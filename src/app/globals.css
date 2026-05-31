@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════════════════
+   DESIGN SYSTEM DYNAMIQUE — Briser les Frontières
+   Ingénierie de la Souveraineté & Cycles Circadiens
+   ═══════════════════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Default Theme: ZENITH (Plein jour - Contraste Alabastre / Onyx) */
+  --bg-base: #FFFFFF;
+  --bg-surface: #FAF9F6;
+  --bg-surface-alt: #F5F5F0;
+  --bg-surface-hover: #EAEAE2;
+  --text-main: #111111;
+  --text-muted: #555555;
+  --color-accent-emerald: #056B46;
+  --color-accent-emerald-dark: #034E32;
+  --color-accent-gold: #A67C37;
+  --color-accent-gold-light: #BD954E;
+  --color-accent-gold-muted: rgba(166, 124, 55, 0.08);
+  --color-accent-emerald-muted: rgba(5, 107, 70, 0.08);
+  --color-border-line: rgba(17, 17, 17, 0.08);
+  --color-border-hover-line: rgba(17, 17, 17, 0.16);
+  --transition-speed: 1s; /* Transition lente et organique pour les thèmes */
+  --celestial-bg-opacity: 0.025;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Thème AUBE (Fajr) — Teintes calmes de brume beige-sable */
+.theme-fajr {
+  --bg-base: #FAF8F5;
+  --bg-surface: #F4EFEA;
+  --bg-surface-alt: #EDE6DE;
+  --bg-surface-hover: #E2D7CC;
+  --text-main: #2C2B29;
+  --text-muted: #6E6A64;
+  --color-accent-emerald: #087B53;
+  --color-accent-emerald-dark: #055C3E;
+  --color-accent-gold: #9E7331;
+  --color-accent-gold-light: #B58943;
+  --color-accent-gold-muted: rgba(158, 115, 49, 0.08);
+  --color-accent-emerald-muted: rgba(8, 123, 83, 0.08);
+  --color-border-line: rgba(44, 43, 41, 0.08);
+  --color-border-hover-line: rgba(44, 43, 41, 0.16);
+  --celestial-bg-opacity: 0.03;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Thème CRÉPUSCULE (Maghrib) — Cuivre chaud et argile doux */
+.theme-maghrib {
+  --bg-base: #F3EBE1;
+  --bg-surface: #E8DCD0;
+  --bg-surface-alt: #DECFC0;
+  --bg-surface-hover: #CFAF96;
+  --text-main: #3A312A;
+  --text-muted: #736254;
+  --color-accent-emerald: #0B6A47;
+  --color-accent-emerald-dark: #064D33;
+  --color-accent-gold: #A06A26;
+  --color-accent-gold-light: #B77E3C;
+  --color-accent-gold-muted: rgba(160, 106, 38, 0.08);
+  --color-accent-emerald-muted: rgba(11, 106, 71, 0.08);
+  --color-border-line: rgba(58, 49, 42, 0.08);
+  --color-border-hover-line: rgba(58, 49, 42, 0.16);
+  --celestial-bg-opacity: 0.04;
+}
+
+/* Thème ISHA (Nuit / Kosmos / Sombre Prestige) — Noir obsidienne profond */
+.theme-isha {
+  --bg-base: #0A0A0C;
+  --bg-surface: #121216;
+  --bg-surface-alt: #18181F;
+  --bg-surface-hover: #22222B;
+  --text-main: #F2EDE8;
+  --text-muted: #9E9EA8;
+  --color-accent-emerald: #10B981;
+  --color-accent-emerald-dark: #059669;
+  --color-accent-gold: #D4A853;
+  --color-accent-gold-light: #E8C468;
+  --color-accent-gold-muted: rgba(212, 168, 83, 0.15);
+  --color-accent-emerald-muted: rgba(16, 185, 129, 0.15);
+  --color-border-line: rgba(160, 174, 192, 0.1);
+  --color-border-hover-line: rgba(160, 174, 192, 0.2);
+  --celestial-bg-opacity: 0.12;
+}
+
+@theme {
+  /* Raccordement des utilitaires de classes existants sur les variables circadiennes */
+  --color-midnight: var(--bg-base);
+  --color-midnight-light: var(--bg-surface);
+  --color-surface: var(--bg-surface-alt);
+  --color-surface-hover: var(--bg-surface-hover);
+
+  --color-cream: var(--text-main);
+  --color-cream-muted: var(--text-muted);
+
+  --color-emerald: var(--color-accent-emerald);
+  --color-emerald-dark: var(--color-accent-emerald-dark);
+  --color-gold: var(--color-accent-gold);
+  --color-gold-light: var(--color-accent-gold-light);
+  --color-gold-muted: var(--color-accent-gold-muted);
+  --color-emerald-muted: var(--color-accent-emerald-muted);
+
+  --color-border: var(--color-border-line);
+  --color-border-hover: var(--color-border-hover-line);
+
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+/* ═══ Reset, Base & Transitions Organiques ═══ */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  line-height: 1.618; /* Golden Ratio */
+  overflow-x: hidden;
+  transition: background-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
+              color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
 }
+
+/* Appliquer des transitions douces sur tous les conteneurs principaux de structure */
+header, footer, main, section, div, span, p, a, h1, h2, h3, h4, h5, h6 {
+  transition: background-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
+              color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
+              border-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ═══ Typographie Golden Ratio ═══ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+/* ═══ Sélection ═══ */
+::selection {
+  background-color: var(--color-emerald-muted);
+  color: var(--text-main);
+}
+
+/* ═══ Scrollbar ═══ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-surface-alt);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-emerald-dark);
+}
+
+/* ═══ Grain Overlay de Texture Minérale ═══ */
+.grain-overlay::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* ═══ Animations de Salat Takeover Pulsing ═══ */
+@keyframes salat-pulse {
+  0% {
+    transform: scale(0.98);
+    opacity: 0.95;
+    box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.2);
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 0 40px 10px rgba(212, 168, 83, 0.4);
+  }
+  100% {
+    transform: scale(0.98);
+    opacity: 0.95;
+    box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.2);
+  }
+}
+
+.animate-salat-pulse {
+  animation: salat-pulse 4s infinite ease-in-out;
+}
+
+/* ═══ Accessibilité ═══ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ═══ Ken Burns Nature Animation (Contemplation Infinie) ═══ */
+@keyframes kenburns-infinite {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  25% {
+    transform: scale(1.08) translate(1.2%, -0.8%);
+  }
+  50% {
+    transform: scale(1.15) translate(-0.8%, 1.2%);
+  }
+  75% {
+    transform: scale(1.08) translate(-1.2%, -1.2%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns-infinite 60s infinite ease-in-out;
+}
+
