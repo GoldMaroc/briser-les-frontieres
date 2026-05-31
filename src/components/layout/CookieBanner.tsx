@@ -7,9 +7,9 @@ export default function CookieBanner() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Vérifier si l'utilisateur a déjà consenti
-    const consent = localStorage.getItem("blf_cookies_accepted");
-    if (consent !== "true") {
+    // Vérifier si l'utilisateur a déjà fait un choix
+    const consent = localStorage.getItem("blf_cookies_consent");
+    if (!consent) {
       // Afficher le bandeau après 1.5 seconde
       const timer = setTimeout(() => setVisible(true), 1500);
       return () => clearTimeout(timer);
@@ -17,7 +17,12 @@ export default function CookieBanner() {
   }, []);
 
   const handleAccept = () => {
-    localStorage.setItem("blf_cookies_accepted", "true");
+    localStorage.setItem("blf_cookies_consent", "accepted");
+    setVisible(false);
+  };
+
+  const handleRefuse = () => {
+    localStorage.setItem("blf_cookies_consent", "refused");
     setVisible(false);
   };
 
@@ -47,16 +52,30 @@ export default function CookieBanner() {
             </h3>
             
             <p className="text-[11px] text-cream-muted leading-relaxed">
-              En poursuivant votre navigation sur la plateforme, vous acceptez l&apos;activation de traceurs techniques strictement indispensables au fonctionnement du protocole d&apos;audit cognitif ainsi qu&apos;à la transmission sécurisée et chiffrée de vos coordonnées de souveraineté.
+              En poursuivant votre navigation, vous acceptez l&apos;activation de traceurs techniques strictement nécessaires au bon fonctionnement de l&apos;audit cognitif ainsi qu&apos;à la sécurisation et au chiffrement de vos coordonnées. Vous pouvez consentir ou refuser leur activation.
             </p>
 
-            <div className="flex gap-4 pt-2">
-              <button
-                onClick={handleAccept}
-                className="w-full py-2.5 bg-gold text-midnight text-[10px] uppercase tracking-[0.15em] font-bold hover:bg-gold-light transition-all rounded-sm cursor-pointer shadow-lg shadow-gold/5"
+            <div className="flex flex-col gap-3 pt-2">
+              <div className="flex gap-3">
+                <button
+                  onClick={handleRefuse}
+                  className="w-1/2 py-2.5 bg-transparent border border-cream-muted/30 text-cream-muted text-[10px] uppercase tracking-[0.15em] font-semibold hover:border-cream-muted/60 hover:text-cream transition-all rounded-sm cursor-pointer text-center"
+                >
+                  Refuser ✕
+                </button>
+                <button
+                  onClick={handleAccept}
+                  className="w-1/2 py-2.5 bg-gold text-midnight text-[10px] uppercase tracking-[0.15em] font-bold hover:bg-gold-light transition-all rounded-sm cursor-pointer shadow-lg shadow-gold/5 text-center"
+                >
+                  Accepter ✓
+                </button>
+              </div>
+              <a
+                href="/conditions-generales"
+                className="text-center text-[10px] text-gold hover:text-gold-light hover:underline uppercase tracking-widest block pt-1 font-semibold"
               >
-                Accepter & Continuer ✓
-              </button>
+                Voir les Conditions Générales
+              </a>
             </div>
           </div>
         </motion.div>
