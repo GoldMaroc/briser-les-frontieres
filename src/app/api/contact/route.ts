@@ -1,10 +1,30 @@
 import { NextResponse } from "next/server";
 import { addContact } from "@/lib/db";
 import { sendContactEmail } from "@/lib/mail";
+import { z } from "zod";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+const ContactSchema = z.object({
+  nom: z.string().min(1),
+  prenom: z.string().min(1),
+  email: z.string().email(),
+  telephone: z.string().min(1),
+  adresse: z.string().min(1),
+  codePostal: z.string().min(1),
+  ville: z.string().min(1),
+  typeRelation: z.string(),
+  formuleAccompagnement: z.string(),
+  livreSelection: z.string(),
+  message: z.string().min(1)
+});
+
+    const bodyRaw = await request.json();
+    const parsed = ContactSchema.safeParse(bodyRaw);
+    if (!parsed.success) {
+      return NextResponse.json({ message: "Données invalides." }, { status: 400 });
+    }
+    const body = parsed.data;
     const { 
       nom, 
       prenom,
@@ -56,8 +76,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Envoi de la notification e-mail par SMTP en arrière-plan (non bloquant)
-    sendContactEmail({
+    // Envoi de la notification e-mail par SMTP (doit être await sur Vercel)
+    await sendContactEmail({
       nom,
       prenom,
       email,
@@ -70,7 +90,7 @@ export async function POST(request: Request) {
       livreSelection,
       message
     }).catch((err) => {
-      console.error("Échec de l'envoi d'e-mail de contact en arrière-plan :", err);
+      console.error("Échec de l'envoi d'e-mail de contact :", err);
     });
 
     return NextResponse.json(

@@ -1,10 +1,31 @@
 import { NextResponse } from "next/server";
 import { addCandidature } from "@/lib/db";
 import { sendCandidatureEmail } from "@/lib/mail";
+import { z } from "zod";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+const CandidatureSchema = z.object({
+  nom: z.string().min(1),
+  prenom: z.string().min(1),
+  email: z.string().email(),
+  telephone: z.string().min(1),
+  adresse: z.string().min(1),
+  codePostal: z.string().min(1),
+  ville: z.string().min(1),
+  fatigueDecisionnelle: z.string().optional(),
+  chargeAllostatique: z.string().optional(),
+  salatImpact: z.string().optional(),
+  interpositionAccord: z.boolean(),
+  motivation: z.string().min(1),
+});
+
+    const bodyRaw = await request.json();
+    const parsed = CandidatureSchema.safeParse(bodyRaw);
+    if (!parsed.success) {
+      return NextResponse.json({ message: "Données invalides." }, { status: 400 });
+    }
+    const body = parsed.data;
     const { 
       nom, 
       prenom,
@@ -44,9 +65,9 @@ export async function POST(request: Request) {
       adresse,
       codePostal,
       ville,
-      fatigueDecisionnelle,
-      chargeAllostatique,
-      salatImpact,
+      fatigueDecisionnelle: fatigueDecisionnelle || "",
+      chargeAllostatique: chargeAllostatique || "",
+      salatImpact: salatImpact || "",
       interpositionAccord,
       motivation,
     });
@@ -58,8 +79,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Envoi de la notification e-mail en arrière-plan (non bloquant)
-    sendCandidatureEmail({
+    // Envoi de la notification e-mail (doit être await sur Vercel)
+    await sendCandidatureEmail({
       nom,
       prenom,
       email,
@@ -67,13 +88,13 @@ export async function POST(request: Request) {
       adresse,
       codePostal,
       ville,
-      fatigueDecisionnelle,
-      chargeAllostatique,
-      salatImpact,
+      fatigueDecisionnelle: fatigueDecisionnelle || "",
+      chargeAllostatique: chargeAllostatique || "",
+      salatImpact: salatImpact || "",
       interpositionAccord,
       motivation,
     }).catch((err) => {
-      console.error("Échec de l'envoi d'e-mail de candidature en arrière-plan :", err);
+      console.error("Échec de l'envoi d'e-mail de candidature :", err);
     });
 
     return NextResponse.json(

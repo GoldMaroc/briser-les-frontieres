@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Card from "@/components/ui/Card";
@@ -25,6 +26,7 @@ export default function Home() {
   // États pour les témoignages interactifs (43 avis + avis dynamiques approuvés)
   const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(testimonials);
   const [activeTab, setActiveTab] = useState<'homme' | 'femme' | 'famille' | 'groupe'>("homme");
+  const carouselRef = useRef<HTMLDivElement>(null);
   const [currentTestimonialPage, setCurrentTestimonialPage] = useState(1);
 
   // Réinitialiser la page quand on change d'onglet
@@ -221,21 +223,8 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION 1 : HERO IMMERSIF ET CINÉMATOGRAPHIQUE
           ═══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 bg-stone-950">
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-16 bg-midnight">
         
-        {/* Fond vidéo marin sombre de prestige */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
-          <div className="absolute inset-0 bg-gradient-to-b from-stone-950 via-transparent to-stone-950 z-10" />
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover scale-105 filter grayscale"
-          >
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-ocean-waves-crashing-11756-large.mp4" type="video/mp4" />
-          </video>
-        </div>
 
         <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-20 text-center flex flex-col items-center">
           
@@ -243,29 +232,19 @@ export default function Home() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-[10px] font-semibold uppercase tracking-[0.4em] text-gold bg-gold-muted/15 px-5 py-2 rounded-full border border-gold/10 mb-8 font-body"
+            className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted px-5 py-2 rounded-full border border-emerald/20 mb-8 font-body"
           >
-            Ingénierie de la Souveraineté
+            Renouer avec Allah
           </motion.span>
 
           <motion.h1
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-[4.8rem] font-light leading-[1.1] tracking-wide text-stone-100 max-w-5xl"
+            className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-medium leading-[1.2] tracking-wide text-cream max-w-5xl"
           >
-            Le Fatalisme N&apos;est Pas une Option.<br />
-            <span className="text-gold italic font-normal">Le Mandat</span> est une Obligation.
+            Restaurez votre souveraineté intellectuelle et domptez votre Nafs pour retrouver une prière (Salat) inébranlable et assumer votre mandat de Khalifa.
           </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-8 text-sm sm:text-base text-stone-400 max-w-2xl font-body leading-relaxed"
-          >
-            Protocole C.O.M.E.S. — Ingénierie comportementale pour restaurer la clarté intellectuelle, reprendre le contrôle absolu du Nafs et assumer le mandat de Khalifa.
-          </motion.p>
 
           {/* BOUTON D&apos;ÉVEIL DE CONSCIENCE CENTRAL */}
           <motion.div
@@ -276,20 +255,20 @@ export default function Home() {
           >
             <button
               onClick={() => setIsVideoOpen(true)}
-              className="group relative flex items-center justify-center p-6 border-2 border-gold text-gold rounded-full font-heading text-lg tracking-widest uppercase hover:bg-gold hover:text-stone-950 transition-all duration-500 shadow-xl shadow-gold/5 cursor-pointer"
+              className="group relative flex items-center justify-center p-6 border-2 border-emerald text-emerald rounded-full font-heading text-lg tracking-widest uppercase hover:bg-emerald hover:text-midnight transition-all duration-500 shadow-xl shadow-emerald/10 cursor-pointer bg-midnight"
             >
-              <span className="absolute inset-0 rounded-full border border-gold/40 animate-ping opacity-75" />
+              <span className="absolute inset-0 rounded-full border border-emerald/40 animate-ping opacity-75" />
               Écouter l&apos;Appel — 90 secondes
             </button>
-            <span className="text-[10px] tracking-[0.2em] text-stone-500 uppercase font-body font-medium">Pour les croyants cherchant le premier pas et la constance</span>
+            <span className="text-[10px] tracking-[0.2em] text-cream-muted uppercase font-body font-bold">Pour les croyants cherchant à renouer avec la Prière et la constance</span>
           </motion.div>
 
         </div>
 
         {/* Petite flèche animée */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none opacity-40">
-          <span className="text-[9px] tracking-[0.25em] uppercase text-stone-500 font-body font-semibold">Commencer l&apos;Audit</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-gold animate-bounce" />
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none opacity-60">
+          <span className="text-[9px] tracking-[0.25em] uppercase text-emerald font-body font-bold">Commencer l&apos;Audit</span>
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald animate-bounce" />
         </div>
       </section>
 
@@ -496,17 +475,17 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION 2.5 : LE SPECTACLE DE LA CRÉATION (Monde Végétal Réaliste et Véritable Vidéo)
           ═══════════════════════════════════════════ */}
-      <section className="relative min-h-[85vh] flex items-center justify-center py-28 overflow-hidden bg-stone-950 border-b border-border">
+      <section className="relative min-h-[85vh] flex items-center justify-center py-28 overflow-hidden bg-surface border-y border-border">
         
         {/* Monde naturel réaliste avec véritable vidéo en boucle fluide */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-50">
-          <div className="absolute inset-0 bg-gradient-to-b from-stone-950 via-stone-950/50 to-stone-950 z-10" />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-10">
+          <div className="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface z-10" />
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover scale-105"
+            className="w-full h-full object-cover scale-105 filter grayscale"
           >
             <source src="https://assets.mixkit.co/videos/preview/mixkit-dense-wild-jungle-with-lush-greenery-41484-large.mp4" type="video/mp4" />
           </video>
@@ -520,31 +499,31 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="backdrop-blur-md bg-stone-950/75 border border-gold/15 p-8 md:p-14 rounded-sm shadow-2xl space-y-8"
+            className="backdrop-blur-xl bg-midnight/90 border border-emerald/15 p-8 md:p-14 rounded-sm shadow-2xl space-y-8"
           >
-            <span className="text-[10px] font-semibold uppercase tracking-[0.4em] text-gold bg-gold-muted/20 px-5 py-2 rounded-full border border-gold/10 font-body">
+            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted/20 px-5 py-2 rounded-full border border-emerald/10 font-body">
               Contemplation — Al-Khaliq
             </span>
 
             {/* Versets sublimes sur la perfection divine */}
             <div className="space-y-6">
-              <h3 className="font-heading text-3xl sm:text-5xl text-stone-200 font-light leading-loose tracking-wide" dir="rtl">
+              <h3 className="font-heading text-3xl sm:text-5xl text-cream font-medium leading-loose tracking-wide" dir="rtl">
                 الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ ۖ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ <br />
                 ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ
               </h3>
               
-              <div className="w-16 h-px bg-gold/30 mx-auto" />
+              <div className="w-16 h-px bg-emerald/30 mx-auto" />
               
-              <h4 className="font-heading text-xl sm:text-2xl font-light text-gold italic leading-relaxed max-w-3xl mx-auto">
+              <h4 className="font-heading text-xl sm:text-2xl font-light text-emerald italic leading-relaxed max-w-3xl mx-auto">
                 « Celui qui a créé sept cieux superposés sans que tu voies de disproportion en la création du Tout-Miséricordieux. Ramène ton regard : y vois-tu une quelconque faille ? Puis ramène ton regard à deux fois : le regard te reviendra humilié, fatigué. »
               </h4>
               
-              <p className="text-[10px] uppercase text-stone-500 tracking-[0.3em] font-semibold font-body">
+              <p className="text-[10px] uppercase text-cream-muted tracking-[0.3em] font-bold font-body">
                 Sourate Al-Mulk (67:3-4)
               </p>
             </div>
 
-            <p className="mt-8 text-sm text-stone-400 font-body leading-relaxed max-w-2xl mx-auto">
+            <p className="mt-8 text-sm text-cream-muted font-body leading-relaxed max-w-2xl mx-auto font-medium">
               Une perfection absolue, dénuée de la moindre brèche. La nature sauvage — la richesse de ce monde végétal verdoyant, chaque envolée d&apos;oiseau sauvage, la trajectoire délicate des insectes et papillons multicolores dans la lumière filtrante — témoigne avec force de cette harmonie mathématique et vivante. Contempler la création est le remède ultime de la conscience contre l&apos;entropie de l&apos;âme.
             </p>
           </motion.div>
@@ -596,35 +575,45 @@ export default function Home() {
             })}
           </div>
 
-          {/* Grid de témoignages avec pagination réactive */}
+          {/* Carousel de témoignages */}
           {(() => {
             const filtered = allTestimonials.filter(t => t.category === activeTab);
-            const itemsPerPage = 4;
-            const totalPages = Math.ceil(filtered.length / itemsPerPage);
-            const displayed = filtered.slice((currentTestimonialPage - 1) * itemsPerPage, currentTestimonialPage * itemsPerPage);
 
             return (
-              <div className="space-y-12">
-                
-                {/* Conteneur de Cartes avec animation de transition */}
-                <motion.div
-                  key={`${activeTab}-${currentTestimonialPage}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-8"
-                >
-                  {displayed.map((t) => (
+              <div className="space-y-6">
+                <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; }`}</style>
+                <div className="relative group">
+                  {/* Boutons de navigation PC */}
+                  {filtered.length > 1 && (
+                    <>
+                      <button onClick={() => carouselRef.current?.scrollBy({ left: -400, behavior: 'smooth' })} className="hidden md:flex absolute -left-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-border shadow-sm rounded-full items-center justify-center text-emerald hover:bg-emerald hover:text-white transition-all duration-300 cursor-pointer text-xl">
+                        ←
+                      </button>
+                      <button onClick={() => carouselRef.current?.scrollBy({ left: 400, behavior: 'smooth' })} className="hidden md:flex absolute -right-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-border shadow-sm rounded-full items-center justify-center text-emerald hover:bg-emerald hover:text-white transition-all duration-300 cursor-pointer text-xl">
+                        →
+                      </button>
+                    </>
+                  )}
+
+                  <motion.div
+                    ref={carouselRef}
+                    key={activeTab}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scroll-smooth hide-scrollbar"
+                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                  >
+                  {filtered.map((t) => (
                     <div
                       key={t.id}
-                      className="group p-8 border border-border bg-surface/30 rounded-sm transition-all duration-500 hover:border-gold/30 hover:-translate-y-1 flex flex-col justify-between"
+                      className="w-[85vw] sm:w-[450px] flex-shrink-0 snap-center group p-8 border border-border bg-surface/30 rounded-sm transition-all duration-500 hover:border-emerald/30 hover:-translate-y-1 flex flex-col justify-between"
                     >
                       <div className="space-y-6">
-                        
                         {/* Haut de carte : Nom et Éléments techniques */}
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
-                            <h4 className="font-heading text-lg sm:text-xl text-cream group-hover:text-gold transition-colors duration-300">
+                            <h4 className="font-heading text-lg sm:text-xl text-cream group-hover:text-emerald transition-colors duration-300">
                               {t.name}
                             </h4>
                             {t.role && (
@@ -634,12 +623,12 @@ export default function Home() {
                           
                           <div className="flex flex-col items-end gap-1.5 font-body">
                             {t.score !== undefined && (
-                              <span className="text-[9px] font-semibold uppercase tracking-wider text-gold px-2.5 py-1 border border-gold/20 rounded-full bg-gold-muted/5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald px-2.5 py-1 border border-emerald/20 rounded-full bg-emerald-muted/5">
                                 Audit : {t.score}%
                               </span>
                             )}
                             {t.period && (
-                              <span className="text-[9px] font-semibold uppercase tracking-wider text-emerald px-2.5 py-1 border border-emerald/20 rounded-full bg-emerald-muted/5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald px-2.5 py-1 border border-emerald/20 rounded-full bg-emerald-muted/5">
                                 {t.period}
                               </span>
                             )}
@@ -654,48 +643,22 @@ export default function Home() {
 
                       {/* Bas de carte : Localisation */}
                       {t.location && (
-                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-[10px] uppercase tracking-wider text-stone-500 font-body">
+                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-[10px] uppercase tracking-wider text-emerald font-body">
                           <span>Localisation</span>
-                          <span className="text-cream-muted font-semibold">{t.location}</span>
+                          <span className="text-cream-muted font-bold">{t.location}</span>
                         </div>
                       )}
                     </div>
                   ))}
                 </motion.div>
+                </div>
 
-                {/* Séparateur et Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-6 pt-4 font-body font-semibold">
-                    <button
-                      onClick={() => setCurrentTestimonialPage(p => Math.max(1, p - 1))}
-                      disabled={currentTestimonialPage === 1}
-                      className={`px-4 py-2 border border-border text-[10px] uppercase font-bold tracking-widest transition-colors cursor-pointer ${
-                        currentTestimonialPage === 1
-                          ? "opacity-30 cursor-not-allowed"
-                          : "hover:border-gold hover:text-gold"
-                      }`}
-                    >
-                      ← Précédent
-                    </button>
-                    
-                    <span className="text-xs text-cream-muted font-semibold">
-                      Page <strong className="text-gold">{currentTestimonialPage}</strong> sur {totalPages}
-                    </span>
-
-                    <button
-                      onClick={() => setCurrentTestimonialPage(p => Math.min(totalPages, p + 1))}
-                      disabled={currentTestimonialPage === totalPages}
-                      className={`px-4 py-2 border border-border text-[10px] uppercase font-bold tracking-widest transition-colors cursor-pointer ${
-                        currentTestimonialPage === totalPages
-                          ? "opacity-30 cursor-not-allowed"
-                          : "hover:border-gold hover:text-gold"
-                      }`}
-                    >
-                      Suivant →
-                    </button>
+                {/* Indicateur de défilement */}
+                {filtered.length > 1 && (
+                  <div className="flex items-center justify-center gap-2 pt-2 opacity-50">
+                    <span className="text-[10px] uppercase tracking-widest text-cream-muted font-bold">← Glisser horizontalement pour voir plus d&apos;avis →</span>
                   </div>
                 )}
-
               </div>
             );
           })()}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/ui/Button";
+import PlanningSocialClient from "./PlanningSocialClient";
 
 interface Subscriber {
   id: string;
@@ -88,15 +89,17 @@ interface GiftRequest {
   };
   prestation: string;
   message: string;
+  status: "pending" | "approved" | "rejected";
   created_at: string;
 }
 
-type TabType = "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials";
+type TabType = "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials" | "planning";
 
 export default function AdminClient() {
   const [password, setPassword] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [loginStep, setLoginStep] = useState<1 | 2>(1); // 1 = main password, 2 = OTP double factor
+  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes en secondes (600s)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("candidatures");
   
@@ -123,14 +126,65 @@ export default function AdminClient() {
   const [expandedMsg, setExpandedMsg] = useState<string | null>(null);
   const [expandedGift, setExpandedGift] = useState<string | null>(null);
 
-  // Essayer d'utiliser les clés mémorisées
+  // States for Popups (Voir en grand)
+  const [popupMsg, setPopupMsg] = useState<ContactMessage | null>(null);
+  const [popupCand, setPopupCand] = useState<Candidature | null>(null);
+
+  // Vérifier au montage si l'administrateur a déjà une session active (via le cookie HTTP-Only)
   useEffect(() => {
-    const savedPassword = localStorage.getItem("blf_admin_password");
-    // Si déjà connecté dans cette session de navigation, on peut bypasser, sinon on force l'OTP à chaque reconnexion logicielle
-    if (savedPassword && !isAuthenticated) {
-      setPassword(savedPassword);
-    }
+    const checkActiveSession = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/api/admin/data", { method: "GET" });
+        if (response.ok) {
+          const resData = await response.json();
+          setData(resData.data);
+          setIsAuthenticated(true);
+          
+          // Récupérer le mot de passe mémorisé pour compatibilité d'affichage locale
+          const savedPassword = localStorage.getItem("blf_admin_password");
+          if (savedPassword) {
+            setPassword(savedPassword);
+          }
+        } else {
+          // Si pas de session valide, nettoyer le local storage pour forcer une nouvelle double auth
+          localStorage.removeItem("blf_admin_password");
+        }
+      } catch (err) {
+        console.warn("Échec de la détection de session active.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkActiveSession();
   }, []);
+
+  // Compte à rebours de 10 minutes (600s) pour la validité de l'OTP
+  useEffect(() => {
+    if (loginStep !== 2) return;
+    
+    setTimeLeft(600); // Réinitialiser le compteur à 10 minutes
+    
+    const interval = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setErrorMsg("Le code OTP de sécurité a expiré. Veuillez générer un nouveau code.");
+          setLoginStep(1);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, [loginStep]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  };
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,18 +247,36 @@ export default function AdminClient() {
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("blf_admin_password");
     setIsAuthenticated(false);
     setLoginStep(1);
     setPassword("");
     setOtpCode("");
     setData({ subscribers: [], candidatures: [], audits: [], testimonials: [], contacts: [], gifts: [] });
+    
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch (err) {
+      console.warn("Échec de la révocation réseau de la session.");
+    }
   };
 
   const handleCandidatureAction = async (id: string, status: "approved" | "rejected") => {
     setErrorMsg("");
     setSuccessMsg("");
+
+    let reason = "";
+    if (status === "rejected") {
+      const inputReason = prompt("Veuillez saisir le motif de refus de la candidature (ce motif sera envoyé par e-mail au candidat) :");
+      if (inputReason === null) return; // Annulé par l'administrateur
+      if (!inputReason.trim()) {
+        alert("Le motif de refus est obligatoire pour rejeter une candidature.");
+        return;
+      }
+      reason = inputReason.trim();
+    }
+
     try {
       const response = await fetch("/api/admin/action", {
         method: "POST",
@@ -212,7 +284,7 @@ export default function AdminClient() {
           "Content-Type": "application/json",
           "X-Admin-Password": password
         },
-        body: JSON.stringify({ action: "updateCandidature", id, status })
+        body: JSON.stringify({ action: "updateCandidature", id, status, reason })
       });
 
       const resData = await response.json();
@@ -223,7 +295,57 @@ export default function AdminClient() {
           candidatures: prev.candidatures.map((c) => (c.id === id ? { ...c, status } : c))
         }));
       } else {
-        setErrorMsg(resData.message || "Échec de la mise à jour.");
+        if (response.status === 401) {
+          await handleLogout();
+          setErrorMsg("Votre session administrative a expiré. Veuillez vous reconnecter.");
+        } else {
+          setErrorMsg(resData.message || "Échec de la mise à jour.");
+        }
+      }
+    } catch (err) {
+      setErrorMsg("Erreur lors de l'enregistrement de l'action.");
+    }
+  };
+
+  const handleGiftAction = async (id: string, status: "approved" | "rejected") => {
+    setErrorMsg("");
+    setSuccessMsg("");
+
+    let reason = "";
+    if (status === "rejected") {
+      const inputReason = prompt("Veuillez saisir le motif de refus du cadeau (ce motif sera envoyé par e-mail au donateur) :");
+      if (inputReason === null) return; // Annulé par l'administrateur
+      if (!inputReason.trim()) {
+        alert("Le motif de refus est obligatoire pour rejeter un cadeau.");
+        return;
+      }
+      reason = inputReason.trim();
+    }
+
+    try {
+      const response = await fetch("/api/admin/action", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Admin-Password": password
+        },
+        body: JSON.stringify({ action: "updateGift", id, status, reason })
+      });
+
+      const resData = await response.json();
+      if (response.ok) {
+        setSuccessMsg(resData.message);
+        setData((prev) => ({
+          ...prev,
+          gifts: prev.gifts.map((g) => (g.id === id ? { ...g, status } : g))
+        }));
+      } else {
+        if (response.status === 401) {
+          await handleLogout();
+          setErrorMsg("Votre session administrative a expiré. Veuillez vous reconnecter.");
+        } else {
+          setErrorMsg(resData.message || "Échec de la mise à jour.");
+        }
       }
     } catch (err) {
       setErrorMsg("Erreur lors de l'enregistrement de l'action.");
@@ -259,7 +381,12 @@ export default function AdminClient() {
           }
         });
       } else {
-        setErrorMsg(resData.message || "Échec de la suppression.");
+        if (response.status === 401) {
+          await handleLogout();
+          setErrorMsg("Votre session administrative a expiré. Veuillez vous reconnecter.");
+        } else {
+          setErrorMsg(resData.message || "Échec de la suppression.");
+        }
       }
     } catch (err) {
       setErrorMsg("Erreur lors de la suppression.");
@@ -288,7 +415,12 @@ export default function AdminClient() {
           subscribers: prev.subscribers.filter((s) => s.id !== id)
         }));
       } else {
-        setErrorMsg(resData.message || "Échec de la suppression.");
+        if (response.status === 401) {
+          await handleLogout();
+          setErrorMsg("Votre session administrative a expiré. Veuillez vous reconnecter.");
+        } else {
+          setErrorMsg(resData.message || "Échec de la suppression.");
+        }
       }
     } catch (err) {
       setErrorMsg("Erreur lors de la suppression.");
@@ -326,7 +458,12 @@ export default function AdminClient() {
           }
         });
       } else {
-        setErrorMsg(resData.message || "Échec de l'action sur le témoignage.");
+        if (response.status === 401) {
+          await handleLogout();
+          setErrorMsg("Votre session administrative a expiré. Veuillez vous reconnecter.");
+        } else {
+          setErrorMsg(resData.message || "Échec de l'action sur le témoignage.");
+        }
       }
     } catch (err) {
       setErrorMsg("Erreur de connexion lors de l'action.");
@@ -413,14 +550,23 @@ export default function AdminClient() {
           <form onSubmit={handleOtpSubmit} className="space-y-6">
             <div className="space-y-1">
               <label className="text-[9px] uppercase tracking-[0.2em] text-emerald font-semibold block text-center">Entrez le code OTP reçu par e-mail</label>
+              
+              {/* Compteur temps restant luxueux */}
+              <div className="text-center py-2 bg-midnight/30 rounded-sm border border-border/10 my-2">
+                <span className="text-[9px] uppercase tracking-[0.2em] text-cream-muted block mb-0.5">Temps restant</span>
+                <span className={`text-xl font-mono font-bold tracking-wider ${timeLeft < 60 ? "text-red-400 animate-pulse" : "text-gold"}`}>
+                  {formatTime(timeLeft)}
+                </span>
+              </div>
+
               <input
                 type="text"
                 required
-                maxLength={6}
+                maxLength={9}
                 value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ""))}
-                className="w-full bg-midnight border border-border focus:border-gold p-3.5 text-2xl text-gold outline-none rounded-sm transition-colors text-center tracking-[0.4em] font-mono"
-                placeholder="••••••"
+                onChange={(e) => setOtpCode(e.target.value.replace(/[^a-zA-Z0-9]/g, "").toUpperCase())}
+                className="w-full bg-midnight border border-border focus:border-gold p-3.5 text-2xl text-gold outline-none rounded-sm transition-colors text-center tracking-[0.2em] font-mono"
+                placeholder="•••••••••"
               />
             </div>
 
@@ -439,7 +585,7 @@ export default function AdminClient() {
             <div className="space-y-3">
               <Button
                 type="submit"
-                disabled={isLoading || otpCode.length !== 6}
+                disabled={isLoading || otpCode.length !== 9}
                 variant="primary"
                 className="w-full py-4 text-center justify-center flex font-bold tracking-[0.2em]"
               >
@@ -490,32 +636,41 @@ export default function AdminClient() {
         </div>
       )}
 
-      {/* Onglets de Navigation Multi-colonnes (6 onglets) */}
-      <div className="flex flex-wrap border-b border-border gap-1">
+      {/* Layout Principal: Sidebar à gauche, Contenu à droite */}
+      <div className="flex flex-col md:flex-row gap-8">
+        
+        {/* SIDEBAR DE NAVIGATION */}
+        <div className="w-full md:w-64 shrink-0 flex flex-col gap-2 bg-surface/30 p-4 border border-border rounded-sm">
         {[
-          { key: "candidatures", label: `Candidatures (${data.candidatures.length})` },
-          { key: "audits", label: `Audits Souveraineté (${data.audits.length})` },
-          { key: "messages", label: `Messages Reçus (${data.contacts?.length || 0})` },
-          { key: "gifts", label: `Cadeaux Offerts (${data.gifts?.length || 0})` },
-          { key: "newsletter", label: `Newsletter (${data.subscribers.length})` },
-          { key: "testimonials", label: `Avis Modération (${data.testimonials.length})` }
+          { key: "candidatures", label: `Candidatures`, count: data.candidatures.length },
+          { key: "audits", label: `Audits`, count: data.audits.length },
+          { key: "messages", label: `Messages`, count: data.contacts?.length || 0 },
+          { key: "gifts", label: `Cadeaux`, count: data.gifts?.length || 0 },
+          { key: "newsletter", label: `Newsletter`, count: data.subscribers.length },
+          { key: "testimonials", label: `Avis Modération`, count: data.testimonials.length },
+          { key: "planning", label: `Agent Social`, count: null }
         ].map((tab) => (
           <button
             key={tab.key}
             onClick={() => { setActiveTab(tab.key as TabType); setSuccessMsg(""); setErrorMsg(""); }}
-            className={`py-3.5 px-4 text-[10px] sm:text-xs uppercase tracking-widest font-semibold cursor-pointer border-b-2 transition-all ${
+            className={`py-3 px-4 text-xs font-semibold cursor-pointer rounded-sm transition-all flex justify-between items-center ${
               activeTab === tab.key
-                ? "border-gold text-gold font-bold bg-gold-muted/5"
-                : "border-transparent text-cream-muted hover:text-cream"
+                ? "bg-gold/10 text-gold border border-gold/30"
+                : "text-cream-muted hover:text-cream hover:bg-surface"
             }`}
           >
-            {tab.label}
+            <span>{tab.label}</span>
+            {tab.count !== null && (
+              <span className={`text-[10px] px-2 py-0.5 rounded-full ${activeTab === tab.key ? 'bg-gold/20 text-gold' : 'bg-surface-alt text-cream-muted'}`}>
+                {tab.count}
+              </span>
+            )}
           </button>
         ))}
-      </div>
+        </div>
 
       {/* CONTENU ONGLETS */}
-      <div className="bg-midnight-light border border-border p-6 rounded-sm min-h-[400px]">
+      <div className="flex-1 min-w-0 bg-midnight-light border border-border p-6 rounded-sm min-h-[600px]">
         <AnimatePresence mode="wait">
           
           {/* 1. TABLEAU DES CANDIDATURES MENTORAT */}
@@ -562,10 +717,11 @@ export default function AdminClient() {
                             {c.status === "approved" ? "Approuvé" : c.status === "rejected" ? "Refusé" : "En attente"}
                           </span>
                           <button
-                            onClick={() => setExpandedCand(expandedCand === c.id ? null : c.id)}
-                            className="px-3 py-1.5 border border-border text-[9px] uppercase tracking-widest font-semibold hover:border-gold hover:text-gold cursor-pointer rounded-sm"
+                            onClick={() => setPopupCand(c)}
+                            className="px-3 py-1.5 border border-gold/50 text-gold text-[9px] uppercase tracking-widest font-bold hover:bg-gold/10 cursor-pointer rounded-sm ml-2 flex items-center gap-2"
                           >
-                            {expandedCand === c.id ? "Masquer ▲" : "Dossier Complet ▼"}
+                            <span>Ouvrir en Pop-up</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                           </button>
                         </div>
                       </div>
@@ -720,6 +876,11 @@ export default function AdminClient() {
               exit={{ opacity: 0, y: -15 }}
               className="space-y-6"
             >
+              <div className="flex justify-end mb-4">
+                <a href="/api/admin/data/export?type=contacts" className="text-xs font-bold px-4 py-2 border border-gold/50 text-gold hover:bg-gold/10 rounded-sm transition">
+                  ⬇️ TÉLÉCHARGER EN CSV
+                </a>
+              </div>
               {(!data.contacts || data.contacts.length === 0) ? (
                 <p className="text-sm text-cream-muted italic text-center py-16">Aucun message situationnel de contact reçu.</p>
               ) : (
@@ -740,10 +901,11 @@ export default function AdminClient() {
                         </div>
                         <div className="flex items-center gap-3">
                           <button
-                            onClick={() => setExpandedMsg(expandedMsg === contact.id ? null : contact.id)}
-                            className="px-3 py-1.5 border border-border text-[9px] uppercase tracking-widest font-semibold hover:border-gold hover:text-gold cursor-pointer rounded-sm"
+                            onClick={() => setPopupMsg(contact)}
+                            className="px-3 py-1.5 border border-gold/50 text-gold text-[9px] uppercase tracking-widest font-bold hover:bg-gold/10 cursor-pointer rounded-sm flex items-center gap-2"
                           >
-                            {expandedMsg === contact.id ? "Masquer ▲" : "Lire le Message ▼"}
+                            <span>Ouvrir en Pop-up</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                           </button>
                         </div>
                       </div>
@@ -814,7 +976,16 @@ export default function AdminClient() {
               ) : (
                 <div className="space-y-4">
                   {data.gifts.map((gift) => (
-                    <div key={gift.id} className="border border-border p-6 rounded-sm bg-midnight/10 hover:border-gold/30 transition-all duration-300">
+                    <div
+                      key={gift.id}
+                      className={`border p-6 rounded-sm transition-all duration-300 ${
+                        gift.status === "approved"
+                          ? "border-emerald/30 bg-emerald-muted/5"
+                          : gift.status === "rejected"
+                          ? "border-border bg-midnight/20"
+                          : "border-gold/30 bg-gold-muted/5"
+                      }`}
+                    >
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border/40 pb-4 mb-4">
                         <div className="space-y-1">
                           <span className="text-[8px] uppercase tracking-widest text-gold font-bold bg-gold-muted/10 border border-gold/20 px-2.5 py-0.5 rounded">
@@ -828,6 +999,15 @@ export default function AdminClient() {
                           </p>
                         </div>
                         <div className="flex items-center gap-3">
+                          <span className={`text-[9px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full border ${
+                            gift.status === "approved"
+                              ? "border-emerald/40 text-emerald bg-emerald-muted/10"
+                              : gift.status === "rejected"
+                              ? "border-border/60 text-cream-muted bg-midnight/35"
+                              : "border-gold/40 text-gold bg-gold-muted/10"
+                          }`}>
+                            {gift.status === "approved" ? "Approuvé" : gift.status === "rejected" ? "Refusé" : "En attente"}
+                          </span>
                           <button
                             onClick={() => setExpandedGift(expandedGift === gift.id ? null : gift.id)}
                             className="px-3 py-1.5 border border-border text-[9px] uppercase tracking-widest font-semibold hover:border-gold hover:text-gold cursor-pointer rounded-sm"
@@ -885,6 +1065,24 @@ export default function AdminClient() {
                               Supprimer Commande Cadeau 🗑
                             </button>
                           </div>
+
+                          {/* Actions de modération du cadeau */}
+                          {gift.status === "pending" && (
+                            <div className="flex justify-end gap-3 pt-4">
+                              <button
+                                onClick={() => handleGiftAction(gift.id, "rejected")}
+                                className="px-5 py-2 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white text-[10px] uppercase tracking-wider font-semibold cursor-pointer transition-all rounded-sm"
+                              >
+                                Rejeter la Prestation
+                              </button>
+                              <button
+                                onClick={() => handleGiftAction(gift.id, "approved")}
+                                className="px-5 py-2 border border-emerald text-emerald hover:bg-emerald hover:text-midnight text-[10px] uppercase tracking-wider font-semibold cursor-pointer transition-all rounded-sm"
+                              >
+                                Approuver la Prestation
+                              </button>
+                            </div>
+                          )}
                         </motion.div>
                       )}
                     </div>
@@ -893,6 +1091,7 @@ export default function AdminClient() {
               )}
             </motion.div>
           )}
+
 
           {/* 5. TABLEAU NEWSLETTER */}
           {activeTab === "newsletter" && (
@@ -1023,9 +1222,181 @@ export default function AdminClient() {
             </motion.div>
           )}
 
+          {activeTab === "planning" && (
+            <motion.div
+              key="planning"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <PlanningSocialClient />
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </div>
 
+      {/* --- POP-UP DES CANDIDATURES --- */}
+      <AnimatePresence>
+        {popupCand && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-midnight/80 backdrop-blur-sm overflow-y-auto"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-midnight-light border border-gold/30 p-8 rounded-sm shadow-2xl max-w-4xl w-full relative max-h-[90vh] overflow-y-auto"
+            >
+              {/* Bouton de fermeture */}
+              <button
+                onClick={() => setPopupCand(null)}
+                className="absolute top-6 right-6 text-cream-muted hover:text-red-400 transition-colors"
+              >
+                ✕ Fermer
+              </button>
+
+              <h2 className="font-heading text-3xl font-light text-cream mb-6">
+                Candidature de <span className="text-gold font-semibold">{popupCand.prenom} {popupCand.nom}</span>
+              </h2>
+
+              <div className="space-y-8 font-body">
+                {/* Motivation en évidence */}
+                <div className="bg-midnight border border-border p-6 rounded-sm">
+                  <h3 className="text-[10px] uppercase tracking-widest text-gold font-bold mb-4">Motivation & Objectifs</h3>
+                  <p className="text-sm leading-relaxed text-cream whitespace-pre-line italic">
+                    « {popupCand.motivation} »
+                  </p>
+                </div>
+
+                {/* Diagnostics */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-4 bg-midnight/50 border border-border rounded-sm">
+                    <span className="text-[9px] uppercase text-cream-muted block mb-2">Fatigue Décisionnelle</span>
+                    <strong className="text-sm text-cream uppercase">{popupCand.fatigueDecisionnelle}</strong>
+                  </div>
+                  <div className="p-4 bg-midnight/50 border border-border rounded-sm">
+                    <span className="text-[9px] uppercase text-cream-muted block mb-2">Charge Allostatique</span>
+                    <strong className="text-sm text-cream uppercase">{popupCand.chargeAllostatique}</strong>
+                  </div>
+                  <div className="p-4 bg-midnight/50 border border-border rounded-sm">
+                    <span className="text-[9px] uppercase text-cream-muted block mb-2">Impact sur la Salat</span>
+                    <strong className="text-sm text-cream uppercase">{popupCand.salatImpact}</strong>
+                  </div>
+                </div>
+
+                {/* Coordonnées */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs leading-relaxed border-t border-border/40 pt-6">
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">E-mail</strong> <a href={`mailto:${popupCand.email}`} className="text-gold underline text-sm">{popupCand.email}</a></p>
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Téléphone</strong> <span className="text-sm text-cream">{popupCand.telephone || "Non renseigné"}</span></p>
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Localité</strong> <span className="text-sm text-cream">{popupCand.codePostal || ""} {popupCand.ville || popupCand.localisation || "Non fournie"}</span></p>
+                  <p className="sm:col-span-2 md:col-span-3"><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Adresse physique</strong> <span className="text-sm text-cream">{popupCand.adresse || "Non fournie"}</span></p>
+                </div>
+
+                {/* Actions */}
+                {popupCand.status === "pending" && (
+                  <div className="flex justify-end gap-4 mt-8 pt-6 border-t border-border/40">
+                    <button
+                      onClick={() => { handleCandidatureAction(popupCand.id, "rejected"); setPopupCand(null); }}
+                      className="px-6 py-3 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all rounded-sm"
+                    >
+                      Rejeter
+                    </button>
+                    <button
+                      onClick={() => { handleCandidatureAction(popupCand.id, "approved"); setPopupCand(null); }}
+                      className="px-6 py-3 border border-emerald text-emerald hover:bg-emerald hover:text-midnight text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all rounded-sm"
+                    >
+                      Approuver le candidat
+                    </button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* --- POP-UP DES MESSAGES DE CONTACT --- */}
+      <AnimatePresence>
+        {popupMsg && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-midnight/80 backdrop-blur-sm overflow-y-auto"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-midnight-light border border-gold/30 p-8 rounded-sm shadow-2xl max-w-4xl w-full relative max-h-[90vh] overflow-y-auto"
+            >
+              {/* Bouton de fermeture */}
+              <button
+                onClick={() => setPopupMsg(null)}
+                className="absolute top-6 right-6 text-cream-muted hover:text-red-400 transition-colors"
+              >
+                ✕ Fermer
+              </button>
+
+              <div className="mb-6 space-y-2">
+                <span className="text-[10px] uppercase tracking-widest text-emerald font-bold bg-emerald-muted/10 border border-emerald/20 px-3 py-1 rounded">
+                  Sujet : {popupMsg.typeRelation}
+                </span>
+                <h2 className="font-heading text-3xl font-light text-cream mt-4">
+                  Message de <span className="text-gold font-semibold">{popupMsg.prenom} {popupMsg.nom}</span>
+                </h2>
+              </div>
+
+              <div className="space-y-8 font-body">
+                {/* Le Message */}
+                <div className="bg-midnight border border-border p-6 rounded-sm">
+                  <h3 className="text-[10px] uppercase tracking-widest text-gold font-bold mb-4">Message Complet</h3>
+                  <p className="text-lg leading-relaxed text-cream whitespace-pre-line">
+                    « {popupMsg.message} »
+                  </p>
+                </div>
+
+                {/* Formules demandées */}
+                {(popupMsg.formuleAccompagnement !== "aucune" || popupMsg.livreSelection !== "aucun") && (
+                  <div className="flex flex-wrap gap-4">
+                    {popupMsg.formuleAccompagnement && popupMsg.formuleAccompagnement !== "aucune" && (
+                      <span className="px-4 py-2 bg-emerald/10 border border-emerald/30 text-emerald rounded text-xs uppercase font-bold">Intérêt Accompagnement : {popupMsg.formuleAccompagnement}</span>
+                    )}
+                    {popupMsg.livreSelection && popupMsg.livreSelection !== "aucun" && (
+                      <span className="px-4 py-2 bg-gold/10 border border-gold/30 text-gold rounded text-xs uppercase font-bold">Livre Sélectionné : {popupMsg.livreSelection}</span>
+                    )}
+                  </div>
+                )}
+
+                {/* Coordonnées */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs leading-relaxed border-t border-border/40 pt-6">
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">E-mail</strong> <a href={`mailto:${popupMsg.email}`} className="text-gold underline text-sm">{popupMsg.email}</a></p>
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Téléphone</strong> <span className="text-sm text-cream">{popupMsg.telephone || "Non renseigné"}</span></p>
+                  <p><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Localité</strong> <span className="text-sm text-cream">{popupMsg.codePostal || ""} {popupMsg.ville || "Non fournie"}</span></p>
+                  <p className="sm:col-span-2 md:col-span-3"><strong className="text-emerald uppercase tracking-widest text-[9px] block mb-1">Adresse physique</strong> <span className="text-sm text-cream">{popupMsg.adresse || "Non fournie"}</span></p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-end mt-8 pt-6 border-t border-border/40">
+                  <button
+                    onClick={() => { handleDeleteItem(popupMsg.id, "deleteContact"); setPopupMsg(null); }}
+                    className="px-6 py-3 bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500 hover:text-white text-xs uppercase tracking-wider font-semibold cursor-pointer transition-all rounded-sm"
+                  >
+                    Supprimer ce message 🗑
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      </div>
     </div>
   );
 }

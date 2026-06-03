@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import ProtectedEmail from "@/components/ui/ProtectedEmail";
 
 export default function Contact() {
   const [nom, setNom] = useState("");
@@ -135,7 +136,7 @@ export default function Contact() {
                 <span className="text-emerald font-bold">▪</span>
                 <div>
                   <strong className="text-cream block mb-1">Coordonnées de secours</strong>
-                  En cas d&apos;urgence relative à l&apos;application du protocole de 30 jours, utilisez l&apos;adresse directe : <code className="text-gold">contact@briserlesfrontieres.fr</code>
+                  En cas d&apos;urgence relative à l&apos;application du protocole de 30 jours, utilisez l&apos;adresse directe : <ProtectedEmail />
                 </div>
               </li>
             </ul>

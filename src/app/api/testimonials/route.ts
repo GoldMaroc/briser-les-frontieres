@@ -3,7 +3,7 @@ import { getAdminDbData } from "@/lib/db";
 
 export async function GET() {
   try {
-    const dbData = getAdminDbData();
+    const dbData = await getAdminDbData();
     const approvedTestimonials = (dbData.testimonials || [])
       .filter((t) => t.approved === true)
       .map((t) => ({

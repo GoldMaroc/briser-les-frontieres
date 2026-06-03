@@ -1,10 +1,40 @@
 import { NextResponse } from "next/server";
 import { addGift } from "@/lib/db";
 import { sendGiftEmail } from "@/lib/mail";
+import { z } from "zod";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+const OffrirSchema = z.object({
+  offrant: z.object({
+    nom: z.string().min(1),
+    prenom: z.string().min(1),
+    email: z.string().email(),
+    telephone: z.string().min(1),
+    adresse: z.string().min(1),
+    codePostal: z.string().min(1),
+    ville: z.string().min(1),
+  }),
+  beneficiaire: z.object({
+    nom: z.string().min(1),
+    prenom: z.string().min(1),
+    email: z.string().email(),
+    telephone: z.string().min(1),
+    adresse: z.string().min(1),
+    codePostal: z.string().min(1),
+    ville: z.string().min(1),
+    relation: z.string().min(1),
+  }),
+  prestation: z.string().min(1),
+  message: z.string()
+});
+
+    const bodyRaw = await request.json();
+    const parsed = OffrirSchema.safeParse(bodyRaw);
+    if (!parsed.success) {
+      return NextResponse.json({ message: "Données invalides." }, { status: 400 });
+    }
+    const body = parsed.data;
     const { offrant, beneficiaire, prestation, message } = body;
 
     // Validation des données des deux parties

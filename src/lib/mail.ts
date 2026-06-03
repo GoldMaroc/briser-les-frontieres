@@ -21,6 +21,10 @@ function getTransporter() {
       user: SMTP_USER,
       pass: SMTP_PASSWORD,
     },
+    tls: {
+      // Évite les rejets de certificats SSL auto-signés ou invalides fréquents chez certains hébergeurs
+      rejectUnauthorized: false,
+    },
   });
 }
 
@@ -227,6 +231,10 @@ export async function sendCandidatureEmail(candidature: {
       subject: `✉️ Nouvelle Candidature Mentorat : ${candidature.prenom} ${candidature.nom}`,
       html: htmlContent,
     });
+    // Envoyer également un email de remerciement et confirmation au client
+    await sendClientCandidatureThankYou(candidature.email, candidature.prenom, candidature.nom).catch((err) => {
+      console.error("Échec d'envoi du mail de remerciement candidature client en arrière-plan :", err);
+    });
     return { success: true, message: "Email de candidature envoyé" };
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email de candidature :", error);
@@ -381,6 +389,10 @@ export async function sendContactEmail(contact: {
       subject: `✉️ Nouveau Message Cabinet : ${contact.prenom} ${contact.nom} (${contact.typeRelation})`,
       html: htmlContent,
     });
+    // Envoyer également un email de remerciement et confirmation au client
+    await sendClientContactThankYou(contact.email, contact.prenom, contact.nom).catch((err) => {
+      console.error("Échec d'envoi du mail de remerciement contact client en arrière-plan :", err);
+    });
     return { success: true, message: "Email de contact envoyé" };
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email de contact :", error);
@@ -507,3 +519,425 @@ export async function sendGiftEmail(gift: {
     return { success: false, message: "Erreur SMTP" };
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FONCTIONS DE REMERCIEMENT ET CONFIRMATION CLIENT (AUTOMATIQUES)
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function sendClientCandidatureThankYou(email: string, prenom: string, nom: string) {
+  const transporter = getTransporter();
+  if (!transporter) return;
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(212, 168, 83, 0.2); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #f0ede8;">Candidature Reçue</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${prenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous remercions pour l'intérêt que vous portez au protocole d'accompagnement de 9 mois du **Cabinet de Pilotage de la Souveraineté**.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Votre dossier de candidature a bien été enregistré. L'Ingénieur Mounir BYAR l'examinera personnellement sous 48 heures afin d'évaluer l'alignement de vos motivations et de vos engagements.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Si votre profil est retenu, nous vous contacterons pour planifier votre entretien d'interposition stratégique.
+      </p>
+      <div style="margin: 30px 0; padding: 15px; border-left: 2px solid #d4a853; background-color: #0d1b2a; font-size: 12px; color: #f0ede8; font-style: italic;">
+        « Reprendre la pleine maîtrise de votre attention et de votre environnement matériel n'est pas une option, c'est une exigence du mandat terrestre de Khalifa. »
+      </div>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 10px 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+        <p style="margin: 0; color: rgba(160, 174, 192, 0.4);">
+          <a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a>
+        </p>
+      </div>
+    </div>
+  `;
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `🛡️ Cabinet BLF — Confirmation de réception de candidature`,
+      html: htmlContent,
+    });
+  } catch (err) {
+    console.error("Erreur d'envoi du mail de remerciement candidature au client :", err);
+  }
+}
+
+async function sendClientContactThankYou(email: string, prenom: string, nom: string) {
+  const transporter = getTransporter();
+  if (!transporter) return;
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(160, 174, 192, 0.1); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #f0ede8;">Sollicitation Reçue</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${prenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous remercions pour votre message transmis au Cabinet de Pilotage de la Souveraineté.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Votre demande a bien été enregistrée. Mounir BYAR étudiera vos coordonnées et vos observations pour vous répondre de manière ciblée sous 48 heures.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous attachons une importance primordiale à la discrétion et à la confidentialité. Vos coordonnées restent chiffrées de bout en bout et conservées en toute sécurité.
+      </p>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(email)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `✉️ Cabinet BLF — Prise en compte de votre sollicitation`,
+      html: htmlContent,
+    });
+  } catch (err) {
+    console.error("Erreur d'envoi du mail de remerciement contact au client :", err);
+  }
+}
+
+/**
+ * Envoie un e-mail d'alerte sécurité en cas de blocage de l'administration suite à 3 échecs consécutifs.
+ */
+export async function sendAdminLockoutEmail() {
+  const transporter = getTransporter();
+  const targetEmail = "byarmounir@gmail.com";
+  
+  if (!transporter) {
+    console.warn(`[SMTP] Configuration SMTP manquante. Impossible d'envoyer l'email d'avertissement de blocage.`);
+    return { success: false, message: "SMTP non configuré" };
+  }
+
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 40px 30px; max-width: 500px; margin: 0 auto; border: 2px solid #ef4444; border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 30px;">
+        <span style="font-size: 26px; font-weight: bold; letter-spacing: 5px; color: #ef4444;">ALERTE SÉCURITÉ</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 14px; font-weight: 300; letter-spacing: 2px; color: #a0aec0; text-transform: uppercase;">Blocage Console d'Administration</h2>
+      </div>
+
+      <div style="margin-bottom: 30px; line-height: 1.6;">
+        <p style="font-size: 14px; color: #f0ede8;">
+          <strong>Attention Mounir,</strong>
+        </p>
+        <p style="font-size: 14px; color: #f0ede8;">
+          La console d'administration de votre site a été **bloquée pendant 2 heures** suite à **3 tentatives consécutives de saisie de code OTP erroné**.
+        </p>
+        <div style="background-color: #0d1b2a; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 4px; padding: 15px; margin: 20px 0; font-size: 13px;">
+          <p style="margin: 0 0 5px 0;"><strong>Statut :</strong> Bloqué temporairement</p>
+          <p style="margin: 0 0 5px 0;"><strong>Durée :</strong> 2 heures (120 minutes)</p>
+          <p style="margin: 0;"><strong>Déblocage prévu :</strong> ${new Date(Date.now() + 2 * 60 * 60 * 1000).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })} (heure de l'activité)</p>
+        </div>
+        <p style="font-size: 12px; color: #a0aec0;">
+          Si vous n'êtes pas à l'origine de ces tentatives, quelqu'un essaie d'accéder à votre console. Vos données de cohortes et candidatures restent parfaitement sécurisées.
+        </p>
+      </div>
+
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.3);">© Briser les Frontières</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: targetEmail,
+      subject: `🚨 ALERTE : Console Admin Bloquée (3 tentatives échouées)`,
+      html: htmlContent,
+    });
+    return { success: true, message: "Alerte de sécurité envoyée avec succès" };
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de l'alerte de sécurité par e-mail :", error);
+    return { success: false, message: "Échec de l'envoi de l'alerte SMTP" };
+  }
+}
+
+/**
+ * Envoie un email d'acceptation de candidature au mentorat 9 mois
+ */
+export async function sendCandidatureApprovedEmail(email: string, prenom: string, nom: string) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn(`[SMTP] SMTP non configuré pour acceptation candidature.`);
+    return { success: false, message: "SMTP non configuré" };
+  }
+
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(212, 168, 83, 0.3); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #f0ede8; text-transform: uppercase;">Félicitations — Candidature Acceptée</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${prenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous avons le plaisir de vous informer que votre dossier pour le mentorat d'accompagnement de 9 mois du **Cabinet de Pilotage de la Souveraineté** a été **accepté** personnellement par l'Ingénieur Mounir BYAR.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Votre rigueur, votre profil et vos réponses ont démontré un alignement fort avec le niveau d'exigence requis par le **Protocole C.O.M.E.S.**.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8; font-weight: bold; margin-top: 20px;">
+        Quelle est la suite ?
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        L'Ingénieur ou un membre de notre équipe vous contactera **prochainement** par téléphone ou par e-mail pour planifier votre premier entretien d'interposition stratégique et initier votre parcours.
+      </p>
+      <div style="margin: 30px 0; padding: 15px; border-left: 2px solid #10b981; background-color: #0d1b2a; font-size: 12px; color: #10b981; font-style: italic; font-weight: bold;">
+        « Vous êtes admis au protocole. Soyez prêt à réarchitecturer votre attention et à assumer votre mandat de Khalifa avec excellence. »
+      </div>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(email)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `🏆 Cabinet BLF — Votre candidature a été acceptée !`,
+      html: htmlContent,
+    });
+    return { success: true, message: "Email d'acceptation de candidature envoyé" };
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de l'email d'acceptation candidature :", error);
+    return { success: false, message: "Erreur SMTP" };
+  }
+}
+
+/**
+ * Envoie un email de refus de candidature avec motif de décision
+ */
+export async function sendCandidatureRejectedEmail(email: string, prenom: string, nom: string, reason: string) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn(`[SMTP] SMTP non configuré pour refus candidature.`);
+    return { success: false, message: "SMTP non configuré" };
+  }
+
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(160, 174, 192, 0.1); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #a0aec0;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #a0aec0; text-transform: uppercase;">Retour sur Candidature</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${prenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous remercions sincèrement d'avoir pris le temps de postuler au mentorat de 9 mois du **Cabinet de Pilotage de la Souveraineté** et d'avoir partagé vos motivations avec nous.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        L'Ingénieur Mounir BYAR a étudié avec beaucoup d'attention votre dossier. Malheureusement, au vu du nombre extrêmement limité de places disponibles au sein de la cohorte et de nos critères d'admissibilité comportementale, nous ne pouvons pas retenir votre candidature pour cette session.
+      </p>
+      <div style="margin: 25px 0; padding: 15px; border-left: 2px solid #ef4444; background-color: #1a2436; font-size: 13px; color: #f0ede8;">
+        <strong style="color: #ef4444; display: block; margin-bottom: 5px;">Motif de la décision :</strong>
+        <p style="margin: 0; white-space: pre-wrap; font-style: italic;">${reason || "Non spécifié."}</p>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous encourageons vivement à continuer à travailler sur les fondements du **Protocole C.O.M.E.S.** de manière autonome et à surveiller nos futures ouvertures de cohortes.
+      </p>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(email)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `✉️ Cabinet BLF — Décision relative à votre candidature`,
+      html: htmlContent,
+    });
+    return { success: true, message: "Email de refus de candidature envoyé" };
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de l'email de refus candidature :", error);
+    return { success: false, message: "Erreur SMTP" };
+  }
+}
+
+/**
+ * Envoie un email d'approbation cadeau de la part de l'offrant et à destination du bénéficiaire
+ */
+export async function sendGiftApprovedEmail(
+  offrantEmail: string,
+  beneficiaireEmail: string,
+  offrantPrenom: string,
+  offrantNom: string,
+  beneficiairePrenom: string,
+  beneficiaireNom: string,
+  prestation: string
+) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn(`[SMTP] SMTP non configuré pour acceptation cadeau.`);
+    return { success: false, message: "SMTP non configuré" };
+  }
+
+  // 1. Envoyer l'email d'invitation cadeau au proche (le bénéficiaire)
+  const htmlBeneficiaire = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 40px 30px; max-width: 600px; margin: 0 auto; border: 2px solid #d4a853; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+      <div style="text-align: center; border-bottom: 1px solid rgba(212, 168, 83, 0.2); padding-bottom: 20px; margin-bottom: 30px;">
+        <span style="font-size: 28px; font-weight: bold; letter-spacing: 5px; color: #d4a853;">BLF CADEAU</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 14px; font-weight: 300; letter-spacing: 2px; color: #f0ede8; text-transform: uppercase;">Une invitation d'exception vous attend</h2>
+      </div>
+      <p style="font-size: 15px; line-height: 1.6; color: #f0ede8;">Salam ${beneficiairePrenom},</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #a0aec0;">
+        Nous avons le plaisir de vous annoncer que votre ami(e) **${offrantPrenom} ${offrantNom}** vous a offert une prestation exclusive auprès du **Cabinet de Pilotage de la Souveraineté** :
+      </p>
+      <div style="background-color: #0d1b2a; border: 1px solid rgba(212, 168, 83, 0.3); border-radius: 4px; padding: 25px; margin: 25px 0; text-align: center;">
+        <span style="font-size: 11px; text-transform: uppercase; color: #d4a853; font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 5px;">Invitation Cadeau Validée</span>
+        <strong style="font-size: 20px; color: #f0ede8; display: block; text-transform: uppercase; letter-spacing: 1px;">${prestation}</strong>
+      </div>
+      <p style="font-size: 15px; line-height: 1.6; color: #a0aec0;">
+        Cette prestation a été personnellement approuvée par l'Ingénieur Mounir BYAR. Elle est maintenant active et prête à être planifiée.
+      </p>
+      <p style="font-size: 15px; line-height: 1.6; color: #a0aec0;">
+        L'Ingénieur ou un membre de notre cabinet vous contactera **prochainement** à cette adresse e-mail pour fixer avec vous la date de votre session et vous transmettre le protocole de préparation.
+      </p>
+      <div style="margin: 30px 0; padding: 15px; border-left: 2px solid #d4a853; background-color: #1a2436; font-size: 13px; color: #f0ede8; font-style: italic; border-radius: 2px;">
+        « Offrir la souveraineté de l'esprit est le plus noble des présents. Reprenez la maîtrise de votre temps. »
+      </div>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(email)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+
+  // 2. Envoyer l'email de confirmation à l'offrant (le donateur)
+  const htmlOffrant = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(212, 168, 83, 0.3); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF CADEAU</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #f0ede8; text-transform: uppercase;">Prestation Cadeau Approuvée</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${offrantPrenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous avons le plaisir de vous confirmer que votre commande cadeau pour **${beneficiairePrenom} ${beneficiaireNom}** a été **approuvée** par l'Ingénieur Mounir BYAR.
+      </p>
+      <div style="background-color: #0d1b2a; border: 1px solid rgba(160, 174, 192, 0.1); padding: 15px; border-radius: 4px; margin: 20px 0; font-size: 13px;">
+        <p style="margin: 0 0 5px 0;"><strong>Bénéficiaire :</strong> ${beneficiairePrenom} ${beneficiaireNom}</p>
+        <p style="margin: 0 0 5px 0;"><strong>Prestation :</strong> ${prestation}</p>
+        <p style="margin: 0;"><strong>Statut :</strong> Approuvé & Actif</p>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Un magnifique e-mail d'invitation cadeau vient d'être envoyé à **${beneficiairePrenom}** (${beneficiaireEmail}). Nous la planifierons très prochainement avec lui/elle.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous remercions pour votre confiance et pour ce magnifique geste d'excellence comportementale envers votre proche.
+      </p>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(beneficiaireEmail)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+
+  try {
+    // Envoi au bénéficiaire
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: beneficiaireEmail,
+      subject: `🎁 Invitation Cadeau BLF : ${offrantPrenom} vous offre la prestation "${prestation}" !`,
+      html: htmlBeneficiaire,
+    });
+
+    // Envoi à l'offrant
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: offrantEmail,
+      subject: `🎁 Cabinet BLF — Votre commande cadeau pour ${beneficiairePrenom} est validée`,
+      html: htmlOffrant,
+    });
+
+    return { success: true, message: "E-mails cadeaux envoyés aux deux parties" };
+  } catch (error) {
+    console.error("Erreur lors de l'envoi des e-mails cadeaux approuvés :", error);
+    return { success: false, message: "Erreur lors de l'envoi SMTP" };
+  }
+}
+
+/**
+ * Envoie un email de refus cadeau avec explications à l'offrant pour remboursement
+ */
+export async function sendGiftRejectedEmail(
+  offrantEmail: string,
+  offrantPrenom: string,
+  offrantNom: string,
+  beneficiairePrenom: string,
+  beneficiaireNom: string,
+  prestation: string,
+  reason: string
+) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn(`[SMTP] SMTP non configuré pour refus cadeau.`);
+    return { success: false, message: "SMTP non configuré" };
+  }
+
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(160, 174, 192, 0.1); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #a0aec0;">BLF CADEAU</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #a0aec0; text-transform: uppercase;">Annulation Commande Cadeau</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam ${offrantPrenom},</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Nous vous remercions pour votre demande de prestation cadeau « **${prestation}** » destinée à **${beneficiairePrenom} ${beneficiaireNom}**.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        L'Ingénieur Mounir BYAR étudie attentivement chaque demande de prestation, y compris celles destinées à des tiers, afin de s'assurer de la pertinence comportementale et de l'alignement avec les exigences du Cabinet.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Après examen, nous avons le regret de vous informer que nous ne pouvons pas honorer cette prestation cadeau.
+      </p>
+      <div style="margin: 25px 0; padding: 15px; border-left: 2px solid #ef4444; background-color: #1a2436; font-size: 13px; color: #f0ede8;">
+        <strong style="color: #ef4444; display: block; margin-bottom: 5px;">Motif de la décision :</strong>
+        <p style="margin: 0; white-space: pre-wrap; font-style: italic;">${reason || "Non spécifié."}</p>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8; font-weight: bold; margin-top: 20px;">
+        Remboursement intégral :
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Aucun montant ne sera débité ou un remboursement intégral de votre transaction sera initié sous 48 heures. Vous n'avez aucune démarche à entreprendre.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0; margin-top: 15px;">
+        Nous restons à votre entière disposition pour tout échange complémentaire.
+      </p>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 30px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 0 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+      <p style="margin: 10px 0 0 0; color: rgba(160, 174, 192, 0.4);"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=\${encodeURIComponent(offrantEmail)\}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a></p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: offrantEmail,
+      subject: `🎁 Cabinet BLF — Annulation et remboursement de votre prestation cadeau`,
+      html: htmlContent,
+    });
+    return { success: true, message: "Email de refus de cadeau envoyé à l'offrant" };
+  } catch (error) {
+    console.error("Erreur lors de l'envoi de l'email de refus de cadeau :", error);
+    return { success: false, message: "Erreur SMTP" };
+  }
+}
+

@@ -53,10 +53,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "h5",
-    name: "Kamel",
-    role: "",
+    name: "Thomas",
+    role: "Converti",
     category: "homme",
-    text: "Après une grave dépression, j'avais perdu toute confiance en la vie. Je n'arrivais plus à sortir, à vivre en société ou même à envisager de retravailler. Le compagnonnage de 9 mois m'a redonné un cadre spirituel et mental. J'ai repris confiance en la miséricorde d'Allah, j'ai accepté de revivre en société et je viens de retrouver un emploi stable.",
+    text: "Issu d'une famille athée, j'ai découvert l'Islam à 25 ans mais j'étais perdu face à l'immensité de la pratique. Le protocole de 9 mois m'a pris par la main pour intégrer la Salat étape par étape, avec une approche logique et neurobiologique qui m'a convaincu. J'ai enfin trouvé la paix auprès d'Allah.",
     score: 89,
     period: "Protocole 9 Mois",
     location: "Bétheny"
@@ -73,10 +73,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "h7",
-    name: "Rayan",
-    role: "Étudiant",
+    name: "Julien",
+    role: "Converti",
     category: "homme",
-    text: "Je n'avais jamais prié de ma vie et la religion me semblait inaccessible. J'étais perdu dans des addictions aux écrans et aux jeux. L'accompagnement m'a pris par la main en m'expliquant l'Islam sous un angle neurobiologique et dévotionnel. J'ai posé mon front au sol pour la première fois. Une renaissance.",
+    text: "Je n'avais jamais prié de ma vie et la religion me semblait inaccessible. J'étais perdu dans des addictions aux écrans et aux jeux. L'accompagnement m'a pris par la main en m'expliquant l'Islam sous un angle neurobiologique et dévotionnel. J'ai posé mon front au sol pour la première fois. Une véritable renaissance.",
     score: 81,
     period: "Protocole 9 Mois",
     location: "Sézanne"
@@ -123,10 +123,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "h12",
-    name: "Omar",
-    role: "",
+    name: "Alexandre",
+    role: "Nouveau converti",
     category: "homme",
-    text: "Noyé dans les soucis de la vie de tous les jours et des dettes matérielles, je ne prenais plus aucun temps pour Dieu. Les 9 mois d'accompagnement m'ont forcé à couper le superflu. En simplifiant ma vie et en me concentrant sur ma Salat, la Baraka est revenue dans mon foyer.",
+    text: "La modernité et la course à l'argent m'avaient épuisé. En découvrant l'Islam, je cherchais la paix, mais je restais noyé dans le superflu et ne savais pas comment prier. Ce protocole m'a forcé à épurer ma vie et à centrer mes journées autour de ma Salat. La sérénité et la Baraka sont enfin entrées dans ma vie.",
     score: 82,
     period: "Protocole 9 Mois",
     location: "Soissons"
@@ -175,10 +175,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "f2",
-    name: "Nadia",
-    role: "",
+    name: "Claire",
+    role: "Convertie",
     category: "femme",
-    text: "Complètement perdue après une rupture de vie, je me laissais aller à de nombreux excès mondains pour combler le vide. Le protocole de 9 mois m'a réappris à aimer la solitude dévotionnelle et à purifier mes habitudes de vie. J'ai retrouvé ma dignité et ma paix intérieure.",
+    text: "Suite à ma conversion, je me sentais isolée et submergée par les doutes. Le protocole de 9 mois m'a réappris à aimer la solitude avec mon Créateur et à purifier mes habitudes de vie. J'ai compris le sens profond de l'adoration et j'ai trouvé ma dignité de femme en me soumettant à Allah.",
     score: 92,
     period: "Protocole 9 Mois",
     location: "Cormontreuil"
@@ -205,10 +205,10 @@ export const testimonials: Testimonial[] = [
   },
   {
     id: "f5",
-    name: "Samira",
-    role: "",
+    name: "Sophie",
+    role: "Convertie",
     category: "femme",
-    text: "J'avais une pratique spirituelle en dents de scie : des mois de prière assidue suivis de longs mois de coupure totale. L'accompagnement de 9 mois a mis fin à ce cycle destructeur. L'instauration de verrous comportementaux a rendu ma pratique stable et inébranlable.",
+    text: "Après ma conversion, ma pratique spirituelle était en dents de scie : des mois de foi intense suivis de baisses de moral. L'accompagnement a mis fin à cette instabilité en instaurant des verrous environnementaux. Ma connexion avec Allah est désormais stable et inébranlable.",
     score: 83,
     period: "Protocole 9 Mois",
     location: "Bétheny"

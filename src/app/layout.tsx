@@ -5,7 +5,6 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { TimeThemeProvider } from "@/components/ui/TimeThemeProvider";
 import SalatTakeover from "@/components/ui/SalatTakeover";
-import HorlogerieWidget from "@/components/ui/HorlogerieWidget";
 import CookieBanner from "@/components/layout/CookieBanner";
 
 const cormorant = Cormorant_Garamond({
@@ -96,7 +95,6 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <SalatTakeover />
-          <HorlogerieWidget />
           <CookieBanner />
         </TimeThemeProvider>
       </body>

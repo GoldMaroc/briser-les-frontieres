@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import HorlogerieWidget from "@/components/ui/HorlogerieWidget";
 
 const stepperSteps = [
   { href: "/", label: "Éveil", num: "01" },
   { href: "/audit", label: "Diagnostic", num: "02" },
   { href: "/fondements", label: "Compréhension", num: "03" },
   { href: "/protocole", label: "Méthode", num: "04" },
-  { href: "/livres", label: "Outils", num: "05" },
+  { href: "/offres", label: "Offres", num: "05" },
+  { href: "/livres", label: "Outils", num: "06" },
 ];
 
 export default function Header() {
@@ -25,20 +28,23 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-midnight/95 backdrop-blur-md border-b border-border"
-          : "bg-transparent"
-      }`}
-    >
-      <nav className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between h-20">
-        {/* Logo */}
-        <Link href="/" className="relative z-10">
-          <span className="font-heading text-2xl font-semibold tracking-[0.15em] text-cream">
-            BLF
-          </span>
-        </Link>
+    <div className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      <HorlogerieWidget />
+      <header
+        className={`w-full transition-all duration-300 ${
+          scrolled
+            ? "bg-midnight border-b border-border shadow-sm"
+            : "bg-midnight border-b border-transparent"
+        }`}
+      >
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href="/" className="relative z-10 flex items-center gap-4 group">
+            <Image src="/logo_blf.png" alt="Logo Briser les Frontières" width={44} height={44} className="object-contain" />
+            <span className="font-heading text-lg sm:text-xl font-medium tracking-wider text-cream uppercase leading-tight max-w-[140px] sm:max-w-none lg:hidden">
+              Briser les Frontières
+            </span>
+          </Link>
  
         {/* Navigation Desktop (Stepper Linéaire) */}
         <div className="hidden lg:flex items-center gap-5">
@@ -73,18 +79,16 @@ export default function Header() {
               pathname === "/offrir" ? "text-gold font-bold" : "text-cream-muted"
             }`}
           >
-            Offrir 🎁
+            Offrir
           </Link>
           
           <Link
             href="/contact"
-            className={`ml-4 px-5 py-2.5 border-2 text-xs tracking-[0.15em] uppercase font-semibold transition-all duration-400 ${
-              pathname === "/contact"
-                ? "bg-gold border-gold text-stone-950 font-bold"
-                : "border-cream text-cream hover:bg-cream hover:text-midnight"
+            className={`ml-6 btn-inst ${
+              pathname === "/contact" ? "btn-inst-primary" : ""
             }`}
           >
-            06. Souveraineté
+            07. Contact
           </Link>
         </div>
 
@@ -150,7 +154,7 @@ export default function Header() {
                     pathname === "/offrir" ? "font-semibold" : ""
                   }`}
                 >
-                  Offrir une Prestation 🎁
+                  Offrir une Prestation
                 </Link>
               </motion.div>
               
@@ -162,19 +166,20 @@ export default function Header() {
                 <Link
                   href="/contact"
                   onClick={() => setMenuOpen(false)}
-                  className={`mt-4 px-8 py-3 border-2 text-sm tracking-[0.15em] uppercase font-semibold transition-all duration-400 block ${
+                  className={`mt-4 px-8 py-3 border text-sm tracking-[0.15em] uppercase font-semibold transition-all duration-300 block ${
                     pathname === "/contact"
                       ? "bg-gold border-gold text-stone-950 font-bold"
-                      : "border-cream text-cream hover:bg-cream hover:text-midnight"
+                      : "border-gold/30 text-gold hover:bg-gold hover:text-midnight"
                   }`}
                 >
-                  06. Souveraineté (Contact)
+                  07. Contact
                 </Link>
               </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
       </nav>
-    </header>
+      </header>
+    </div>
   );
 }

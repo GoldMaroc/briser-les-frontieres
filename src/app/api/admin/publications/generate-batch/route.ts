@@ -1,0 +1,97 @@
+import { NextResponse } from "next/server";
+
+export async function POST(request: Request) {
+  try {
+    const { metrics, platforms, category, temperatures } = await request.json();
+    
+    // Si la tendance d'engagement (data réelle) baisse...
+    // Si elle est haute, on "informe" et "fidelise"
+    let strategyHint = "";
+    if (metrics?.engagementTrend === "down") {
+      strategyHint = "L'engagement est en baisse. L'objectif global des posts doit être agressif, clivant, conçu pour re-capter l'attention immédiate (Objectif: communaute et convertir).";
+    } else {
+      strategyHint = "L'engagement est stable/haut. L'objectif global des posts doit être la consolidation de l'autorité et la fidélisation (Objectif: informer, fideliser).";
+    }
+
+    const targetCategory = category ? `Concentre les publications sur le thème spécifique : "${category}".` : "Varie les thèmes autour du leadership et du Khalifa.";
+    let platformsInstructions = "";
+    if (platforms && platforms.length > 0) {
+      platformsInstructions = platforms.map((p: string) => {
+        const temp = temperatures && temperatures[p] !== undefined ? temperatures[p] : 0.5;
+        let tone = "équilibré et engageant";
+        if (temp < 0.4) tone = "très sérieux, factuel, institutionnel et académique";
+        if (temp >= 0.8) tone = "très créatif, disruptif, punchy et clivant";
+        return `- ${p} : Ton exigé -> ${tone} (Température ciblée: ${temp}). Adapte strictement le format à ce réseau.`;
+      }).join("\n   ");
+    } else {
+      platformsInstructions = "- X, LinkedIn";
+    }
+
+    const prompt = `
+Tu es l'Agent Stratège de "Briser les Frontières". Ta mission est de rédiger un plan de communication complet de 12 publications.
+Voici la température actuelle d'engagement globale du client : ${strategyHint}
+${targetCategory}
+
+CONSIGNES STRICTES :
+1. Thème central : Le leadership, la souveraineté mentale/physique/spirituelle, le rôle de Khalifa (gérant/dépositaire de Dieu sur Terre).
+2. Humanisation & Anti-Bot : Évite absolument le langage robotique ou trop corporate. Écris de façon très directe, brute, presque "conversationnelle" par moment, avec des sauts de lignes marqués. Aucun hashtag (ça fait spam).
+3. Plateformes Cibles & Tonalités (TRÈS IMPORTANT) :
+   ${platformsInstructions}
+4. Tu dois générer exactement 12 publications.
+5. Tu dois retourner le résultat UNIQUEMENT au format JSON, sans aucun texte avant ou après.
+
+Le format JSON attendu est strictement un objet contenant un tableau "posts" de 12 éléments comme suit :
+{
+  "posts": [
+    {
+      "theme": "Sujet du post",
+      "titre": "Titre d'accroche (optionnel)",
+      "objectif": "informer", // Doit être 'convertir', 'informer', 'fideliser' ou 'communaute'
+      "attente": "Ce que tu attends du lecteur",
+      "platforms": ["X"], // Un tableau contenant une ou deux plateformes parmi: linkedin, X, tiktok, instagram, facebook
+      "content": "Le texte adapté au format de la plateforme choisie. (ex: Script TikTok, ou Post LinkedIn, etc.)"
+    }
+  ]
+}
+`;
+
+    const apiKey = process.env.MISTRAL_API_KEY;
+    if (!apiKey) {
+      return NextResponse.json({ error: "MISTRAL_API_KEY non configurée." }, { status: 500 });
+    }
+
+    const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: "mistral-large-latest",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" }
+      })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error?.message || "Erreur Mistral");
+    }
+
+    const rawJson = data.choices[0].message.content;
+    let posts = [];
+    try {
+      // Mistral peut renvoyer un objet contenant un tableau, ou directement le tableau.
+      const parsed = JSON.parse(rawJson);
+      posts = Array.isArray(parsed) ? parsed : (parsed.posts || parsed.publications || Object.values(parsed)[0]);
+    } catch (e) {
+      console.error("Erreur parsing JSON Mistral", rawJson);
+      return NextResponse.json({ error: "L'IA a généré un format invalide." }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true, posts });
+  } catch (error: any) {
+    console.error("Generate batch error:", error);
+    return NextResponse.json({ error: error.message || "Erreur serveur" }, { status: 500 });
+  }
+}

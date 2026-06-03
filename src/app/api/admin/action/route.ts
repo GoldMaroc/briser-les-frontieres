@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { 
   updateCandidatureStatus, 
   deleteCandidature, 
@@ -7,18 +8,43 @@ import {
   deleteGift, 
   deleteSubscriber, 
   approveSubmittedTestimonial, 
-  deleteSubmittedTestimonial 
+  deleteSubmittedTestimonial,
+  verifyAdminSession,
+  getAdminDbData,
+  updateGiftStatus
 } from "@/lib/db";
+import {
+  sendCandidatureApprovedEmail,
+  sendCandidatureRejectedEmail,
+  sendGiftApprovedEmail,
+  sendGiftRejectedEmail
+} from "@/lib/mail";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "BLF_ADMIN_2026";
 
 export async function POST(request: Request) {
   try {
-    const authHeader = request.headers.get("X-Admin-Password");
+    // 1. Vérifier la validité de la session d'administration active
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get("blf_admin_session")?.value;
+    
+    let isSessionValid = false;
+    if (sessionToken) {
+      isSessionValid = await verifyAdminSession(sessionToken);
+    }
 
-    if (!authHeader || authHeader !== ADMIN_PASSWORD) {
+    if (!isSessionValid) {
       return NextResponse.json(
-        { message: "Accès refusé. Mot de passe incorrect." },
+        { message: "Accès refusé. Votre session administrative a expiré ou est invalide. Veuillez recharger la page et vous reconnecter." },
+        { status: 401 }
+      );
+    }
+
+    // 2. Vérification optionnelle de sécurité complémentaire sur la clé d'accès si fournie
+    const authHeader = request.headers.get("X-Admin-Password");
+    if (authHeader && authHeader !== ADMIN_PASSWORD) {
+      return NextResponse.json(
+        { message: "Accès refusé. Clé d'accès principale incorrecte." },
         { status: 401 }
       );
     }
@@ -42,11 +68,23 @@ export async function POST(request: Request) {
         );
       }
 
+      const dbData = await getAdminDbData();
+      const candidate = dbData.candidatures.find((c) => c.id === id);
+      if (!candidate) {
+        return NextResponse.json({ message: "Impossible de trouver la candidature." }, { status: 404 });
+      }
+
       const success = await updateCandidatureStatus(id, status);
       if (success) {
+        if (status === "approved") {
+          await sendCandidatureApprovedEmail(candidate.email, candidate.prenom, candidate.nom);
+        } else if (status === "rejected") {
+          const { reason } = body;
+          await sendCandidatureRejectedEmail(candidate.email, candidate.prenom, candidate.nom, reason || "");
+        }
         return NextResponse.json({ success: true, message: `Statut de la candidature mis à jour sur : ${status}` });
       } else {
-        return NextResponse.json({ message: "Impossible de trouver la candidature." }, { status: 404 });
+        return NextResponse.json({ message: "Impossible de mettre à jour le statut de la candidature." }, { status: 500 });
       }
     }
 
@@ -80,6 +118,50 @@ export async function POST(request: Request) {
     }
 
     // 4. GESTION DES PRESTATIONS CADEAUX (GIFTS)
+    if (action === "updateGift") {
+      if (!status || !["pending", "approved", "rejected"].includes(status)) {
+        return NextResponse.json(
+          { message: "Statut du cadeau invalide." },
+          { status: 400 }
+        );
+      }
+
+      const dbData = await getAdminDbData();
+      const gift = dbData.gifts.find((g) => g.id === id);
+      if (!gift) {
+        return NextResponse.json({ message: "Impossible de trouver la commande cadeau." }, { status: 404 });
+      }
+
+      const success = await updateGiftStatus(id, status);
+      if (success) {
+        if (status === "approved") {
+          await sendGiftApprovedEmail(
+            gift.offrant.email,
+            gift.beneficiaire.email,
+            gift.offrant.prenom,
+            gift.offrant.nom,
+            gift.beneficiaire.prenom,
+            gift.beneficiaire.nom,
+            gift.prestation
+          );
+        } else if (status === "rejected") {
+          const { reason } = body;
+          await sendGiftRejectedEmail(
+            gift.offrant.email,
+            gift.offrant.prenom,
+            gift.offrant.nom,
+            gift.beneficiaire.prenom,
+            gift.beneficiaire.nom,
+            gift.prestation,
+            reason || ""
+          );
+        }
+        return NextResponse.json({ success: true, message: `Statut de la prestation cadeau mis à jour sur : ${status}` });
+      } else {
+        return NextResponse.json({ message: "Impossible de mettre à jour le statut du cadeau." }, { status: 500 });
+      }
+    }
+
     if (action === "deleteGift") {
       const success = await deleteGift(id);
       if (success) {
