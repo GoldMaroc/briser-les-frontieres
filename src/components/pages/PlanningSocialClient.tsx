@@ -200,6 +200,32 @@ export default function PlanningSocialClient() {
     }
   };
 
+  const publishNow = async (id: string, content: string) => {
+    if (!confirm("Voulez-vous forcer la publication immédiate sur les réseaux (sans attendre la date planifiée) ?")) return;
+    
+    try {
+      const res = await fetch("/api/admin/social/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, content })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        alert("Publication expédiée sur LinkedIn avec succès !");
+        if (selectedPub && selectedPub.id === id) {
+          setSelectedPub({ ...selectedPub, status: "published" });
+        }
+        fetchPublications();
+      } else {
+        alert("Erreur: " + data.error);
+      }
+    } catch (e) {
+      alert("Erreur technique lors de la publication.");
+      console.error(e);
+    }
+  };
+
   const saveEdit = async () => {
     if (!selectedPub) return;
     try {
@@ -528,8 +554,14 @@ export default function PlanningSocialClient() {
 
       {/* POPUP MODAL */}
       {selectedPub && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-fade-in">
-          <div className="bg-midnight border border-gold/30 rounded-md w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm animate-fade-in"
+          onClick={() => setSelectedPub(null)}
+        >
+          <div 
+            className="bg-midnight border border-gold/30 rounded-md w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="bg-surface/80 p-4 border-b border-border flex justify-between items-center">
               <h3 className="text-xl font-heading text-gold truncate pr-4">{selectedPub.titre}</h3>
               <button onClick={() => setSelectedPub(null)} className="text-cream-muted hover:text-cream text-2xl leading-none">&times;</button>
@@ -595,11 +627,15 @@ export default function PlanningSocialClient() {
                 <>
                   <Button onClick={() => setIsEditing(true)} variant="ghost" className="text-sm border-border hover:border-gold">📝 Modifier</Button>
                   
-                  {selectedPub.status !== "approved" && (
-                    <Button onClick={() => updateStatus(selectedPub.id, "approved")} variant="ghost" className="text-sm border-emerald/50 text-emerald hover:bg-emerald/10">✅ Approuver</Button>
+                  {selectedPub.status !== "approved" && selectedPub.status !== "published" && (
+                    <Button onClick={() => updateStatus(selectedPub.id, "approved")} variant="ghost" className="text-sm border-emerald/50 text-emerald hover:bg-emerald/10">✅ Approuver pour plus tard</Button>
                   )}
                   {selectedPub.status === "approved" && (
                     <Button onClick={() => updateStatus(selectedPub.id, "pending_validation")} variant="ghost" className="text-sm border-gold/50 text-gold hover:bg-gold/10">⏳ Mettre en attente</Button>
+                  )}
+                  
+                  {selectedPub.status !== "published" && (
+                    <Button onClick={() => publishNow(selectedPub.id, selectedPub.content)} variant="ghost" className="text-sm border-[#0A66C2]/50 text-[#0A66C2] hover:bg-[#0A66C2]/10 font-bold">🚀 Publier Maintenant</Button>
                   )}
                   
                   <Button onClick={() => {

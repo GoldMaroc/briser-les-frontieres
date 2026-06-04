@@ -5,11 +5,11 @@ const SMTP_HOST = process.env.SMTP_HOST || "";
 const SMTP_PORT = parseInt(process.env.SMTP_PORT || "587", 10);
 const SMTP_USER = process.env.SMTP_USER || "";
 const SMTP_PASSWORD = process.env.SMTP_PASSWORD || "";
-const SMTP_FROM = process.env.SMTP_FROM || '"BLF Plateforme" <noreply@briserlesfrontieres.fr>';
-const SMTP_TO = process.env.SMTP_TO || "contact@briserlesfrontieres.fr";
+export const SMTP_FROM = process.env.SMTP_FROM || '"Cabinet BLF" <info@briserlesfrontieres.fr>';
+const SMTP_TO = process.env.SMTP_TO || "info@briserlesfrontieres.fr";
 
 // Crée le transporteur uniquement si la configuration est présente
-function getTransporter() {
+export function getTransporter() {
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASSWORD) {
     return null;
   }
@@ -938,6 +938,169 @@ export async function sendGiftRejectedEmail(
   } catch (error) {
     console.error("Erreur lors de l'envoi de l'email de refus de cadeau :", error);
     return { success: false, message: "Erreur SMTP" };
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAILS DE TUNNEL (PHASE 3) : BIENVENUE, FAJR, HEBDOMADAIRE
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Envoie un email de Bienvenue puissant et incisif lors de l'inscription
+ */
+export async function sendWelcomeEmail(email: string) {
+  const transporter = getTransporter();
+  if (!transporter) return;
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(212, 168, 83, 0.2); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 16px; font-weight: 300; letter-spacing: 1px; color: #f0ede8; text-transform: uppercase;">Entrée dans le Protocole</h2>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam,</p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Vous venez de franchir la première étape. Celle de la prise de conscience.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        La majorité des hommes aujourd'hui subissent l'entropie : fatigue décisionnelle, dispersion numérique, prières bâclées ou manquées, et un mandat de Khalifa totalement délaissé au profit d'urgences futiles dictées par le Nafs.
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        <strong>Briser les Frontières n'est pas une simple newsletter.</strong> C'est un cabinet d'ingénierie comportementale conçu pour restaurer votre souveraineté intellectuelle et spirituelle.
+      </p>
+      <div style="margin: 30px 0; padding: 15px; border-left: 2px solid #d4a853; background-color: #0d1b2a; font-size: 13px; color: #f0ede8;">
+        <strong style="color: #d4a853; display: block; margin-bottom: 10px; text-transform: uppercase;">Ce que vous allez recevoir :</strong>
+        <ul style="margin: 0; padding-left: 20px; line-height: 1.8; color: #a0aec0;">
+          <li><strong style="color: #f0ede8;">L'Appel du Fajr :</strong> Chaque jour, à l'heure exacte du lever du soleil selon votre position géographique, un court rappel frappera votre boîte mail. Pour forger la discipline.</li>
+          <li><strong style="color: #f0ede8;">L'Ingénierie Hebdomadaire :</strong> Un apport tactique hebdomadaire pour dompter votre environnement et aligner vos actions sur votre foi.</li>
+        </ul>
+      </div>
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Préparez-vous à revoir vos standards. L'exigence est totale.
+      </p>
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 40px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 10px 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+        <p style="margin: 0; color: rgba(160, 174, 192, 0.4);">
+          <a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a>
+        </p>
+      </div>
+    </div>
+  `;
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `🛡️ BLF — Votre entrée dans le Protocole (À lire attentivement)`,
+      html: htmlContent,
+    });
+  } catch (err) {
+    console.error("Erreur d'envoi du mail de bienvenue :", err);
+  }
+}
+
+/**
+ * Envoie un email de rappel spirituel quotidien à l'heure du Fajr
+ */
+export async function sendFajrEmail(email: string, ville: string) {
+  const transporter = getTransporter();
+  if (!transporter) return;
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #050505; color: #f0ede8; padding: 40px; max-width: 500px; margin: 0 auto; border-top: 3px solid #d4a853;">
+      <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 3px; color: #d4a853; text-align: center; margin-bottom: 30px;">L'Heure du Fajr (${ville})</p>
+      
+      <p style="font-size: 15px; line-height: 1.8; color: #e5e5e5; text-align: center; font-style: italic;">
+        "La prière est meilleure que le sommeil."
+      </p>
+      
+      <div style="margin: 40px 0; height: 1px; background: linear-gradient(90deg, rgba(212,168,83,0) 0%, rgba(212,168,83,0.5) 50%, rgba(212,168,83,0) 100%);"></div>
+      
+      <p style="font-size: 13px; line-height: 1.6; color: #888888; text-align: center;">
+        L'entropie commence dès le réveil. La façon dont vous répondez à cet appel définit l'entièreté de votre journée.<br><br>
+        Levez-vous. Purifiez-vous. Assumez votre mandat.
+      </p>
+      
+      <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #444444; letter-spacing: 1px;">
+        <p>Briser les Frontières — Ingénierie Comportementale</p>
+        <p style="margin-top: 10px;"><a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}" style="color: #444444; text-decoration: underline;">Se désabonner</a></p>
+      </div>
+    </div>
+  `;
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `🌅 As-Salat Khayrun Min An-Nawm (Fajr)`,
+      html: htmlContent,
+    });
+  } catch (err) {
+    console.error("Erreur d'envoi du mail Fajr :", err);
+  }
+}
+
+/**
+ * Envoie un email hebdomadaire de recommandation (Vente Mentorat)
+ */
+export async function sendWeeklyAdviceEmail(email: string) {
+  const transporter = getTransporter();
+  if (!transporter) return;
+  const htmlContent = `
+    <div style="font-family: 'Inter', system-ui, sans-serif; background-color: #0a1128; color: #f0ede8; padding: 30px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(212, 168, 83, 0.2); border-radius: 4px;">
+      <div style="text-align: center; border-bottom: 1px solid rgba(160, 174, 192, 0.1); padding-bottom: 20px; margin-bottom: 25px;">
+        <span style="font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #d4a853;">BLF</span>
+        <h2 style="margin: 10px 0 0 0; font-size: 14px; font-weight: 300; letter-spacing: 2px; color: #a0aec0; text-transform: uppercase;">Ingénierie de la Souveraineté</h2>
+      </div>
+      
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8;">Salam,</p>
+      
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Avez-vous remarqué comment les algorithmes, les notifications et le désordre spatial fragmentent votre attention ?
+      </p>
+      
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Ce n'est pas un accident. C'est une conception systémique. L'environnement moderne est architecturé pour épuiser votre <strong>fatigue décisionnelle</strong> avant même l'heure du Dhuhr. Résultat : des prières sans Khuchu, une procrastination chronique et un sentiment d'impuissance face à vos réelles obligations terrestres.
+      </p>
+
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        La seule réponse n'est pas la "motivation". La motivation est volatile, dictée par le Nafs. <strong>La vraie réponse est l'Ingénierie des Systèmes.</strong>
+      </p>
+
+      <div style="margin: 30px 0; padding: 20px; border: 1px solid rgba(212, 168, 83, 0.4); background-color: #0d1b2a; text-align: center; border-radius: 4px;">
+        <h3 style="margin: 0 0 15px 0; font-size: 18px; color: #d4a853;">Le Protocole C.O.M.E.S. (Mentorat 9 Mois)</h3>
+        <p style="font-size: 13px; line-height: 1.6; color: #f0ede8; margin-bottom: 20px;">
+          Je vous accompagne personnellement sur 9 mois pour déconstruire votre environnement entropique et réarchitecturer vos fondations temporelles, spatiales et spirituelles.
+        </p>
+        <a href="https://www.briserlesfrontieres.fr/contact" style="display: inline-block; padding: 12px 24px; background-color: #d4a853; color: #0a1128; font-weight: bold; text-decoration: none; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; border-radius: 2px;">
+          POSTULER AU MENTORAT
+        </a>
+      </div>
+
+      <p style="font-size: 14px; line-height: 1.6; color: #a0aec0;">
+        Attention : les places sont strictement limitées et soumises à une étude de votre profil lors d'un entretien d'interposition. Ce n'est pas une simple formation, c'est une restructuration profonde.
+      </p>
+      
+      <p style="font-size: 14px; line-height: 1.6; color: #f0ede8; font-weight: bold; margin-top: 30px;">
+        Mounir BYAR<br>
+        <span style="font-weight: normal; font-size: 12px; color: #a0aec0;">Ingénieur & Fondateur du Cabinet</span>
+      </p>
+
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.1); padding-top: 20px; text-align: center; font-size: 11px; color: #a0aec0; margin-top: 40px;">
+        <p style="margin: 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 5px 0 10px 0; color: rgba(160, 174, 192, 0.4);">© ${new Date().getFullYear()} Briser les Frontières</p>
+        <p style="margin: 0; color: rgba(160, 174, 192, 0.4);">
+          <a href="https://www.briserlesfrontieres.fr/api/newsletter/unsubscribe?email=${encodeURIComponent(email)}" style="color: #a0aec0; text-decoration: underline;">Se désabonner de nos communications</a>
+        </p>
+      </div>
+    </div>
+  `;
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: email,
+      subject: `⚙️ Ingénierie Comportementale : Maîtrisez-vous votre environnement ?`,
+      html: htmlContent,
+    });
+  } catch (err) {
+    console.error("Erreur d'envoi du mail hebdomadaire :", err);
   }
 }
 

@@ -4,6 +4,9 @@ import crypto from "crypto";
 export interface Subscriber {
   id: string;
   email: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  ville?: string | null;
   created_at: string;
 }
 
@@ -142,20 +145,26 @@ interface DatabaseSchema {
 // MÉTHODES DE GESTION DES ABONNÉS NEWSLETTER
 // ─────────────────────────────────────────────────────────────────────────────
 
-export async function addSubscriber(email: string): Promise<{ success: boolean; message: string }> {
+export async function addSubscriber(
+  email: string,
+  latitude: number | null = null,
+  longitude: number | null = null,
+  ville: string | null = null
+): Promise<{ success: boolean; message: string }> {
   try {
     const lowerEmail = email.toLowerCase().trim();
     
     // Check exists
     const { rows } = await sql`SELECT id FROM subscribers WHERE email = ${lowerEmail} LIMIT 1`;
     if (rows.length > 0) {
+      // If already exists, we might want to update location, but for now we skip
       return { success: true, message: "Déjà inscrit à la newsletter premium." };
     }
 
     const id = `sub_${Math.random().toString(36).substr(2, 9)}`;
     await sql`
-      INSERT INTO subscribers (id, email)
-      VALUES (${id}, ${lowerEmail})
+      INSERT INTO subscribers (id, email, latitude, longitude, ville)
+      VALUES (${id}, ${lowerEmail}, ${latitude}, ${longitude}, ${ville})
     `;
     return { success: true, message: "Inscription newsletter enregistrée avec succès." };
   } catch (error) {

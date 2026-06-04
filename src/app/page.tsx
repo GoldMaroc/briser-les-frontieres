@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -75,61 +75,6 @@ export default function Home() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [videoStep, setVideoStep] = useState(0);
 
-  // Position souris pour la géométrie sacrée interactive
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const gridContainerRef = useRef<HTMLDivElement>(null);
-
-  // Calculateur de temps de vie (At-Taswîf)
-  const [ageInput, setAgeInput] = useState(30);
-  const [showCountdown, setShowCountdown] = useState(false);
-  const [remainingSeconds, setRemainingSeconds] = useState(0);
-  const [remainingSalats, setRemainingSalats] = useState(0);
-
-  // Pour la Surat Az-Zumar
-  const zumarSectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: zumarSectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const textOpacity1 = useTransform(scrollYProgress, [0.2, 0.35], [0.1, 1]);
-  const textOpacity2 = useTransform(scrollYProgress, [0.35, 0.5], [0.1, 1]);
-  const textOpacity3 = useTransform(scrollYProgress, [0.5, 0.65], [0.1, 1]);
-
-  // Gérer la position de la souris relative au conteneur de la grille
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!gridContainerRef.current) return;
-    const rect = gridContainerRef.current.getBoundingClientRect();
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  // Compteur d'existence réactif
-  useEffect(() => {
-    if (!showCountdown) return;
-
-    // Espérance de vie moyenne estimée à 79 ans
-    const averageLifespanYears = 79;
-    const yearsRemaining = Math.max(0, averageLifespanYears - ageInput);
-    let seconds = yearsRemaining * 365.25 * 24 * 60 * 60;
-    setRemainingSeconds(seconds);
-    setRemainingSalats(yearsRemaining * 365.25 * 5); // 5 prières par jour
-
-    const timer = setInterval(() => {
-      setRemainingSeconds((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [ageInput, showCountdown]);
-
   // Gérer les étapes de la vidéo immersive
   useEffect(() => {
     if (!isVideoOpen) {
@@ -137,10 +82,10 @@ export default function Home() {
       return;
     }
 
-    const t1 = setTimeout(() => setVideoStep(1), 4000);   // Verset Arabe
-    const t2 = setTimeout(() => setVideoStep(2), 11000);  // Traduction Française
-    const t3 = setTimeout(() => setVideoStep(3), 20000);  // Choc de conscience
-    const t4 = setTimeout(() => setVideoStep(4), 32000);  // Call to action
+    const t1 = setTimeout(() => setVideoStep(1), 1500);   // Verset Arabe (accéléré)
+    const t2 = setTimeout(() => setVideoStep(2), 6500);   // Traduction Française
+    const t3 = setTimeout(() => setVideoStep(3), 12000);  // Choc de conscience
+    const t4 = setTimeout(() => setVideoStep(4), 18000);  // Call to action
 
     return () => {
       clearTimeout(t1);
@@ -223,7 +168,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION 1 : HERO IMMERSIF ET CINÉMATOGRAPHIQUE
           ═══════════════════════════════════════════ */}
-      <section className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-16 bg-midnight">
+      <section className="relative min-h-[95vh] flex flex-col justify-center pt-40 pb-24 bg-midnight">
         
 
         <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-20 text-center flex flex-col items-center">
@@ -241,7 +186,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="font-heading text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] font-medium leading-[1.2] tracking-wide text-cream max-w-5xl"
+            className="font-heading text-4xl md:text-5xl font-medium leading-[1.3] tracking-wide text-cream max-w-4xl"
           >
             Restaurez votre souveraineté intellectuelle et domptez votre Nafs pour retrouver une prière (Salat) inébranlable et assumer votre mandat de Khalifa.
           </motion.h1>
@@ -405,132 +350,6 @@ export default function Home() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 2 : LA GÉOMÉTRIE SACRÉE INTERACTIVE (Grille d&apos;Ordre Céleste)
-          ═══════════════════════════════════════════ */}
-      <section
-        ref={gridContainerRef}
-        onMouseMove={handleMouseMove}
-        className="relative py-28 bg-midnight border-y border-border cursor-crosshair overflow-hidden"
-      >
-        {/* Grille géométrique interactive SVG */}
-        <div className="absolute inset-0 pointer-events-none opacity-20">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="mouse-glow" cx={`${mousePos.x}px`} cy={`${mousePos.y}px`} r="300px" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="var(--color-gold)" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="rgba(0,0,0,0)" stopOpacity="0" />
-              </radialGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#mouse-glow)" />
-            
-            {/* Cercles de proportions de Fibonacci basés sur le centre */}
-            <circle cx="50%" cy="50%" r="80" fill="none" stroke="var(--color-border)" strokeWidth="0.5" />
-            <circle cx="50%" cy="50%" r="130" fill="none" stroke="var(--color-border)" strokeWidth="0.5" />
-            <circle cx="50%" cy="50%" r="210" fill="none" stroke="var(--color-border)" strokeWidth="0.5" />
-            <circle cx="50%" cy="50%" r="340" fill="none" stroke="var(--color-border)" strokeWidth="0.5" />
-            
-            {/* Lignes diagonales reliant les pôles */}
-            <line x1="0" y1="0" x2="100%" y2="100%" stroke="var(--color-border)" strokeWidth="0.3" strokeDasharray="5,5" />
-            <line x1="100%" y1="0" x2="0" y2="100%" stroke="var(--color-border)" strokeWidth="0.3" strokeDasharray="5,5" />
-            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="var(--color-border)" strokeWidth="0.3" />
-            <line x1="0" y1="50%" x2="100%" y2="50%" stroke="var(--color-border)" strokeWidth="0.3" />
-          </svg>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <SectionHeading
-            label="Sciences & Rigueur"
-            title="L&apos;Harmonie de l&apos;Ordre Divin"
-            subtitle="Le C.O.M.E.S. n&apos;est pas une méthode émotionnelle ou improvisée. C&apos;est une ingénierie rigoureuse de réduction de l&apos;entropie psychologique, s&apos;appuyant sur l&apos;équilibre universel et mathématique voulu par le Créateur."
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-            <Card
-              variant="bordered"
-              label="Axiome 01"
-              title="Souveraineté"
-              description="Neutralisation de la fatigue décisionnelle par l'automatisation comportementale. Le Nafs (ego) sature la bande passante cognitive par des micro-choix parasites. La routine rituelle de la Salat fait barrière."
-              index={1}
-            />
-            <Card
-              variant="bordered"
-              label="Axiome 02"
-              title="Design Spatial"
-              description="Application de la loi de proximité environnementale. Nous modifions physiquement et numériquement votre cadre de vie pour rendre la désobéissance difficile et le bien immédiat et fluide."
-              index={2}
-            />
-            <Card
-              variant="bordered"
-              label="Axiome 03"
-              title="Chronobiologie"
-              description="Alignement chirurgical sur le rythme de rotation terrestre. L'aube comme pivot métabolique. La régulation du cortisol et de l'adénosine par l'exposition lumineuse au Fajr."
-              index={3}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 2.5 : LE SPECTACLE DE LA CRÉATION (Monde Végétal Réaliste et Véritable Vidéo)
-          ═══════════════════════════════════════════ */}
-      <section className="relative min-h-[85vh] flex items-center justify-center py-28 overflow-hidden bg-surface border-y border-border">
-        
-        {/* Monde naturel réaliste avec véritable vidéo en boucle fluide */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none select-none opacity-10">
-          <div className="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface z-10" />
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover scale-105 filter grayscale"
-          >
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-dense-wild-jungle-with-lush-greenery-41484-large.mp4" type="video/mp4" />
-          </video>
-        </div>
-
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 relative z-20 text-center flex flex-col items-center">
-          
-          {/* Cadre de prestige en verre dépoli (Glassmorphism) */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="backdrop-blur-xl bg-midnight/90 border border-emerald/15 p-8 md:p-14 rounded-sm shadow-2xl space-y-8"
-          >
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted/20 px-5 py-2 rounded-full border border-emerald/10 font-body">
-              Contemplation — Al-Khaliq
-            </span>
-
-            {/* Versets sublimes sur la perfection divine */}
-            <div className="space-y-6">
-              <h3 className="font-heading text-3xl sm:text-5xl text-cream font-medium leading-loose tracking-wide" dir="rtl">
-                الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا ۖ مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ ۖ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ <br />
-                ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ
-              </h3>
-              
-              <div className="w-16 h-px bg-emerald/30 mx-auto" />
-              
-              <h4 className="font-heading text-xl sm:text-2xl font-light text-emerald italic leading-relaxed max-w-3xl mx-auto">
-                « Celui qui a créé sept cieux superposés sans que tu voies de disproportion en la création du Tout-Miséricordieux. Ramène ton regard : y vois-tu une quelconque faille ? Puis ramène ton regard à deux fois : le regard te reviendra humilié, fatigué. »
-              </h4>
-              
-              <p className="text-[10px] uppercase text-cream-muted tracking-[0.3em] font-bold font-body">
-                Sourate Al-Mulk (67:3-4)
-              </p>
-            </div>
-
-            <p className="mt-8 text-sm text-cream-muted font-body leading-relaxed max-w-2xl mx-auto font-medium">
-              Une perfection absolue, dénuée de la moindre brèche. La nature sauvage — la richesse de ce monde végétal verdoyant, chaque envolée d&apos;oiseau sauvage, la trajectoire délicate des insectes et papillons multicolores dans la lumière filtrante — témoigne avec force de cette harmonie mathématique et vivante. Contempler la création est le remède ultime de la conscience contre l&apos;entropie de l&apos;âme.
-            </p>
-          </motion.div>
-
-        </div>
-      </section>
-
       {/* ═══════════════════════════════════════════
           SECTION 2.6 : TÉMOIGNAGES & RÉCITS DE TRANSFORMATION (43 Avis Interactifs & Dynamiques)
           ═══════════════════════════════════════════ */}
@@ -805,179 +624,24 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════
-          SECTION 3 : LA PROCRASTINATION DE VIE (At-Taswîf)
+          SECTION : FORMULAIRE DE CONTACT PROTOCOLE C.O.M.E.S.
           ═══════════════════════════════════════════ */}
-
-
-      <section className="relative py-28 bg-stone-50 border-b border-stone-200 text-stone-900">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center flex flex-col items-center">
-          
-          <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-gold bg-gold-muted/15 px-4 py-1.5 rounded-full border border-gold/10 mb-6 font-body">
-            At-Taswîf (La Procrastination Spirituelle)
-          </span>
-
-          <h2 className="font-heading text-4xl sm:text-5xl font-light text-stone-950 max-w-3xl leading-tight">
-            « Prends garde au "Plus Tard", car c&apos;est l&apos;arme absolue d&apos;Iblis pour vider ton existence. »
-          </h2>
-
-          <p className="mt-8 text-sm text-stone-600 font-body leading-relaxed max-w-xl">
-            Nous repoussons continuellement notre retour sincère vers Allah, supposant que le sablier de notre existence est infini. C&apos;est une défaillance de souveraineté cognitive. Brisons l&apos;illusion matérielle immédiatement.
-          </p>
-
-          {/* CALCULATEUR / COMPTEUR D&apos;EXISTENCE */}
-          <div className="mt-12 p-8 border border-stone-200 bg-stone-100/50 rounded-sm w-full max-w-lg shadow-sm">
-            <h4 className="font-heading text-lg font-semibold text-stone-900 mb-6">Calcule ton audit de vie estimé</h4>
-            
-            {!showCountdown ? (
-              <div className="space-y-5 font-body">
-                <div className="flex flex-col gap-2 items-center">
-                  <label htmlFor="age-selector" className="text-xs text-stone-500 uppercase tracking-wider">Quel est ton âge biologique actuel ?</label>
-                  <input
-                    id="age-selector"
-                    type="number"
-                    min="15"
-                    max="78"
-                    value={ageInput}
-                    onChange={(e) => setAgeInput(Number(e.target.value))}
-                    className="w-20 px-3 py-2 bg-white text-stone-950 border border-stone-300 text-center font-bold outline-none focus:border-gold"
-                  />
-                </div>
-                <Button onClick={() => setShowCountdown(true)} variant="primary" className="py-3 px-8 text-xs font-semibold">
-                  Lancer l&apos;Audit temporel
-                </Button>
-              </div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="space-y-6 font-body"
-              >
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 bg-white border border-stone-200">
-                    <span className="text-[10px] uppercase text-stone-400 block tracking-widest mb-1">Secondes Estimées</span>
-                    <span className="font-heading text-xl font-light text-stone-900 tracking-wider">
-                      {remainingSeconds.toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="p-4 bg-white border border-stone-200">
-                    <span className="text-[10px] uppercase text-stone-400 block tracking-widest mb-1">Salats Restantes</span>
-                    <span className="font-heading text-xl font-light text-stone-900 tracking-wider">
-                      {remainingSalats.toLocaleString()}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Choc psychologique et spirituel sur le temps restant réel */}
-                <div className="p-5 bg-stone-950 text-stone-100 border border-gold/40 text-left rounded-sm space-y-4">
-                  <span className="text-[9px] uppercase tracking-widest text-gold font-bold block">Avertissement de l&apos;Ingénieur</span>
-                  <p className="text-xs text-stone-300 leading-relaxed font-body">
-                    <strong>Attention :</strong> Ce capital estimé de <strong className="text-gold">{remainingSalats.toLocaleString()} prières</strong> est une pure projection statistique théorique. 
-                  </p>
-                  <p className="text-xs text-stone-300 leading-relaxed font-body italic border-l border-gold pl-3">
-                    « Qui te garantit que ce chiffre n&apos;est pas une illusion ? Qui te dit qu&apos;il ne te reste pas <strong>qu&apos;une seule prière</strong> à accomplir ? Une seule maintenant. Peut-être la prochaine Salat de ta journée. Ou peut-être aucune. »
-                  </p>
-
-                  <div className="pt-2 border-t border-stone-800 space-y-2">
-                    <p className="font-heading text-sm text-stone-200 text-center leading-loose tracking-wide" dir="rtl">
-                      أَفَرَأَيْتَ الَّذِي كَفَرَ بِآيَاتِنَا وَقَالَ لَأُوتَيَنَّ مَالًا وَوَلَدًا * أَطَّلَعَ الْغَيْبَ أَمِ اتَّخَذَ عِندَ الرَّحْمَنِ عَهْدًا
-                    </p>
-                    <p className="text-[10px] italic leading-relaxed text-stone-400 text-center">
-                      {"« As-tu vu celui qui ne croit pas à Nos versets et dit : \"On me donnera certes des biens et des enfants ?\" * A-t-il pénétré l'Inconnaissable, ou a-t-il pris un engagement (un contrat) auprès du Tout-Miséricordieux ? »"}
-                      <span className="block text-[9px] uppercase tracking-widest text-gold font-bold mt-1">(Sourate Maryam, 19:77-78)</span>
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex justify-center gap-6 pt-2">
-                  <button
-                    onClick={() => setShowCountdown(false)}
-                    className="text-[10px] uppercase text-stone-400 hover:text-stone-950 font-semibold cursor-pointer tracking-wider"
-                  >
-                    Réinitialiser l&apos;audit
-                  </button>
-                  <button
-                    onClick={() => { window.location.href="#contact-comes"; }}
-                    className="text-[10px] uppercase text-gold hover:text-stone-950 font-semibold cursor-pointer tracking-wider border-b border-gold"
-                  >
-                    Postuler au Protocole de 9 Mois
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 4 : L&apos;INTERPELLATION INTIME — SURAT AZ-ZUMAR (OBSIDIENNE / SOMBRE SACRÉ)
-          ═══════════════════════════════════════════ */}
-      <section
-        ref={zumarSectionRef}
-        className="relative py-36 bg-stone-950 text-stone-100 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(212,168,83,0.06)_0%,rgba(0,0,0,0)_75%)] pointer-events-none" />
-        
-        <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center space-y-16 relative z-10 flex flex-col items-center">
-          
-          <span className="text-[10px] tracking-[0.4em] uppercase text-gold font-semibold block font-body">
-            L&apos;Appel Sacré
-          </span>
-
-          <div className="space-y-12">
-            
-            {/* Verset en Arabe */}
-            <motion.h3
-              style={{ opacity: textOpacity1 }}
-              className="font-heading text-4xl sm:text-6xl text-stone-300 font-light leading-loose tracking-wide"
-              dir="rtl"
-            >
-              قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ ۚ
-            </motion.h3>
-
-            {/* Traduction Partie I */}
-            <motion.h2
-              style={{ opacity: textOpacity2 }}
-              className="font-heading text-3xl sm:text-5xl font-light text-gold leading-tight tracking-wide"
-            >
-              {"« Dis : \"Ô Mes serviteurs qui avez commis des excès à votre propre détriment, ne désespérez pas de la miséricorde d'Allah...\" »"}
-            </motion.h2>
-
-            {/* Traduction Partie II */}
-            <motion.p
-              style={{ opacity: textOpacity3 }}
-              className="font-body text-sm sm:text-base text-stone-400 max-w-2xl mx-auto leading-relaxed"
-            >
-              {"« ...Car Allah pardonne tous les péchés. Oui, c'est Lui le Pardonneur, le Très Miséricordieux.\" (Az-Zumar 39:53) »"}
-              <span className="block text-[10px] uppercase text-gold tracking-widest mt-4 font-semibold">
-                Il s&apos;adresse à toi, aujourd&apos;hui. Pas à un autre. Reviens.
-              </span>
-            </motion.p>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          SECTION 5 : FORMULAIRE DE CONTACT PROTOCOLE C.O.M.E.S.
-          ═══════════════════════════════════════════ */}
-      <section id="contact-comes" className="relative py-28 bg-stone-50 border-t border-stone-200 text-stone-900">
+      <section id="contact-comes" className="relative py-28 bg-surface border-t border-border text-cream">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald mb-4 block font-body">
               Muhasaba & Accompagnement
             </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-light text-stone-950">
+            <h2 className="font-heading text-3xl sm:text-5xl font-light text-cream">
               Solliciter un Accompagnement Privé
             </h2>
-            <p className="mt-6 text-sm text-stone-600 leading-relaxed font-body max-w-xl mx-auto">
+            <p className="mt-6 text-sm text-cream-muted leading-relaxed font-body max-w-xl mx-auto">
               Que ce soit pour le **Protocole de 30 Jours** (eBook) ou pour postuler à notre accompagnement ultime, le **Protocole de 9 Mois** (compagnonnage intense et interposition behavioriste), déposez votre demande.
             </p>
           </div>
 
-          <div className="relative p-10 md:p-16 border border-stone-200 bg-white shadow-sm rounded-sm max-w-2xl mx-auto">
+          <div className="relative p-10 md:p-16 border border-border bg-surface-muted/30 shadow-sm rounded-sm max-w-2xl mx-auto">
             <div className="absolute top-0 left-10 w-24 h-px bg-gold" />
             <div className="absolute bottom-0 right-10 w-24 h-px bg-gold" />
 
@@ -993,7 +657,7 @@ export default function Home() {
               <form onSubmit={handleContactSubmit} className="space-y-6 max-w-md mx-auto font-body">
                 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="nom-field" className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Identité / Prénom</label>
+                  <label htmlFor="nom-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Identité / Prénom</label>
                   <input
                     required
                     type="text"
@@ -1002,12 +666,12 @@ export default function Home() {
                     onChange={(e) => setNom(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: Yacine, Dr. Sliman..."
-                    className="px-4 py-3 bg-stone-50 text-stone-950 placeholder-stone-400/40 border border-stone-200 focus:border-gold outline-none text-xs transition-colors"
+                    className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email-field" className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Adresse Email</label>
+                  <label htmlFor="email-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Adresse Email</label>
                   <input
                     required
                     type="email"
@@ -1016,18 +680,18 @@ export default function Home() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: contact@votre-domaine.com"
-                    className="px-4 py-3 bg-stone-50 text-stone-950 placeholder-stone-400/40 border border-stone-200 focus:border-gold outline-none text-xs transition-colors"
+                    className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="accompagnement-select" className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Protocole Souhaité</label>
+                  <label htmlFor="accompagnement-select" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Protocole Souhaité</label>
                   <select
                     id="accompagnement-select"
                     value={accompagnementSelect}
                     onChange={(e) => setAccompagnementSelect(e.target.value)}
                     disabled={loading}
-                    className="px-4 py-3 bg-stone-50 text-stone-950 border border-stone-200 focus:border-gold outline-none text-xs transition-colors cursor-pointer"
+                    className="px-4 py-3 bg-surface/30 text-cream border border-border focus:border-gold outline-none text-xs transition-colors cursor-pointer rounded-sm"
                   >
                     <option value="9mois">Protocole de 9 Mois — Accompagnement Complet</option>
                     <option value="30jours">Protocole de 30 Jours — Validation d&apos;eBook</option>
@@ -1036,7 +700,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message-field" className="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Votre Situation / Vos Obstacles</label>
+                  <label htmlFor="message-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Votre Situation / Vos Obstacles</label>
                   <textarea
                     required
                     id="message-field"

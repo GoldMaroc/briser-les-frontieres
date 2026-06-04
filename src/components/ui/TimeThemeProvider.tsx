@@ -62,20 +62,27 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
       let country = "France";
 
       try {
-        const ipResponse = await fetch("https://ipapi.co/json/");
-        if (ipResponse.ok) {
-          const ipData = await ipResponse.json();
-          if (ipData.latitude && ipData.longitude) {
-            lat = ipData.latitude;
-            lon = ipData.longitude;
-            city = ipData.city || "Reims";
-            country = ipData.country_name || "France";
-            setLocationName(`${city}, ${country}`);
+        const consent = localStorage.getItem("blf_cookies_consent");
+        // Si consentement donné, on géolocalise
+        if (consent === "accepted") {
+          const ipResponse = await fetch("https://ipapi.co/json/");
+          if (ipResponse.ok) {
+            const ipData = await ipResponse.json();
+            if (ipData.latitude && ipData.longitude) {
+              lat = ipData.latitude;
+              lon = ipData.longitude;
+              city = ipData.city || "Reims";
+              country = ipData.country_name || "France";
+              setLocationName(`${city}, ${country}`);
+            }
           }
+        } else {
+          // Sinon, on affiche une localisation générique sans tracker IP
+          setLocationName("France (Souveraine)");
         }
       } catch (e) {
-        console.warn("Échec de la géolocalisation IP, utilisation du fallback Reims/Paris.", e);
-        setLocationName("Reims, France");
+        console.warn("Échec de la géolocalisation IP.", e);
+        setLocationName("France (Souveraine)");
       }
 
       try {
@@ -138,16 +145,10 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
     const interval = setInterval(() => {
       const now = new Date();
       
-      // A. Mettre à jour le thème circadien automatique (s'il n'y a pas d'override manuel)
+      // A. Désactivation du thème circadien automatique (visibilité trop variable)
+      // Le thème est désormais verrouillé sur "isha" (sombre, premium et stable)
       if (!manualOverride) {
-        const currentHour = now.getHours();
-        if (currentHour >= 5 && currentHour < 12) {
-          setActiveTheme("fajr");
-        } else if (currentHour >= 12 && currentHour < 18) {
-          setActiveTheme("zenith");
-        } else if (currentHour >= 18 && currentHour < 21) {
-          setActiveTheme("maghrib");
-        } else {
+        if (activeTheme !== "isha") {
           setActiveTheme("isha");
         }
       }
