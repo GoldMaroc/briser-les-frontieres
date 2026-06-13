@@ -177,9 +177,9 @@ export default function Home() {
             initial={{ opacity: 0, y: -15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted px-5 py-2 rounded-full border border-emerald/20 mb-8 font-body"
+            className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted/10 px-5 py-2 rounded-full border border-emerald/20 mb-8 font-body"
           >
-            Renouer avec Allah
+            Il n&apos;est jamais trop tard
           </motion.span>
 
           <motion.h1
@@ -190,6 +190,15 @@ export default function Home() {
           >
             Restaurez votre clarté intellectuelle et maîtrisez votre Nafs pour retrouver une prière (Salat) apaisée et accomplir sereinement votre mandat de Khalifa.
           </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-8 text-sm md:text-base text-cream-muted max-w-3xl font-body leading-relaxed"
+          >
+            Sachez que la porte est toujours ouverte. Allah a partagé Sa miséricorde en cent parts, et Il accueille le retour de Ses serviteurs avec une indulgence absolue. L&apos;investissement de cet accompagnement n&apos;est rien face à la récompense ultime : la félicité éternelle (Al-Falah) et la reconquête de la Souveraineté de votre âme.
+          </motion.p>
 
           {/* BOUTON D&apos;ÉVEIL DE CONSCIENCE CENTRAL */}
           <motion.div
