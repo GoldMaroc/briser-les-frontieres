@@ -174,7 +174,7 @@ export default function Contact() {
                 {/* Identité : Prénom & Nom */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="prenom" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Prénom</label>
+                    <label htmlFor="prenom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Prénom</label>
                     <input
                       required
                       type="text"
@@ -183,12 +183,12 @@ export default function Contact() {
                       onChange={(e) => setPrenom(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Sliman"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="nom" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Nom</label>
+                    <label htmlFor="nom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Nom</label>
                     <input
                       required
                       type="text"
@@ -197,7 +197,7 @@ export default function Contact() {
                       onChange={(e) => setNom(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Amrani"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
                 </div>
@@ -205,7 +205,7 @@ export default function Contact() {
                 {/* Coordonnées : Email & Téléphone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="email" className="text-[9px] uppercase tracking-wider text-cream-muted">Email Personnel / Contact</label>
+                    <label htmlFor="email" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Email Personnel / Contact</label>
                     <input
                       required
                       type="email"
@@ -214,12 +214,12 @@ export default function Contact() {
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: sliman@exemple.com"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="telephone" className="text-[9px] uppercase tracking-wider text-cream-muted">Téléphone de Contact</label>
+                    <label htmlFor="telephone" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Téléphone de Contact</label>
                     <input
                       required
                       type="tel"
@@ -228,14 +228,14 @@ export default function Contact() {
                       onChange={(e) => setTelephone(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: 06 12 34 56 78"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Adresse Physique */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="adresse" className="text-[9px] uppercase tracking-wider text-cream-muted">Adresse physique</label>
+                  <label htmlFor="adresse" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Adresse physique</label>
                   <input
                     required
                     type="text"
@@ -244,14 +244,14 @@ export default function Contact() {
                     onChange={(e) => setAdresse(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: 14 Avenue de la République"
-                    className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                   />
                 </div>
 
                 {/* Code Postal & Ville */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="codePostal" className="text-[9px] uppercase tracking-wider text-cream-muted">Code Postal</label>
+                    <label htmlFor="codePostal" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Code Postal</label>
                     <input
                       required
                       type="text"
@@ -260,12 +260,12 @@ export default function Contact() {
                       onChange={(e) => setCodePostal(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: 51100"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="ville" className="text-[9px] uppercase tracking-wider text-cream-muted">Ville de Résidence</label>
+                    <label htmlFor="ville" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Ville de Résidence</label>
                     <input
                       required
                       type="text"
@@ -274,14 +274,14 @@ export default function Contact() {
                       onChange={(e) => setVille(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Reims"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
 
                 {/* Objet de la Demande */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="typeRelation" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold text-emerald">Objet de la Demande</label>
+                  <label htmlFor="typeRelation" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-emerald">Objet de la Demande</label>
                   <select
                     id="typeRelation"
                     value={typeRelation}
@@ -294,7 +294,7 @@ export default function Contact() {
                       }
                     }}
                     disabled={loading}
-                    className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm"
+                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
                   >
                     <option value="accompagnement_9_mois">Postuler au Protocole d&apos;Accompagnement de 9 Mois</option>
                     <option value="retour_spirituel">Échange pour un Retour vers Allah (Salat / Foi)</option>
@@ -307,13 +307,13 @@ export default function Contact() {
                 <div className="grid grid-cols-1 gap-4">
                   {(typeRelation === "accompagnement_9_mois" || typeRelation === "retour_spirituel") && (
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="formuleAccompagnement" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold text-emerald">Format de l&apos;Accompagnement</label>
+                      <label htmlFor="formuleAccompagnement" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-emerald">Format de l&apos;Accompagnement</label>
                       <select
                         id="formuleAccompagnement"
                         value={formuleAccompagnement}
                         onChange={(e) => setFormuleAccompagnement(e.target.value)}
                         disabled={loading}
-                        className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm"
+                        className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
                       >
                         <option value="individuel">Accompagnement Individuel (1 personne)</option>
                         <option value="famille">Accompagnement Familles (Foyer / Couple)</option>
@@ -324,13 +324,13 @@ export default function Contact() {
 
                   {typeRelation === "livre" && (
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="livreSelection" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold text-gold">Sélectionner l&apos;Ouvrage</label>
+                      <label htmlFor="livreSelection" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-gold">Sélectionner l&apos;Ouvrage</label>
                       <select
                         id="livreSelection"
                         value={livreSelection}
                         onChange={(e) => setLivreSelection(e.target.value)}
                         disabled={loading}
-                        className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm"
+                        className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
                       >
                         <option value="secrets">Les Secrets du Retour vers Allah — Format ePub (5,90 €)</option>
                         <option value="rahman">Ar-Rahman : La Mer sans Rivage — Format PDF (12,65 €)</option>
@@ -342,7 +342,7 @@ export default function Contact() {
 
                 {/* Message situationnel */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-[9px] uppercase tracking-wider text-cream-muted">Description de votre Situation / Message</label>
+                  <label htmlFor="message" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Description de votre Situation / Message</label>
                   <textarea
                     required
                     id="message"
@@ -351,7 +351,7 @@ export default function Contact() {
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
                     placeholder="Détaillez votre demande en toute franchise. Quelle impasse traversez-vous ?"
-                    className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs font-body rounded-sm"
+                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs font-body rounded-sm"
                   />
                 </div>
 

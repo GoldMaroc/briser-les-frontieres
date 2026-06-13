@@ -176,7 +176,7 @@ export default function Offrir() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantPrenom" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Prénom</label>
+                    <label htmlFor="offrantPrenom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Prénom</label>
                     <input
                       required
                       type="text"
@@ -185,12 +185,12 @@ export default function Offrir() {
                       value={data.offrantPrenom}
                       onChange={handleChange}
                       placeholder="Ex: Sliman"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantNom" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Nom</label>
+                    <label htmlFor="offrantNom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Nom</label>
                     <input
                       required
                       type="text"
@@ -199,14 +199,14 @@ export default function Offrir() {
                       value={data.offrantNom}
                       onChange={handleChange}
                       placeholder="Ex: Amrani"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantEmail" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Email</label>
+                    <label htmlFor="offrantEmail" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Email</label>
                     <input
                       required
                       type="email"
@@ -215,12 +215,12 @@ export default function Offrir() {
                       value={data.offrantEmail}
                       onChange={handleChange}
                       placeholder="Ex: sliman@exemple.com"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantTelephone" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Numéro de Téléphone</label>
+                    <label htmlFor="offrantTelephone" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Numéro de Téléphone</label>
                     <input
                       required
                       type="tel"
@@ -229,14 +229,14 @@ export default function Offrir() {
                       value={data.offrantTelephone}
                       onChange={handleChange}
                       placeholder="Ex: 06 12 34 56 78"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                   <div className="md:col-span-2 flex flex-col gap-2">
-                    <label htmlFor="offrantAdresse" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Adresse physique</label>
+                    <label htmlFor="offrantAdresse" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Adresse physique</label>
                     <input
                       required
                       type="text"
@@ -245,11 +245,11 @@ export default function Offrir() {
                       value={data.offrantAdresse}
                       onChange={handleChange}
                       placeholder="Ex: 14 Avenue de la République"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantCodePostal" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Code Postal</label>
+                    <label htmlFor="offrantCodePostal" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Code Postal</label>
                     <input
                       required
                       type="text"
@@ -258,11 +258,11 @@ export default function Offrir() {
                       value={data.offrantCodePostal}
                       onChange={handleChange}
                       placeholder="Ex: 51100"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="offrantVille" className="text-[9px] uppercase tracking-wider text-cream-muted">Votre Ville</label>
+                    <label htmlFor="offrantVille" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Ville</label>
                     <input
                       required
                       type="text"
@@ -271,7 +271,7 @@ export default function Offrir() {
                       value={data.offrantVille}
                       onChange={handleChange}
                       placeholder="Ex: Reims"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
@@ -286,7 +286,7 @@ export default function Offrir() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="beneficiairePrenom" className="text-[9px] uppercase tracking-wider text-cream-muted">Son Prénom</label>
+                    <label htmlFor="beneficiairePrenom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son Prénom</label>
                     <input
                       required
                       type="text"
@@ -295,12 +295,12 @@ export default function Offrir() {
                       value={data.beneficiairePrenom}
                       onChange={handleChange}
                       placeholder="Ex: Bilal"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="beneficiaireNom" className="text-[9px] uppercase tracking-wider text-cream-muted">Son Nom</label>
+                    <label htmlFor="beneficiaireNom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son Nom</label>
                     <input
                       required
                       type="text"
@@ -309,20 +309,20 @@ export default function Offrir() {
                       value={data.beneficiaireNom}
                       onChange={handleChange}
                       placeholder="Ex: Amrani"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors uppercase"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   <div className="flex flex-col gap-2 md:col-span-1">
-                    <label htmlFor="beneficiaireRelation" className="text-[9px] uppercase tracking-wider text-cream-muted">Lien de relation avec vous</label>
+                    <label htmlFor="beneficiaireRelation" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Lien de relation avec vous</label>
                     <select
                       id="beneficiaireRelation"
                       name="beneficiaireRelation"
                       value={data.beneficiaireRelation}
                       onChange={handleChange}
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm"
                     >
                       <option value="conjoint">Époux / Épouse (Foyer)</option>
                       <option value="enfant">Enfant (Filiation)</option>
@@ -333,7 +333,7 @@ export default function Offrir() {
                   </div>
 
                   <div className="flex flex-col gap-2 md:col-span-1">
-                    <label htmlFor="beneficiaireEmail" className="text-[9px] uppercase tracking-wider text-cream-muted">Son E-mail</label>
+                    <label htmlFor="beneficiaireEmail" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son E-mail</label>
                     <input
                       required
                       type="email"
@@ -342,12 +342,12 @@ export default function Offrir() {
                       value={data.beneficiaireEmail}
                       onChange={handleChange}
                       placeholder="Ex: bilal@amrani.fr"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2 md:col-span-1">
-                    <label htmlFor="beneficiaireTelephone" className="text-[9px] uppercase tracking-wider text-cream-muted">Son Téléphone</label>
+                    <label htmlFor="beneficiaireTelephone" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son Téléphone</label>
                     <input
                       required
                       type="tel"
@@ -356,14 +356,14 @@ export default function Offrir() {
                       value={data.beneficiaireTelephone}
                       onChange={handleChange}
                       placeholder="Ex: 06 99 88 77 66"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
                   <div className="md:col-span-2 flex flex-col gap-2">
-                    <label htmlFor="beneficiaireAdresse" className="text-[9px] uppercase tracking-wider text-cream-muted">Son Adresse physique</label>
+                    <label htmlFor="beneficiaireAdresse" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son Adresse physique</label>
                     <input
                       required
                       type="text"
@@ -372,11 +372,11 @@ export default function Offrir() {
                       value={data.beneficiaireAdresse}
                       onChange={handleChange}
                       placeholder="Ex: 4 Boulevard du Général de Gaulle"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="beneficiaireCodePostal" className="text-[9px] uppercase tracking-wider text-cream-muted">Son Code Postal</label>
+                    <label htmlFor="beneficiaireCodePostal" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Son Code Postal</label>
                     <input
                       required
                       type="text"
@@ -385,11 +385,11 @@ export default function Offrir() {
                       value={data.beneficiaireCodePostal}
                       onChange={handleChange}
                       placeholder="Ex: 51100"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="beneficiaireVille" className="text-[9px] uppercase tracking-wider text-cream-muted">Sa Ville</label>
+                    <label htmlFor="beneficiaireVille" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Sa Ville</label>
                     <input
                       required
                       type="text"
@@ -398,7 +398,7 @@ export default function Offrir() {
                       value={data.beneficiaireVille}
                       onChange={handleChange}
                       placeholder="Ex: Reims"
-                      className="px-4 py-3 bg-midnight text-cream border border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-emerald outline-none text-xs rounded-sm transition-colors"
                     />
                   </div>
                 </div>
@@ -412,13 +412,13 @@ export default function Offrir() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="prestation" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold text-emerald">Choisir la Prestation à Offrir</label>
+                  <label htmlFor="prestation" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-emerald">Choisir la Prestation à Offrir</label>
                   <select
                     id="prestation"
                     name="prestation"
                     value={data.prestation}
                     onChange={handleChange}
-                    className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm"
+                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
                   >
                     <option value="pack_ouvrages">Le Pack Ouvrages complets (ePub + PDF) — 18,55 € (Accès Immédiat)</option>
                     <option value="diagnostic_souverainete">Bilan de Souveraineté & Diagnostic complet — 49,00 €</option>
@@ -427,7 +427,7 @@ export default function Offrir() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-[9px] uppercase tracking-wider text-cream-muted">Message personnel d&apos;accompagnement spirituel</label>
+                  <label htmlFor="message" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Message personnel d&apos;accompagnement spirituel</label>
                   <textarea
                     required
                     id="message"
@@ -436,7 +436,7 @@ export default function Offrir() {
                     value={data.message}
                     onChange={handleChange}
                     placeholder="Écrivez un mot d'encouragement spirituel, de motivation ou d'excellence cognitive pour le destinataire..."
-                    className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs font-body rounded-sm"
+                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs font-body rounded-sm"
                   />
                 </div>
               </div>
