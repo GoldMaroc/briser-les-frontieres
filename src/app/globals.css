@@ -6,18 +6,20 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  --bg-base: #020202; /* Noir abyssal */
-  --bg-surface: #0a0a0a; /* Surface très légèrement détachée */
-  --bg-surface-alt: rgba(255, 255, 255, 0.02); 
-  --bg-surface-hover: rgba(255, 255, 255, 0.05);
+  --bg-base: #0F0F11; /* Onyx profond (plus chaud et noble que le noir pur) */
+  --bg-surface: #17171A; /* Surface très légèrement détachée */
+  --bg-surface-alt: rgba(242, 240, 233, 0.03); 
+  --bg-surface-hover: rgba(242, 240, 233, 0.06);
   
-  --text-main: #ffffff; 
-  --text-muted: #888888; 
+  --text-main: #F2F0E9; /* Albâtre / Crème doux (plus reposant que le blanc) */
+  --text-muted: #A09D94; /* Gris chaud/kaki clair pour les textes secondaires */
   
-  --color-border-line: rgba(255, 255, 255, 0.08);
-  --color-border-hover-line: rgba(255, 255, 255, 0.15);
+  --color-border-line: rgba(242, 240, 233, 0.08);
+  --color-border-hover-line: rgba(242, 240, 233, 0.15);
   
-  --transition-speed: 0.6s; 
+  --color-accent-gold: #C5A880; /* Or vieilli */
+  
+  --transition-speed: 0.8s; /* Légèrement plus lent pour la noblesse */
 }
 
 @theme {
@@ -32,8 +34,8 @@
   --color-border: var(--color-border-line);
   --color-border-hover: var(--color-border-hover-line);
 
-  --font-heading: 'Outfit', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: var(--font-playfair), 'Playfair Display', serif;
+  --font-body: var(--font-inter), 'Inter', sans-serif;
 }
 
 /* ═══ Reset & Base ═══ */
@@ -53,8 +55,9 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.04em; /* Tracking très serré typique des agences */
-  line-height: 1;
+  letter-spacing: -0.02em; /* Tracking un peu moins serré pour le Serif */
+  line-height: 1.1;
+  font-weight: 500;
 }
 
 /* ═══ Glassmorphism Utilities ═══ */
@@ -73,7 +76,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #555555 100%);
+  background: linear-gradient(135deg, #F2F0E9 0%, #C5A880 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -84,6 +87,6 @@ h1, h2, h3, h4, h5, h6 {
 .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
 ::selection {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--color-accent-gold);
+  color: #0F0F11;
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -9,15 +9,15 @@ import CookieBanner from "@/components/layout/CookieBanner";
 import { Analytics } from "@vercel/analytics/react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
-const outfit = Outfit({
-  variable: "--font-heading",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 const inter = Inter({
-  variable: "--font-body",
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   display: "swap",
@@ -81,7 +81,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${outfit.variable} ${inter.variable} h-full antialiased`}
+      className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-midnight text-cream relative">
         <script
