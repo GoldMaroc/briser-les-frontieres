@@ -48,7 +48,7 @@ Le format JSON attendu est strictement un objet contenant un tableau "posts" de 
       "titre": "Titre d'accroche (optionnel)",
       "objectif": "informer", // Doit être 'convertir', 'informer', 'fideliser' ou 'communaute'
       "attente": "Ce que tu attends du lecteur",
-      "platforms": ["X"], // Un tableau contenant une ou deux plateformes parmi: linkedin, X, tiktok, instagram, facebook
+      "platforms": ["X"], // Un tableau contenant une ou deux plateformes parmi: linkedin_perso (profil de Mounir, pour l'incarnation/leadership), linkedin_page (page entreprise, pour institutionnel/offres), X, tiktok, instagram, facebook
       "content": "Le texte adapté au format de la plateforme choisie. (ex: Script TikTok, ou Post LinkedIn, etc.)"
     }
   ]

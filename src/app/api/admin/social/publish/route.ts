@@ -4,14 +4,14 @@ import { updatePublication } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const { id, content } = await request.json();
+    const { id, content, platforms } = await request.json();
     
-    if (!id || !content) {
+    if (!id || !content || !platforms) {
       return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
     }
 
     // Force publish right now
-    const socialResult = await publishPublication(id, content);
+    const socialResult = await publishPublication(id, content, platforms);
     
     // Check if it worked
     if (socialResult.linkedin?.success) {

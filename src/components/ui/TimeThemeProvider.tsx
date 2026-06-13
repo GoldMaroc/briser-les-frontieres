@@ -146,10 +146,10 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
       const now = new Date();
       
       // A. Désactivation du thème circadien automatique (visibilité trop variable)
-      // Le thème est désormais verrouillé sur "isha" (sombre, premium et stable)
+      // Le thème est désormais verrouillé sur "fajr" (clair, premium et lisible)
       if (!manualOverride) {
-        if (activeTheme !== "isha") {
-          setActiveTheme("isha");
+        if (activeTheme !== "fajr") {
+          setActiveTheme("fajr");
         }
       }
 

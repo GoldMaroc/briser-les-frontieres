@@ -8,6 +8,7 @@ export default function Confirmation() {
   const [status, setStatus] = useState<"loading" | "success" | "failed">("loading");
   const [email, setEmail] = useState("");
   const [bookId, setBookId] = useState("secrets");
+  const [sessionId, setSessionId] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -15,6 +16,7 @@ export default function Confirmation() {
       const sessionId = params.get("session_id");
 
       if (sessionId) {
+        setSessionId(sessionId);
         fetch(`/api/checkout-session?session_id=${sessionId}`)
           .then((res) => res.json())
           .then((data) => {
@@ -66,16 +68,16 @@ export default function Confirmation() {
               
               {bookId === "secrets" ? (
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button href="/Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET-92u7e.pdf" variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
+                  <Button href={`/api/download?session_id=${sessionId}&format=pdf`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
                     📥 Version PDF
                   </Button>
-                  <Button href="/Les-Secrets-du-Retour-vers-Allah-92u7e.epub" variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
+                  <Button href={`/api/download?session_id=${sessionId}&format=epub`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
                     📥 Version EPUB (Liseuse)
                   </Button>
                 </div>
               ) : (
                 <div className="flex justify-center">
-                  <Button href="/Ar-Rahman-LIVRE-COMPLET.pdf" variant="primary" className="py-3 px-8 text-center justify-center font-semibold w-full sm:w-auto">
+                  <Button href={`/api/download?session_id=${sessionId}&format=pdf`} variant="primary" className="py-3 px-8 text-center justify-center font-semibold w-full sm:w-auto">
                     📥 Télécharger le Livre Ar-Rahman (PDF de Prestige)
                   </Button>
                 </div>

@@ -11,10 +11,11 @@ export async function GET(request: Request) {
     ? "https://www.briserlesfrontieres.fr/api/admin/social/linkedin/callback"
     : "http://localhost:3000/api/admin/social/linkedin/callback";
 
-  // Scope nécessaires pour publier au nom de l'utilisateur
-  // "w_member_social" permet de créer des posts
+  // Scope nécessaires pour publier au nom de l'utilisateur ET sur sa page entreprise
+  // "w_member_social" permet de créer des posts profil
+  // "w_organization_social" permet de créer des posts sur une page entreprise
   // "openid profile" permet d'identifier l'utilisateur (récupérer son URN)
-  const scope = "w_member_social profile openid";
+  const scope = "w_member_social w_organization_social profile openid";
   
   const state = Math.random().toString(36).substring(7);
 

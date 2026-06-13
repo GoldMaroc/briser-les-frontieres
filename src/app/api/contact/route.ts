@@ -16,7 +16,8 @@ const ContactSchema = z.object({
   typeRelation: z.string(),
   formuleAccompagnement: z.string(),
   livreSelection: z.string(),
-  message: z.string().min(1)
+  message: z.string().min(1),
+  turnstileToken: z.string().optional()
 });
 
     const bodyRaw = await request.json();
@@ -53,6 +54,31 @@ const ContactSchema = z.object({
         { status: 400 }
       );
     }
+
+    // --- Vérification Cloudflare Turnstile ---
+    const turnstileToken = parsed.data.turnstileToken;
+    if (!turnstileToken) {
+      return NextResponse.json({ message: "Le jeton de sécurité est manquant." }, { status: 400 });
+    }
+
+    const secretKey = process.env.TURNSTILE_SECRET_KEY;
+    if (secretKey) {
+      const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `secret=${secretKey}&response=${turnstileToken}`,
+      });
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        console.error("Turnstile verification failed", verifyData);
+        return NextResponse.json({ message: "Vérification anti-spam échouée. Veuillez réessayer." }, { status: 400 });
+      }
+    } else {
+      console.warn("⚠️ TURNSTILE_SECRET_KEY is not set. Skipping server verification.");
+    }
+    // --- Fin Vérification ---
 
     // Enregistrement persistant en base de données JSON
     const result = await addContact({

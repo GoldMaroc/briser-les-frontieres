@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import TopBar from "@/components/ui/TopBar";
 import Header from "@/components/layout/Header";
 
 export default function AdminDraftsPage() {
@@ -76,7 +75,6 @@ export default function AdminDraftsPage() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-[#f0ede8] font-sans">
-      <TopBar />
       <Header />
       
       <main className="pt-32 pb-20 px-4">

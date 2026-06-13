@@ -8,48 +8,74 @@ export async function POST(request: Request) {
     const { bookId } = await request.json();
     const origin = request.headers.get("origin");
 
-    if (bookId !== "secrets" && bookId !== "rahman") {
+    if (bookId !== "secrets" && bookId !== "rahman" && bookId !== "protocole") {
       return NextResponse.json(
-        { message: "Identifiant d'ouvrage invalide." },
+        { message: "Identifiant invalide." },
         { status: 400 }
       );
     }
 
-    // Configuration ad-hoc du produit et du tarif (100% géré en code)
-    const lineItem = bookId === "secrets"
-      ? {
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: "Les Secrets du Retour vers Allah (Format ePub)",
-              description: "Format numérique ePub — Accès immédiat",
-            },
-            unit_amount: 590, // 5.90 EUR
-          },
-          quantity: 1,
-        }
-      : {
-          price_data: {
-            currency: "eur",
-            product_data: {
-              name: "Ar-Rahman — La Mer sans Rivage (Format PDF)",
-              description: "Format numérique PDF de prestige — Accès immédiat",
-            },
-            unit_amount: 1265, // 12.65 EUR
-          },
-          quantity: 1,
-        };
-
-    // Initialisation de la session Stripe Checkout en mode EMBEDDED
-    const session = await stripe.checkout.sessions.create({
-      ui_mode: "embedded" as any,
-      line_items: [lineItem] as any,
+    let lineItem;
+    let sessionParams: any = {
       mode: "payment",
       metadata: { bookId },
-      return_url: `${origin}/livres/confirmation?session_id={CHECKOUT_SESSION_ID}`,
-    } as any);
+    };
 
-    return NextResponse.json({ clientSecret: session.client_secret });
+    if (bookId === "protocole") {
+      lineItem = {
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: "L'Accompagnement Élite (Protocole C.O.M.E.S.)",
+            description: "Accès exclusif au programme d'Ingénierie Spirituelle.",
+          },
+          unit_amount: 9700, // 97.00 EUR
+        },
+        quantity: 1,
+      };
+      
+      // Standard Hosted Checkout for High-Ticket/Services
+      sessionParams.line_items = [lineItem];
+      sessionParams.success_url = `${origin}/espace-client?session_id={CHECKOUT_SESSION_ID}&success=true`;
+      sessionParams.cancel_url = `${origin}/`;
+    } else {
+      lineItem = bookId === "secrets"
+        ? {
+            price_data: {
+              currency: "eur",
+              product_data: {
+                name: "Les Secrets du Retour vers Allah (Format ePub)",
+                description: "Format numérique ePub — Accès immédiat",
+              },
+              unit_amount: 590, // 5.90 EUR
+            },
+            quantity: 1,
+          }
+        : {
+            price_data: {
+              currency: "eur",
+              product_data: {
+                name: "Ar-Rahman — La Mer sans Rivage (Format PDF)",
+                description: "Format numérique PDF de prestige — Accès immédiat",
+              },
+              unit_amount: 1265, // 12.65 EUR
+            },
+            quantity: 1,
+          };
+          
+      // Embedded Checkout for digital books
+      sessionParams.ui_mode = "embedded";
+      sessionParams.line_items = [lineItem];
+      sessionParams.return_url = `${origin}/livres/confirmation?session_id={CHECKOUT_SESSION_ID}`;
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionParams);
+
+    if (bookId === "protocole") {
+      return NextResponse.json({ url: session.url });
+    } else {
+      return NextResponse.json({ clientSecret: session.client_secret });
+    }
   } catch (error: any) {
     console.error("Erreur d'initialisation du paiement Stripe :", error);
     return NextResponse.json(

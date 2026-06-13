@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
 import ProtectedEmail from "@/components/ui/ProtectedEmail";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 export default function Contact() {
   const [nom, setNom] = useState("");
@@ -23,6 +24,7 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -46,6 +48,11 @@ export default function Contact() {
       return;
     }
 
+    if (!turnstileToken) {
+      setError("Veuillez patienter pendant la validation anti-spam ou rafraîchir la page.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -64,7 +71,8 @@ export default function Contact() {
           typeRelation, 
           formuleAccompagnement: (typeRelation === "accompagnement_9_mois" || typeRelation === "retour_spirituel") ? formuleAccompagnement : "aucune",
           livreSelection: typeRelation === "livre" ? livreSelection : "aucun",
-          message 
+          message,
+          turnstileToken
         }),
       });
 
@@ -351,7 +359,15 @@ export default function Contact() {
                   <p className="text-xs text-red-400 font-body uppercase tracking-wider text-center">{error}</p>
                 )}
 
-                <Button type="submit" disabled={loading} className="w-full mt-4 py-4 justify-center shadow-lg shadow-emerald/5">
+                <div className="flex justify-center mt-4">
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    options={{ theme: "dark" }}
+                  />
+                </div>
+
+                <Button type="submit" disabled={loading || !turnstileToken} className="w-full mt-4 py-4 justify-center shadow-lg shadow-emerald/5">
                   {loading ? "Validation..." : "Transmettre au Cabinet"}
                 </Button>
 

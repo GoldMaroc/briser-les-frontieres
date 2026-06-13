@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/ui/Button";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 interface FormData {
   nom: string;
@@ -40,6 +41,7 @@ export default function CandidatureForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
@@ -61,6 +63,11 @@ export default function CandidatureForm() {
       return;
     }
 
+    if (!turnstileToken) {
+      setError("Veuillez patienter pendant la validation anti-spam ou rafraîchir la page.");
+      return;
+    }
+
     setLoading(true);
     setError("");
 
@@ -68,7 +75,7 @@ export default function CandidatureForm() {
       const response = await fetch("/api/candidature", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, turnstileToken }),
       });
 
       if (response.ok) {
@@ -407,6 +414,14 @@ export default function CandidatureForm() {
                 <p className="text-xs text-cream-muted leading-relaxed font-body">
                   En soumettant ce formulaire, vous attestez de l&apos;exactitude des données et de votre volonté sincère de vous engager dans un audit de souveraineté cognitive. Zéro engagement financier n&apos;est requis à cette étape.
                 </p>
+
+                <div className="flex justify-center mt-6">
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
+                    onSuccess={(token) => setTurnstileToken(token)}
+                    options={{ theme: "dark" }}
+                  />
+                </div>
               </motion.div>
             )}
 
@@ -426,7 +441,7 @@ export default function CandidatureForm() {
               <div />
             )}
 
-            <Button type="submit" disabled={loading} className="shadow-lg shadow-emerald/5">
+            <Button type="submit" disabled={loading || (step === 4 && !turnstileToken)} className="shadow-lg shadow-emerald/5">
               {step === 4 ? (loading ? "Traitement..." : "Soumettre la candidature") : "Continuer"}
             </Button>
           </div>

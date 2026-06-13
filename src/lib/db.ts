@@ -115,6 +115,16 @@ export interface AdminSession {
   expiresAt: string;
 }
 
+export interface Purchase {
+  id: string;
+  session_id: string;
+  customer_email: string;
+  book_id: string;
+  amount_total: number;
+  payment_status: string;
+  created_at: string;
+}
+
 export interface AdminLockout {
   failedAttempts: number;
   lockedUntil: string | null;
@@ -729,7 +739,7 @@ export async function getSocialTokens() {
   }
 }
 
-export async function setSocialTokens(tokens: { linkedin_access_token?: string; linkedin_urn?: string }) {
+export async function setSocialTokens(tokens: { linkedin_access_token?: string; linkedin_urn?: string; facebook_access_token?: string; facebook_page_id?: string; }) {
   try {
     const existing = await getSocialTokens();
     const merged = { ...existing, ...tokens };
@@ -739,5 +749,30 @@ export async function setSocialTokens(tokens: { linkedin_access_token?: string; 
     `;
   } catch (error) {
     console.error(error);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MÉTHODES DE GESTION DES ACHATS (WEBHOOKS)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function recordPurchase(
+  sessionId: string,
+  customerEmail: string,
+  bookId: string,
+  amountTotal: number,
+  paymentStatus: string
+): Promise<boolean> {
+  try {
+    const id = `pur_${Math.random().toString(36).substr(2, 9)}`;
+    await sql`
+      INSERT INTO purchases (id, session_id, customer_email, book_id, amount_total, payment_status)
+      VALUES (${id}, ${sessionId}, ${customerEmail}, ${bookId}, ${amountTotal}, ${paymentStatus})
+      ON CONFLICT (session_id) DO NOTHING
+    `;
+    return true;
+  } catch (error) {
+    console.error("Erreur d'enregistrement d'achat :", error);
+    return false;
   }
 }

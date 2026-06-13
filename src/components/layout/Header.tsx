@@ -12,8 +12,9 @@ const stepperSteps = [
   { href: "/audit", label: "Diagnostic", num: "02" },
   { href: "/fondements", label: "Compréhension", num: "03" },
   { href: "/protocole", label: "Méthode", num: "04" },
-  { href: "/offres", label: "Offres", num: "05" },
-  { href: "/livres", label: "Outils", num: "06" },
+  { href: "/articles", label: "Journal", num: "05" },
+  { href: "/offres", label: "Offres", num: "06" },
+  { href: "/livres", label: "Outils", num: "07" },
 ];
 
 export default function Header() {
@@ -26,6 +27,10 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
@@ -88,7 +93,7 @@ export default function Header() {
               pathname === "/contact" ? "btn-inst-primary" : ""
             }`}
           >
-            07. Contact
+            08. Contact
           </Link>
         </div>
 
@@ -172,7 +177,7 @@ export default function Header() {
                       : "border-gold/30 text-gold hover:bg-gold hover:text-midnight"
                   }`}
                 >
-                  07. Contact
+                  08. Contact
                 </Link>
               </motion.div>
             </motion.div>

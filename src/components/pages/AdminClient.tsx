@@ -93,13 +93,14 @@ interface GiftRequest {
   created_at: string;
 }
 
-type TabType = "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials" | "planning";
+type TabType = "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials" | "planning" | "planning_linkedin_perso" | "planning_linkedin_page" | "planning_X" | "planning_tiktok" | "planning_instagram" | "planning_facebook";
 
 export default function AdminClient() {
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [otpCode, setOtpCode] = useState("");
   const [loginStep, setLoginStep] = useState<1 | 2>(1); // 1 = main password, 2 = OTP double factor
-  const [timeLeft, setTimeLeft] = useState(600); // 10 minutes en secondes (600s)
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes en secondes (300s)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>("candidatures");
   
@@ -159,11 +160,11 @@ export default function AdminClient() {
     checkActiveSession();
   }, []);
 
-  // Compte à rebours de 10 minutes (600s) pour la validité de l'OTP
+  // Compte à rebours de 5 minutes (300s) pour la validité de l'OTP
   useEffect(() => {
     if (loginStep !== 2) return;
     
-    setTimeLeft(600); // Réinitialiser le compteur à 10 minutes
+    setTimeLeft(300); // Réinitialiser le compteur à 5 minutes
     
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
@@ -520,14 +521,32 @@ export default function AdminClient() {
           <form onSubmit={handlePasswordSubmit} className="space-y-6">
             <div className="space-y-1">
               <label className="text-[9px] uppercase tracking-[0.2em] text-cream-muted font-semibold block">Clé d'accès principale</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-midnight border border-border focus:border-gold p-3.5 text-sm text-cream outline-none rounded-sm transition-colors text-center tracking-widest"
-                placeholder="••••••••••••••"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-midnight border border-border focus:border-gold p-3.5 pr-12 text-sm text-cream outline-none rounded-sm transition-colors text-center tracking-widest"
+                  placeholder="••••••••••••••"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-cream-muted hover:text-gold transition-colors"
+                >
+                  {showPassword ? (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.29 3.29m0 0a10.05 10.05 0 015.71-1.581c4.478 0 8.268 2.943 9.543 7a9.97 9.97 0 01-1.564 3.029l-.002.002" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
 
             {errorMsg && (
@@ -608,10 +627,10 @@ export default function AdminClient() {
 
   /* INTERFACE TABLEAU DE BORD ADMIN MULTI-ONGLETS AVEC CRUD COMPLET */
   return (
-    <div className="space-y-8 font-body">
+    <div className="flex flex-col flex-1 gap-6 font-body h-full min-h-0">
       
       {/* Header Admin */}
-      <div className="flex flex-col md:flex-row items-center justify-between border-b border-border pb-6 gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-between border-b border-border pb-4 gap-4 shrink-0">
         <div className="space-y-1 text-center md:text-left">
           <span className="text-[10px] tracking-[0.3em] uppercase text-emerald font-bold">Cabinet de Pilotage</span>
           <h2 className="font-heading text-3xl text-cream font-light">Administration des Cohortes</h2>
@@ -637,40 +656,80 @@ export default function AdminClient() {
       )}
 
       {/* Layout Principal: Sidebar à gauche, Contenu à droite */}
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
         
         {/* SIDEBAR DE NAVIGATION */}
-        <div className="w-full md:w-64 shrink-0 flex flex-col gap-2 bg-surface/30 p-4 border border-border rounded-sm">
+        <div className="w-full md:w-64 shrink-0 flex flex-col gap-6 bg-surface/30 p-4 border border-border rounded-sm overflow-y-auto custom-scrollbar">
         {[
-          { key: "candidatures", label: `Candidatures`, count: data.candidatures.length },
-          { key: "audits", label: `Audits`, count: data.audits.length },
-          { key: "messages", label: `Messages`, count: data.contacts?.length || 0 },
-          { key: "gifts", label: `Cadeaux`, count: data.gifts?.length || 0 },
-          { key: "newsletter", label: `Newsletter`, count: data.subscribers.length },
-          { key: "testimonials", label: `Avis Modération`, count: data.testimonials.length },
-          { key: "planning", label: `Agent Social`, count: null }
-        ].map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => { setActiveTab(tab.key as TabType); setSuccessMsg(""); setErrorMsg(""); }}
-            className={`py-3 px-4 text-xs font-semibold cursor-pointer rounded-sm transition-all flex justify-between items-center ${
-              activeTab === tab.key
-                ? "bg-gold/10 text-gold border border-gold/30"
-                : "text-cream-muted hover:text-cream hover:bg-surface"
-            }`}
-          >
-            <span>{tab.label}</span>
-            {tab.count !== null && (
-              <span className={`text-[10px] px-2 py-0.5 rounded-full ${activeTab === tab.key ? 'bg-gold/20 text-gold' : 'bg-surface-alt text-cream-muted'}`}>
-                {tab.count}
-              </span>
-            )}
-          </button>
+          {
+            title: "Relationnel & Ventes",
+            items: [
+              { key: "candidatures", label: `Candidatures`, count: data.candidatures.length },
+              { key: "audits", label: `Audits`, count: data.audits.length },
+              { key: "messages", label: `Messages`, count: data.contacts?.length || 0 },
+              { key: "gifts", label: `Cadeaux`, count: data.gifts?.length || 0 },
+            ]
+          },
+          {
+            title: "Marketing & Réputation",
+            items: [
+              { key: "newsletter", label: `Newsletter`, count: data.subscribers.length },
+              { key: "testimonials", label: `Avis Modération`, count: data.testimonials.length },
+            ]
+          },
+          {
+            title: "Usines à Contenu (IA)",
+            items: [
+              { key: "link_tiktok", label: `TikTok Studio (IA)`, count: null, isLink: "/admin/social/tiktok" },
+              { key: "planning_linkedin_perso", label: `Agent LinkedIn (Mounir)`, count: null },
+              { key: "planning_linkedin_page", label: `Agent LinkedIn (Page)`, count: null },
+              { key: "planning_X", label: `Agent X (Twitter)`, count: null },
+              { key: "planning_instagram", label: `Agent Instagram`, count: null },
+              { key: "planning_facebook", label: `Agent Facebook`, count: null }
+            ]
+          }
+        ].map((group, idx) => (
+          <div key={idx} className="flex flex-col gap-2">
+            <span className="text-[9px] uppercase tracking-widest text-cream-muted/50 font-bold ml-1 mb-1">
+              {group.title}
+            </span>
+            {group.items.map((tab) => {
+              if ("isLink" in tab && tab.isLink) {
+                return (
+                  <a
+                    key={tab.key}
+                    href={tab.isLink}
+                    className="py-3 px-4 text-xs font-semibold cursor-pointer rounded-sm transition-all flex justify-between items-center bg-gold/10 text-gold border border-gold/30 hover:bg-gold/20"
+                  >
+                    <span>{tab.label}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/20 text-gold">↗</span>
+                  </a>
+                );
+              }
+              return (
+              <button
+                key={tab.key}
+                onClick={() => { setActiveTab(tab.key as TabType); setSuccessMsg(""); setErrorMsg(""); }}
+                className={`py-3 px-4 text-xs font-semibold cursor-pointer rounded-sm transition-all flex justify-between items-center ${
+                  activeTab === tab.key
+                    ? "bg-gold/10 text-gold border border-gold/30"
+                    : "text-cream-muted hover:text-cream hover:bg-surface"
+                }`}
+              >
+                <span>{tab.label}</span>
+                {tab.count !== null && (
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${activeTab === tab.key ? 'bg-gold/20 text-gold' : 'bg-surface-alt text-cream-muted'}`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            )})}
+          </div>
         ))}
         </div>
 
       {/* CONTENU ONGLETS */}
-      <div className="flex-1 min-w-0 bg-midnight-light border border-border p-6 rounded-sm min-h-[600px]">
+      <div className="flex-1 min-w-0 bg-midnight-light border border-border p-6 rounded-sm overflow-y-auto custom-scrollbar relative">
         <AnimatePresence mode="wait">
           
           {/* 1. TABLEAU DES CANDIDATURES MENTORAT */}
@@ -1222,15 +1281,15 @@ export default function AdminClient() {
             </motion.div>
           )}
 
-          {activeTab === "planning" && (
+          {activeTab.startsWith("planning") && (
             <motion.div
-              key="planning"
+              key={activeTab}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
             >
-              <PlanningSocialClient />
+              <PlanningSocialClient lockedPlatform={activeTab === "planning" ? undefined : activeTab.replace("planning_", "")} />
             </motion.div>
           )}
 
