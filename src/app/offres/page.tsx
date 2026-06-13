@@ -99,7 +99,7 @@ export default function OffresPage() {
               className={`relative bg-surface/40 backdrop-blur-sm border rounded-sm flex flex-col ${
                 offre.popular 
                   ? "border-gold shadow-lg shadow-gold/10 scale-100 lg:scale-105 z-10" 
-                  : "border-white/10 hover:border-gold/30"
+                  : "border-border hover:border-gold/30"
               }`}
             >
               {offre.popular && (
@@ -114,7 +114,7 @@ export default function OffresPage() {
                 
                 <div className="mb-6">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-white">{offre.prix}</span>
+                    <span className="text-3xl font-bold text-cream">{offre.prix}</span>
                   </div>
                   <p className="text-xs text-cream-muted mt-2 italic">{offre.paiement}</p>
                 </div>
