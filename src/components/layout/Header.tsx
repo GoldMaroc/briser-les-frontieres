@@ -51,36 +51,32 @@ export default function Header() {
             </span>
           </Link>
  
-        {/* Navigation Desktop (Stepper Linéaire) */}
-        <div className="hidden lg:flex items-center gap-5">
-          {stepperSteps.map((step, i) => {
+        {/* Navigation Desktop (Stepper Linéaire épuré) */}
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 ml-auto">
+          {stepperSteps.map((step) => {
             const isActive = pathname === step.href;
             return (
-              <div key={step.href} className="flex items-center gap-5">
-                <Link
-                  href={step.href}
-                  className={`relative flex items-center gap-1.5 text-[11px] font-body tracking-[0.15em] uppercase transition-all duration-300 group ${
-                    isActive
-                      ? "text-gold font-bold scale-102"
-                      : "text-cream-muted hover:text-cream"
-                  }`}
-                >
-                  <span className={`text-[9px] ${isActive ? "text-gold" : "text-cream-muted/60"}`}>
-                    {step.num}.
-                  </span>
-                  {step.label}
-                  <span className={`absolute -bottom-1 left-1/2 h-px bg-gold transition-all duration-400 ${isActive ? "w-full left-0" : "w-0 group-hover:w-full group-hover:left-0"}`} />
-                </Link>
-                {i < stepperSteps.length - 1 && (
-                  <span className="text-cream-muted/40 text-xs font-light select-none">➔</span>
-                )}
-              </div>
+              <Link
+                key={step.href}
+                href={step.href}
+                className={`relative flex items-center gap-1 text-[10px] xl:text-[11px] font-body tracking-[0.15em] uppercase transition-all duration-300 group whitespace-nowrap ${
+                  isActive
+                    ? "text-gold font-bold scale-102"
+                    : "text-cream-muted hover:text-cream"
+                }`}
+              >
+                <span className={`text-[8px] xl:text-[9px] ${isActive ? "text-gold" : "text-cream-muted/60"}`}>
+                  {step.num}.
+                </span>
+                {step.label}
+                <span className={`absolute -bottom-1 left-1/2 h-px bg-gold transition-all duration-400 ${isActive ? "w-full left-0" : "w-0 group-hover:w-full group-hover:left-0"}`} />
+              </Link>
             );
           })}
           
           <Link
             href="/offrir"
-            className={`ml-4 text-[11px] font-body tracking-[0.15em] uppercase hover:text-gold-light transition-colors ${
+            className={`text-[10px] xl:text-[11px] font-body tracking-[0.15em] uppercase hover:text-gold-light transition-colors whitespace-nowrap ${
               pathname === "/offrir" ? "text-gold font-bold" : "text-cream-muted"
             }`}
           >
@@ -89,8 +85,10 @@ export default function Header() {
           
           <Link
             href="/contact"
-            className={`ml-6 btn-inst ${
-              pathname === "/contact" ? "btn-inst-primary" : ""
+            className={`px-4 xl:px-5 py-2 border text-[10px] xl:text-[11px] font-body tracking-[0.15em] uppercase transition-all duration-300 whitespace-nowrap rounded-sm ${
+              pathname === "/contact"
+                ? "bg-gold border-gold text-stone-950 font-bold"
+                : "border-gold/30 text-gold hover:bg-gold hover:text-midnight"
             }`}
           >
             08. Contact
