@@ -188,7 +188,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="font-heading text-4xl md:text-5xl font-medium leading-[1.3] tracking-wide text-cream max-w-4xl"
           >
-            Restaurez votre souveraineté intellectuelle et domptez votre Nafs pour retrouver une prière (Salat) inébranlable et assumer votre mandat de Khalifa.
+            Restaurez votre clarté intellectuelle et maîtrisez votre Nafs pour retrouver une prière (Salat) apaisée et accomplir sereinement votre mandat de Khalifa.
           </motion.h1>
 
           {/* BOUTON D&apos;ÉVEIL DE CONSCIENCE CENTRAL */}
@@ -306,11 +306,11 @@ export default function Home() {
                       L&apos;illusion d&apos;At-Taswîf
                     </span>
                     <h3 className="font-heading text-2xl sm:text-4xl text-stone-200 font-light leading-relaxed">
-                      Tu te dis &quot;demain&quot;. Tu te dis &quot;plus tard&quot;.<br />
-                      Chaque jour est une érosion de ta volonté. Mais la mort ne négocie pas son calendrier.
+                      Vous vous dites &quot;demain&quot;. Vous remettez à &quot;plus tard&quot;.<br />
+                      Chaque jour qui passe dissipe votre potentiel. Reprenez le contrôle de votre temps et de votre spiritualité dès aujourd&apos;hui.
                     </h3>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Chaque Salat reportée, chaque thread inachevé avec ton Créateur est une capitulation de ton Nafs. Es-tu prêt à rendre ton compte final dans cette posture ?
+                      Chaque prière reportée crée une charge mentale invisible. Libérez-vous de l&apos;At-Taswîf (procrastination) pour renouer avec un cœur apaisé et une détermination inébranlable.
                     </p>
                   </motion.div>
                 )}
@@ -324,13 +324,13 @@ export default function Home() {
                     className="space-y-8"
                   >
                     <span className="text-[10px] tracking-[0.4em] uppercase text-gold font-semibold block font-body">
-                      Prendre ses responsabilités radicalement
+                      L&apos;Excellence par la méthode
                     </span>
                     <h3 className="font-heading text-4xl sm:text-6xl text-stone-100 font-light">
-                      Fends la mer de ton quotidien.
+                      Élevez-vous au-dessus du chaos quotidien.
                     </h3>
                     <p className="text-stone-400 text-sm font-body max-w-md mx-auto leading-relaxed">
-                      Ne subis plus. Agis. Le protocole C.O.M.E.S. est conçu pour briser tes blocages comportementaux et spirituels en 30 jours.
+                      Le protocole C.O.M.E.S. est conçu pour restructurer vos habitudes cognitives et spirituelles en 30 jours. L&apos;excellence n&apos;est pas un hasard, c&apos;est une méthode d&apos;ingénierie appliquée à votre vie.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
                       <Button onClick={() => { setIsVideoOpen(false); window.location.href="/livres#secrets"; }} variant="primary">
@@ -361,7 +361,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           
           <SectionHeading
-            label="Muhasaba & Rédemption"
+            label="Muhasaba & Élévation"
             title="43 Récits de Transformation"
             subtitle="Découvrez les témoignages authentiques d'hommes, de femmes, de familles et de cohortes qui ont restauré leur souveraineté spirituelle et cognitive en sortant de l'illusion de l'At-Taswîf (procrastination) grâce au protocole C.O.M.E.S."
           />
@@ -724,7 +724,7 @@ export default function Home() {
             )}
 
             <p className="mt-8 text-center text-[9px] text-stone-400 max-w-xs mx-auto leading-relaxed">
-              Secret professionnel strict. Vos échanges avec Mounir BYAR sont confidentiels, sécurisés et encryptés de bout en bout.
+              Confidentialité Absolue garantie. Vos échanges avec Mounir BYAR sont confidentiels, sécurisés et protégés par une éthique de conseil irréprochable.
             </p>
           </div>
         </div>
@@ -738,7 +738,7 @@ export default function Home() {
             Étape 02 : Lancez Votre Diagnostic
           </h2>
           <p className="text-sm text-stone-400 font-body max-w-lg mx-auto leading-relaxed">
-            Vous avez pris conscience de la Matrice mondaine. Il est temps d&apos;auditer précisément l&apos;état d&apos;entropie de votre esprit, de votre temps et de votre Salat.
+            Vous avez pris conscience des illusions mondaines. Il est temps d&apos;auditer avec précision votre organisation pour retrouver clarté, sérénité et alignement spirituel.
           </p>
           <Button href="/audit" variant="primary" className="shadow-lg shadow-gold/5 font-bold tracking-widest px-10 py-4">
             Commencer le Bilan Gratuit →
