@@ -1,19 +1,17 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { FiCheck, FiCalendar } from "react-icons/fi";
-import Link from "next/link";
+import { FiCheck } from "react-icons/fi";
 
 const offres = [
   {
     id: "audit",
     titre: "Audit Diagnostique",
     duree: "Séance unique",
-    prix: "85,90 €",
-    paiement: "Paiement en 1 fois",
-    stripeLinks: [
-      { label: "Acheter", url: "#lien-stripe-audit" }
+    options: [
+      { label: "Paiement unique", price: "85,90 €", url: "#lien-stripe-audit" }
     ],
     desc: "Une analyse chirurgicale de votre situation actuelle pour identifier vos blocages profonds et définir un plan d'action immédiat.",
     features: [
@@ -29,11 +27,9 @@ const offres = [
     id: "30j",
     titre: "Protocole 30 Jours",
     duree: "1 Mois",
-    prix: "698,90 €",
-    paiement: "En 1 ou 2 fois (sans frais)",
-    stripeLinks: [
-      { label: "Acheter en 1 fois", url: "#lien-stripe-30j-1x" },
-      { label: "Acheter en 2 fois", url: "#lien-stripe-30j-2x" }
+    options: [
+      { label: "Paiement unique", price: "698,90 €", url: "#lien-stripe-30j-1x" },
+      { label: "En 2 fois (sans frais)", price: "2 x 349,45 €", url: "#lien-stripe-30j-2x" }
     ],
     desc: "Un mois d'accompagnement intensif pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
     features: [
@@ -50,11 +46,9 @@ const offres = [
     id: "3m",
     titre: "Transformation 3 Mois",
     duree: "90 Jours",
-    prix: "1 655,30 €",
-    paiement: "En 1 ou 3 fois (sans frais)",
-    stripeLinks: [
-      { label: "Acheter en 1 fois", url: "#lien-stripe-3m-1x" },
-      { label: "Acheter en 3 fois", url: "#lien-stripe-3m-3x" }
+    options: [
+      { label: "Paiement unique", price: "1 655,30 €", url: "#lien-stripe-3m-1x" },
+      { label: "En 3 fois (sans frais)", price: "3 x 551,76 €", url: "#lien-stripe-3m-3x" }
     ],
     desc: "L'accompagnement de référence pour ancrer définitivement la maîtrise de soi dans votre vie.",
     features: [
@@ -71,11 +65,9 @@ const offres = [
     id: "12m",
     titre: "Mentorat d'Excellence",
     duree: "12 Mois",
-    prix: "4 889,60 €",
-    paiement: "En 1 ou 6 fois (sans frais)",
-    stripeLinks: [
-      { label: "Acheter en 1 fois", url: "#lien-stripe-12m-1x" },
-      { label: "Acheter en 6 fois", url: "#lien-stripe-12m-6x" }
+    options: [
+      { label: "Paiement unique", price: "4 889,60 €", url: "#lien-stripe-12m-1x" },
+      { label: "En 6 fois (sans frais)", price: "6 x 814,93 €", url: "#lien-stripe-12m-6x" }
     ],
     desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
     features: [
@@ -91,6 +83,13 @@ const offres = [
 ];
 
 export default function OffresPage() {
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({
+    "audit": 0,
+    "30j": 0,
+    "3m": 0,
+    "12m": 0,
+  });
+
   return (
     <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
       {/* Gradients de fond */}
@@ -127,11 +126,31 @@ export default function OffresPage() {
                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{offre.duree}</span>
                 <h3 className="text-xl font-heading font-semibold text-cream mb-4">{offre.titre}</h3>
                 
-                <div className="mb-6">
+                <div className="mb-6 min-h-[100px]">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-cream">{offre.prix}</span>
+                    <span className="text-3xl font-bold text-cream">
+                      {offre.options[selectedOptions[offre.id]].price}
+                    </span>
                   </div>
-                  <p className="text-xs text-cream-muted mt-2 italic">{offre.paiement}</p>
+                  
+                  {offre.options.length > 1 && (
+                    <div className="mt-4 flex flex-col gap-3">
+                      {offre.options.map((opt, idx) => (
+                        <label 
+                          key={idx} 
+                          className="flex items-center gap-3 cursor-pointer group"
+                          onClick={() => setSelectedOptions({ ...selectedOptions, [offre.id]: idx })}
+                        >
+                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${selectedOptions[offre.id] === idx ? 'border-gold' : 'border-stone-500 group-hover:border-gold'}`}>
+                            {selectedOptions[offre.id] === idx && <div className="w-2 h-2 rounded-full bg-gold" />}
+                          </div>
+                          <span className={`text-sm ${selectedOptions[offre.id] === idx ? 'text-cream font-medium' : 'text-cream-muted group-hover:text-cream transition-colors'}`}>
+                            {opt.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <p className="text-sm text-cream-muted leading-relaxed mb-8 h-20">
@@ -148,20 +167,17 @@ export default function OffresPage() {
                 </ul>
               </div>
 
-              <div className="p-8 pt-0 mt-auto flex flex-col gap-3">
-                {offre.stripeLinks.map((link, idx) => (
-                  <a 
-                    key={idx}
-                    href={link.url} 
-                    className={`w-full flex justify-center items-center gap-2 py-3 rounded-sm font-semibold tracking-wider uppercase text-[11px] transition-all ${
-                      offre.popular 
-                        ? idx === 0 ? "bg-gold text-stone-950 hover:bg-gold-light" : "border border-gold text-gold hover:bg-gold/10"
-                        : idx === 0 ? "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950" : "border border-stone-600 text-stone-400 hover:text-cream hover:border-stone-400"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                ))}
+              <div className="p-8 pt-0 mt-auto">
+                <a 
+                  href={offre.options[selectedOptions[offre.id]].url} 
+                  className={`w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all ${
+                    offre.popular 
+                      ? "bg-gold text-stone-950 hover:bg-gold-light" 
+                      : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
+                  }`}
+                >
+                  Procéder au paiement
+                </a>
               </div>
             </motion.div>
           ))}
