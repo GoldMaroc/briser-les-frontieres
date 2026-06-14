@@ -188,7 +188,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="font-heading text-4xl md:text-5xl font-medium leading-[1.3] tracking-wide text-cream max-w-4xl"
           >
-            Restaurez votre clarté intellectuelle et maîtrisez votre Nafs pour retrouver une prière (Salat) apaisée et accomplir sereinement votre mandat de Khalifa.
+            Restaurez votre clarté intellectuelle et maîtrisez vos passions pour retrouver une prière (Salat) apaisée et accomplir sereinement votre mission sur terre.
           </motion.h1>
 
           <motion.p
@@ -312,14 +312,14 @@ export default function Home() {
                     className="space-y-8 max-w-2xl font-body"
                   >
                     <span className="text-[10px] tracking-[0.4em] uppercase text-stone-500 font-semibold block">
-                      L&apos;illusion d&apos;At-Taswîf
+                      L&apos;illusion de la procrastination
                     </span>
                     <h3 className="font-heading text-2xl sm:text-4xl text-stone-200 font-light leading-relaxed">
                       Vous vous dites &quot;demain&quot;. Vous remettez à &quot;plus tard&quot;.<br />
-                      Chaque jour qui passe dissipe votre potentiel. Reprenez le contrôle de votre temps et de votre spiritualité dès aujourd&apos;hui.
+                      Chaque jour qui passe dissipe votre potentiel. Reprenez le contrôle de votre temps et de votre vie dès aujourd&apos;hui.
                     </h3>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Chaque prière reportée crée une charge mentale invisible. Libérez-vous de l&apos;At-Taswîf (procrastination) pour renouer avec un cœur apaisé et une détermination inébranlable.
+                      Chaque prière reportée crée une charge mentale invisible. Libérez-vous de l&apos;inertie pour renouer avec un cœur apaisé et une détermination inébranlable.
                     </p>
                   </motion.div>
                 )}
@@ -370,9 +370,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           
           <SectionHeading
-            label="Muhasaba & Élévation"
+            label="Bilan & Élévation"
             title="43 Récits de Transformation"
-            subtitle="Découvrez les témoignages authentiques d'hommes, de femmes, de familles et de cohortes qui ont restauré leur souveraineté spirituelle et cognitive en sortant de l'illusion de l'At-Taswîf (procrastination) grâce au protocole C.O.M.E.S."
+            subtitle="Découvrez les témoignages authentiques d'hommes, de femmes, de familles et de cohortes qui ont restauré leur clarté d'esprit et vaincu la procrastination grâce au protocole C.O.M.E.S."
           />
 
           {/* Onglets interactifs de catégories avec compteurs */}

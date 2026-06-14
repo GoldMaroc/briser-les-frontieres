@@ -36,10 +36,10 @@ export default function Fondements() {
               La Dégradation Silencieuse du Capital Mental
             </h3>
             <p className="text-base md:text-lg text-cream leading-relaxed font-body mb-6">
-              Chaque individu dispose d&apos;une ressource biologique limitée appelée <strong className="text-gold">bande passante cognitive</strong>. Sous l&apos;effet de l&apos;entropie quotidienne — micro-décisions inutiles, chaos domestique, désorganisation numérique — le cerveau accumule une <strong className="text-gold">charge allostatique</strong>. 
+              Chaque individu dispose d&apos;une <strong className="text-gold">énergie mentale</strong> limitée. Sous l&apos;effet de la désorganisation quotidienne — micro-décisions inutiles, chaos domestique, distractions numériques — le cerveau accumule une <strong className="text-gold">charge mentale invisible</strong>. 
             </p>
             <p className="text-base md:text-lg text-cream leading-relaxed font-body">
-              Cette surcharge fatigue le cortex préfrontal, entraînant une vulnérabilité aux biais cognitifs et une incapacité à maintenir la maîtrise du <strong className="text-emerald">Nafs</strong> (l&apos;ego/les passions). Le résultat est une détérioration de la présence d&apos;esprit lors de la Salat (prière) et une déconnexion du mandat terrestre.
+              Cette surcharge fatigue l&apos;esprit, entraînant une vulnérabilité aux mauvaises impulsions et une incapacité à maintenir la maîtrise de soi. Le résultat est une détérioration de la présence d&apos;esprit lors de la prière (Salat) et une perte de sens au quotidien.
             </p>
           </motion.div>
 

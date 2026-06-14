@@ -12,12 +12,13 @@ const offres = [
     duree: "Séance unique",
     prix: "85,90 €",
     paiement: "Paiement en 1 fois",
+    stripeLink: "#lien-stripe-audit-a-inserer",
     desc: "Une analyse chirurgicale de votre situation actuelle pour identifier vos blocages profonds et définir un plan d'action immédiat.",
     features: [
       "Consultation privée de 60 min",
       "Analyse de votre charge mentale",
       "Cartographie des fuites d'énergie",
-      "Diagnostic comportemental",
+      "Diagnostic de votre organisation",
       "Livrable avec plan d'action"
     ],
     popular: false
@@ -27,14 +28,15 @@ const offres = [
     titre: "Protocole 30 Jours",
     duree: "1 Mois",
     prix: "698,90 €",
-    paiement: "Payable en 1 ou 2 fois",
-    desc: "Un mois d'interposition stratégique pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
+    paiement: "En 1 ou 2 fois (sans frais)",
+    stripeLink: "#lien-stripe-30j-a-inserer",
+    desc: "Un mois d'accompagnement intensif pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
     features: [
       "Audit Diagnostique inclus",
       "Espace Client Privé",
       "Programme quotidien sur-mesure",
       "Suivi hebdomadaire",
-      "Mise en place de la routine matinale (Fajr)",
+      "Mise en place de la routine matinale",
       "Accès prioritaire par messagerie"
     ],
     popular: true
@@ -44,28 +46,30 @@ const offres = [
     titre: "Transformation 3 Mois",
     duree: "90 Jours",
     prix: "1 655,30 €",
-    paiement: "Paiement mensuel possible",
-    desc: "L'accompagnement de référence pour ancrer définitivement la souveraineté comportementale dans votre vie.",
+    paiement: "En 1 ou 3 fois (sans frais)",
+    stripeLink: "#lien-stripe-3m-a-inserer",
+    desc: "L'accompagnement de référence pour ancrer définitivement la maîtrise de soi dans votre vie.",
     features: [
       "Protocole 30 Jours intégral",
-      "Ajustements micro-environnementaux",
-      "Systématisation de la Muhasaba",
-      "Ancrage chronobiologique complet",
+      "Ajustements de votre environnement",
+      "Méthode d'introspection quotidienne",
+      "Réorganisation de vos journées",
       "Restructuration de l'espace physique",
-      "Suhba (Compagnonnage) régulier"
+      "Accompagnement et suivi régulier"
     ],
     popular: false
   },
   {
     id: "12m",
-    titre: "Mandat Khalifa (Avancé)",
+    titre: "Mentorat d'Excellence",
     duree: "12 Mois",
     prix: "4 889,60 €",
-    paiement: "Paiement mensuel possible",
-    desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de paradigme.",
+    paiement: "En 1 ou 6 fois (sans frais)",
+    stripeLink: "#lien-stripe-12m-a-inserer",
+    desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
     features: [
       "Accès intégral et illimité",
-      "Ingénierie de souveraineté complète",
+      "Système d'organisation complet",
       "Accompagnement familial / couple possible",
       "Alignement de vos finances et projets",
       "Refonte existentielle et spirituelle",
@@ -134,16 +138,16 @@ export default function OffresPage() {
               </div>
 
               <div className="p-8 pt-0 mt-auto">
-                <Link 
-                  href="/candidature" 
+                <a 
+                  href={offre.stripeLink} 
                   className={`w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all ${
                     offre.popular 
                       ? "bg-gold text-stone-950 hover:bg-gold-light" 
                       : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
                   }`}
                 >
-                  <FiCalendar /> Déposer une candidature
-                </Link>
+                  Procéder au paiement
+                </a>
               </div>
             </motion.div>
           ))}
