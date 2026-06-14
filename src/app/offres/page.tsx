@@ -90,6 +90,9 @@ export default function OffresPage() {
     "12m": 0,
   });
 
+  const auditOffre = offres.find(o => o.id === "audit");
+  const mentoratOffres = offres.filter(o => o.id !== "audit");
+
   return (
     <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
       {/* Gradients de fond */}
@@ -102,27 +105,76 @@ export default function OffresPage() {
           subtitle="Choisissez le niveau d'interposition nécessaire pour briser vos frontières. Les places sont strictement limitées pour garantir l'excellence du suivi."
         />
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {offres.map((offre, i) => (
+        {/* Offre d'Entrée : Audit */}
+        {auditOffre && (
+          <div className="max-w-4xl mx-auto mb-16 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-surface/40 backdrop-blur-md border border-gold/30 rounded-sm flex flex-col md:flex-row overflow-hidden shadow-2xl shadow-gold/5 relative"
+            >
+               <div className="flex-1 p-8 md:p-12">
+                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{auditOffre.duree}</span>
+                 <h3 className="text-2xl font-heading font-semibold text-cream mb-4">{auditOffre.titre}</h3>
+                 <p className="text-sm text-cream-muted leading-relaxed mb-8">
+                   {auditOffre.desc}
+                 </p>
+                 <ul className="space-y-4">
+                   {auditOffre.features.map((feature, idx) => (
+                     <li key={idx} className="flex items-start gap-3 text-sm text-cream-muted">
+                       <FiCheck className="text-emerald shrink-0 mt-0.5" />
+                       <span className="leading-tight">{feature}</span>
+                     </li>
+                   ))}
+                 </ul>
+               </div>
+               
+               <div className="w-full md:w-1/3 bg-black/40 p-8 md:p-12 border-t md:border-t-0 md:border-l border-stone-800 flex flex-col justify-center items-center text-center">
+                 <span className="text-4xl font-bold text-cream mb-2">
+                   {auditOffre.options[selectedOptions["audit"]].price}
+                 </span>
+                 <p className="text-xs text-cream-muted mb-8 italic">Paiement unique</p>
+                 
+                 <a 
+                   href={auditOffre.options[selectedOptions["audit"]].url} 
+                   className="w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all bg-gold text-stone-950 hover:bg-gold-light"
+                 >
+                   Procéder au paiement
+                 </a>
+               </div>
+            </motion.div>
+          </div>
+        )}
+
+        <SectionHeading
+          label="Les Programmes"
+          title="Mentorats & Accompagnements"
+          subtitle="Des solutions structurées pour instaurer de nouvelles fondations et changer radicalement de vie."
+        />
+
+        {/* Grille à 3 colonnes pour les programmes */}
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 relative z-10">
+          {mentoratOffres.map((offre, index) => (
             <motion.div
               key={offre.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
               className={`relative bg-surface/40 backdrop-blur-sm border rounded-sm flex flex-col ${
                 offre.popular 
-                  ? "border-gold shadow-lg shadow-gold/10 scale-100 lg:scale-105 z-10" 
+                  ? "border-gold shadow-lg shadow-gold/10 scale-105 z-10" 
                   : "border-border hover:border-gold/30"
               }`}
             >
               {offre.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-stone-950 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                  Recommandé
+                <div className="absolute -top-4 left-0 right-0 flex justify-center">
+                  <span className="bg-gold text-stone-950 text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-sm">
+                    Recommandé
+                  </span>
                 </div>
               )}
-              
-              <div className="p-8 flex-1">
+
+              <div className="p-8 pb-0">
                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{offre.duree}</span>
                 <h3 className="text-xl font-heading font-semibold text-cream mb-4">{offre.titre}</h3>
                 
