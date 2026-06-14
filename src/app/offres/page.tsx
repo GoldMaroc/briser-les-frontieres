@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { FiCheck, FiCalendar } from "react-icons/fi";
+import { FiCheck, FiChevronDown } from "react-icons/fi";
 import Link from "next/link";
 
 const offres = [
@@ -64,8 +65,10 @@ const offres = [
     titre: "Mentorat d'Excellence",
     duree: "12 Mois",
     prix: "4 889,60 €",
+    prixBarre: "6 112,00 €",
+    badge: "-20% appliqués",
     paiement: "En 1 ou 6 fois (sans frais)",
-    stripeLink: "#lien-stripe-12m-a-inserer",
+    stripeLink: "#lien-stripe-12m",
     desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
     features: [
       "Accès intégral et illimité",
@@ -80,6 +83,12 @@ const offres = [
 ];
 
 export default function OffresPage() {
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+
+  const toggleCard = (id: string) => {
+    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
     <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
       {/* Gradients de fond */}
@@ -116,25 +125,53 @@ export default function OffresPage() {
                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{offre.duree}</span>
                 <h3 className="text-xl font-heading font-semibold text-cream mb-4">{offre.titre}</h3>
                 
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
+                <div className="mb-4 min-h-[80px]">
+                  <div className="flex items-baseline gap-2 flex-wrap">
                     <span className="text-3xl font-bold text-cream">{offre.prix}</span>
+                    {offre.prixBarre && (
+                      <span className="text-sm text-stone-500 line-through decoration-gold/50">{offre.prixBarre}</span>
+                    )}
                   </div>
+                  {offre.badge && (
+                    <span className="inline-block mt-1 bg-emerald/20 text-emerald text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                      {offre.badge}
+                    </span>
+                  )}
                   <p className="text-xs text-cream-muted mt-2 italic">{offre.paiement}</p>
                 </div>
                 
-                <p className="text-sm text-cream-muted leading-relaxed mb-8 h-20">
-                  {offre.desc}
-                </p>
+                <button 
+                  onClick={() => toggleCard(offre.id)}
+                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gold hover:text-cream transition-colors mb-4 outline-none"
+                >
+                  {expandedCards[offre.id] ? "Masquer les détails" : "Voir les détails"}
+                  <FiChevronDown className={`transition-transform duration-300 ${expandedCards[offre.id] ? "rotate-180" : ""}`} />
+                </button>
 
-                <ul className="space-y-4 mb-8">
-                  {offre.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3 text-sm text-cream-muted">
-                      <FiCheck className="text-emerald shrink-0 mt-0.5" />
-                      <span className="leading-tight">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                <AnimatePresence>
+                  {expandedCards[offre.id] && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="text-sm text-cream-muted leading-relaxed mb-6 pt-2">
+                        {offre.desc}
+                      </p>
+
+                      <ul className="space-y-4 mb-6">
+                        {offre.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start gap-3 text-sm text-cream-muted">
+                            <FiCheck className="text-emerald shrink-0 mt-0.5" />
+                            <span className="leading-tight">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               <div className="p-8 pt-0 mt-auto">
