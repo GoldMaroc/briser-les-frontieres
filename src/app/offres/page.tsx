@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { FiCheck } from "react-icons/fi";
+import { FiCheck, FiCalendar } from "react-icons/fi";
+import Link from "next/link";
 
 const offres = [
   {
     id: "audit",
     titre: "Audit Diagnostique",
     duree: "Séance unique",
-    options: [
-      { label: "Paiement unique", price: "85,90 €", url: "#lien-stripe-audit" }
-    ],
+    prix: "85,90 €",
+    paiement: "Paiement en 1 fois",
+    stripeLink: "#lien-stripe-audit-a-inserer",
     desc: "Une analyse chirurgicale de votre situation actuelle pour identifier vos blocages profonds et définir un plan d'action immédiat.",
     features: [
       "Consultation privée de 60 min",
@@ -27,10 +27,9 @@ const offres = [
     id: "30j",
     titre: "Protocole 30 Jours",
     duree: "1 Mois",
-    options: [
-      { label: "Paiement unique", price: "698,90 €", url: "#lien-stripe-30j-1x" },
-      { label: "En 2 fois (sans frais)", price: "2 x 349,45 €", url: "#lien-stripe-30j-2x" }
-    ],
+    prix: "698,90 €",
+    paiement: "En 1 ou 2 fois (sans frais)",
+    stripeLink: "#lien-stripe-30j-a-inserer",
     desc: "Un mois d'accompagnement intensif pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
     features: [
       "Audit Diagnostique inclus",
@@ -46,10 +45,9 @@ const offres = [
     id: "3m",
     titre: "Transformation 3 Mois",
     duree: "90 Jours",
-    options: [
-      { label: "Paiement unique", price: "1 655,30 €", url: "#lien-stripe-3m-1x" },
-      { label: "En 3 fois (sans frais)", price: "3 x 551,76 €", url: "#lien-stripe-3m-3x" }
-    ],
+    prix: "1 655,30 €",
+    paiement: "En 1 ou 3 fois (sans frais)",
+    stripeLink: "#lien-stripe-3m-a-inserer",
     desc: "L'accompagnement de référence pour ancrer définitivement la maîtrise de soi dans votre vie.",
     features: [
       "Protocole 30 Jours intégral",
@@ -65,10 +63,9 @@ const offres = [
     id: "12m",
     titre: "Mentorat d'Excellence",
     duree: "12 Mois",
-    options: [
-      { label: "Paiement unique", price: "4 889,60 €", url: "#lien-stripe-12m-1x" },
-      { label: "En 6 fois (sans frais)", price: "6 x 814,93 €", url: "#lien-stripe-12m-6x" }
-    ],
+    prix: "4 889,60 €",
+    paiement: "En 1 ou 6 fois (sans frais)",
+    stripeLink: "#lien-stripe-12m-a-inserer",
     desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
     features: [
       "Accès intégral et illimité",
@@ -83,16 +80,6 @@ const offres = [
 ];
 
 export default function OffresPage() {
-  const [selectedOptions, setSelectedOptions] = useState<Record<string, number>>({
-    "audit": 0,
-    "30j": 0,
-    "3m": 0,
-    "12m": 0,
-  });
-
-  const auditOffre = offres.find(o => o.id === "audit");
-  const mentoratOffres = offres.filter(o => o.id !== "audit");
-
   return (
     <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
       {/* Gradients de fond */}
@@ -105,104 +92,35 @@ export default function OffresPage() {
           subtitle="Choisissez le niveau d'interposition nécessaire pour briser vos frontières. Les places sont strictement limitées pour garantir l'excellence du suivi."
         />
 
-        {/* Offre d'Entrée : Audit */}
-        {auditOffre && (
-          <div className="max-w-4xl mx-auto mb-16 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-surface/40 backdrop-blur-md border border-gold/30 rounded-sm flex flex-col md:flex-row overflow-hidden shadow-2xl shadow-gold/5 relative"
-            >
-               <div className="flex-1 p-8 md:p-12">
-                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{auditOffre.duree}</span>
-                 <h3 className="text-2xl font-heading font-semibold text-cream mb-4">{auditOffre.titre}</h3>
-                 <p className="text-sm text-cream-muted leading-relaxed mb-8">
-                   {auditOffre.desc}
-                 </p>
-                 <ul className="space-y-4">
-                   {auditOffre.features.map((feature, idx) => (
-                     <li key={idx} className="flex items-start gap-3 text-sm text-cream-muted">
-                       <FiCheck className="text-emerald shrink-0 mt-0.5" />
-                       <span className="leading-tight">{feature}</span>
-                     </li>
-                   ))}
-                 </ul>
-               </div>
-               
-               <div className="w-full md:w-1/3 bg-black/40 p-8 md:p-12 border-t md:border-t-0 md:border-l border-stone-800 flex flex-col justify-center items-center text-center">
-                 <span className="text-4xl font-bold text-cream mb-2">
-                   {auditOffre.options[selectedOptions["audit"]].price}
-                 </span>
-                 <p className="text-xs text-cream-muted mb-8 italic">Paiement unique</p>
-                 
-                 <a 
-                   href={auditOffre.options[selectedOptions["audit"]].url} 
-                   className="w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all bg-gold text-stone-950 hover:bg-gold-light"
-                 >
-                   Procéder au paiement
-                 </a>
-               </div>
-            </motion.div>
-          </div>
-        )}
-
-        <SectionHeading
-          label="Les Programmes"
-          title="Mentorats & Accompagnements"
-          subtitle="Des solutions structurées pour instaurer de nouvelles fondations et changer radicalement de vie."
-        />
-
-        {/* Grille à 3 colonnes pour les programmes */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16 relative z-10">
-          {mentoratOffres.map((offre, index) => (
+        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {offres.map((offre, i) => (
             <motion.div
               key={offre.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
               className={`relative bg-surface/40 backdrop-blur-sm border rounded-sm flex flex-col ${
                 offre.popular 
-                  ? "border-gold shadow-lg shadow-gold/10 scale-105 z-10" 
+                  ? "border-gold shadow-lg shadow-gold/10 scale-100 lg:scale-105 z-10" 
                   : "border-border hover:border-gold/30"
               }`}
             >
               {offre.popular && (
-                <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                  <span className="bg-gold text-stone-950 text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-sm">
-                    Recommandé
-                  </span>
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-stone-950 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                  Recommandé
                 </div>
               )}
-
-              <div className="p-8 pb-0">
+              
+              <div className="p-8 flex-1">
                 <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{offre.duree}</span>
                 <h3 className="text-xl font-heading font-semibold text-cream mb-4">{offre.titre}</h3>
                 
-                <div className="mb-6 min-h-[100px]">
+                <div className="mb-6">
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-cream">
-                      {offre.options[selectedOptions[offre.id]].price}
-                    </span>
+                    <span className="text-3xl font-bold text-cream">{offre.prix}</span>
                   </div>
-                  
-                  {offre.options.length > 1 && (
-                    <div className="mt-4 flex flex-col gap-3">
-                      {offre.options.map((opt, idx) => (
-                        <label 
-                          key={idx} 
-                          className="flex items-center gap-3 cursor-pointer group"
-                          onClick={() => setSelectedOptions({ ...selectedOptions, [offre.id]: idx })}
-                        >
-                          <div className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${selectedOptions[offre.id] === idx ? 'border-gold' : 'border-stone-500 group-hover:border-gold'}`}>
-                            {selectedOptions[offre.id] === idx && <div className="w-2 h-2 rounded-full bg-gold" />}
-                          </div>
-                          <span className={`text-sm ${selectedOptions[offre.id] === idx ? 'text-cream font-medium' : 'text-cream-muted group-hover:text-cream transition-colors'}`}>
-                            {opt.label}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  )}
+                  <p className="text-xs text-cream-muted mt-2 italic">{offre.paiement}</p>
                 </div>
                 
                 <p className="text-sm text-cream-muted leading-relaxed mb-8 h-20">
@@ -221,7 +139,7 @@ export default function OffresPage() {
 
               <div className="p-8 pt-0 mt-auto">
                 <a 
-                  href={offre.options[selectedOptions[offre.id]].url} 
+                  href={offre.stripeLink} 
                   className={`w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all ${
                     offre.popular 
                       ? "bg-gold text-stone-950 hover:bg-gold-light" 
@@ -236,7 +154,7 @@ export default function OffresPage() {
         </div>
 
         {/* Éthique et Accessibilité */}
-        <div className="mt-24 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="mt-24 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto relative z-10">
           {/* Bloc Éthique (Riba) */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
