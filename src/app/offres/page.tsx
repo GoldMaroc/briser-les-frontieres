@@ -12,7 +12,9 @@ const offres = [
     duree: "Séance unique",
     prix: "85,90 €",
     paiement: "Paiement en 1 fois",
-    stripeLink: "#lien-stripe-audit-a-inserer",
+    stripeLinks: [
+      { label: "Acheter", url: "#lien-stripe-audit" }
+    ],
     desc: "Une analyse chirurgicale de votre situation actuelle pour identifier vos blocages profonds et définir un plan d'action immédiat.",
     features: [
       "Consultation privée de 60 min",
@@ -29,7 +31,10 @@ const offres = [
     duree: "1 Mois",
     prix: "698,90 €",
     paiement: "En 1 ou 2 fois (sans frais)",
-    stripeLink: "#lien-stripe-30j-a-inserer",
+    stripeLinks: [
+      { label: "Acheter en 1 fois", url: "#lien-stripe-30j-1x" },
+      { label: "Acheter en 2 fois", url: "#lien-stripe-30j-2x" }
+    ],
     desc: "Un mois d'accompagnement intensif pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
     features: [
       "Audit Diagnostique inclus",
@@ -47,7 +52,10 @@ const offres = [
     duree: "90 Jours",
     prix: "1 655,30 €",
     paiement: "En 1 ou 3 fois (sans frais)",
-    stripeLink: "#lien-stripe-3m-a-inserer",
+    stripeLinks: [
+      { label: "Acheter en 1 fois", url: "#lien-stripe-3m-1x" },
+      { label: "Acheter en 3 fois", url: "#lien-stripe-3m-3x" }
+    ],
     desc: "L'accompagnement de référence pour ancrer définitivement la maîtrise de soi dans votre vie.",
     features: [
       "Protocole 30 Jours intégral",
@@ -65,7 +73,10 @@ const offres = [
     duree: "12 Mois",
     prix: "4 889,60 €",
     paiement: "En 1 ou 6 fois (sans frais)",
-    stripeLink: "#lien-stripe-12m-a-inserer",
+    stripeLinks: [
+      { label: "Acheter en 1 fois", url: "#lien-stripe-12m-1x" },
+      { label: "Acheter en 6 fois", url: "#lien-stripe-12m-6x" }
+    ],
     desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
     features: [
       "Accès intégral et illimité",
@@ -137,17 +148,20 @@ export default function OffresPage() {
                 </ul>
               </div>
 
-              <div className="p-8 pt-0 mt-auto">
-                <a 
-                  href={offre.stripeLink} 
-                  className={`w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all ${
-                    offre.popular 
-                      ? "bg-gold text-stone-950 hover:bg-gold-light" 
-                      : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
-                  }`}
-                >
-                  Procéder au paiement
-                </a>
+              <div className="p-8 pt-0 mt-auto flex flex-col gap-3">
+                {offre.stripeLinks.map((link, idx) => (
+                  <a 
+                    key={idx}
+                    href={link.url} 
+                    className={`w-full flex justify-center items-center gap-2 py-3 rounded-sm font-semibold tracking-wider uppercase text-[11px] transition-all ${
+                      offre.popular 
+                        ? idx === 0 ? "bg-gold text-stone-950 hover:bg-gold-light" : "border border-gold text-gold hover:bg-gold/10"
+                        : idx === 0 ? "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950" : "border border-stone-600 text-stone-400 hover:text-cream hover:border-stone-400"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
               </div>
             </motion.div>
           ))}
