@@ -183,6 +183,63 @@ export default function OffresPage() {
           ))}
         </div>
 
+        {/* Éthique et Accessibilité */}
+        <div className="mt-24 grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Bloc Éthique (Riba) */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="p-8 border border-gold/20 rounded-sm bg-surface/40 backdrop-blur-sm relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-5">
+              <span className="font-arabic text-6xl">۞</span>
+            </div>
+            <h4 className="text-xl font-heading text-gold mb-4">Éthique Financière (0% Riba)</h4>
+            <p className="text-sm text-cream leading-relaxed mb-6">
+              Nos facilités de paiement en plusieurs fois sont proposées <strong>strictement sans aucun frais supplémentaire ni intérêt</strong>. Nous refusons catégoriquement la pratique de l&apos;usure (Riba), en accord avec nos principes d&apos;excellence et d&apos;éthique spirituelle.
+            </p>
+            <blockquote className="border-l-2 border-gold/50 pl-4 mb-4">
+              <p className="text-xs text-cream-muted italic mb-2">
+                &quot;Allah a rendu licite le commerce, et illicite l&apos;intérêt (Riba).&quot;
+              </p>
+              <footer className="text-[10px] text-stone-500 uppercase tracking-widest">— Coran 2:275</footer>
+            </blockquote>
+            <blockquote className="border-l-2 border-gold/50 pl-4">
+              <p className="text-xs text-cream-muted italic mb-2">
+                &quot;Le Messager d&apos;Allah ﷺ a maudit celui qui se nourrit de l&apos;usure, celui qui la fait consommer, celui qui l&apos;écrit et ses deux témoins.&quot;
+              </p>
+              <footer className="text-[10px] text-stone-500 uppercase tracking-widest">— Sahih Muslim</footer>
+            </blockquote>
+          </motion.div>
+
+          {/* Bloc Difficultés Financières */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="p-8 border border-stone-800 rounded-sm bg-surface/40 backdrop-blur-sm"
+          >
+            <h4 className="text-xl font-heading text-cream mb-4">L&apos;Argent ne doit pas être un frein</h4>
+            <p className="text-sm text-cream-muted leading-relaxed mb-6">
+              Si vous traversez de réelles <strong>difficultés financières</strong> mais que votre détermination à changer de vie est sincère et inébranlable, nous avons des solutions adaptées pour vous. N&apos;hésitez pas à nous contacter, la porte reste ouverte.
+            </p>
+            <blockquote className="border-l-2 border-stone-600 pl-4 mb-8">
+              <p className="text-xs text-stone-400 italic mb-2">
+                &quot;Allah veut pour vous la facilité, Il ne veut pas la difficulté pour vous.&quot;
+              </p>
+              <footer className="text-[10px] text-stone-500 uppercase tracking-widest">— Coran 2:185</footer>
+            </blockquote>
+            <a 
+              href="/contact" 
+              className="inline-block border-b border-gold text-gold text-sm font-semibold pb-1 hover:text-cream hover:border-cream transition-colors"
+            >
+              Contactez-nous pour une solution sur-mesure
+            </a>
+          </motion.div>
+        </div>
+
       </div>
     </div>
   );
