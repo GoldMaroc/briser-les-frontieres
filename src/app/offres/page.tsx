@@ -1,193 +1,152 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { FiCheck, FiChevronDown } from "react-icons/fi";
-import Link from "next/link";
+import { FiCheck, FiX, FiClock } from "react-icons/fi";
 
-const offres = [
-  {
-    id: "audit",
-    titre: "Audit Diagnostique",
-    duree: "Séance unique",
-    prix: "85,90 €",
-    paiement: "Paiement en 1 fois",
-    stripeLink: "#lien-stripe-audit-a-inserer",
-    desc: "Une analyse chirurgicale de votre situation actuelle pour identifier vos blocages profonds et définir un plan d'action immédiat.",
-    features: [
-      "Consultation privée de 60 min",
-      "Analyse de votre charge mentale",
-      "Cartographie des fuites d'énergie",
-      "Diagnostic de votre organisation",
-      "Livrable avec plan d'action"
-    ],
-    popular: false
-  },
-  {
-    id: "30j",
-    titre: "Protocole 30 Jours",
-    duree: "1 Mois",
-    prix: "698,90 €",
-    paiement: "En 1 ou 2 fois (sans frais)",
-    stripeLink: "#lien-stripe-30j-a-inserer",
-    desc: "Un mois d'accompagnement intensif pour instaurer de nouvelles fondations et retrouver la maîtrise de votre temps.",
-    features: [
-      "Audit Diagnostique inclus",
-      "Espace Client Privé",
-      "Programme quotidien sur-mesure",
-      "Suivi hebdomadaire",
-      "Mise en place de la routine matinale",
-      "Accès prioritaire par messagerie"
-    ],
-    popular: true
-  },
-  {
-    id: "3m",
-    titre: "Transformation 3 Mois",
-    duree: "90 Jours",
-    prix: "1 655,30 €",
-    paiement: "En 1 ou 3 fois (sans frais)",
-    stripeLink: "#lien-stripe-3m-a-inserer",
-    desc: "L'accompagnement de référence pour ancrer définitivement la maîtrise de soi dans votre vie.",
-    features: [
-      "Protocole 30 Jours intégral",
-      "Ajustements de votre environnement",
-      "Méthode d'introspection quotidienne",
-      "Réorganisation de vos journées",
-      "Restructuration de l'espace physique",
-      "Accompagnement et suivi régulier"
-    ],
-    popular: false
-  },
-  {
-    id: "12m",
-    titre: "Mentorat d'Excellence",
-    duree: "12 Mois",
-    prix: "4 889,60 €",
-    prixBarre: "6 112,00 €",
-    badge: "-20% appliqués",
-    paiement: "En 1 ou 6 fois (sans frais)",
-    stripeLink: "#lien-stripe-12m",
-    desc: "Le programme de mentorat ultime. Réservé aux personnes déterminées à changer radicalement de vie.",
-    features: [
-      "Accès intégral et illimité",
-      "Système d'organisation complet",
-      "Accompagnement familial / couple possible",
-      "Alignement de vos finances et projets",
-      "Refonte existentielle et spirituelle",
-      "Accès direct au cercle restreint"
-    ],
-    popular: false
-  }
+const featuresList = [
+  { label: "Bilan & Diagnostic Profond", values: ["1h30", "1h30", "1h30", "Compris"] },
+  { label: "Durée de l'Accompagnement", values: ["Séance unique", "30 Jours", "3 Mois", "12 Mois"] },
+  { label: "Nombre de Séances", values: ["1 Séance", "4 Séances", "12 Séances", "Illimité"] },
+  { label: "Fréquence du Suivi", values: ["-", "Hebdomadaire", "Quotidien", "Immersion Totale"] },
+  { label: "Accès Messagerie Privée", values: ["-", "5j/7", "7j/7 (Prioritaire)", "H24 (VIP)"] },
+  { label: "Plan d'Action Stratégique", values: ["Inclus", "Inclus", "Inclus", "Inclus"] },
+  { label: "Exercices & Outils Déblocage", values: ["-", "Inclus", "Inclus", "Inclus"] },
+];
+
+const plans = [
+  { id: "audit", titre: "Audit Diagnostique", prix: "85,90 €", paiement: "En 1 fois", stripeLink: "#lien-stripe-audit" },
+  { id: "30j", titre: "Protocole 30 Jours", prix: "612,70 €", paiement: "En 1 ou 2 fois", stripeLink: "#lien-stripe-30j" },
+  { id: "3m", titre: "Transformation 3 Mois", popular: true, prix: "1 655,30 €", paiement: "En 1 ou 3 fois", stripeLink: "#lien-stripe-3m" },
+  { id: "12m", titre: "Mentorat d'Excellence", prixBase: "6 112,00 €", prixPromo: "4 889,60 €", paiement: "En 1 ou 6 fois", stripeLink: "#lien-stripe-12m" }
 ];
 
 export default function OffresPage() {
-  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+  const [timeLeft, setTimeLeft] = useState<string | null>(null);
 
-  const toggleCard = (id: string) => {
-    setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
-  };
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      // find first friday of current month
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      const dayOfWeek = firstDay.getDay(); // 0 is Sun, 5 is Fri
+      const daysToFirstFriday = (5 - dayOfWeek + 7) % 7;
+      const firstFriday = new Date(now.getFullYear(), now.getMonth(), 1 + daysToFirstFriday);
+      firstFriday.setHours(0, 0, 0, 0);
+
+      const endOfSunday = new Date(firstFriday);
+      endOfSunday.setDate(firstFriday.getDate() + 2);
+      endOfSunday.setHours(23, 59, 59, 999);
+
+      if (now >= firstFriday && now <= endOfSunday) {
+        const diff = endOfSunday.getTime() - now.getTime();
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / 1000 / 60) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        return `${d}j ${h}h ${m}m ${s}s`;
+      }
+      return null;
+    };
+
+    setTimeLeft(calculateTimeLeft());
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
-      {/* Gradients de fond */}
-      <div className="absolute top-0 right-0 w-full h-[800px] bg-[radial-gradient(circle_at_50%_0%,rgba(212,175,55,0.1)_0%,rgba(10,17,40,0)_60%)] pointer-events-none" />
+      {/* Gradients */}
+      <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-gold/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-gold/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4">
         <SectionHeading
-          label="L'Accompagnement"
-          title="Investissez dans votre Souveraineté"
-          subtitle="Choisissez le niveau d'interposition nécessaire pour briser vos frontières. Les places sont strictement limitées pour garantir l'excellence du suivi."
+          label="Investissement"
+          title="Tableau Comparatif des Offres"
+          subtitle="Comparez en un clin d'œil les différents niveaux d'accompagnement pour choisir celui qui correspond à vos besoins."
         />
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {offres.map((offre, i) => (
-            <motion.div
-              key={offre.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className={`relative bg-surface/40 backdrop-blur-sm border rounded-sm flex flex-col ${
-                offre.popular 
-                  ? "border-gold shadow-lg shadow-gold/10 scale-100 lg:scale-105 z-10" 
-                  : "border-border hover:border-gold/30"
-              }`}
-            >
-              {offre.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gold text-stone-950 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                  Recommandé
-                </div>
-              )}
-              
-              <div className="p-8 flex-1">
-                <span className="text-gold font-body text-xs tracking-widest uppercase mb-2 block">{offre.duree}</span>
-                <h3 className="text-xl font-heading font-semibold text-cream mb-4">{offre.titre}</h3>
-                
-                <div className="mb-4 min-h-[80px]">
-                  <div className="flex items-baseline gap-2 flex-wrap">
-                    <span className="text-3xl font-bold text-cream">{offre.prix}</span>
-                    {offre.prixBarre && (
-                      <span className="text-sm text-stone-500 line-through decoration-gold/50">{offre.prixBarre}</span>
+        <div className="mt-16 max-w-7xl mx-auto overflow-x-auto pb-8 relative z-10">
+          <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead>
+              <tr>
+                <th className="p-6 border-b border-stone-800 w-1/4"></th>
+                {plans.map((plan) => (
+                  <th key={plan.id} className={`p-6 border-b border-stone-800 w-[18%] text-center align-bottom relative ${plan.popular ? 'bg-gold/5 rounded-t-lg border-x border-t border-gold/30' : ''}`}>
+                    {plan.popular && (
+                      <div className="absolute -top-4 left-0 right-0 flex justify-center">
+                        <span className="bg-gold text-stone-950 text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-sm">Recommandé</span>
+                      </div>
                     )}
-                  </div>
-                  {offre.badge && (
-                    <span className="inline-block mt-1 bg-emerald/20 text-emerald text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
-                      {offre.badge}
-                    </span>
-                  )}
-                  <p className="text-xs text-cream-muted mt-2 italic">{offre.paiement}</p>
-                </div>
-                
-                <button 
-                  onClick={() => toggleCard(offre.id)}
-                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-gold hover:text-cream transition-colors mb-4 outline-none"
-                >
-                  {expandedCards[offre.id] ? "Masquer les détails" : "Voir les détails"}
-                  <FiChevronDown className={`transition-transform duration-300 ${expandedCards[offre.id] ? "rotate-180" : ""}`} />
-                </button>
-
-                <AnimatePresence>
-                  {expandedCards[offre.id] && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden"
+                    <h3 className="text-lg font-heading text-cream mb-4">{plan.titre}</h3>
+                    
+                    {/* Timer Logic for Offer 4 */}
+                    {plan.id === "12m" && timeLeft ? (
+                      <div className="mb-4 flex flex-col items-center">
+                        <div className="flex items-center gap-1 text-emerald font-bold mb-1 bg-emerald/10 px-3 py-1 rounded-sm border border-emerald/20 animate-pulse">
+                          <FiClock className="w-4 h-4" />
+                          <span className="text-xs">{timeLeft}</span>
+                        </div>
+                        <span className="text-sm text-stone-500 line-through decoration-gold/50">{plan.prixBase}</span>
+                        <span className="text-2xl font-bold text-cream mt-1">{plan.prixPromo}</span>
+                      </div>
+                    ) : (
+                      <div className="mb-4">
+                        <span className="text-2xl font-bold text-cream">{plan.id === "12m" ? plan.prixBase : plan.prix}</span>
+                      </div>
+                    )}
+                    
+                    <p className="text-xs text-cream-muted italic">{plan.paiement}</p>
+                    <p className="text-[10px] text-stone-500 uppercase tracking-widest mt-1">Sans frais</p>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {featuresList.map((row, index) => (
+                <tr key={index} className="hover:bg-surface/30 transition-colors">
+                  <td className="p-6 border-b border-stone-800/50 text-sm font-medium text-cream">{row.label}</td>
+                  {row.values.map((val, idx) => {
+                    const isPopular = plans[idx].popular;
+                    const isIncluded = val !== "-";
+                    return (
+                      <td key={idx} className={`p-6 border-b border-stone-800/50 text-center text-sm ${isPopular ? 'bg-gold/5 border-x border-gold/30' : ''}`}>
+                        {isIncluded ? (
+                          val === "Inclus" || val === "Compris" ? (
+                            <FiCheck className="mx-auto text-emerald w-5 h-5" />
+                          ) : (
+                            <span className="text-cream-muted">{val}</span>
+                          )
+                        ) : (
+                          <FiX className="mx-auto text-stone-600 w-4 h-4" />
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+              {/* Row for Checkout Buttons */}
+              <tr>
+                <td className="p-6 border-b border-stone-800"></td>
+                {plans.map((plan) => (
+                  <td key={plan.id} className={`p-6 border-b border-stone-800 text-center ${plan.popular ? 'bg-gold/5 rounded-b-lg border-x border-b border-gold/30' : ''}`}>
+                    <a 
+                      href={plan.stripeLink} 
+                      className={`inline-block w-full text-center py-3 px-4 rounded-sm font-semibold tracking-wider uppercase text-[11px] transition-all ${
+                        plan.popular 
+                          ? "bg-gold text-stone-950 hover:bg-gold-light" 
+                          : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
+                      }`}
                     >
-                      <p className="text-sm text-cream-muted leading-relaxed mb-6 pt-2">
-                        {offre.desc}
-                      </p>
-
-                      <ul className="space-y-4 mb-6">
-                        {offre.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-sm text-cream-muted">
-                            <FiCheck className="text-emerald shrink-0 mt-0.5" />
-                            <span className="leading-tight">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <div className="p-8 pt-0 mt-auto">
-                <a 
-                  href={offre.stripeLink} 
-                  className={`w-full flex justify-center items-center gap-2 py-4 rounded-sm font-semibold tracking-wider uppercase text-xs transition-all ${
-                    offre.popular 
-                      ? "bg-gold text-stone-950 hover:bg-gold-light" 
-                      : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
-                  }`}
-                >
-                  Procéder au paiement
-                </a>
-              </div>
-            </motion.div>
-          ))}
+                      Procéder au paiement
+                    </a>
+                  </td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* Éthique et Accessibilité */}
