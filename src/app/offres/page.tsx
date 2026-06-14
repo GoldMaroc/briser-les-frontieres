@@ -6,13 +6,18 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import { FiCheck, FiX, FiClock } from "react-icons/fi";
 
 const featuresList = [
-  { label: "Bilan & Diagnostic Profond", values: ["1h30", "1h30", "1h30", "Compris"] },
+  { label: "Objectif Opérationnel", values: ["L'Éveil (Vos blocages)", "Action (Maîtrise des pulsions)", "Souveraineté (Ordre restauré)", "Le Mandat de Khalifa (Gouvernance absolue)"] },
   { label: "Durée de l'Accompagnement", values: ["Séance unique", "30 Jours", "3 Mois", "12 Mois"] },
-  { label: "Nombre de Séances", values: ["1 Séance", "4 Séances", "12 Séances", "Illimité"] },
+  { label: "Bilan & Diagnostic Profond", values: ["1h30 (Audit du stress)", "1h30", "1h30", "Continu & Évolutif"] },
+  { label: "Nombre de Séances", values: ["1 Séance d'impact", "4 Séances", "12 Séances", "Illimité (À la demande)"] },
   { label: "Fréquence du Suivi", values: ["-", "Hebdomadaire", "Quotidien", "Immersion Totale"] },
-  { label: "Accès Messagerie Privée", values: ["-", "5j/7", "7j/7 (Prioritaire)", "H24 (VIP)"] },
-  { label: "Plan d'Action Stratégique", values: ["Inclus", "Inclus", "Inclus", "Inclus"] },
-  { label: "Exercices & Outils Déblocage", values: ["-", "Inclus", "Inclus", "Inclus"] },
+  { label: "Accès Messagerie Privée", values: ["-", "5j/7 (Horaires bureau)", "7j/7 (Prioritaire)", "H24 (Ligne Directe VIP)"] },
+  { label: "Méthode C.O.M.E.S.", values: ["Diagnostic uniquement", "Déploiement : Clarifier & Organiser", "Déploiement complet", "Maîtrise systémique et ancrage"] },
+  { label: "Synchronisation Spirituelle", values: ["-", "Ajustement sur les horaires de prière", "Couvre-feux digitaux & Sanctuarisation", "Alignement total sur la Barakah"] },
+  { label: "Plan d'Action Stratégique", values: ["Inclus (Roadmap d'urgence)", "Inclus (Ajusté mensuellement)", "Inclus (Itératif)", "Inclus (Refonte structurelle)"] },
+  { label: "Exercices & Outils Déblocage", values: ["-", "Inclus (Routines anti-procrastination)", "Inclus (Protection mentale)", "Inclus (Protocoles de crise)"] },
+  { label: "Environnement (Tahara physique)", values: ["-", "Inclus (Aménagement du bureau)", "Inclus (Réorganisation physique)", "Inclus (Ergonomie premium)"] },
+  { label: "Clôture Mentale (Apaisement)", values: ["Identification des boucles ouvertes", "Clôture des dossiers en attente", "Délégation et automatisation", "Tawakkul total (Zéro charge)"] },
 ];
 
 const plans = [
@@ -116,8 +121,13 @@ export default function OffresPage() {
                         {isIncluded ? (
                           val === "Inclus" || val === "Compris" ? (
                             <FiCheck className="mx-auto text-emerald w-5 h-5" />
+                          ) : val.startsWith("Inclus ") ? (
+                            <div className="flex flex-col items-center justify-center gap-1">
+                              <FiCheck className="text-emerald w-5 h-5" />
+                              <span className="text-cream-muted text-[11px] leading-tight text-center">{val.replace("Inclus ", "")}</span>
+                            </div>
                           ) : (
-                            <span className="text-cream-muted">{val}</span>
+                            <span className="text-cream-muted text-[13px] leading-snug">{val}</span>
                           )
                         ) : (
                           <FiX className="mx-auto text-stone-600 w-4 h-4" />
