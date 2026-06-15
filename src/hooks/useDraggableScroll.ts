@@ -39,7 +39,6 @@ export function useDraggableScroll<T extends HTMLElement>(externalRef?: MutableR
   };
 
   return {
-    ref,
     onMouseDown: handleMouseDown,
     onMouseLeave: handleMouseLeave,
     onMouseUp: handleMouseUp,
