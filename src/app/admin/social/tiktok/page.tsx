@@ -92,22 +92,22 @@ export default function TikTokStudio() {
       <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* En-tête */}
-        <div className="flex items-center gap-4 mb-12">
-          <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-transparent rounded-2xl flex items-center justify-center border border-gold/30">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 mb-8 sm:mb-12">
+          <div className="w-16 h-16 bg-gradient-to-br from-gold/20 to-transparent rounded-2xl flex items-center justify-center border border-gold/30 shrink-0">
             <FaTiktok className="w-8 h-8 text-gold" />
           </div>
           <div>
-            <h1 className="text-3xl font-serif text-sand-light font-bold">TikTok Studio (Faceless)</h1>
-            <p className="text-sand/70 mt-2">Générez des scripts viraux et des requêtes d'images IA à partir de vos articles.</p>
+            <h1 className="text-2xl sm:text-3xl font-serif text-sand-light font-bold">TikTok Studio (Faceless)</h1>
+            <p className="text-sand/70 mt-2 text-sm sm:text-base">Générez des scripts viraux et des requêtes d'images IA à partir de vos articles.</p>
           </div>
         </div>
 
         {/* Sélection */}
-        <div className="bg-midnight-light/50 border border-gold/10 p-6 rounded-2xl mb-8 backdrop-blur-sm">
+        <div className="bg-midnight-light/50 border border-gold/10 p-4 sm:p-6 rounded-2xl mb-8 backdrop-blur-sm">
           <label className="block text-sm font-medium text-sand mb-2">1. Sélectionnez l'article source</label>
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <select 
-              className="flex-1 bg-midnight border border-gold/30 rounded-xl px-4 py-3 text-sand focus:ring-2 focus:ring-gold/50 focus:border-gold outline-none"
+              className="flex-1 bg-midnight border border-gold/30 rounded-xl px-4 py-3 text-sand focus:ring-2 focus:ring-gold/50 focus:border-gold outline-none w-full"
               value={selectedArticleId}
               onChange={(e) => setSelectedArticleId(e.target.value)}
             >
@@ -120,7 +120,7 @@ export default function TikTokStudio() {
             <button 
               onClick={handleGenerate}
               disabled={!selectedArticleId || isGenerating}
-              className="bg-gold text-midnight px-8 py-3 rounded-xl font-bold hover:bg-gold-light transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gold text-midnight px-8 py-3 rounded-xl font-bold hover:bg-gold-light transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               {isGenerating ? (
                 <span className="animate-pulse">Analyse en cours...</span>
@@ -141,8 +141,8 @@ export default function TikTokStudio() {
             className="space-y-6"
           >
             {/* HOOK */}
-            <div className="bg-gradient-to-r from-red-900/20 to-midnight-light/50 border border-red-500/30 p-6 rounded-2xl relative group">
-              <h3 className="text-red-400 font-bold mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-r from-red-900/20 to-midnight-light/50 border border-red-500/30 p-4 sm:p-6 rounded-2xl relative group">
+              <h3 className="text-red-400 font-bold mb-4 pr-8 text-sm sm:text-base">
                 ⏱️ Phase 1 : LE HOOK (0-3 Secondes)
               </h3>
               
@@ -190,14 +190,14 @@ export default function TikTokStudio() {
             </div>
 
             {/* BODY */}
-            <div className="bg-midnight-light/50 border border-gold/20 p-6 rounded-2xl">
-              <h3 className="text-gold font-bold mb-4 flex items-center gap-2">
+            <div className="bg-midnight-light/50 border border-gold/20 p-4 sm:p-6 rounded-2xl">
+              <h3 className="text-gold font-bold mb-4 pr-8 text-sm sm:text-base">
                 📖 Phase 2 : LE DÉVELOPPEMENT (3-45 Secondes)
               </h3>
               
               <div className="space-y-6">
                 {script.bodyParts.map((part: any, index: number) => (
-                  <div key={index} className="grid md:grid-cols-2 gap-6 relative group border-b border-white/5 pb-6 last:border-0 last:pb-0">
+                  <div key={index} className="grid md:grid-cols-2 gap-4 sm:gap-6 relative group border-b border-white/5 pb-6 pt-4 first:pt-0 last:border-0 last:pb-0">
                     <div>
                       <p className="text-lg text-sand font-serif">
                         {part.text}
@@ -218,8 +218,8 @@ export default function TikTokStudio() {
             </div>
 
             {/* CTA */}
-            <div className="bg-gradient-to-r from-blue-900/20 to-midnight-light/50 border border-blue-500/30 p-6 rounded-2xl relative group">
-              <h3 className="text-blue-400 font-bold mb-4 flex items-center gap-2">
+            <div className="bg-gradient-to-r from-blue-900/20 to-midnight-light/50 border border-blue-500/30 p-4 sm:p-6 rounded-2xl relative group">
+              <h3 className="text-blue-400 font-bold mb-4 pr-8 text-sm sm:text-base">
                 🎯 Phase 3 : L'APPEL À L'ACTION (45-60 Secondes)
               </h3>
               
@@ -239,7 +239,7 @@ export default function TikTokStudio() {
             </div>
 
             {/* HASHTAGS */}
-            <div className="bg-midnight-light/30 border border-white/5 p-4 rounded-xl flex items-center justify-between">
+            <div className="bg-midnight-light/30 border border-white/5 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex flex-wrap gap-2">
                 {script.hashtags.map((tag: string, index: number) => (
                   <span key={index} className="bg-midnight px-3 py-1 rounded-full text-sand/70 text-sm border border-white/10">
