@@ -170,6 +170,17 @@ export default function Home() {
           ═══════════════════════════════════════════ */}
       <section className="relative min-h-[95vh] flex flex-col justify-center pt-40 pb-24 bg-midnight">
         
+        {/* Arche Florale (Eden) - Arrière-plan */}
+        <div 
+          className="absolute top-0 left-0 w-full h-[60vh] md:h-[80vh] z-0 pointer-events-none opacity-60 mix-blend-screen"
+          style={{
+            backgroundImage: "url('/floral_arch_eden.png')",
+            backgroundPosition: "top center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat"
+          }}
+        />
+
 
         <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-20 text-center flex flex-col items-center">
           
