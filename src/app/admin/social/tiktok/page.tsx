@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaTiktok, FaMagic, FaCopy, FaVideo, FaCheck } from "react-icons/fa";
+import { FaTiktok, FaMagic, FaCopy, FaVideo, FaCheck, FaSave, FaList } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 export default function TikTokStudio() {
@@ -13,16 +13,28 @@ export default function TikTokStudio() {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  const [planning, setPlanning] = useState<any[]>([]);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const fetchPlanning = () => {
+    fetch("/api/admin/social/tiktok/planning")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setPlanning(data.planning);
+        }
+      });
+  };
 
   useEffect(() => {
     fetch("/api/admin/publications")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          // Filtre uniquement les articles avec du contenu
           setPublications(data.publications.filter((p: any) => p.content && p.content.length > 50));
         }
       });
+    fetchPlanning();
   }, []);
 
   const handleGenerate = async () => {
@@ -83,6 +95,47 @@ export default function TikTokStudio() {
     navigator.clipboard.writeText(text);
     setCopiedSection(section);
     setTimeout(() => setCopiedSection(null), 2000);
+  };
+
+  const handleSaveToPlanning = async () => {
+    if (!script) return;
+    const article = publications.find(p => p.id === selectedArticleId);
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/admin/social/tiktok/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          titre_source: article?.titre || "Inconnu",
+          script
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Sauvegardé dans le planning !");
+        fetchPlanning();
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      alert("Erreur lors de la sauvegarde.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const toggleStatus = async (id: number, currentStatut: string) => {
+    const newStatut = currentStatut === 'Planifié' ? 'Publié' : 'Planifié';
+    try {
+      const res = await fetch("/api/admin/social/tiktok/planning", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, statut: newStatut })
+      });
+      if (res.ok) fetchPlanning();
+    } catch (err) {
+      alert("Erreur de mise à jour");
+    }
   };
 
   return (
@@ -252,8 +305,55 @@ export default function TikTokStudio() {
               </button>
             </div>
 
+            {/* SAUVEGARDE */}
+            <div className="flex justify-center pt-8 border-t border-white/10">
+              <button 
+                onClick={handleSaveToPlanning}
+                disabled={isSaving}
+                className="bg-green-600/20 text-green-400 border border-green-500/50 px-8 py-4 rounded-xl font-bold hover:bg-green-600/40 hover:text-white transition-all flex items-center justify-center gap-3 w-full sm:w-auto shadow-[0_0_15px_rgba(34,197,94,0.2)] disabled:opacity-50"
+              >
+                <FaSave className="text-xl" /> {isSaving ? "Sauvegarde en cours..." : "Enregistrer ce script dans le Planning"}
+              </button>
+            </div>
+
           </motion.div>
         )}
+
+        {/* PLANNING SECTION */}
+        <div className="mt-16 bg-midnight-light/50 border border-gold/10 p-6 rounded-2xl backdrop-blur-sm">
+          <h2 className="text-2xl font-serif text-sand-light font-bold mb-6 flex items-center gap-3">
+            <FaList className="text-gold" /> Planning TikTok
+          </h2>
+          {planning.length === 0 ? (
+            <p className="text-sand/50">Aucun script planifié pour le moment.</p>
+          ) : (
+            <div className="space-y-4">
+              {planning.map(item => (
+                <div key={item.id} className="bg-midnight border border-white/5 p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+                  <div>
+                    <h4 className="text-sand font-bold">{item.titre_source}</h4>
+                    <p className="text-xs text-sand/50 mt-1">Généré le {new Date(item.date_creation).toLocaleDateString("fr-FR")}</p>
+                    {item.hook && (
+                      <p className="text-sm text-sand/70 italic mt-2 border-l-2 border-gold/30 pl-2">"{item.hook.substring(0, 60)}..."</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${item.statut === 'Publié' ? 'bg-green-900/20 text-green-400 border-green-500/30' : 'bg-gold/10 text-gold border-gold/30'}`}>
+                      {item.statut}
+                    </span>
+                    <button 
+                      onClick={() => toggleStatus(item.id, item.statut)}
+                      className="text-xs text-sand/70 hover:text-white underline transition-colors"
+                    >
+                      {item.statut === 'Planifié' ? 'Marquer comme Publié' : 'Remettre en Planifié'}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

@@ -99,6 +99,20 @@ export async function GET(request: Request) {
       );
     `;
 
+    // 8. Table : TikTok Planning (Générateur IA)
+    await client.sql`
+      CREATE TABLE IF NOT EXISTS tiktok_planning (
+          id SERIAL PRIMARY KEY,
+          titre_source VARCHAR(255) NOT NULL,
+          hook TEXT,
+          body_json JSONB,
+          cta TEXT,
+          hashtags TEXT,
+          statut VARCHAR(50) DEFAULT 'Planifié',
+          date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
     client.release();
 
     return NextResponse.json({ 
