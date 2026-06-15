@@ -56,58 +56,82 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
 
     // Détection de l'IP et chargement des horaires de prière
     const fetchLocationAndPrayers = async () => {
-      let lat = 48.8566; // Fallback Paris
-      let lon = 2.3522;
-      let city = "Paris";
-      let country = "France";
+      const fetchPrayersForCoords = async (lat: number, lon: number, locName: string) => {
+        try {
+          // UOIF (méthode 12) pour la France ou par défaut
+          const prayerResponse = await fetch(
+            `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=12`
+          );
+          if (prayerResponse.ok) {
+            const prayerData = await prayerResponse.json();
+            const timings = prayerData.data.timings;
+            const filteredTimings = {
+              Fajr: timings.Fajr,
+              Dhuhr: timings.Dhuhr,
+              Asr: timings.Asr,
+              Maghrib: timings.Maghrib,
+              Isha: timings.Isha,
+            };
+            setPrayerTimings(filteredTimings);
+            prayerTimingsRef.current = filteredTimings;
+            setLocationName(locName);
+          }
+        } catch (e) {
+          console.error("Erreur lors de la récupération des horaires de prière.", e);
+        }
+      };
+
+      // 1. Estimation rapide par IP (pas de blocage cookie)
+      let initialLat = 48.8566;
+      let initialLon = 2.3522;
+      let initialCity = "Paris";
+      let initialCountry = "France";
 
       try {
-        const consent = localStorage.getItem("blf_cookies_consent");
-        // Si consentement donné, on géolocalise
-        if (consent === "accepted") {
-          const ipResponse = await fetch("https://ipapi.co/json/");
-          if (ipResponse.ok) {
-            const ipData = await ipResponse.json();
-            if (ipData.latitude && ipData.longitude) {
-              lat = ipData.latitude;
-              lon = ipData.longitude;
-              city = ipData.city || "Reims";
-              country = ipData.country_name || "France";
-              setLocationName(`${city}, ${country}`);
-            }
+        const ipResponse = await fetch("https://ipapi.co/json/");
+        if (ipResponse.ok) {
+          const ipData = await ipResponse.json();
+          if (ipData.latitude && ipData.longitude) {
+            initialLat = ipData.latitude;
+            initialLon = ipData.longitude;
+            initialCity = ipData.city || "Paris";
+            initialCountry = ipData.country_name || "France";
           }
-        } else {
-          // Sinon, on affiche une localisation générique sans tracker IP
-          setLocationName("France (Souveraine)");
         }
       } catch (e) {
-        console.warn("Échec de la géolocalisation IP.", e);
-        setLocationName("France (Souveraine)");
+        console.warn("Échec de la géolocalisation IP, utilisation du fallback.");
       }
 
-      try {
-        // UOIF (méthode 12) pour la France
-        const prayerResponse = await fetch(
-          `https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=12`
+      // Lancement initial (rapide)
+      await fetchPrayersForCoords(initialLat, initialLon, `${initialCity}, ${initialCountry}`);
+
+      // 2. Demande de la position EXACTE du navigateur (si l'utilisateur l'autorise)
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const exactLat = position.coords.latitude;
+            const exactLon = position.coords.longitude;
+            
+            // Reverse Geocoding pour trouver le nom exact de la ville
+            try {
+              const geoRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${exactLat}&longitude=${exactLon}&localityLanguage=fr`);
+              if (geoRes.ok) {
+                const geoData = await geoRes.json();
+                const exactCity = geoData.city || geoData.locality || "Position";
+                const exactCountry = geoData.countryName || "";
+                await fetchPrayersForCoords(exactLat, exactLon, `${exactCity}, ${exactCountry} (Exact)`);
+              } else {
+                await fetchPrayersForCoords(exactLat, exactLon, "Position Exacte");
+              }
+            } catch (e) {
+              await fetchPrayersForCoords(exactLat, exactLon, "Position Exacte");
+            }
+          },
+          (error) => {
+            console.warn("Géolocalisation du navigateur ignorée ou refusée", error);
+          },
+          { enableHighAccuracy: true, timeout: 5000 }
         );
-        if (prayerResponse.ok) {
-          const prayerData = await prayerResponse.json();
-          const timings = prayerData.data.timings;
-          
-          // Ne conserver que les 5 prières principales
-          const filteredTimings = {
-            Fajr: timings.Fajr,
-            Dhuhr: timings.Dhuhr,
-            Asr: timings.Asr,
-            Maghrib: timings.Maghrib,
-            Isha: timings.Isha,
-          };
-          
-          setPrayerTimings(filteredTimings);
-          prayerTimingsRef.current = filteredTimings;
-        }
-      } catch (e) {
-        console.error("Erreur lors de la récupération des horaires de prière.", e);
       }
     };
 
