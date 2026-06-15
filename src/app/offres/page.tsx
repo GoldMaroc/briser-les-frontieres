@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useDraggableScroll } from "@/hooks/useDraggableScroll";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { FiCheck, FiX, FiClock } from "react-icons/fi";
 
@@ -29,6 +30,8 @@ const plans = [
 
 export default function OffresPage() {
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
+  const dragHandlers = useDraggableScroll(tableRef);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -73,7 +76,12 @@ export default function OffresPage() {
           subtitle="Comparez en un clin d'œil les différents niveaux d'accompagnement pour choisir celui qui correspond à vos besoins."
         />
 
-        <div className="mt-16 max-w-7xl mx-auto overflow-x-auto pb-8 relative z-10">
+        <div 
+          className="mt-16 max-w-7xl mx-auto overflow-x-auto pb-8 relative z-10 hide-scrollbar"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          ref={tableRef}
+          {...dragHandlers}
+        >
           <table className="w-full text-left border-collapse min-w-[800px]">
             <thead>
               <tr>

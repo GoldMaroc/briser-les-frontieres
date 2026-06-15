@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useDraggableScroll } from "@/hooks/useDraggableScroll";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -27,6 +29,7 @@ export default function Home() {
   const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(testimonials);
   const [activeTab, setActiveTab] = useState<'homme' | 'femme' | 'famille' | 'groupe'>("homme");
   const carouselRef = useRef<HTMLDivElement>(null);
+  const dragHandlers = useDraggableScroll(carouselRef);
   const [currentTestimonialPage, setCurrentTestimonialPage] = useState(1);
 
   // Réinitialiser la page quand on change d'onglet
@@ -436,6 +439,7 @@ export default function Home() {
 
                   <motion.div
                     ref={carouselRef}
+                    {...dragHandlers}
                     key={activeTab}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
