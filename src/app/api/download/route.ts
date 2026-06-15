@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import fs from "fs";
 import path from "path";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_123");
 
 export async function GET(request: Request) {
   try {

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { recordPurchase } from "@/lib/db";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "sk_test_123");
 // Ce secret sera fourni par Stripe lors de la création du webhook
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET || "";
 

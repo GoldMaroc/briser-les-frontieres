@@ -4,7 +4,7 @@ import { sql } from "@vercel/postgres";
 // Instantiate the OpenAI client to use DeepSeek API
 const openai = new OpenAI({
   baseURL: 'https://api.deepseek.com',
-  apiKey: process.env.DEEPSEEK_API_KEY
+  apiKey: process.env.DEEPSEEK_API_KEY || "dummy_key_for_build",
 });
 
 const COMES_SYSTEM_PROMPT = `Tu es l'Intelligence Artificielle du Cabinet d'Ingénierie de la Souveraineté "Briser les Frontières". 
