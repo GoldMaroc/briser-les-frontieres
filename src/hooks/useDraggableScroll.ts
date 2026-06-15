@@ -14,6 +14,9 @@ export function useDraggableScroll<T extends HTMLElement>(externalRef?: MutableR
     setScrollLeft(ref.current.scrollLeft);
     ref.current.style.cursor = 'grabbing';
     ref.current.style.userSelect = 'none'; // Prevent text selection
+    // Disable smooth scrolling and snapping while dragging
+    ref.current.style.scrollBehavior = 'auto';
+    ref.current.style.scrollSnapType = 'none';
   };
 
   const handleMouseLeave = () => {
@@ -21,6 +24,8 @@ export function useDraggableScroll<T extends HTMLElement>(externalRef?: MutableR
     setIsDragging(false);
     ref.current.style.cursor = 'auto';
     ref.current.style.removeProperty('user-select');
+    ref.current.style.removeProperty('scroll-behavior');
+    ref.current.style.removeProperty('scroll-snap-type');
   };
 
   const handleMouseUp = () => {
@@ -28,6 +33,8 @@ export function useDraggableScroll<T extends HTMLElement>(externalRef?: MutableR
     setIsDragging(false);
     ref.current.style.cursor = 'auto';
     ref.current.style.removeProperty('user-select');
+    ref.current.style.removeProperty('scroll-behavior');
+    ref.current.style.removeProperty('scroll-snap-type');
   };
 
   const handleMouseMove = (e: MouseEvent) => {
