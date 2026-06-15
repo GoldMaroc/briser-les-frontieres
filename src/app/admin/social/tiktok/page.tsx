@@ -245,14 +245,14 @@ export default function TikTokStudio() {
   };
 
   // ----- Génération de la grille hebdo -----
-  const daysArray = [];
+  const daysArray: Date[] = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(viewStartDate);
     d.setDate(d.getDate() + i);
     daysArray.push(d);
   }
 
-  const timeSlots = [];
+  const timeSlots: number[] = [];
   for (let h = 8; h <= 21; h++) {
     timeSlots.push(h);
   }
