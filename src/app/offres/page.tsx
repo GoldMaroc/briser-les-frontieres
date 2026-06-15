@@ -197,9 +197,9 @@ export default function OffresPage() {
             transition={{ delay: 0.1 }}
             className="p-8 border border-stone-800 rounded-sm bg-surface/40 backdrop-blur-sm"
           >
-            <h4 className="text-xl font-heading text-cream mb-4">L&apos;Argent ne doit pas être un frein</h4>
+            <h4 className="text-xl font-heading text-cream mb-4">L'Argent ne doit pas être un frein</h4>
             <p className="text-sm text-cream-muted leading-relaxed mb-6">
-              Si vous traversez de réelles <strong>difficultés financières</strong> mais que votre détermination à changer de vie est sincère et inébranlable, nous avons des solutions adaptées pour vous. N&apos;hésitez pas à nous contacter, la porte reste ouverte.
+              Sachez que la porte reste ouverte. Allah a partagé Sa miséricorde en cent parts, et Il accueille le retour de Ses serviteurs avec une indulgence absolue. Si vous traversez de réelles difficultés financières, n'hésitez pas. <strong>L'investissement de cet accompagnement n'est rien face à la récompense ultime : la félicité éternelle (Al-Falah) et la reconquête de votre mandat de Khalifa.</strong> Reprenez la responsabilité de votre âme.
             </p>
             <blockquote className="border-l-2 border-stone-600 pl-4 mb-8">
               <p className="text-xs text-stone-400 italic mb-2">
