@@ -109,6 +109,7 @@ export async function GET(request: Request) {
           cta TEXT,
           hashtags TEXT,
           statut VARCHAR(50) DEFAULT 'Planifié',
+          date_planification TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;

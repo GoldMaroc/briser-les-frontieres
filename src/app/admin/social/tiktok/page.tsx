@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { FaTiktok, FaMagic, FaCopy, FaVideo, FaCheck, FaSave, FaList } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function TikTokStudio() {
   const [publications, setPublications] = useState<any[]>([]);
@@ -15,6 +15,23 @@ export default function TikTokStudio() {
   const [copiedSection, setCopiedSection] = useState<string | null>(null);
   const [planning, setPlanning] = useState<any[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Calendrier TikTok
+  const [viewStartDate, setViewStartDate] = useState(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    const day = d.getDay() || 7; 
+    if (day !== 1) d.setHours(-24 * (day - 1));
+    return d;
+  });
+  const [draggedItemId, setDraggedItemId] = useState<number | null>(null);
+
+  // Popup Edition
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editHook, setEditHook] = useState("");
+  const [editBodyStr, setEditBodyStr] = useState("");
+  const [editCta, setEditCta] = useState("");
 
   const fetchPlanning = () => {
     fetch("/api/admin/social/tiktok/planning")
@@ -132,11 +149,113 @@ export default function TikTokStudio() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id, statut: newStatut })
       });
-      if (res.ok) fetchPlanning();
+      if (res.ok) {
+        if (selectedItem?.id === id) setSelectedItem({ ...selectedItem, statut: newStatut });
+        fetchPlanning();
+      }
     } catch (err) {
       alert("Erreur de mise à jour");
     }
   };
+
+  // ----- Logique Drag & Drop -----
+  const onDragStart = (e: React.DragEvent, id: number) => {
+    setDraggedItemId(id);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const onDragOver = (e: React.DragEvent) => {
+    e.preventDefault(); 
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const onDrop = async (e: React.DragEvent, targetDate: Date) => {
+    e.preventDefault();
+    if (!draggedItemId) return;
+
+    // Met à jour localement pour la réactivité
+    setPlanning(prev => prev.map(p => 
+      p.id === draggedItemId ? { ...p, date_planification: targetDate.toISOString() } : p
+    ));
+
+    try {
+      await fetch("/api/admin/social/tiktok/planning", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: draggedItemId, date_planification: targetDate.toISOString() })
+      });
+    } catch (err) {
+      console.error(err);
+      fetchPlanning();
+    }
+    
+    setDraggedItemId(null);
+  };
+
+  // ----- Popup Edition -----
+  const openPopup = (item: any) => {
+    setSelectedItem(item);
+    setEditHook(item.hook || "");
+    // Convertir le body_json en texte lisible pour l'édition rapide
+    let bodyText = "";
+    if (item.body_json) {
+      if (Array.isArray(item.body_json)) {
+        bodyText = item.body_json.map((part: any) => part.text).join("\n\n");
+      } else {
+        bodyText = JSON.stringify(item.body_json);
+      }
+    }
+    setEditBodyStr(bodyText);
+    setEditCta(item.cta || "");
+    setIsEditing(false);
+  };
+
+  const saveEdit = async () => {
+    if (!selectedItem) return;
+    try {
+      // Re-formater en body_json simple ou le stocker tel quel
+      const formattedBody = editBodyStr.split("\n\n").map(text => ({ type: "speech", text }));
+      await fetch("/api/admin/social/tiktok/planning", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          id: selectedItem.id, 
+          hook: editHook, 
+          body_json: formattedBody, 
+          cta: editCta 
+        })
+      });
+      setSelectedItem({ ...selectedItem, hook: editHook, body_json: formattedBody, cta: editCta });
+      setIsEditing(false);
+      fetchPlanning();
+    } catch (e) {
+      alert("Erreur lors de la sauvegarde.");
+    }
+  };
+
+  const deleteScript = async (id: number) => {
+    if (!confirm("Voulez-vous vraiment supprimer ce script ?")) return;
+    try {
+      await fetch(`/api/admin/social/tiktok/planning?id=${id}`, { method: "DELETE" });
+      setSelectedItem(null);
+      fetchPlanning();
+    } catch (e) {
+      alert("Erreur lors de la suppression");
+    }
+  };
+
+  // ----- Génération de la grille hebdo -----
+  const daysArray = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(viewStartDate);
+    d.setDate(d.getDate() + i);
+    daysArray.push(d);
+  }
+
+  const timeSlots = [];
+  for (let h = 8; h <= 21; h++) {
+    timeSlots.push(h);
+  }
 
   return (
     <div className="relative py-32 bg-midnight min-h-screen">
@@ -319,40 +438,194 @@ export default function TikTokStudio() {
           </motion.div>
         )}
 
-        {/* PLANNING SECTION */}
-        <div className="mt-16 bg-midnight-light/50 border border-gold/10 p-6 rounded-2xl backdrop-blur-sm">
-          <h2 className="text-2xl font-serif text-sand-light font-bold mb-6 flex items-center gap-3">
-            <FaList className="text-gold" /> Planning TikTok
-          </h2>
-          {planning.length === 0 ? (
-            <p className="text-sand/50">Aucun script planifié pour le moment.</p>
-          ) : (
-            <div className="space-y-4">
-              {planning.map(item => (
-                <div key={item.id} className="bg-midnight border border-white/5 p-4 rounded-xl flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-                  <div>
-                    <h4 className="text-sand font-bold">{item.titre_source}</h4>
-                    <p className="text-xs text-sand/50 mt-1">Généré le {new Date(item.date_creation).toLocaleDateString("fr-FR")}</p>
-                    {item.hook && (
-                      <p className="text-sm text-sand/70 italic mt-2 border-l-2 border-gold/30 pl-2">"{item.hook.substring(0, 60)}..."</p>
-                    )}
+        {/* CALENDRIER INTERACTIF TIKTOK */}
+        <div className="mt-20 bg-midnight-light/50 border border-gold/10 p-6 rounded-2xl backdrop-blur-sm relative z-20">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+            <h2 className="text-2xl font-serif text-sand-light font-bold flex items-center gap-3">
+              <FaList className="text-gold" /> Planning Editorial (Semaine)
+            </h2>
+            
+            <div className="flex gap-2 items-center bg-midnight border border-white/10 rounded-lg p-1">
+              <button 
+                className="px-3 py-1.5 text-xs text-sand-light hover:bg-white/5 rounded-md transition-colors"
+                onClick={() => {
+                  const d = new Date(viewStartDate);
+                  d.setDate(d.getDate() - 7);
+                  setViewStartDate(d);
+                }}
+              >
+                ← Semaine préc.
+              </button>
+              <span className="text-sm font-bold text-gold px-2">
+                {viewStartDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })} - {new Date(viewStartDate.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </span>
+              <button 
+                className="px-3 py-1.5 text-xs text-sand-light hover:bg-white/5 rounded-md transition-colors"
+                onClick={() => {
+                  const d = new Date(viewStartDate);
+                  d.setDate(d.getDate() + 7);
+                  setViewStartDate(d);
+                }}
+              >
+                Semaine suiv. →
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto border border-white/5 rounded-xl bg-midnight/30">
+            <div style={{ display: 'grid', gridTemplateColumns: `50px repeat(7, minmax(140px, 1fr))` }}>
+              {/* Header Jours */}
+              <div className="bg-white/5 border-b border-r border-white/5" />
+              {daysArray.map((d, i) => {
+                const isToday = new Date().toDateString() === d.toDateString();
+                return (
+                  <div key={i} className={`text-center py-3 text-xs border-b border-r border-white/5 font-bold ${isToday ? 'text-gold bg-gold/5' : 'text-sand/70'}`}>
+                    {d.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric' })}
                   </div>
-                  <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold border ${item.statut === 'Publié' ? 'bg-green-900/20 text-green-400 border-green-500/30' : 'bg-gold/10 text-gold border-gold/30'}`}>
-                      {item.statut}
-                    </span>
-                    <button 
-                      onClick={() => toggleStatus(item.id, item.statut)}
-                      className="text-xs text-sand/70 hover:text-white underline transition-colors"
-                    >
-                      {item.statut === 'Planifié' ? 'Marquer comme Publié' : 'Remettre en Planifié'}
-                    </button>
+                );
+              })}
+
+              {/* Lignes Heures */}
+              {timeSlots.map(hour => (
+                <React.Fragment key={hour}>
+                  <div className="flex items-center justify-end pr-2 text-[10px] text-sand/50 font-bold border-b border-r border-white/5 bg-white/5 h-16">
+                    {hour}:00
                   </div>
-                </div>
+                  {daysArray.map((d, i) => {
+                    // Trouver les scripts pour cette heure et ce jour
+                    const scriptsForSlot = planning.filter(p => {
+                      if (!p.date_planification) return false;
+                      const pDate = new Date(p.date_planification);
+                      return pDate.getFullYear() === d.getFullYear() && pDate.getMonth() === d.getMonth() && pDate.getDate() === d.getDate() && pDate.getHours() === hour;
+                    });
+
+                    return (
+                      <div 
+                        key={i} 
+                        className="border-b border-r border-white/5 h-16 relative p-1"
+                        onDragOver={onDragOver}
+                        onDrop={(e) => {
+                          const targetDate = new Date(d);
+                          targetDate.setHours(hour, 0, 0, 0);
+                          onDrop(e, targetDate);
+                        }}
+                      >
+                        {scriptsForSlot.map(script => (
+                          <div 
+                            key={script.id}
+                            draggable
+                            onDragStart={(e) => onDragStart(e, script.id)}
+                            onClick={() => openPopup(script)}
+                            className={`absolute inset-1 p-1.5 rounded-lg border cursor-pointer hover:border-gold/50 transition-all text-[10px] flex flex-col justify-between overflow-hidden shadow-sm ${
+                              script.statut === 'Publié' ? 'bg-green-900/30 border-green-500/30' : 'bg-midnight border-white/10'
+                            }`}
+                          >
+                            <div className="font-bold text-sand-light truncate">{script.titre_source}</div>
+                            <div className="text-sand/50 truncate italic mt-0.5">"{script.hook ? script.hook.substring(0, 25) : 'Sans accroche'}..."</div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
               ))}
             </div>
-          )}
+          </div>
         </div>
+
+        {/* POPUP EDITION */}
+        <AnimatePresence>
+          {selectedItem && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+              onClick={() => setSelectedItem(null)}
+            >
+              <div 
+                className="bg-midnight border border-gold/20 rounded-2xl w-full max-w-3xl shadow-2xl flex flex-col max-h-[90vh]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="bg-white/5 p-4 border-b border-white/10 flex justify-between items-center rounded-t-2xl">
+                  <div>
+                    <h3 className="text-lg font-serif text-gold font-bold">Script : {selectedItem.titre_source}</h3>
+                    <p className="text-xs text-sand/50">Planifié le : {selectedItem.date_planification ? new Date(selectedItem.date_planification).toLocaleString('fr-FR') : 'Non défini'}</p>
+                  </div>
+                  <button onClick={() => setSelectedItem(null)} className="text-sand/50 hover:text-white text-2xl leading-none">&times;</button>
+                </div>
+                
+                <div className="p-6 overflow-y-auto space-y-6 text-sm text-sand-light flex-1 custom-scrollbar">
+                  {isEditing ? (
+                    <div className="space-y-4">
+                      <div>
+                        <label className="text-xs text-gold uppercase tracking-widest font-bold mb-2 block">Accroche (Hook)</label>
+                        <textarea 
+                          value={editHook} 
+                          onChange={(e) => setEditHook(e.target.value)}
+                          className="w-full bg-midnight-light border border-gold/30 rounded-xl p-4 text-sand-light outline-none focus:border-gold h-20"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gold uppercase tracking-widest font-bold mb-2 block">Développement (Body)</label>
+                        <textarea 
+                          value={editBodyStr} 
+                          onChange={(e) => setEditBodyStr(e.target.value)}
+                          className="w-full bg-midnight-light border border-gold/30 rounded-xl p-4 text-sand-light outline-none focus:border-gold h-48"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-gold uppercase tracking-widest font-bold mb-2 block">Appel à l'action (CTA)</label>
+                        <textarea 
+                          value={editCta} 
+                          onChange={(e) => setEditCta(e.target.value)}
+                          className="w-full bg-midnight-light border border-gold/30 rounded-xl p-4 text-sand-light outline-none focus:border-gold h-20"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                        <h4 className="text-xs text-gold uppercase tracking-widest font-bold mb-2">Accroche (Hook)</h4>
+                        <p className="italic">"{selectedItem.hook}"</p>
+                      </div>
+                      <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                        <h4 className="text-xs text-gold uppercase tracking-widest font-bold mb-2">Développement</h4>
+                        <p className="whitespace-pre-wrap leading-relaxed">{selectedItem.body_json && Array.isArray(selectedItem.body_json) ? selectedItem.body_json.map((p:any)=>p.text).join('\n\n') : JSON.stringify(selectedItem.body_json)}</p>
+                      </div>
+                      <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                        <h4 className="text-xs text-gold uppercase tracking-widest font-bold mb-2">Appel à l'action</h4>
+                        <p>"{selectedItem.cta}"</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="bg-white/5 p-4 border-t border-white/10 flex flex-wrap gap-3 justify-end rounded-b-2xl">
+                  {isEditing ? (
+                    <>
+                      <button onClick={() => setIsEditing(false)} className="px-4 py-2 text-sm text-sand/70 hover:text-white transition-colors">Annuler</button>
+                      <button onClick={saveEdit} className="px-6 py-2 text-sm bg-green-600/20 text-green-400 border border-green-500/50 rounded-lg hover:bg-green-600/40 transition-colors font-bold">Sauvegarder</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={() => setIsEditing(true)} className="px-4 py-2 text-sm border border-gold/30 text-gold rounded-lg hover:bg-gold/10 transition-colors">📝 Modifier le script</button>
+                      
+                      <button 
+                        onClick={() => toggleStatus(selectedItem.id, selectedItem.statut)} 
+                        className={`px-4 py-2 text-sm border rounded-lg transition-colors ${selectedItem.statut === 'Planifié' ? 'border-green-500/50 text-green-400 hover:bg-green-500/10' : 'border-gold/50 text-gold hover:bg-gold/10'}`}
+                      >
+                        {selectedItem.statut === 'Planifié' ? '✅ Marquer comme Publié' : '🔄 Remettre en Planifié'}
+                      </button>
+                      
+                      <button onClick={() => deleteScript(selectedItem.id)} className="px-4 py-2 text-sm border border-red-500/50 text-red-500 rounded-lg hover:bg-red-500/10 transition-colors">🗑️ Supprimer</button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </div>

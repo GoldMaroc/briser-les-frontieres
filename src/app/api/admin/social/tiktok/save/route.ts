@@ -14,9 +14,13 @@ export async function POST(request: Request) {
     const bodyJson = JSON.stringify(script.bodyParts);
     const hashtags = Array.isArray(script.hashtags) ? script.hashtags.join(" ") : script.hashtags;
 
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(18, 0, 0, 0);
+
     await client.sql`
-      INSERT INTO tiktok_planning (titre_source, hook, body_json, cta, hashtags, statut)
-      VALUES (${titre_source}, ${script.hook}, ${bodyJson}, ${script.cta}, ${hashtags}, 'Planifié')
+      INSERT INTO tiktok_planning (titre_source, hook, body_json, cta, hashtags, statut, date_planification)
+      VALUES (${titre_source}, ${script.hook}, ${bodyJson}, ${script.cta}, ${hashtags}, 'Planifié', ${tomorrow.toISOString()})
     `;
 
     client.release();
