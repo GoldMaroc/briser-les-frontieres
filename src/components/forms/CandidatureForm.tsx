@@ -42,6 +42,12 @@ export default function CandidatureForm() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const isTurnstileConfigured = Boolean(
+    turnstileSiteKey &&
+    turnstileSiteKey !== "1x00000000000000000000AA" &&
+    !turnstileSiteKey.startsWith("1x000000")
+  );
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 4));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
@@ -63,7 +69,7 @@ export default function CandidatureForm() {
       return;
     }
 
-    if (!turnstileToken) {
+    if (isTurnstileConfigured && !turnstileToken) {
       setError("Veuillez patienter pendant la validation anti-spam ou rafraîchir la page.");
       return;
     }
@@ -415,13 +421,15 @@ export default function CandidatureForm() {
                   En soumettant ce formulaire, vous attestez de l&apos;exactitude des données et de votre volonté sincère de vous engager dans un audit de souveraineté cognitive. Zéro engagement financier n&apos;est requis à cette étape.
                 </p>
 
-                <div className="flex justify-center mt-6">
-                  <Turnstile
-                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
-                    onSuccess={(token) => setTurnstileToken(token)}
-                    options={{ theme: "dark" }}
-                  />
-                </div>
+                {isTurnstileConfigured && (
+                  <div className="flex justify-center mt-6">
+                    <Turnstile
+                      siteKey={turnstileSiteKey!}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      options={{ theme: "dark" }}
+                    />
+                  </div>
+                )}
               </motion.div>
             )}
 
@@ -441,7 +449,7 @@ export default function CandidatureForm() {
               <div />
             )}
 
-            <Button type="submit" disabled={loading || (step === 4 && !turnstileToken)} className="shadow-lg shadow-emerald/5">
+            <Button type="submit" disabled={loading || (step === 4 && isTurnstileConfigured && !turnstileToken)} className="shadow-lg shadow-emerald/5">
               {step === 4 ? (loading ? "Traitement..." : "Soumettre la candidature") : "Continuer"}
             </Button>
           </div>

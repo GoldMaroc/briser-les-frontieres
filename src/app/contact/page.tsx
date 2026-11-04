@@ -25,6 +25,12 @@ export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [turnstileToken, setTurnstileToken] = useState("");
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+  const isTurnstileConfigured = Boolean(
+    turnstileSiteKey &&
+    turnstileSiteKey !== "1x00000000000000000000AA" &&
+    !turnstileSiteKey.startsWith("1x000000")
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -48,7 +54,7 @@ export default function Contact() {
       return;
     }
 
-    if (!turnstileToken) {
+    if (isTurnstileConfigured && !turnstileToken) {
       setError("Veuillez patienter pendant la validation anti-spam ou rafraîchir la page.");
       return;
     }
@@ -359,15 +365,17 @@ export default function Contact() {
                   <p className="text-xs text-red-400 font-body uppercase tracking-wider text-center">{error}</p>
                 )}
 
-                <div className="flex justify-center mt-4">
-                  <Turnstile
-                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
-                    onSuccess={(token) => setTurnstileToken(token)}
-                    options={{ theme: "dark" }}
-                  />
-                </div>
+                {isTurnstileConfigured && (
+                  <div className="flex justify-center mt-4">
+                    <Turnstile
+                      siteKey={turnstileSiteKey!}
+                      onSuccess={(token) => setTurnstileToken(token)}
+                      options={{ theme: "dark" }}
+                    />
+                  </div>
+                )}
 
-                <Button type="submit" disabled={loading || !turnstileToken} className="w-full mt-4 py-4 justify-center shadow-lg shadow-emerald/5">
+                <Button type="submit" disabled={loading || (isTurnstileConfigured && !turnstileToken)} className="w-full mt-4 py-4 justify-center shadow-lg shadow-emerald/5">
                   {loading ? "Validation..." : "Transmettre au Cabinet"}
                 </Button>
 

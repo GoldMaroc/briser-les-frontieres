@@ -56,13 +56,13 @@ const ContactSchema = z.object({
     }
 
     // --- Vérification Cloudflare Turnstile ---
-    const turnstileToken = parsed.data.turnstileToken;
-    if (!turnstileToken) {
-      return NextResponse.json({ message: "Le jeton de sécurité est manquant." }, { status: 400 });
-    }
-
     const secretKey = process.env.TURNSTILE_SECRET_KEY;
     if (secretKey) {
+      const turnstileToken = parsed.data.turnstileToken;
+      if (!turnstileToken) {
+        return NextResponse.json({ message: "Le jeton de sécurité est manquant." }, { status: 400 });
+      }
+
       const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
         method: "POST",
         headers: {
