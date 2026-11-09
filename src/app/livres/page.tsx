@@ -136,9 +136,9 @@ export default function Livres() {
             >
               <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
 
-              {/* 1. EN-TÊTE ALIGNÉ (Hauteur fixe sur grand écran) */}
-              <div className="pb-5 mb-6 border-b border-border/50">
-                <div className="flex items-center justify-between gap-3 mb-3">
+              {/* 1. EN-TÊTE ALIGNÉ (Hauteur fixe identique sur les 2 cartes) */}
+              <div className="pb-4 mb-6 border-b border-border/50 lg:h-[124px] flex flex-col justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <span className="inline-flex items-center h-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold bg-gold-muted px-3 border border-gold/25">
                     Ouvrage I • Méthode 30 Jours
                   </span>
@@ -152,19 +152,21 @@ export default function Livres() {
                   </div>
                 </div>
 
-                <h2 className="font-heading text-2xl sm:text-[28px] text-cream font-light leading-tight sm:truncate">
-                  Les Secrets du Retour vers Allah
-                </h2>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-emerald font-semibold mt-1.5 sm:truncate">
-                  Reprendre sa Prière et sa Souveraineté
-                </p>
+                <div>
+                  <h2 className="font-heading text-2xl sm:text-[26px] text-cream font-light leading-tight truncate">
+                    Les Secrets du Retour vers Allah
+                  </h2>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-emerald font-semibold mt-1 truncate">
+                    Reprendre sa Prière et sa Souveraineté
+                  </p>
+                </div>
               </div>
 
-              {/* 2. CORPS ALIGNÉ : COUVERTURE (RATIO FIXE) + SYNOPSIS (HAUTEURS FIXES) */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-stretch flex-1 mb-6 pb-6 border-b border-border/50">
-                {/* Colonne Couverture (Ratio 2:3 strictement identique) */}
-                <div className="sm:col-span-5 flex flex-col items-center justify-between">
-                  <div className="relative w-48 sm:w-full max-w-[200px] aspect-[2/3] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight">
+              {/* 2. CORPS ALIGNÉ : COUVERTURE CALÉE EN HAUT + SYNOPSIS ALIGNÉ */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start flex-1 mb-6 pb-6 border-b border-border/50">
+                {/* Colonne Couverture (Dimensions fixes 195x285px calée en haut) */}
+                <div className="sm:col-span-5 flex flex-col items-center justify-start">
+                  <div className="relative w-[195px] h-[285px] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight shrink-0">
                     <img
                       src={
                         secretsSide === "recto"
@@ -176,7 +178,7 @@ export default function Livres() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 w-48 sm:w-full max-w-[200px] mt-3">
+                  <div className="grid grid-cols-2 gap-1.5 w-[195px] mt-3 shrink-0">
                     <button
                       type="button"
                       onClick={() => setSecretsSide("recto")}
@@ -202,31 +204,31 @@ export default function Livres() {
                   </div>
                 </div>
 
-                {/* Colonne Texte (Blocs alignés horizontalement) */}
-                <div className="sm:col-span-7 flex flex-col justify-between space-y-4">
-                  {/* Citation (Hauteur harmonisée) */}
+                {/* Colonne Texte (Blocs de hauteur fixe alignés horizontalement) */}
+                <div className="sm:col-span-7 flex flex-col justify-between h-full space-y-3.5">
+                  {/* Citation (Hauteur fixe 44px) */}
                   <div className="min-h-[44px] flex items-center border-l-2 border-gold pl-3">
-                    <p className="text-xs text-cream-muted leading-snug font-body italic">
+                    <p className="text-xs text-cream-muted leading-snug font-body italic line-clamp-2">
                       « Ne subissez plus votre quotidien. Reprenez votre prière et votre souveraineté. »
                     </p>
                   </div>
 
-                  {/* Résumé (4 lignes) */}
-                  <p className="text-xs sm:text-[13px] text-cream-muted leading-relaxed font-body min-h-[84px]">
+                  {/* Résumé (Hauteur fixe 84px) */}
+                  <p className="text-xs sm:text-[13px] text-cream-muted leading-relaxed font-body min-h-[84px] line-clamp-4">
                     Au croisement d&apos;Al-Ghazâlî, d&apos;Ibn al-Qayyim et des sciences cognitives, une ingénierie en <strong className="text-cream">5 chapitres et un protocole de 30 jours</strong> pour briser le cycle des rechutes et réinstaller la prière.
                   </p>
 
-                  {/* 3 Points clés alignés */}
+                  {/* 3 Points clés (1 ligne chacun) */}
                   <ul className="space-y-2 text-xs text-cream-muted font-body">
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">Le Statut de Khalîfa &amp; l&apos;Anatomie d&apos;At-Tawbah</span>
                     </li>
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">As-Salât : algorithme circadien (-27,3% cortisol)</span>
                     </li>
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">Design environnemental &amp; Protocole 30 jours</span>
                     </li>
@@ -238,7 +240,7 @@ export default function Livres() {
                       <FiLayers className="text-gold shrink-0" /> 41 pages (5 chapitres)
                     </span>
                     <span className="text-emerald font-medium">
-                      Accès immédiat
+                      Accès immédiat (PDF &amp; ePub)
                     </span>
                   </div>
                 </div>
@@ -277,9 +279,9 @@ export default function Livres() {
             >
               <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
 
-              {/* 1. EN-TÊTE ALIGNÉ (Hauteur fixe sur grand écran) */}
-              <div className="pb-5 mb-6 border-b border-border/50">
-                <div className="flex items-center justify-between gap-3 mb-3">
+              {/* 1. EN-TÊTE ALIGNÉ (Hauteur fixe identique sur les 2 cartes) */}
+              <div className="pb-4 mb-6 border-b border-border/50 lg:h-[124px] flex flex-col justify-between">
+                <div className="flex items-center justify-between gap-3">
                   <span className="inline-flex items-center h-6 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold bg-gold-muted px-3 border border-gold/25">
                     Ouvrage II • Noms d&apos;Allah (Vol. I)
                   </span>
@@ -293,19 +295,21 @@ export default function Livres() {
                   </div>
                 </div>
 
-                <h2 className="font-heading text-2xl sm:text-[28px] text-cream font-light leading-tight sm:truncate">
-                  Ar-Rahman : La Mer sans Rivage
-                </h2>
-                <p className="text-[11px] uppercase tracking-[0.18em] text-emerald font-semibold mt-1.5 sm:truncate">
-                  Exégèse du Premier Nom — La Miséricorde Universelle
-                </p>
+                <div>
+                  <h2 className="font-heading text-2xl sm:text-[26px] text-cream font-light leading-tight truncate">
+                    Ar-Rahman : La Mer sans Rivage
+                  </h2>
+                  <p className="text-[11px] uppercase tracking-[0.15em] text-emerald font-semibold mt-1 truncate">
+                    Exégèse du Premier Nom — La Miséricorde Universelle
+                  </p>
+                </div>
               </div>
 
-              {/* 2. CORPS ALIGNÉ : COUVERTURE (RATIO FIXE) + SYNOPSIS (HAUTEURS FIXES) */}
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-stretch flex-1 mb-6 pb-6 border-b border-border/50">
-                {/* Colonne Couverture (Ratio 2:3 strictement identique) */}
-                <div className="sm:col-span-5 flex flex-col items-center justify-between">
-                  <div className="relative w-48 sm:w-full max-w-[200px] aspect-[2/3] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight">
+              {/* 2. CORPS ALIGNÉ : COUVERTURE CALÉE EN HAUT + SYNOPSIS ALIGNÉ */}
+              <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-start flex-1 mb-6 pb-6 border-b border-border/50">
+                {/* Colonne Couverture (Dimensions fixes 195x285px calée en haut) */}
+                <div className="sm:col-span-5 flex flex-col items-center justify-start">
+                  <div className="relative w-[195px] h-[285px] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight shrink-0">
                     <img
                       src={
                         rahmanSide === "recto"
@@ -317,7 +321,7 @@ export default function Livres() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 w-48 sm:w-full max-w-[200px] mt-3">
+                  <div className="grid grid-cols-2 gap-1.5 w-[195px] mt-3 shrink-0">
                     <button
                       type="button"
                       onClick={() => setRahmanSide("recto")}
@@ -343,31 +347,31 @@ export default function Livres() {
                   </div>
                 </div>
 
-                {/* Colonne Texte (Blocs alignés horizontalement) */}
-                <div className="sm:col-span-7 flex flex-col justify-between space-y-4">
-                  {/* Citation (Hauteur harmonisée) */}
+                {/* Colonne Texte (Blocs de hauteur fixe alignés horizontalement) */}
+                <div className="sm:col-span-7 flex flex-col justify-between h-full space-y-3.5">
+                  {/* Citation (Hauteur fixe 44px) */}
                   <div className="min-h-[44px] flex items-center border-l-2 border-gold pl-3">
-                    <p className="text-xs text-cream-muted leading-snug font-body italic">
+                    <p className="text-xs text-cream-muted leading-snug font-body italic line-clamp-2">
                       « La miséricorde qui précède toute chose. Le nom qui n&apos;a jamais cessé de t&apos;aimer. »
                     </p>
                   </div>
 
-                  {/* Résumé (4 lignes) */}
-                  <p className="text-xs sm:text-[13px] text-cream-muted leading-relaxed font-body min-h-[84px]">
+                  {/* Résumé (Hauteur fixe 84px) */}
+                  <p className="text-xs sm:text-[13px] text-cream-muted leading-relaxed font-body min-h-[84px] line-clamp-4">
                     Une exégèse complète en <strong className="text-cream">5 parties et 12 chapitres</strong> (Tabarî, Qurtubî, Râzî, Ibn Kathîr, Al-Ghazâlî, Ibn al-Qayyim) explorant la racine sacrée <em>R-H-M</em> et la guérison du désespoir.
                   </p>
 
-                  {/* 3 Points clés alignés */}
+                  {/* 3 Points clés (1 ligne chacun) */}
                   <ul className="space-y-2 text-xs text-cream-muted font-body">
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">Archéologie de la racine R-H-M &amp; Sourate Ar-Rahman</span>
                     </li>
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">Les récits prophétiques (Taïf, Yûnus, 100 parties)</span>
                     </li>
-                    <li className="flex items-center gap-2.5">
+                    <li className="flex items-center gap-2.5 h-5">
                       <FiCheck className="text-gold shrink-0" />
                       <span className="truncate">Invocations prophétiques &amp; Programme de Dhikr</span>
                     </li>
@@ -379,7 +383,7 @@ export default function Livres() {
                       <FiLayers className="text-gold shrink-0" /> 84 pages (12 chapitres)
                     </span>
                     <span className="text-emerald font-medium">
-                      Accès immédiat
+                      Accès immédiat (PDF &amp; ePub)
                     </span>
                   </div>
                 </div>
