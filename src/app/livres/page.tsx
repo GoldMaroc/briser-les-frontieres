@@ -132,11 +132,11 @@ export default function Livres() {
             </div>
 
             <Button 
-              href="https://buy.stripe.com/4gM3cv6vG7B76Rb1y55Ne01"
+              href="/paiement?offre=secrets"
               variant="primary" 
               className="w-full py-4 text-center justify-center font-bold tracking-widest"
             >
-              Commander l&apos;eBook (ePub)
+              Commander l&apos;eBook (PDF & ePub)
             </Button>
 
             {/* Badge de confiance de paiement */}
@@ -242,7 +242,7 @@ export default function Livres() {
             </div>
 
             <Button 
-              href="https://buy.stripe.com/3cI9AT7zK1cJ8Zj1y55Ne02"
+              href="/paiement?offre=rahman"
               variant="primary" 
               className="w-full py-4 text-center justify-center font-bold tracking-widest"
             >

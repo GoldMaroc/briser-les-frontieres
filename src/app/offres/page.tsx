@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { useDraggableScroll } from "@/hooks/useDraggableScroll";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -22,10 +23,10 @@ const featuresList = [
 ];
 
 const plans = [
-  { id: "audit", titre: "Audit Diagnostique", prix: "85,90 €", paiement: "En 1 fois", stripeLink: "#lien-stripe-audit" },
-  { id: "30j", titre: "Protocole 30 Jours", prix: "612,70 €", paiement: "En 1 ou 2 fois", stripeLink: "#lien-stripe-30j" },
-  { id: "3m", titre: "Transformation 3 Mois", popular: true, prix: "1 655,30 €", paiement: "En 1 ou 3 fois", stripeLink: "#lien-stripe-3m" },
-  { id: "12m", titre: "Mentorat d'Excellence", prixBase: "6 112,00 €", prixPromo: "4 889,60 €", paiement: "En 1 ou 6 fois", stripeLink: "#lien-stripe-12m" }
+  { id: "audit", titre: "Audit Diagnostique", prix: "85,90 €", paiement: "En 1 fois", stripeLink: "/paiement?offre=audit" },
+  { id: "30j", titre: "Protocole 30 Jours", prix: "612,70 €", paiement: "En 1 ou 2 fois", stripeLink: "/paiement?offre=30j" },
+  { id: "3m", titre: "Transformation 3 Mois", popular: true, prix: "1 655,30 €", paiement: "En 1 ou 3 fois", stripeLink: "/paiement?offre=3m" },
+  { id: "12m", titre: "Mentorat d'Excellence", prixBase: "6 112,00 €", prixPromo: "4 889,60 €", paiement: "En 1 ou 6 fois", stripeLink: "/paiement?offre=12m" }
 ];
 
 export default function OffresPage() {
@@ -150,7 +151,7 @@ export default function OffresPage() {
                 <td className="p-6 border-b border-stone-800"></td>
                 {plans.map((plan) => (
                   <td key={plan.id} className={`p-6 border-b border-stone-800 text-center ${plan.popular ? 'bg-gold/5 rounded-b-lg border-x border-b border-gold/30' : ''}`}>
-                    <a 
+                    <Link 
                       href={plan.stripeLink} 
                       className={`inline-block w-full text-center py-3 px-4 rounded-sm font-semibold tracking-wider uppercase text-[11px] transition-all ${
                         plan.popular 
@@ -159,7 +160,7 @@ export default function OffresPage() {
                       }`}
                     >
                       Procéder au paiement
-                    </a>
+                    </Link>
                   </td>
                 ))}
               </tr>

@@ -9,25 +9,35 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("session_id");
+    const paymentIntentId = searchParams.get("payment_intent");
     const format = searchParams.get("format"); // pdf ou epub
 
-    if (!sessionId) {
-      return NextResponse.json({ message: "Identifiant de session manquant." }, { status: 400 });
+    if (!sessionId && !paymentIntentId) {
+      return NextResponse.json({ message: "Identifiant de transaction manquant." }, { status: 400 });
     }
 
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    let bookId = "secrets";
 
-    if (session.payment_status !== "paid") {
-      return NextResponse.json({ message: "Accès refusé. Le paiement n'a pas été validé." }, { status: 403 });
+    if (paymentIntentId) {
+      const pi = await stripe.paymentIntents.retrieve(paymentIntentId);
+      if (pi.status !== "succeeded") {
+        return NextResponse.json({ message: "Accès refusé. Le paiement n'a pas été validé." }, { status: 403 });
+      }
+      bookId = pi.metadata?.offerId || pi.metadata?.bookId || "secrets";
+    } else if (sessionId) {
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      if (session.payment_status !== "paid") {
+        return NextResponse.json({ message: "Accès refusé. Le paiement n'a pas été validé." }, { status: 403 });
+      }
+      bookId = session.metadata?.bookId || session.metadata?.offerId || "secrets";
     }
-
-    const bookId = session.metadata?.bookId || "secrets";
 
     let filename = "";
     if (bookId === "secrets") {
-      filename = format === "epub" 
-        ? "Les-Secrets-du-Retour-vers-Allah-92u7e.epub" 
-        : "Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET-92u7e.pdf";
+      filename =
+        format === "epub"
+          ? "Les-Secrets-du-Retour-vers-Allah-92u7e.epub"
+          : "Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET-92u7e.pdf";
     } else if (bookId === "rahman") {
       filename = "Ar-Rahman-LIVRE-COMPLET.pdf";
     } else {
