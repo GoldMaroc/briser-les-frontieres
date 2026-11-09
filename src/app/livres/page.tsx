@@ -1,39 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
-import { FiBookOpen, FiLock, FiChevronLeft, FiChevronRight, FiCheck, FiEye, FiX } from "react-icons/fi";
-
-interface BookExcerptPage {
-  pageNumber: number;
-  title: string;
-  locked?: boolean;
-}
-
-const EXCERPT_PAGES: BookExcerptPage[] = [
-  { pageNumber: 6, title: "Sommaire" },
-  { pageNumber: 7, title: "Préface (1/2)" },
-  { pageNumber: 8, title: "Préface (2/2)" },
-  { pageNumber: 9, title: "Introduction (1/3)" },
-  { pageNumber: 10, title: "Introduction (2/3)" },
-  { pageNumber: 11, title: "Introduction (3/3)" },
-  { pageNumber: 12, title: "Chapitre I (p. 12)" },
-  { pageNumber: 13, title: "Pages 13 à 41 (Verrouillé)", locked: true },
-];
-
-const RAHMAN_EXCERPT_PAGES: BookExcerptPage[] = [
-  { pageNumber: 6, title: "Sommaire (1/2)" },
-  { pageNumber: 7, title: "Sommaire (2/2)" },
-  { pageNumber: 8, title: "Avant-Propos (1/2)" },
-  { pageNumber: 9, title: "Avant-Propos (2/2)" },
-  { pageNumber: 10, title: "Partie I" },
-  { pageNumber: 11, title: "Chapitre I (p. 11)" },
-  { pageNumber: 12, title: "Chapitre I (p. 12)" },
-  { pageNumber: 13, title: "Pages 13 à 84 (Verrouillé)", locked: true },
-];
+import {
+  FiBookOpen,
+  FiLock,
+  FiCheck,
+  FiX,
+  FiShoppingBag,
+  FiLayers,
+} from "react-icons/fi";
 
 const INVOCATIONS_LIST = [
   {
@@ -72,49 +51,53 @@ const INVOCATIONS_LIST = [
 ];
 
 export default function Livres() {
-  const [activeTab, setActiveTab] = useState<"livres" | "invocations" | "videos" | "formations">("livres");
+  const [activeTab, setActiveTab] = useState<
+    "livres" | "invocations" | "videos" | "formations"
+  >("livres");
 
-  const [activeCover, setActiveCover] = useState<"both" | "recto" | "verso">("both");
-  const [currentPage, setCurrentPage] = useState<number>(6);
-  const [showSecretsExcerpt, setShowSecretsExcerpt] = useState<boolean>(false);
+  // Contrôle Recto / Verso pour chaque livre
+  const [secretsSide, setSecretsSide] = useState<"recto" | "verso">("recto");
+  const [rahmanSide, setRahmanSide] = useState<"recto" | "verso">("recto");
 
-  const [activeRahmanCover, setActiveRahmanCover] = useState<"both" | "recto" | "verso">("both");
-  const [currentRahmanPage, setCurrentRahmanPage] = useState<number>(6);
-  const [showRahmanExcerpt, setShowRahmanExcerpt] = useState<boolean>(false);
+  // Contrôle du Pop-up d'extrait (null | "secrets" | "rahman")
+  const [openPopupBook, setOpenPopupBook] = useState<null | "secrets" | "rahman">(
+    null
+  );
 
-  const goPrevPage = () => {
-    setCurrentPage((p) => Math.max(6, p - 1));
-  };
-
-  const goNextPage = () => {
-    setCurrentPage((p) => Math.min(13, p + 1));
-  };
-
-  const goPrevRahmanPage = () => {
-    setCurrentRahmanPage((p) => Math.max(6, p - 1));
-  };
-
-  const goNextRahmanPage = () => {
-    setCurrentRahmanPage((p) => Math.min(13, p + 1));
-  };
+  // Bloquer le scroll de la page quand le pop-up est ouvert + touche Échap
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenPopupBook(null);
+    };
+    if (openPopupBook) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleKeyDown);
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openPopupBook]);
 
   return (
-    <div className="relative pt-28 sm:pt-40 pb-24 sm:pb-32 bg-midnight min-h-screen overflow-x-hidden w-full max-w-full">
-      {/* Halo de lumière doré circadien et texture */}
-      <div className="absolute top-0 left-0 w-full h-[700px] bg-[radial-gradient(circle_at_50%_0%,var(--color-gold-muted)_0%,transparent_60%)] pointer-events-none opacity-40 md:opacity-60" />
+    <div className="relative pt-28 sm:pt-36 pb-24 sm:pb-32 bg-midnight min-h-screen overflow-x-hidden w-full max-w-full">
+      {/* Halo de lumière doré circadien */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,var(--color-gold-muted)_0%,transparent_60%)] pointer-events-none opacity-40 md:opacity-60" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* En-tête de la page */}
         <SectionHeading
-          label="Les Publications BLF"
+          label="Les Publications & Ressources BLF"
           title="Les Livres de Mounir BYAR"
-          subtitle="Des ouvrages uniques mariant avec rigueur les méthodes de l'exégèse islamique traditionnelle et la science cognitive contemporaine pour restructurer l'esprit."
+          subtitle="Des ouvrages alliant avec rigueur l'exégèse islamique traditionnelle et les sciences cognitives contemporaines pour restructurer l'esprit et le cœur."
         />
 
         {/* 4 petits onglets discrets en haut */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
           {[
-            { id: "livres" as const, label: "Livres" },
+            { id: "livres" as const, label: "Livres (2)" },
             { id: "invocations" as const, label: "Invocations" },
             { id: "videos" as const, label: "Vidéos" },
             { id: "formations" as const, label: "Formations" },
@@ -123,9 +106,9 @@ export default function Livres() {
               key={tab.id}
               type="button"
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-sm text-xs uppercase tracking-widest font-body transition-all cursor-pointer border ${
+              className={`px-5 py-2.5 rounded-sm text-xs uppercase tracking-widest font-body transition-all cursor-pointer border ${
                 activeTab === tab.id
-                  ? "bg-gold text-stone-950 font-bold border-gold"
+                  ? "bg-gold text-stone-950 font-bold border-gold shadow-lg"
                   : "bg-midnight-light/60 text-cream-muted border-border hover:border-gold/40 hover:text-cream"
               }`}
             >
@@ -134,1531 +117,288 @@ export default function Livres() {
           ))}
         </div>
 
-        {activeTab === "livres" && (
-          <>
-            {/* ════════════════════════════════════════════════════════════════════
-                OUVRAGE 1 : Les Secrets du Retour vers Allah
-                ════════════════════════════════════════════════════════════════════ */}
-            <div id="secrets" className="border-t border-border/60 pt-14 sm:pt-20 pb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* COLONNE GAUCHE : PRÉSENTATION & COUVERTURES */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-7 space-y-6 min-w-0"
-            >
-              <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.25em] text-gold bg-gold-muted px-4 py-1.5 border border-gold/20 font-body">
-                eBook Pratique & Méthode de 30 Jours
-              </span>
-              <h3 className="font-heading text-3xl md:text-4xl font-light text-cream">
-                Les Secrets du Retour vers Allah
-              </h3>
-              <p className="text-sm uppercase tracking-widest text-emerald font-semibold font-body">
-                Reprendre sa Prière et sa Souveraineté
-              </p>
-
-              {/* GALERIE DES COUVERTURES (1ère et 4ème de couverture) */}
-              <div className="bg-midnight-light/60 border border-gold/25 rounded-sm p-4 sm:p-6 space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3">
-                  <span className="text-[11px] uppercase tracking-widest text-gold font-bold flex items-center gap-2">
-                    <FiEye className="text-gold" /> Couvertures Officielles de l&apos;Édition
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setActiveCover("both")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeCover === "both"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      Recto & Verso
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveCover("recto")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeCover === "recto"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      1ère de Couverture
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveCover("verso")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeCover === "verso"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      4ème de Couverture
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  className={`grid gap-4 sm:gap-6 items-center justify-center ${
-                    activeCover === "both" ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 max-w-sm mx-auto"
-                  }`}
-                >
-                  {(activeCover === "both" || activeCover === "recto") && (
-                    <div className="space-y-2 text-center">
-                      <div className="relative rounded-sm overflow-hidden border border-gold/30 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group">
-                        <img
-                          src="/books/secrets-couverture-recto.png"
-                          alt="1ère de couverture — Les Secrets du Retour vers Allah"
-                          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-cream-muted block">
-                        Première de Couverture
-                      </span>
-                    </div>
-                  )}
-
-                  {(activeCover === "both" || activeCover === "verso") && (
-                    <div className="space-y-2 text-center">
-                      <div className="relative rounded-sm overflow-hidden border border-gold/30 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group">
-                        <img
-                          src="/books/secrets-couverture-verso.png"
-                          alt="4ème de couverture — Les Secrets du Retour vers Allah"
-                          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-cream-muted block">
-                        Quatrième de Couverture
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <p className="text-sm text-cream-muted leading-relaxed font-body italic border-l-2 border-gold pl-4 my-6">
-                « Ne subissez plus votre quotidien.
-                <br />
-                Reprenez votre prière et votre souveraineté. »
-              </p>
-
-              <p className="text-sm text-cream-muted leading-relaxed font-body">
-                Ce livre n&apos;est pas un appel à l&apos;effort, c&apos;est une ingénierie. Une
-                architecture conçue pour quiconque s&apos;est éloigné de la prière et attend, en
-                silence, de retrouver le chemin.
-              </p>
-
-              <p className="text-sm text-cream-muted leading-relaxed font-body">
-                Au croisement d&apos;Al-Ghazâlî, d&apos;Ibn Qayyim et des sciences cognitives (B.J.
-                Fogg, V. Frankl), Mounir BYAR propose une méthode en 5 mouvements et un protocole de
-                30 jours. Pour quiconque a tenté de revenir sans y parvenir.
-              </p>
-
-              {/* Plan de l'ouvrage stylisé haut de gamme */}
-              <div className="bg-midnight-light/50 p-6 sm:p-8 border border-border/80 rounded-sm">
-                <h4 className="font-heading text-lg text-cream mb-4 font-medium tracking-wide">
-                  Structure de l&apos;ouvrage
-                </h4>
-                <ul className="space-y-3.5 text-xs text-cream-muted font-body">
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">Préface</strong> — Un mot avant
-                      d&apos;entrer : Moins de combat, plus d&apos;architecture.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Chapitre I : Le Statut de Khalîfa
-                      </strong>{" "}
-                      — La prise de responsabilité radicale.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Chapitre II : L&apos;Anatomie du Retour (At-Tawbah)
-                      </strong>{" "}
-                      — La théorie des divergences du soi et Tazkiyah.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Chapitre III : La Prière (As-Salât)
-                      </strong>{" "}
-                      — Algorithme circadien de baisse de 27,3% du cortisol.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Chapitre IV : Reprendre sa Souveraineté
-                      </strong>{" "}
-                      — Le design environnemental (James Clear / B.J. Fogg).
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Chapitre V : L&apos;Écosystème de la Souveraineté
-                      </strong>{" "}
-                      — L&apos;importance cruciale du compagnonnage (Suhba).
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-emerald/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Protocole pratique de 30 jours
-                      </strong>{" "}
-                      — Stabilisation, Profondeur, Expansion.
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-
-            {/* COLONNE DROITE : MODULE D'ACQUISITION */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="lg:col-span-5 p-6 sm:p-8 border border-border bg-midnight-light/60 backdrop-blur-md rounded-sm relative shadow-2xl hover:border-gold/30 transition-all duration-500 lg:sticky lg:top-28"
-            >
-              <div className="absolute top-0 right-10 w-20 h-px bg-gold/50" />
-              <div className="flex items-center gap-4 mb-5 pb-5 border-b border-border/50">
-                <img
-                  src="/books/secrets-couverture-recto.png"
-                  alt="Les Secrets du Retour vers Allah"
-                  className="w-16 h-auto rounded-sm border border-gold/30 shadow-md shrink-0"
-                />
-                <div>
-                  <h4 className="font-heading text-xl text-cream font-semibold tracking-wide">
-                    Se procurer l&apos;ouvrage
-                  </h4>
-                  <p className="text-xs text-emerald font-medium mt-0.5">
-                    Téléchargement immédiat (PDF + ePub)
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xs text-cream-muted leading-relaxed font-body mb-6">
-                L&apos;ouvrage complet (41 pages) est disponible immédiatement après règlement
-                sécurisé sur notre portail. Intégrez le protocole dès aujourd&apos;hui.
-              </p>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Format</span>
-                  <span className="text-cream font-medium">PDF Haute Définition + ePub</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Pagination</span>
-                  <span className="text-cream font-medium">41 pages</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Extrait Gratuit</span>
-                  <span className="text-emerald font-semibold">Pages 6 à 12 ci-dessous ↓</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Tarif Numérique</span>
-                  <span className="text-gold font-bold text-lg">5,90 €</span>
-                </div>
-              </div>
-
-              <Button
-                href="/paiement?offre=secrets"
-                variant="primary"
-                className="w-full py-4 text-center justify-center font-bold tracking-widest"
-              >
-                Commander l&apos;Ouvrage (5,90 €)
-              </Button>
-
-              <button
-                type="button"
-                onClick={() => setShowSecretsExcerpt((v) => !v)}
-                className="mt-3 w-full py-3 px-4 border border-gold/30 hover:border-gold text-gold text-xs uppercase tracking-widest font-semibold rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
-              >
-                {showSecretsExcerpt ? (
-                  <>
-                    <FiX /> Fermer l&apos;extrait
-                  </>
-                ) : (
-                  <>
-                    <FiBookOpen /> Lire l&apos;extrait gratuit (Pages 6 à 12)
-                  </>
-                )}
-              </button>
-            </motion.div>
-          </div>
-
-          {/* ════════════════════════════════════════════════════════════════════
-              LECTEUR D'EXTRAIT INTERACTIF : PAGES 6 À 12 (OUVERT UNIQUEMENT AU CLIC)
-              ════════════════════════════════════════════════════════════════════ */}
-          {showSecretsExcerpt && (
-          <div id="extrait-secrets" className="mt-10 pt-8 border-t border-border/40">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs uppercase tracking-widest text-gold font-semibold flex items-center gap-2">
-                  <FiBookOpen /> Extrait Gratuit — Pages 6 à 12
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowSecretsExcerpt(false)}
-                  className="text-xs text-cream-muted hover:text-cream flex items-center gap-1 cursor-pointer"
-                >
-                  <FiX /> Fermer
-                </button>
-              </div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentPage}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.25 }}
-                  className="bg-[#FAF8F5] text-[#1A1A1A] border border-[#C9A84C]/40 rounded-sm shadow-xl p-6 sm:p-10 min-h-[420px] flex flex-col justify-between relative overflow-hidden select-none"
-                >
-                  {/* Filigrane supérieur discret */}
-                  <div className="text-center text-[9px] uppercase tracking-[0.35em] text-[#8C7A5B] pb-4 mb-6 border-b border-[#C9A84C]/25 flex items-center justify-between">
-                    <span>Les Secrets du Retour vers Allah</span>
-                    <span>
-                      {currentPage <= 12
-                        ? `Extrait Gratuit • Page ${currentPage} / 41`
-                        : "Accès Restreint • Pages 13 à 41"}
-                    </span>
-                  </div>
-
-                  {/* CONTENU DE LA PAGE SÉLECTIONNÉE */}
-                  <div className="flex-1 flex flex-col justify-center">
-                    {currentPage === 6 && (
-                      <div className="space-y-8 py-4">
-                        <div className="text-center space-y-3">
-                          <h3 className="font-heading text-3xl sm:text-4xl font-bold text-[#143D2B]">
-                            Sommaire
-                          </h3>
-                          <div className="text-[#C59B27] tracking-[0.5em] text-xs">◆ ◆ ◆</div>
-                        </div>
-
-                        <div className="space-y-3.5 max-w-lg mx-auto text-sm sm:text-base font-serif">
-                          {[
-                            { label: "Préface — Un mot avant d'entrer", target: 7 },
-                            { label: "Introduction — La Crise de la Déconnexion", target: 9 },
-                            { label: "I. Le Statut de Khalîfa", target: 12 },
-                            { label: "II. L'Anatomie du Retour (At-Tawbah)", target: 13, locked: true },
-                            { label: "III. La Prière (As-Salât)", target: 13, locked: true },
-                            { label: "IV. Reprendre sa Souveraineté", target: 13, locked: true },
-                            { label: "V. L'Écosystème de la Souveraineté", target: 13, locked: true },
-                            { label: "Protocole de Souveraineté — 30 Jours", target: 13, locked: true },
-                            {
-                              label: "Synthèse finale — Ce que vous avez entre les mains",
-                              target: 13,
-                              locked: true,
-                            },
-                            { label: "L'Auteur — Mounir BYAR", target: 13, locked: true },
-                            { label: "Pour aller plus loin — Contact", target: 13, locked: true },
-                          ].map((ch, idx) => (
-                            <button
-                              key={idx}
-                              type="button"
-                              onClick={() => setCurrentPage(ch.target)}
-                              className="w-full text-left flex items-center justify-between gap-2 pb-1.5 border-b border-[#143D2B]/15 text-[#143D2B] hover:text-[#9E7331] transition-colors cursor-pointer"
-                            >
-                              <span className="underline underline-offset-4">{ch.label}</span>
-                              {ch.locked ? (
-                                <span className="text-[10px] uppercase tracking-wider text-[#9E7331] flex items-center gap-1 shrink-0 font-sans font-semibold">
-                                  <FiLock /> p.13+
-                                </span>
-                              ) : (
-                                <span className="text-xs text-[#143D2B]/60 shrink-0 font-sans">
-                                  Lire →
-                                </span>
-                              )}
-                            </button>
-                          ))}
-                        </div>
-
-                        <p className="text-center text-xs italic text-[#666] pt-4">
-                          → Cliquez sur un chapitre pour y accéder directement.
-                        </p>
-                      </div>
-                    )}
-
-                    {currentPage === 7 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <div className="text-center space-y-2 mb-6">
-                          <span className="text-[11px] uppercase tracking-[0.35em] text-[#9E7331] font-sans font-semibold block">
-                            P R É F A C E
-                          </span>
-                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#143D2B]">
-                            Un mot avant d&apos;entrer
-                          </h3>
-                          <div className="text-[#C59B27] tracking-[0.5em] text-xs">◆ ◆ ◆</div>
-                        </div>
-
-                        <p className="indent-6">
-                          Avant d&apos;entrer dans cet ouvrage, vous devez savoir une chose : ce
-                          livre ne vous demandera pas plus d&apos;effort. Il vous proposera moins de
-                          combat.
-                        </p>
-                        <p className="indent-6">
-                          Les pages qui suivent ne sont pas un manuel de plus ajouté à la pile des
-                          livres qui vous attendent. Elles sont une{" "}
-                          <strong>ingénierie</strong> — une architecture conçue pour quiconque
-                          s&apos;est éloigné de sa prière et qui, en silence, attend de retrouver le
-                          chemin sans savoir par où commencer.
-                        </p>
-                        <p className="indent-6">
-                          J&apos;ai écrit ce livre parce que je l&apos;ai cherché et que je ne
-                          l&apos;ai pas trouvé. J&apos;avais besoin d&apos;un texte qui parle à la
-                          fois au croyant désorienté et à l&apos;esprit moderne formé aux sciences.
-                          Un texte qui ne sépare pas l&apos;âme du corps, ni la révélation de
-                          l&apos;observation, ni la sagesse classique d&apos;Al-Ghazâlî de la
-                          psychologie comportementale contemporaine. Un texte qui ose dire que
-                          reprendre sa prière n&apos;est pas une question de volonté héroïque, mais
-                          une question d&apos;<strong>architecture mentale</strong>.
-                        </p>
-                        <p className="indent-6">
-                          Cet ouvrage est ma réponse à ce besoin. Il s&apos;adresse à vous si vous
-                          reconnaissez l&apos;un des états suivants — sans jugement ni condition :
-                        </p>
-                        <p className="indent-6">
-                          Vous avez arrêté de prier depuis des mois ou des années, et vous portez ce
-                          silence comme un poids.
-                        </p>
-                        <p className="indent-6">
-                          Vous priez encore, mais quelque chose s&apos;est éteint à
-                          l&apos;intérieur, et les gestes ne touchent plus le cœur.
-                        </p>
-                      </div>
-                    )}
-
-                    {currentPage === 8 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <p className="indent-6">
-                          Vous ressentez la déconnexion sans pouvoir la nommer — ce vide diffus que
-                          la productivité, les écrans et les acquisitions ne comblent pas.
-                        </p>
-                        <p className="indent-6">
-                          Vous voulez revenir, mais vous ne savez pas par où commencer et toute
-                          tentative précédente s&apos;est soldée par un retour à la case départ.
-                        </p>
-
-                        <div className="my-6 py-5 border-y border-[#C59B27] text-center italic text-base sm:text-lg text-[#143D2B]">
-                          Ce livre est pour vous. Exactement là où vous êtes. Pas là où vous devriez
-                          être.
-                        </div>
-
-                        <p className="indent-6">
-                          Vous y trouverez cinq chapitres, un protocole de trente jours, et une
-                          promesse simple : si vous lisez et appliquez avec rigueur, votre prière
-                          reviendra. Non parce que ces pages contiennent quelque magie, mais parce
-                          qu&apos;elles mettent en méthode ce que la sagesse islamique et les
-                          sciences cognitives ont, chacune de leur côté, observé.
-                        </p>
-                        <p className="indent-6">
-                          Une dernière chose. Ce livre n&apos;a pas été écrit pour vous flatter ni
-                          pour vous culpabiliser. Il a été écrit pour vous rendre{" "}
-                          <strong>lucide</strong> et <strong>libre</strong>. La lucidité vient de la
-                          rigueur. La liberté vient du retour.
-                        </p>
-
-                        <div className="pt-6 text-center space-y-2 text-[#9E7331] italic">
-                          <p>Que la lecture vous soit utile.</p>
-                          <p>Et qu&apos;Allah vous facilite chaque pas.</p>
-                          <p className="pt-4 not-italic font-sans text-xs tracking-widest uppercase text-[#1A1A1A]">
-                            Mounir BYAR
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {currentPage === 9 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <div className="text-center space-y-2 mb-6">
-                          <span className="text-[11px] uppercase tracking-[0.35em] text-[#9E7331] font-sans font-semibold block">
-                            I N T R O D U C T I O N
-                          </span>
-                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#143D2B]">
-                            La Crise de la Déconnexion
-                          </h3>
-                          <p className="text-sm italic text-[#9E7331]">
-                            L&apos;Ingénierie de la Souveraineté
-                          </p>
-                        </div>
-
-                        <p>
-                          L&apos;époque contemporaine se caractérise par une accélération
-                          technologique, cognitive et sociale d&apos;une ampleur inédite dans
-                          l&apos;histoire de l&apos;humanité. Les architectures numériques, les flux
-                          d&apos;informations continus et la pression omniprésente de la performance
-                          ont engendré une fragmentation massive et systémique de l&apos;attention
-                          humaine. Le cœur humain, conceptualisé dans l&apos;épistémologie islamique
-                          sous le terme de <em>Qalb</em>, a toujours été considéré comme
-                          l&apos;organe central de la contemplation, de la cognition morale et de la
-                          perception de la transcendance divine.
-                        </p>
-                        <p className="indent-6">
-                          Or, dans l&apos;écosystème moderne, ce centre perceptif est
-                          continuellement bombardé par des stimuli éphémères, le réduisant à un
-                          simple processeur réactif saturé d&apos;informations. Cette surcharge
-                          cognitive perpétuelle génère un phénomène délétère que l&apos;on peut
-                          qualifier d&apos;<strong>entropie spirituelle</strong>. Plus le système
-                          nerveux humain est sollicité par des mécanismes de gratification
-                          immédiate, moins les ressources exécutives et psychologiques de
-                          l&apos;esprit demeurent disponibles pour l&apos;introspection, le
-                          recueillement et la transcendance.
-                        </p>
-                        <p className="indent-6">
-                          La déconnexion vis-à-vis de la religion observée massivement à l&apos;ère
-                          moderne ne relève pas systématiquement d&apos;une perte de foi idéologique
-                          ou d&apos;un scepticisme intellectuel. Elle résulte plus fondamentalement
-                          et plus insidieusement d&apos;un...
-                        </p>
-                      </div>
-                    )}
-
-                    {currentPage === 10 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <p>
-                          ...environnement dont l&apos;architecture même détourne l&apos;attention
-                          humaine du sens ultime. L&apos;individu moderne évolue dans un monde où
-                          les algorithmes, le marketing et les structures sociales sont
-                          minutieusement calibrés pour capter le regard, monopoliser le temps et
-                          drainer l&apos;énergie. Ce processus instaure un état d&apos;oubli — un
-                          concept que la théologie islamique identifie sous le terme de{" "}
-                          <em>Ghaflah</em>.
-                        </p>
-
-                        <h4 className="font-heading text-lg sm:text-xl font-bold italic text-[#143D2B] pt-2">
-                          L&apos;Ingénierie de la Souveraineté
-                        </h4>
-
-                        <p>
-                          C&apos;est ici qu&apos;intervient le concept fondamental d&apos;
-                          <strong>Ingénierie de la Souveraineté</strong>. Cette discipline se
-                          définit comme la science clinique, psychologique et spirituelle du retour
-                          à Allah, conceptualisé comme l&apos;acte suprême de libération
-                          existentielle. Dans cette perspective, le monothéisme pur (
-                          <em>Tawhîd</em>) dépasse largement le cadre de la simple adhésion
-                          dogmatique. Il s&apos;incarne comme une dynamique opératoire concrète de
-                          désenvoûtement face aux multiples dépendances qui aliènent l&apos;être
-                          humain moderne.
-                        </p>
-
-                        <div className="my-5 py-4 border-y border-[#C59B27] text-center italic text-base text-[#143D2B]">
-                          La souveraineté personnelle ne se définit nullement par une domination
-                          exercée sur autrui, mais par la maîtrise absolue du soi.
-                        </div>
-
-                        <p className="indent-6">
-                          La souveraineté personnelle se définit par la maîtrise du <em>Nafs</em>{" "}
-                          face aux stimuli incessants de l&apos;environnement. C&apos;est la
-                          capacité à ne dépendre ultimement que du Créateur, annulant l&apos;emprise
-                          des validations sociales, des injonctions consuméristes et des addictions
-                          comportementales. Le retour à Allah, formalisé par le...
-                        </p>
-                      </div>
-                    )}
-
-                    {currentPage === 11 && (
-                      <div className="space-y-6 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <p>
-                          ...processus d&apos;<em>At-Tawbah</em>, devient dès lors un processus
-                          d&apos;ingénierie intérieure méthodique et mesurable.
-                        </p>
-
-                        <div className="p-6 sm:p-8 bg-[#F4F1EA] border border-[#C59B27]/50 rounded-sm space-y-4 my-8">
-                          <span className="text-[10px] uppercase tracking-[0.35em] text-[#7A6B53] font-sans font-semibold block">
-                            H A D I T H
-                          </span>
-                          <p className="italic text-base sm:text-lg text-[#1A1A1A] leading-relaxed">
-                            « Allah est plus heureux du repentir de Son serviteur que l&apos;un de
-                            vous ne l&apos;est de retrouver son chameau perdu dans le désert. »
-                          </p>
-                          <p className="text-right text-[11px] uppercase tracking-[0.3em] text-[#555] font-sans">
-                            M U S L I M — 2 7 4 7
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {currentPage === 12 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <div className="text-center space-y-1.5 mb-5">
-                          <span className="text-[10px] uppercase tracking-[0.35em] text-[#9E7331] font-sans font-semibold block">
-                            C H A P I T R E &nbsp; P R E M I E R
-                          </span>
-                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#143D2B]">
-                            Le Statut de Khalîfa
-                          </h3>
-                          <p className="text-xs italic text-[#9E7331]">
-                            L&apos;honneur de la responsabilité
-                          </p>
-                        </div>
-
-                        <p>
-                          Avant d&apos;aborder la mécanique du repentir ou de la prière, il est
-                          impératif de comprendre la position ontologique de l&apos;être humain dans
-                          l&apos;épistémologie islamique. Allah a conféré à l&apos;être humain un
-                          honneur cosmique en le désignant comme <em>Khalîfa</em> — vicaire,
-                          représentant ou gérant — sur terre. Le Coran relate cet événement
-                          fondateur.
-                        </p>
-
-                        <div className="p-5 sm:p-6 bg-[#F4F1EA] border-l-4 border-[#C59B27] space-y-3 my-4">
-                          <p
-                            className="text-right text-lg sm:text-xl text-[#143D2B] leading-loose"
-                            dir="rtl"
-                          >
-                            وَإِذْ قَالَ رَبُّكَ لِلْمَلَٰٓئِكَةِ إِنِّى جَاعِلٌ فِى ٱلْأَرْضِ
-                            خَلِيفَةً
-                          </p>
-                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
-                            « Et lorsque ton Seigneur dit aux Anges : « Je vais établir sur la terre
-                            un successeur (Khalîfa) ». Ils dirent : « Vas-Tu y désigner un qui y
-                            mettra le désordre et répandra le sang ? » Allah répondit : « En vérité,
-                            Je sais ce que vous ne savez pas. » »
-                          </p>
-                          <p className="text-right text-[10px] uppercase tracking-[0.25em] text-[#7A6B53] font-sans">
-                            S O U R A T E &nbsp; A L - B A Q A R A — 2 : 3 0
-                          </p>
-                        </div>
-
-                        <p className="indent-6">
-                          Cet honneur suprême a été scellé lorsqu&apos;Allah a ordonné aux anges de
-                          se prosterner devant Adam. Cette prosternation n&apos;était pas un acte
-                          d&apos;adoration, formellement interdite envers la création, mais une{" "}
-                          <strong>reconnaissance solennelle</strong> de la capacité cognitive, du
-                          libre arbitre et de la lourde responsabilité confiée à l&apos;être humain.
-                          Iblîs, mu par l&apos;arrogance et refusant de reconnaître cette dignité
-                          conférée par Allah, s&apos;enfla d&apos;orgueil et devint l&apos;archétype
-                          du refus.
-                        </p>
-                      </div>
-                    )}
-
-                    {/* PAGE 13+ : ÉCRAN DE VERROUILLAGE DE LA LECTURE */}
-                    {currentPage >= 13 && (
-                      <div className="relative py-6">
-                        {/* Texte flouté en arrière-plan pour montrer la continuité bloquée */}
-                        <div
-                          className="space-y-4 text-sm font-serif text-[#1A1A1A]/50 blur-[5px] select-none pointer-events-none"
-                          aria-hidden="true"
-                        >
-                          <h4 className="font-heading text-xl font-bold text-[#143D2B]">
-                            La prise de responsabilité comme fondation
-                          </h4>
-                          <p>
-                            À l&apos;inverse d&apos;Iblîs, lorsque Adam et Ève commirent
-                            l&apos;erreur de manger de l&apos;arbre interdit et perdirent leur
-                            équilibre initial, leur réaction fut la fondation même de la
-                            souveraineté humaine : la prise de responsabilité immédiate par le
-                            repentir...
-                          </p>
-                          <div className="p-6 bg-[#F4F1EA] border-l-4 border-[#C59B27]">
-                            <p>
-                              « Ô notre Seigneur, nous avons fait du tort à nous-mêmes. Et si Tu ne
-                              nous pardonnes pas et ne nous fais pas miséricorde... »
-                            </p>
-                          </div>
-                          <p>
-                            Être Khalîfa ne confère aucune supériorité hautaine ou despotique sur
-                            les autres créatures ou sur la nature. Il s&apos;agit au contraire
-                            d&apos;une reddition de comptes...
-                          </p>
-                        </div>
-
-                        {/* Carte de verrouillage au premier plan */}
-                        <div className="inset-0 flex items-center justify-center mt-[-220px] relative z-10">
-                          <div className="bg-[#0A1128] text-[#F0EDE8] border-2 border-[#D4A853] rounded-sm p-6 sm:p-8 max-w-lg w-full text-center shadow-[0_20px_50px_rgba(10,17,40,0.85)] space-y-5">
-                            <div className="w-14 h-14 rounded-full bg-[#D4A853]/15 border border-[#D4A853] text-[#D4A853] flex items-center justify-center mx-auto text-2xl">
-                              <FiLock />
-                            </div>
-
-                            <div className="space-y-1.5">
-                              <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4A853] font-bold block">
-                                Fin de l&apos;Extrait Gratuit (Pages 6 à 12)
-                              </span>
-                              <h4 className="font-heading text-2xl sm:text-3xl text-[#F0EDE8] font-light">
-                                Débloquez les Pages 13 à 41
-                              </h4>
-                            </div>
-
-                            <p className="text-xs text-[#A0AEC0] leading-relaxed font-sans">
-                              La suite de cet ouvrage (Chapitres II à V, biomarqueurs de la Salât,
-                              méthode du Habit Stacking et{" "}
-                              <strong className="text-[#F0EDE8]">
-                                Protocole complet de 30 Jours
-                              </strong>
-                              ) est réservée aux acquéreurs de l&apos;édition numérique.
-                            </p>
-
-                            <div className="bg-[#0D1B2A] border border-white/10 rounded-sm p-3.5 text-left space-y-1.5 text-[11px] text-[#A0AEC0] font-sans">
-                              <div className="flex items-center gap-2">
-                                <FiCheck className="text-[#10B981] shrink-0" />
-                                <span>Ouvrage intégral de 41 pages (PDF + ePub Liseuse)</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <FiCheck className="text-[#10B981] shrink-0" />
-                                <span>Accès et téléchargement immédiat après validation</span>
-                              </div>
-                            </div>
-
-                            <Link
-                              href="/paiement?offre=secrets"
-                              className="w-full py-4 px-6 bg-[#D4A853] hover:bg-[#E8C468] text-[#0A1128] font-bold text-xs uppercase tracking-[0.18em] rounded-sm transition-all shadow-lg flex items-center justify-center gap-2 font-sans"
-                            >
-                              <FiLock className="shrink-0" />
-                              <span>Acquérir le Livre Complet (5,90 €) ➔</span>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Pied de page du livre + Boutons Précédent / Suivant */}
-                  <div className="pt-6 mt-8 border-t border-[#C9A84C]/25 flex items-center justify-between gap-2 font-sans">
-                    <button
-                      type="button"
-                      onClick={goPrevPage}
-                      disabled={currentPage <= 6}
-                      className="px-3.5 py-2 rounded-sm border border-[#143D2B]/20 text-xs font-semibold text-[#143D2B] disabled:opacity-30 hover:bg-[#143D2B] hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      <FiChevronLeft /> Page précédente
-                    </button>
-
-                    <span className="font-serif text-sm font-bold text-[#143D2B]">
-                      {currentPage <= 12 ? currentPage : "🔒 13 / 41"}
-                    </span>
-
-                    {currentPage <= 12 ? (
-                      <button
-                        type="button"
-                        onClick={goNextPage}
-                        className="px-3.5 py-2 rounded-sm bg-[#143D2B] text-white text-xs font-semibold hover:bg-[#0F2E20] transition-colors flex items-center gap-1.5 cursor-pointer"
-                      >
-                        {currentPage === 12 ? (
-                          <>
-                            <span>Page 13 (Suite)</span> <FiLock className="text-[#D4A853]" />
-                          </>
-                        ) : (
-                          <>
-                            <span>Page suivante</span> <FiChevronRight />
-                          </>
-                        )}
-                      </button>
-                    ) : (
-                      <Link
-                        href="/paiement?offre=secrets"
-                        className="px-3.5 py-2 rounded-sm bg-[#C59B27] text-[#0A1128] text-xs font-bold hover:bg-[#D4A853] transition-colors flex items-center gap-1.5"
-                      >
-                        <span>Débloquer (5,90 €)</span> <FiChevronRight />
-                      </Link>
-                    )}
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-          )}
-        </div>
-
         {/* ════════════════════════════════════════════════════════════════════
-            OUVRAGE 2 : Ar-Rahman — La Mer sans Rivage
+            ONGLET 1 : LES 2 LIVRES CÔTE À CÔTE (ORGANISATION OPTIMISÉE)
             ════════════════════════════════════════════════════════════════════ */}
-        <div id="rahman" className="border-t border-border/60 pt-16 sm:pt-20 pb-12 mt-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* COLONNE GAUCHE : PRÉSENTATION & COUVERTURES */}
+        {activeTab === "livres" && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+            {/* ────────────────────────────────────────────────────────────────
+                CARTE LIVRE I : Les Secrets du Retour vers Allah
+                ──────────────────────────────────────────────────────────────── */}
             <motion.div
+              id="secrets"
               initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-7 space-y-6 min-w-0"
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="bg-midnight-light/60 border border-border hover:border-gold/40 rounded-sm p-6 sm:p-8 lg:p-10 flex flex-col justify-between shadow-2xl transition-all duration-300 relative"
             >
-              <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.25em] text-gold bg-gold-muted px-4 py-1.5 border border-gold/20 font-body">
-                Volume I — Collection « À l&apos;École des Prophètes et des Noms d&apos;Allah »
-              </span>
-              <h3 className="font-heading text-3xl md:text-4xl font-light text-cream">
-                Ar-Rahman : La Mer sans Rivage
-              </h3>
-              <p className="text-sm uppercase tracking-widest text-emerald font-semibold font-body">
-                Exégèse du Premier Nom — La Miséricorde Universelle d&apos;Allah
-              </p>
+              <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
 
-              {/* GALERIE DES COUVERTURES (1ère et 4ème de couverture Ar-Rahman) */}
-              <div className="bg-midnight-light/60 border border-gold/25 rounded-sm p-4 sm:p-6 space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-3">
-                  <span className="text-[11px] uppercase tracking-widest text-gold font-bold flex items-center gap-2">
-                    <FiEye className="text-gold" /> Couvertures Officielles de l&apos;Édition
-                  </span>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={() => setActiveRahmanCover("both")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeRahmanCover === "both"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      Recto & Verso
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveRahmanCover("recto")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeRahmanCover === "recto"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      1ère de Couverture
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveRahmanCover("verso")}
-                      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
-                        activeRahmanCover === "verso"
-                          ? "bg-gold text-stone-950 font-bold border-gold"
-                          : "bg-midnight text-cream-muted border-border hover:border-gold/40"
-                      }`}
-                    >
-                      4ème de Couverture
-                    </button>
+              <div>
+                {/* En-tête du livre + Prix */}
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.22em] text-gold bg-gold-muted px-3 py-1 border border-gold/25 mb-2">
+                      Ouvrage I • Méthode & Protocole 30 Jours
+                    </span>
+                    <h2 className="font-heading text-2xl sm:text-3xl text-cream font-light leading-tight">
+                      Les Secrets du Retour vers Allah
+                    </h2>
+                    <p className="text-xs uppercase tracking-widest text-emerald font-semibold mt-1">
+                      Reprendre sa Prière et sa Souveraineté
+                    </p>
                   </div>
-                </div>
-
-                <div
-                  className={`grid gap-4 sm:gap-6 items-center justify-center ${
-                    activeRahmanCover === "both"
-                      ? "grid-cols-1 sm:grid-cols-2"
-                      : "grid-cols-1 max-w-sm mx-auto"
-                  }`}
-                >
-                  {(activeRahmanCover === "both" || activeRahmanCover === "recto") && (
-                    <div className="space-y-2 text-center">
-                      <div className="relative rounded-sm overflow-hidden border border-gold/30 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group">
-                        <img
-                          src="/books/rahman-couverture-recto.png"
-                          alt="1ère de couverture — Ar-Rahman : La Mer sans Rivage"
-                          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-cream-muted block">
-                        Première de Couverture
-                      </span>
-                    </div>
-                  )}
-
-                  {(activeRahmanCover === "both" || activeRahmanCover === "verso") && (
-                    <div className="space-y-2 text-center">
-                      <div className="relative rounded-sm overflow-hidden border border-gold/30 shadow-[0_15px_35px_rgba(0,0,0,0.5)] group">
-                        <img
-                          src="/books/rahman-couverture-verso.png"
-                          alt="4ème de couverture — Ar-Rahman : La Mer sans Rivage"
-                          className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                        />
-                      </div>
-                      <span className="text-[10px] uppercase tracking-widest text-cream-muted block">
-                        Quatrième de Couverture
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <p className="text-sm text-cream-muted leading-relaxed font-body italic border-l-2 border-gold pl-4 my-6">
-                « La miséricorde qui précède toute chose.
-                <br />
-                Le nom qui n&apos;a jamais cessé de t&apos;aimer. »
-              </p>
-
-              <p className="text-sm text-cream-muted leading-relaxed font-body">
-                Une plongée de 84 pages dans la linguistique, l&apos;exégèse classique (Tabarî,
-                Qurtubî, Râzî, Ibn Kathîr) et la théologie spirituelle (Ghazâlî, Ibn al-Qayyim)
-                d&apos;un seul nom divin : <strong className="text-cream">Ar-Rahman</strong>. Le
-                premier nom à être invoqué après le Nom suprême, contenant en lui une cosmologie
-                entière et s&apos;incarnant comme un remède puissant contre la crise spirituelle
-                moderne.
-              </p>
-
-              {/* Plan de l'ouvrage stylisé */}
-              <div className="bg-midnight-light/50 p-6 sm:p-8 border border-border/80 rounded-sm">
-                <h4 className="font-heading text-lg text-cream mb-4 font-medium tracking-wide">
-                  Structure de l&apos;ouvrage (12 Chapitres)
-                </h4>
-                <ul className="space-y-3.5 text-xs text-cream-muted font-body">
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">Partie I : La Science du Nom</strong>{" "}
-                      — Les Asma ul Husna, l&apos;archéologie de la racine R-H-M et les 57
-                      occurrences coraniques.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Partie II : La Miséricorde Cosmologique
-                      </strong>{" "}
-                      — La Création comme acte d&apos;amour, exégèse de la Sourate Ar-Rahman et
-                      science du Tafakkur.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Partie III : Les Récits de la Miséricorde
-                      </strong>{" "}
-                      — Le Prophète ﷺ vivant d&apos;Ar-Rahman (Taïf, La Mecque) et les récits qui
-                      révèlent le Nom.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-gold/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">
-                        Partie IV : Théologie & Psychologie
-                      </strong>{" "}
-                      — Regards croisés d&apos;Al-Ghazâlî, Ibn al-Qayyim et Ibn Rajab face au
-                      désespoir.
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-emerald/60 rounded-full mt-1.5 mr-3 flex-shrink-0" />
-                    <div>
-                      <strong className="text-cream font-medium">Partie V : Vivre le Nom</strong> —
-                      Incarner Ar-Rahman (At-Takhalluq), invocations et programme de dhikr.
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </motion.div>
-
-            {/* COLONNE DROITE : MODULE D'ACQUISITION AR-RAHMAN */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="lg:col-span-5 p-6 sm:p-8 border border-border bg-midnight-light/60 backdrop-blur-md rounded-sm relative shadow-2xl hover:border-gold/30 transition-all duration-500 lg:sticky lg:top-28"
-            >
-              <div className="absolute top-0 right-10 w-20 h-px bg-gold/50" />
-              <div className="flex items-center gap-4 mb-5 pb-5 border-b border-border/50">
-                <img
-                  src="/books/rahman-couverture-recto.png"
-                  alt="Ar-Rahman : La Mer sans Rivage"
-                  className="w-16 h-auto rounded-sm border border-gold/30 shadow-md shrink-0"
-                />
-                <div>
-                  <h4 className="font-heading text-xl text-cream font-semibold tracking-wide">
-                    Se procurer l&apos;ouvrage
-                  </h4>
-                  <p className="text-xs text-emerald font-medium mt-0.5">
-                    Téléchargement immédiat (PDF + ePub)
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xs text-cream-muted leading-relaxed font-body mb-6">
-                Le premier volume de la collection « À l&apos;École des Prophètes et des Noms
-                d&apos;Allah » (84 pages) est disponible immédiatement en version numérique de
-                prestige (PDF Haute Définition + ePub).
-              </p>
-
-              <div className="space-y-4 mb-8">
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Format</span>
-                  <span className="text-cream font-medium">PDF Haute Définition + ePub</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Pagination</span>
-                  <span className="text-cream font-medium">84 pages</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Extrait Gratuit</span>
-                  <span className="text-emerald font-semibold">Pages 6 à 12 ci-dessous ↓</span>
-                </div>
-                <div className="flex items-center justify-between border-b border-border/40 pb-3 text-[10px] uppercase tracking-wider font-body">
-                  <span className="text-cream-muted">Tarif Numérique</span>
-                  <span className="text-gold font-bold text-lg">12,65 €</span>
-                </div>
-              </div>
-
-              <Button
-                href="/paiement?offre=rahman"
-                variant="primary"
-                className="w-full py-4 text-center justify-center font-bold tracking-widest"
-              >
-                Commander l&apos;Ouvrage (12,65 €)
-              </Button>
-
-              <button
-                type="button"
-                onClick={() => setShowRahmanExcerpt((v) => !v)}
-                className="mt-3 w-full py-3 px-4 border border-gold/30 hover:border-gold text-gold text-xs uppercase tracking-widest font-semibold rounded-sm flex items-center justify-center gap-2 transition-colors cursor-pointer"
-              >
-                {showRahmanExcerpt ? (
-                  <>
-                    <FiX /> Fermer l&apos;extrait
-                  </>
-                ) : (
-                  <>
-                    <FiBookOpen /> Lire l&apos;extrait gratuit (Pages 6 à 12)
-                  </>
-                )}
-              </button>
-            </motion.div>
-          </div>
-
-          {/* ════════════════════════════════════════════════════════════════════
-              LECTEUR D'EXTRAIT INTERACTIF AR-RAHMAN : PAGES 6 À 12 (OUVERT UNIQUEMENT AU CLIC)
-              ════════════════════════════════════════════════════════════════════ */}
-          {showRahmanExcerpt && (
-          <div id="extrait-rahman" className="mt-10 pt-8 border-t border-border/40">
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-xs uppercase tracking-widest text-gold font-semibold flex items-center gap-2">
-                  <FiBookOpen /> Extrait Gratuit — Pages 6 à 12
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowRahmanExcerpt(false)}
-                  className="text-xs text-cream-muted hover:text-cream flex items-center gap-1 cursor-pointer"
-                >
-                  <FiX /> Fermer
-                </button>
-              </div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentRahmanPage}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.25 }}
-                  className="bg-[#FAF8F5] text-[#1A1A1A] border border-[#C9A84C]/40 rounded-sm shadow-xl p-6 sm:p-10 min-h-[420px] flex flex-col justify-between relative overflow-hidden select-none"
-                >
-                  {/* Filigrane supérieur discret */}
-                  <div className="text-center text-[9px] uppercase tracking-[0.35em] text-[#8C7A5B] pb-4 mb-6 border-b border-[#C9A84C]/25 flex items-center justify-between">
-                    <span>Ar-Rahman — La Mer sans Rivage</span>
-                    <span>
-                      {currentRahmanPage <= 12
-                        ? `Extrait Gratuit • Page ${currentRahmanPage} / 84`
-                        : "Accès Restreint • Pages 13 à 84"}
+                  <div className="text-right shrink-0 bg-midnight/90 border border-gold/30 px-3.5 py-2 rounded-sm">
+                    <span className="block text-xl sm:text-2xl font-heading font-bold text-gold">
+                      5,90 €
+                    </span>
+                    <span className="block text-[9px] uppercase tracking-wider text-cream-muted">
+                      PDF + ePub
                     </span>
                   </div>
+                </div>
 
-                  {/* CONTENU DE LA PAGE SÉLECTIONNÉE */}
-                  <div className="flex-1 flex flex-col justify-center">
-                    {currentRahmanPage === 6 && (
-                      <div className="space-y-6 py-2">
-                        <div className="text-center space-y-2">
-                          <h3 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F2847]">
-                            Sommaire
-                          </h3>
-                          <div className="text-[#C59B27] tracking-[0.5em] text-xs">◆ ◆ ◆</div>
-                        </div>
-
-                        <div className="space-y-4 max-w-lg mx-auto text-xs sm:text-sm font-serif">
-                          <button
-                            type="button"
-                            onClick={() => setCurrentRahmanPage(8)}
-                            className="w-full text-left flex items-center justify-between pb-1.5 border-b border-[#0F2847]/15 text-[#0F2847] hover:text-[#9E7331] cursor-pointer"
-                          >
-                            <span className="underline underline-offset-4">
-                              Avant-Propos — Note de méthode
-                            </span>
-                            <span className="text-[11px] font-sans text-[#0F2847]/60">Lire →</span>
-                          </button>
-
-                          {[
-                            {
-                              part: "PARTIE I — La Science du Nom",
-                              chapters: [
-                                { label: "1. Les Asma ul Husna — Méthode et Enjeux", target: 11 },
-                                {
-                                  label: "2. Archéologie du Nom Ar-Rahman",
-                                  target: 13,
-                                  locked: true,
-                                },
-                                {
-                                  label: "3. Ar-Rahman dans le Corpus Coranique",
-                                  target: 13,
-                                  locked: true,
-                                },
-                              ],
-                            },
-                            {
-                              part: "PARTIE II — La Miséricorde Cosmologique",
-                              chapters: [
-                                {
-                                  label: "4. La Création comme Acte d'Amour",
-                                  target: 13,
-                                  locked: true,
-                                },
-                                {
-                                  label: "5. Exégèse de la Sourate Ar-Rahman",
-                                  target: 13,
-                                  locked: true,
-                                },
-                                {
-                                  label: "6. Les Signes — Le Monde comme Livre Ouvert",
-                                  target: 13,
-                                  locked: true,
-                                },
-                              ],
-                            },
-                            {
-                              part: "PARTIE III — Les Récits de la Miséricorde",
-                              chapters: [
-                                {
-                                  label: "7. Le Prophète ﷺ, Vivant d'Ar-Rahman",
-                                  target: 13,
-                                  locked: true,
-                                },
-                                {
-                                  label: "8. Les Récits qui Révèlent le Nom",
-                                  target: 13,
-                                  locked: true,
-                                },
-                              ],
-                            },
-                            {
-                              part: "PARTIE IV — Théologie et Psychologie",
-                              chapters: [
-                                { label: "9. Ce que les Savants ont Vu", target: 13, locked: true },
-                                {
-                                  label: "10. Ar-Rahman et l'Âme Humaine",
-                                  target: 13,
-                                  locked: true,
-                                },
-                              ],
-                            },
-                            {
-                              part: "PARTIE V — Vivre le Nom",
-                              chapters: [
-                                { label: "11. Incarner Ar-Rahman", target: 13, locked: true },
-                                { label: "12. Invocations et Dhikr", target: 13, locked: true },
-                              ],
-                            },
-                          ].map((section, idx) => (
-                            <div key={idx} className="space-y-1.5">
-                              <p className="font-bold text-[#0F2847] text-xs uppercase tracking-wider pt-1">
-                                {section.part}
-                              </p>
-                              {section.chapters.map((ch, cIdx) => (
-                                <button
-                                  key={cIdx}
-                                  type="button"
-                                  onClick={() => setCurrentRahmanPage(ch.target)}
-                                  className="w-full text-left pl-3 flex items-center justify-between gap-2 py-0.5 text-[#143D2B] hover:text-[#9E7331] cursor-pointer"
-                                >
-                                  <span className="underline underline-offset-4">{ch.label}</span>
-                                  {ch.locked ? (
-                                    <span className="text-[10px] uppercase tracking-wider text-[#9E7331] flex items-center gap-1 shrink-0 font-sans font-semibold">
-                                      <FiLock /> p.13+
-                                    </span>
-                                  ) : (
-                                    <span className="text-[11px] text-[#0F2847]/60 shrink-0 font-sans">
-                                      Lire →
-                                    </span>
-                                  )}
-                                </button>
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 7 && (
-                      <div className="space-y-6 py-6 max-w-lg mx-auto w-full font-serif text-sm sm:text-base">
-                        <div className="space-y-4">
-                          {[
-                            { label: "Conclusion générale — La Mer sans Rivage", target: 13 },
-                            {
-                              label: "Index des références coraniques et hadithiques",
-                              target: 13,
-                            },
-                            { label: "À propos de l'Auteur — Mounir BYAR", target: 13 },
-                            { label: "Pour aller plus loin — Contact", target: 13 },
-                          ].map((item, idx) => (
-                            <button
-                              key={idx}
-                              type="button"
-                              onClick={() => setCurrentRahmanPage(item.target)}
-                              className="w-full text-left flex items-center justify-between gap-2 pb-2 border-b border-[#0F2847]/15 text-[#143D2B] hover:text-[#9E7331] cursor-pointer"
-                            >
-                              <span className="underline underline-offset-4">{item.label}</span>
-                              <span className="text-[10px] uppercase tracking-wider text-[#9E7331] flex items-center gap-1 shrink-0 font-sans font-semibold">
-                                <FiLock /> p.13+
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-
-                        <p className="text-center text-xs italic text-[#666] pt-8">
-                          → Cliquez sur un titre pour y accéder directement.
-                        </p>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 8 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <div className="text-center space-y-2 mb-6">
-                          <span className="text-[11px] uppercase tracking-[0.35em] text-[#9E7331] font-sans font-semibold block">
-                            P R É L I M I N A I R E S
-                          </span>
-                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#0F2847]">
-                            Avant-Propos
-                          </h3>
-                          <p className="text-xs italic text-[#9E7331]">
-                            Note de méthode et d&apos;intention
-                          </p>
-                        </div>
-
-                        <p>
-                          Ce livre est un livre d&apos;exégèse. Non pas un tafsir au sens technique
-                          du terme — ce n&apos;est pas ma compétence — mais une méditation
-                          approfondie, systématique, nourrie des grands savants de l&apos;islam,
-                          autour d&apos;un seul nom divin : <strong>Ar-Rahman</strong>. Un seul.
-                          Parce que chaque nom d&apos;Allah mérite un livre. Parce que la
-                          précipitation est l&apos;ennemie de la profondeur. Et parce que Ar-Rahman,
-                          le premier des noms invoqués après le Nom suprême, contient à lui seul une
-                          cosmologie entière.
-                        </p>
-
-                        <p className="indent-6">
-                          Ce travail s&apos;est construit autour de quatre sources principales. La
-                          première est le <strong>texte coranique</strong> lui-même, exploré dans sa
-                          langue d&apos;origine, avec l&apos;aide des grands lexicographes : Râghib
-                          al-Isfahânî dans son <em>Al-Mufradât fî Gharîb al-Qur&apos;ân</em>, Ibn
-                          Fâris dans son <em>Maqâyîs al-Lugha</em>, Al-Jawharî dans le{" "}
-                          <em>Sihâh</em>. La deuxième est le <strong>corpus hadithique</strong> — les
-                          paroles et traditions du Prophète Muhammad ﷺ — dans les collections
-                          canoniques et leurs commentaires. La troisième est la{" "}
-                          <strong>tradition exégétique</strong> : At-Tabarî, Ibn Kathîr, Al-Qurtubî,
-                          Al-Râzî, et Al-Alûsî principalement. La quatrième est la{" "}
-                          <strong>littérature spirituelle et théologique</strong> : Al-Ghazâlî, Ibn
-                          al-Qayyim al-Jawziyya, Ibn Rajab al-Hanbalî, et Al-&apos;Izz ibn
-                          &apos;Abd al-Salâm.
-                        </p>
-
-                        <p className="indent-6">
-                          Ce livre ne s&apos;adresse pas aux spécialistes — il existe pour eux des
-                          œuvres autrement plus rigoureuses. Il s&apos;adresse à quelqu&apos;un qui
-                          veut comprendre, qui a entre treize et vingt ans, qui lit sérieusement,
-                          qui est prêt à...
-                        </p>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 9 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <p>
-                          ...s&apos;arrêter sur une phrase et à la laisser travailler en lui.{" "}
-                          <strong>
-                            L&apos;exigence intellectuelle n&apos;exclut pas la jeunesse. Elle la
-                            respecte.
-                          </strong>
-                        </p>
-
-                        <p className="indent-6">
-                          Un avertissement nécessaire : ce volume traite{" "}
-                          <strong>exclusivement</strong> de Ar-Rahman. Ar-Rahîm — le
-                          Très-Miséricordieux, miséricorde spécifique et perpétuelle — fera
-                          l&apos;objet du volume suivant. Ces deux noms, bien que partageant une
-                          racine, désignent des réalités distinctes et méritent chacun une
-                          exploration complète. Les confondre ou les traiter ensemble appauvrirait
-                          les deux.
-                        </p>
-
-                        <p className="indent-6">
-                          Que Allah fasse de ce travail un <em>nûr</em> — une lumière — pour ceux
-                          qui le liront. Et qu&apos;Il me pardonne toute erreur, toute insuffisance,
-                          toute présomption.
-                        </p>
-
-                        <div className="pt-8 text-center space-y-3">
-                          <div className="text-[#C59B27] tracking-[0.4em] text-xs">─ ◆ ─</div>
-                          <p className="font-sans text-xs tracking-widest uppercase text-[#0F2847]">
-                            Mounir Byar — Reims, 2025
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 10 && (
-                      <div className="py-12 text-center space-y-6 font-serif">
-                        <div className="text-5xl sm:text-6xl font-heading font-bold text-[#C59B27]">
-                          I
-                        </div>
-                        <div className="text-[#C59B27] tracking-[0.4em] text-xs">──── ◆ ────</div>
-                        <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#0F2847]">
-                          La Science du Nom
-                        </h3>
-                        <p className="text-sm italic text-[#555] max-w-md mx-auto leading-relaxed">
-                          Comment les noms divins se lisent, se méditent et se vivent — et pourquoi
-                          Ar-Rahman occupe une place sans égale dans la théologie islamique
-                        </p>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 11 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <div className="text-center space-y-1.5 mb-5">
-                          <span className="text-[10px] uppercase tracking-[0.35em] text-[#9E7331] font-sans font-semibold block">
-                            C H A P I T R E &nbsp; P R E M I E R
-                          </span>
-                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#0F2847]">
-                            Les Asma ul Husna
-                          </h3>
-                          <p className="text-xs italic text-[#9E7331]">
-                            Méthode et enjeux de la connaissance des noms divins
-                          </p>
-                        </div>
-
-                        <div className="p-5 sm:p-6 bg-[#F4F1EA] border-l-4 border-[#C59B27] space-y-3 my-4">
-                          <p
-                            className="text-right text-lg sm:text-xl text-[#0F2847] leading-loose"
-                            dir="rtl"
-                          >
-                            وَلِلَّهِ ٱلْأَسْمَآءُ ٱلْحُسْنَىٰ فَٱدْعُوهُ بِهَا ۖ وَذَرُوا۟ ٱلَّذِينَ
-                            يُلْحِدُونَ فِىٓ أَسْمَٰٓئِهِۦ
-                          </p>
-                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
-                            « Les plus beaux Noms appartiennent à Allah. Invoquez-Le par ces Noms et
-                            laissez ceux qui profanent Ses Noms — ils seront rétribués pour ce
-                            qu&apos;ils faisaient. »
-                          </p>
-                          <p className="text-right text-[10px] uppercase tracking-[0.25em] text-[#7A6B53] font-sans">
-                            S O U R A T E &nbsp; A L - A &apos; R Â F — 7 : 1 8 0
-                          </p>
-                        </div>
-
-                        <p>
-                          Avant d&apos;entrer dans le cœur de ce livre, il faut poser le cadre. La
-                          tradition islamique a développé une discipline rigoureuse autour des{" "}
-                          <em>Asma ul Husna</em> — les plus beaux noms d&apos;Allah. Cette
-                          discipline n&apos;est pas de l&apos;ornement théologique. Elle est, selon
-                          des savants de la stature d&apos;Al-Ghazâlî et d&apos;Ibn al-Qayyim,{" "}
-                          <strong>la clé de voûte de toute vie spirituelle sérieuse</strong>.
-                          Comprendre pourquoi exige qu&apos;on mesure d&apos;abord ce que signifie,
-                          dans la pensée islamique classique, <em>connaître</em> un nom divin.
-                        </p>
-
-                        <div className="pt-2">
-                          <span className="text-xs font-sans text-[#9E7331] font-bold block mb-1">
-                            § 1
-                          </span>
-                          <h4 className="font-heading text-lg font-bold text-[#0F2847]">
-                            La tradition des 99 noms — hadith et fondements
-                          </h4>
-                          <p className="mt-2">
-                            Le fondement textuel de la science des Asma ul Husna repose
-                            principalement sur deux hadiths canoniques. Le...
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {currentRahmanPage === 12 && (
-                      <div className="space-y-5 text-sm sm:text-[15px] leading-[1.85] text-[#1A1A1A] font-serif">
-                        <p>
-                          ...premier, rapporté par Al-Boukhâri et Muslim, est le plus connu :
-                        </p>
-
-                        <div className="p-5 sm:p-6 bg-[#F4F1EA] border border-[#C59B27]/50 rounded-sm space-y-3">
-                          <span className="text-[10px] uppercase tracking-[0.35em] text-[#7A6B53] font-sans font-semibold block">
-                            H A D I T H &nbsp; S A H Î H
-                          </span>
-                          <p
-                            className="text-right text-lg sm:text-xl text-[#0F2847] leading-loose"
-                            dir="rtl"
-                          >
-                            إِنَّ لِلَّهِ تِسْعَةً وَتِسْعِينَ اسْمًا، مِائَةً إِلَّا وَاحِدًا، مَنْ
-                            أَحْصَاهَا دَخَلَ الْجَنَّةَ
-                          </p>
-                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
-                            « Allah possède quatre-vingt-dix-neuf noms — cent moins un. Quiconque les
-                            retient (ahsâhâ) entrera au Paradis. Certes, Allah est Unique (witr) et
-                            Il aime ce qui est impair. »
-                          </p>
-                          <p className="text-right text-[10px] uppercase tracking-[0.25em] text-[#555] font-sans">
-                            A L - B O U K H Â R I &nbsp; N ° 2 7 3 6 , &nbsp; M U S L I M &nbsp; N °
-                            2 6 7 7
-                          </p>
-                        </div>
-
-                        <p>
-                          Le terme central de ce hadith est <em>ahsâhâ</em> — souvent traduit par «
-                          mémoriser », mais ce n&apos;est là que la couche la plus superficielle de
-                          son sens. Ibn al-Qayyim consacre plusieurs pages de ses{" "}
-                          <em>Madârij al-Sâlikîn</em> à analyser ce verbe. Il identifie trois
-                          niveaux d&apos;<em>ihsâ&apos;</em> (action d&apos;ahsâhâ) :
-                        </p>
-
-                        <div className="p-5 sm:p-6 bg-[#EFECE6] border-l-4 border-[#0F2847] space-y-2">
-                          <span className="text-[10px] uppercase tracking-[0.25em] text-[#0F2847] font-sans font-bold block">
-                            I B N &nbsp; A L - Q A Y Y I M &nbsp; A L - J A W Z I Y Y A &nbsp; ( 6 9
-                            1 – 7 5 1 &nbsp; H )
-                          </span>
-                          <span className="text-xs italic text-[#7A6B53] block">
-                            Madârij al-Sâlikîn, vol. 1, p. 24
-                          </span>
-                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed pt-1">
-                            « Le premier niveau d&apos;ihsâ&apos; est la mémorisation des noms et
-                            leur dénombrement. Le deuxième est la compréhension de leurs
-                            significations et de ce qu&apos;ils impliquent. Le troisième — et
-                            c&apos;est le plus élevé — est d&apos;invoquer Allah par ces noms dans
-                            ses supplications, et de réaliser leurs exigences dans ses actes. »
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* PAGE 13+ : ÉCRAN DE VERROUILLAGE DE LA LECTURE AR-RAHMAN */}
-                    {currentRahmanPage >= 13 && (
-                      <div className="relative py-6">
-                        <div
-                          className="space-y-4 text-sm font-serif text-[#1A1A1A]/50 blur-[5px] select-none pointer-events-none"
-                          aria-hidden="true"
-                        >
-                          <p>
-                            Cette gradation est décisive. Elle explique pourquoi les savants
-                            islamiques n&apos;ont jamais réduit l&apos;étude des noms divins à un
-                            exercice mnémotechnique. Al-Ghazâlî, dans son traité Al-Maqsad al-Asnâ
-                            fî Sharh Asmâ&apos; Allâh al-Husnâ...
-                          </p>
-                          <div className="p-6 bg-[#F4F1EA] border-l-4 border-[#0F2847]">
-                            <p>
-                              « Sache que la connaissance de la signification des noms d&apos;Allah
-                              est le fondement de la religion et le cœur de la gnose (ma&apos;rifa).
-                              Celui qui n&apos;a pas compris le sens du nom n&apos;a rien retenu...
-                              »
-                            </p>
-                          </div>
-                          <h4 className="font-heading text-xl font-bold text-[#0F2847]">
-                            § 2 — Les niveaux de connaissance des noms divins
-                          </h4>
-                          <p>
-                            La tradition islamique distingue plusieurs niveaux d&apos;accès aux noms
-                            d&apos;Allah, que l&apos;on peut organiser en une échelle progressive...
-                          </p>
-                        </div>
-
-                        <div className=" inset-0 flex items-center justify-center">
-                          <div className="bg-[#0A1128] text-[#F0EDE8] border-2 border-[#D4A853] rounded-sm p-6 sm:p-8 max-w-md w-full mx-auto text-center shadow-2xl space-y-4">
-                            <div className="w-12 h-12 rounded-full bg-[#D4A853]/15 border border-[#D4A853]/40 text-[#D4A853] flex items-center justify-center mx-auto text-xl">
-                              <FiLock />
-                            </div>
-                            <span className="text-[10px] uppercase tracking-[0.25em] text-[#D4A853] font-sans font-bold block">
-                              Fin de l&apos;Extrait Gratuit (Pages 6 à 12)
-                            </span>
-                            <h4 className="font-heading text-2xl text-[#F0EDE8] font-light">
-                              Débloquez les Pages 13 à 84
-                            </h4>
-                            <p className="text-xs text-[#A0AEC0] font-sans leading-relaxed">
-                              La suite de l&apos;ouvrage (les 12 chapitres complets, l&apos;exégèse
-                              de la Sourate Ar-Rahman, les récits prophétiques et le programme de
-                              dhikr) est réservée aux lecteurs ayant acquis l&apos;édition complète.
-                            </p>
-
-                            <div className="bg-[#0D1B2A] border border-white/10 rounded-sm p-3.5 text-left space-y-1.5 text-[11px] font-sans text-[#A0AEC0]">
-                              <div className="flex items-center gap-2">
-                                <FiCheck className="text-[#10B981] shrink-0" />
-                                <span>Ouvrage intégral (84 pages — PDF + ePub)</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <FiCheck className="text-[#10B981] shrink-0" />
-                                <span>12 chapitres, 15 savants et +50 versets & hadiths</span>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                <FiCheck className="text-[#10B981] shrink-0" />
-                                <span>Accès et téléchargement immédiat après validation</span>
-                              </div>
-                            </div>
-
-                            <Link
-                              href="/paiement?offre=rahman"
-                              className="w-full py-4 px-6 bg-[#D4A853] hover:bg-[#E8C468] text-[#0A1128] font-bold text-xs uppercase tracking-[0.18em] rounded-sm transition-all shadow-lg flex items-center justify-center gap-2 font-sans"
-                            >
-                              <FiLock className="shrink-0" />
-                              <span>Acquérir le Livre Complet (12,65 €) ➔</span>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Pied de page du livre Ar-Rahman + Boutons Précédent / Suivant */}
-                  <div className="pt-6 mt-8 border-t border-[#C9A84C]/25 flex items-center justify-between gap-2 font-sans">
-                    <button
-                      type="button"
-                      onClick={goPrevRahmanPage}
-                      disabled={currentRahmanPage <= 6}
-                      className="px-3.5 py-2 rounded-sm border border-[#0F2847]/20 text-xs font-semibold text-[#0F2847] disabled:opacity-30 hover:bg-[#0F2847] hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
-                    >
-                      <FiChevronLeft /> Page précédente
-                    </button>
-
-                    <span className="font-serif text-sm font-bold text-[#0F2847]">
-                      {currentRahmanPage <= 12 ? currentRahmanPage : "🔒 13 / 84"}
-                    </span>
-
-                    {currentRahmanPage <= 12 ? (
+                {/* Zone Visuelle : Couverture + Résumé côte à côte sur grand écran */}
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center mb-6 pb-6 border-b border-border/50">
+                  {/* Couverture avec bascule Recto / Verso */}
+                  <div className="sm:col-span-5 flex flex-col items-center">
+                    <div className="relative w-48 sm:w-full max-w-[210px] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight">
+                      <img
+                        src={
+                          secretsSide === "recto"
+                            ? "/books/secrets-couverture-recto.png"
+                            : "/books/secrets-couverture-verso.png"
+                        }
+                        alt="Les Secrets du Retour vers Allah"
+                        className="w-full h-auto object-cover block"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-3">
                       <button
                         type="button"
-                        onClick={goNextRahmanPage}
-                        className="px-3.5 py-2 rounded-sm bg-[#0F2847] text-white text-xs font-semibold hover:bg-[#0A1B30] transition-colors flex items-center gap-1.5 cursor-pointer"
+                        onClick={() => setSecretsSide("recto")}
+                        className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
+                          secretsSide === "recto"
+                            ? "bg-gold text-stone-950 font-bold border-gold"
+                            : "bg-midnight text-cream-muted border-border hover:border-gold/40"
+                        }`}
                       >
-                        {currentRahmanPage === 12 ? (
-                          <>
-                            <span>Page 13 (Suite)</span> <FiLock className="text-[#D4A853]" />
-                          </>
-                        ) : (
-                          <>
-                            <span>Page suivante</span> <FiChevronRight />
-                          </>
-                        )}
+                        Recto
                       </button>
-                    ) : (
-                      <Link
-                        href="/paiement?offre=rahman"
-                        className="px-3.5 py-2 rounded-sm bg-[#C59B27] text-[#0A1128] text-xs font-bold hover:bg-[#D4A853] transition-colors flex items-center gap-1.5"
+                      <button
+                        type="button"
+                        onClick={() => setSecretsSide("verso")}
+                        className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
+                          secretsSide === "verso"
+                            ? "bg-gold text-stone-950 font-bold border-gold"
+                            : "bg-midnight text-cream-muted border-border hover:border-gold/40"
+                        }`}
                       >
-                        <span>Débloquer (12,65 €)</span> <FiChevronRight />
-                      </Link>
-                    )}
+                        4e de Couv. (Dos)
+                      </button>
+                    </div>
                   </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+
+                  {/* Synopsis & Points Clés */}
+                  <div className="sm:col-span-7 space-y-4">
+                    <p className="text-xs sm:text-sm text-cream-muted leading-relaxed font-body italic border-l-2 border-gold pl-3">
+                      « Ne subissez plus votre quotidien. Reprenez votre prière et votre souveraineté. »
+                    </p>
+                    <p className="text-xs sm:text-sm text-cream-muted leading-relaxed font-body">
+                      Au croisement d&apos;Al-Ghazâlî, d&apos;Ibn al-Qayyim et des sciences cognitives, une ingénierie en <strong className="text-cream">5 chapitres et un protocole de 30 jours</strong> pour briser le cycle des rechutes et réinstaller la prière au centre de sa vie.
+                    </p>
+
+                    <ul className="space-y-2 text-xs text-cream-muted font-body pt-1">
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>Le Statut de Khalîfa &amp; l&apos;Anatomie d&apos;At-Tawbah</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>As-Salât : algorithme circadien (-27,3% de cortisol)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>Design environnemental &amp; Feuille de route 30 jours</span>
+                      </li>
+                    </ul>
+
+                    <div className="flex items-center gap-4 pt-1 text-[11px] text-cream-muted">
+                      <span className="flex items-center gap-1.5">
+                        <FiLayers className="text-gold" /> 41 pages
+                      </span>
+                      <span>•</span>
+                      <span className="text-emerald font-medium">
+                        Accès immédiat (PDF &amp; ePub)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Boutons d'action : Lire l'Extrait en Pop-up + Commander */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOpenPopupBook("secrets")}
+                  className="py-3.5 px-4 border border-gold/40 bg-gold/10 hover:bg-gold/20 text-gold text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <FiBookOpen className="text-sm shrink-0" />
+                  <span>Lire un extrait (2 pages)</span>
+                </button>
+
+                <Button
+                  href="/paiement?offre=secrets"
+                  variant="primary"
+                  className="py-3.5 px-4 text-center justify-center font-bold tracking-widest text-xs"
+                >
+                  Commander (5,90 €)
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* ────────────────────────────────────────────────────────────────
+                CARTE LIVRE II : Ar-Rahman — La Mer sans Rivage
+                ──────────────────────────────────────────────────────────────── */}
+            <motion.div
+              id="rahman"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-midnight-light/60 border border-border hover:border-gold/40 rounded-sm p-6 sm:p-8 lg:p-10 flex flex-col justify-between shadow-2xl transition-all duration-300 relative"
+            >
+              <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+
+              <div>
+                {/* En-tête du livre + Prix */}
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <span className="inline-block text-[10px] font-semibold uppercase tracking-[0.22em] text-gold bg-gold-muted px-3 py-1 border border-gold/25 mb-2">
+                      Ouvrage II • Collection Noms d&apos;Allah (Vol. I)
+                    </span>
+                    <h2 className="font-heading text-2xl sm:text-3xl text-cream font-light leading-tight">
+                      Ar-Rahman : La Mer sans Rivage
+                    </h2>
+                    <p className="text-xs uppercase tracking-widest text-emerald font-semibold mt-1">
+                      Exégèse du Premier Nom — La Miséricorde Universelle
+                    </p>
+                  </div>
+                  <div className="text-right shrink-0 bg-midnight/90 border border-gold/30 px-3.5 py-2 rounded-sm">
+                    <span className="block text-xl sm:text-2xl font-heading font-bold text-gold">
+                      12,65 €
+                    </span>
+                    <span className="block text-[9px] uppercase tracking-wider text-cream-muted">
+                      PDF + ePub
+                    </span>
+                  </div>
+                </div>
+
+                {/* Zone Visuelle : Couverture + Résumé côte à côte sur grand écran */}
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center mb-6 pb-6 border-b border-border/50">
+                  {/* Couverture avec bascule Recto / Verso */}
+                  <div className="sm:col-span-5 flex flex-col items-center">
+                    <div className="relative w-48 sm:w-full max-w-[210px] rounded-sm overflow-hidden border border-gold/35 shadow-[0_15px_35px_rgba(0,0,0,0.6)] bg-midnight">
+                      <img
+                        src={
+                          rahmanSide === "recto"
+                            ? "/books/rahman-couverture-recto.png"
+                            : "/books/rahman-couverture-verso.png"
+                        }
+                        alt="Ar-Rahman : La Mer sans Rivage"
+                        className="w-full h-auto object-cover block"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-3">
+                      <button
+                        type="button"
+                        onClick={() => setRahmanSide("recto")}
+                        className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
+                          rahmanSide === "recto"
+                            ? "bg-gold text-stone-950 font-bold border-gold"
+                            : "bg-midnight text-cream-muted border-border hover:border-gold/40"
+                        }`}
+                      >
+                        Recto
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setRahmanSide("verso")}
+                        className={`px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-sm border cursor-pointer transition-all ${
+                          rahmanSide === "verso"
+                            ? "bg-gold text-stone-950 font-bold border-gold"
+                            : "bg-midnight text-cream-muted border-border hover:border-gold/40"
+                        }`}
+                      >
+                        4e de Couv. (Dos)
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Synopsis & Points Clés */}
+                  <div className="sm:col-span-7 space-y-4">
+                    <p className="text-xs sm:text-sm text-cream-muted leading-relaxed font-body italic border-l-2 border-gold pl-3">
+                      « La miséricorde qui précède toute chose. Le nom qui n&apos;a jamais cessé de t&apos;aimer. »
+                    </p>
+                    <p className="text-xs sm:text-sm text-cream-muted leading-relaxed font-body">
+                      Une exégèse complète en <strong className="text-cream">5 parties et 12 chapitres</strong> (Tabarî, Qurtubî, Râzî, Ibn Kathîr, Al-Ghazâlî, Ibn al-Qayyim) explorant la racine sacrée <em>R-H-M</em>, les 57 occurrences coraniques et la guérison du désespoir.
+                    </p>
+
+                    <ul className="space-y-2 text-xs text-cream-muted font-body pt-1">
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>Archéologie de la racine R-H-M &amp; Sourate Ar-Rahman</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>Les récits prophétiques (Taïf, Yûnus, les 100 parties)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <FiCheck className="text-gold shrink-0" />
+                        <span>Recueil d&apos;invocations &amp; Programme hebdomadaire de Dhikr</span>
+                      </li>
+                    </ul>
+
+                    <div className="flex items-center gap-4 pt-1 text-[11px] text-cream-muted">
+                      <span className="flex items-center gap-1.5">
+                        <FiLayers className="text-gold" /> 84 pages (12 chapitres)
+                      </span>
+                      <span>•</span>
+                      <span className="text-emerald font-medium">
+                        Accès immédiat (PDF &amp; ePub)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Boutons d'action : Lire l'Extrait en Pop-up + Commander */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setOpenPopupBook("rahman")}
+                  className="py-3.5 px-4 border border-gold/40 bg-gold/10 hover:bg-gold/20 text-gold text-xs uppercase tracking-widest font-bold rounded-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  <FiBookOpen className="text-sm shrink-0" />
+                  <span>Lire un extrait (2 pages)</span>
+                </button>
+
+                <Button
+                  href="/paiement?offre=rahman"
+                  variant="primary"
+                  className="py-3.5 px-4 text-center justify-center font-bold tracking-widest text-xs"
+                >
+                  Commander (12,65 €)
+                </Button>
+              </div>
+            </motion.div>
           </div>
-          )}
-        </div>
-          </>
         )}
 
+        {/* ════════════════════════════════════════════════════════════════════
+            ONGLET 2 : INVOCATIONS
+            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === "invocations" && (
-          <div className="border-t border-border/60 pt-14 pb-12">
+          <div className="border-t border-border/60 pt-12 pb-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {INVOCATIONS_LIST.map((inv, idx) => (
                 <div
@@ -1669,10 +409,15 @@ export default function Livres() {
                     <span className="text-[10px] uppercase tracking-widest text-gold font-bold block">
                       {inv.category}
                     </span>
-                    <p className="text-right text-xl text-cream leading-loose font-serif" dir="rtl">
+                    <p
+                      className="text-right text-xl text-cream leading-loose font-serif"
+                      dir="rtl"
+                    >
                       {inv.arabic}
                     </p>
-                    <p className="text-xs text-gold/90 italic font-body">{inv.phonetic}</p>
+                    <p className="text-xs text-gold/90 italic font-body">
+                      {inv.phonetic}
+                    </p>
                     <p className="text-xs text-cream-muted leading-relaxed font-body">
                       {inv.translation}
                     </p>
@@ -1686,6 +431,9 @@ export default function Livres() {
           </div>
         )}
 
+        {/* ════════════════════════════════════════════════════════════════════
+            ONGLET 3 : VIDÉOS
+            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === "videos" && (
           <div className="border-t border-border/60 pt-14 pb-12 text-center max-w-2xl mx-auto space-y-4">
             <span className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold block">
@@ -1695,11 +443,15 @@ export default function Livres() {
               Capsules Vidéo & Rappels
             </h3>
             <p className="text-sm text-cream-muted font-body leading-relaxed">
-              Les capsules vidéo et analyses de Mounir BYAR seront publiées dans cet espace très prochainement.
+              Les capsules vidéo et analyses de Mounir BYAR seront publiées dans
+              cet espace très prochainement.
             </p>
           </div>
         )}
 
+        {/* ════════════════════════════════════════════════════════════════════
+            ONGLET 4 : FORMATIONS
+            ════════════════════════════════════════════════════════════════════ */}
         {activeTab === "formations" && (
           <div className="border-t border-border/60 pt-14 pb-12 text-center max-w-2xl mx-auto space-y-4">
             <span className="text-[10px] uppercase tracking-[0.25em] text-gold font-semibold block">
@@ -1709,7 +461,9 @@ export default function Livres() {
               Formations & Programmes Digitaux
             </h3>
             <p className="text-sm text-cream-muted font-body leading-relaxed">
-              Nos formations structurées en ligne sont actuellement en préparation. Vous pouvez dès maintenant vous inscrire sur liste d&apos;attente.
+              Nos formations structurées en ligne sont actuellement en
+              préparation. Vous pouvez dès maintenant vous inscrire sur liste
+              d&apos;attente.
             </p>
             <div className="pt-2">
               <Button href="/contact" variant="primary" className="px-8 py-3 text-xs">
@@ -1725,30 +479,279 @@ export default function Livres() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mt-16 sm:mt-24 text-center border-t border-border/60 pt-16 sm:pt-20 space-y-6"
+          className="mt-16 sm:mt-20 text-center border-t border-border/60 pt-14 sm:pt-16 space-y-5"
         >
           <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold block">
             ➔ Passer à la phase supérieure
           </span>
-          <h3 className="font-heading text-3xl font-light text-cream tracking-wide">
-            Étape 06 : Entamer l&apos;Interposition Privée
+          <h3 className="font-heading text-2xl sm:text-3xl font-light text-cream tracking-wide">
+            Accompagnement & Mentorat Privé
           </h3>
-          <p className="text-sm text-cream-muted max-w-xl mx-auto font-body leading-relaxed">
-            La lecture des écrits numériques est votre point d&apos;entrée. Si vous aspirez à
-            l&apos;excellence ultime du compagnonnage spirituel (Suhba) et comportemental sous la
-            direction de Mounir BYAR, formulez votre candidature privée.
+          <p className="text-xs sm:text-sm text-cream-muted max-w-xl mx-auto font-body leading-relaxed">
+            La lecture des ouvrages est votre point d&apos;entrée. Si vous aspirez à
+            un accompagnement personnalisé (Audit diagnostique, Protocole 30 Jours, 3 Mois ou Mentorat), découvrez nos formules.
           </p>
-          <div className="flex justify-center pt-4">
+          <div className="flex justify-center pt-2">
             <Button
               variant="primary"
-              href="/contact"
+              href="/offres"
               className="shadow-2xl shadow-stone-950/20 font-bold tracking-widest px-10 py-4"
             >
-              Postuler au Mentorat de 9 Mois →
+              Découvrir les Accompagnements →
             </Button>
           </div>
         </motion.div>
       </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════
+          POP-UP D'EXTRAIT : LIVRE OUVERT SUR 2 PAGES PLEINES (MEILLEURES PAGES)
+          ══════════════════════════════════════════════════════════════════════ */}
+      <AnimatePresence>
+        {openPopupBook && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setOpenPopupBook(null)}
+            className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 15 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-6xl bg-midnight border border-gold/40 rounded-sm shadow-[0_25px_80px_rgba(0,0,0,0.9)] overflow-hidden my-auto max-h-[92vh] flex flex-col"
+            >
+              {/* Barre supérieure du Pop-up */}
+              <div className="px-5 py-3.5 bg-midnight-light border-b border-border flex items-center justify-between gap-4 shrink-0">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <FiBookOpen className="text-gold shrink-0" />
+                  <span className="text-xs uppercase tracking-widest text-gold font-bold truncate">
+                    {openPopupBook === "secrets"
+                      ? "Extrait — Les Secrets du Retour vers Allah (Les 2 Pages Clés)"
+                      : "Extrait — Ar-Rahman : La Mer sans Rivage (Les 2 Pages Clés)"}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setOpenPopupBook(null)}
+                  className="px-3 py-1.5 rounded-sm bg-midnight border border-border hover:border-gold text-cream-muted hover:text-cream text-xs uppercase tracking-wider font-semibold flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
+                >
+                  <FiX className="text-sm" /> Fermer
+                </button>
+              </div>
+
+              {/* Corps du Pop-up : Double Page de Lecture Pleine (Livre Ouvert) */}
+              <div className="p-4 sm:p-6 lg:p-8 overflow-y-auto flex-1 bg-midnight">
+                {openPopupBook === "secrets" ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#FAF8F5] text-[#1A1A1A] rounded-sm shadow-2xl border-2 border-[#C9A84C]/40 overflow-hidden relative">
+                    {/* Pliure centrale du livre sur grand écran */}
+                    <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-r from-black/5 via-black/15 to-black/5 pointer-events-none z-10" />
+
+                    {/* PAGE DE GAUCHE (PAGE PLEINE 1) */}
+                    <div className="p-6 sm:p-9 lg:p-11 border-b lg:border-b-0 lg:border-r border-[#C9A84C]/30 flex flex-col justify-between space-y-5 font-serif text-sm sm:text-[15px] leading-[1.8] text-justify select-none">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-[#8C7A5B] font-sans pb-2.5 border-b border-[#C9A84C]/25">
+                          <span>Les Secrets du Retour vers Allah</span>
+                          <span className="font-bold text-[#143D2B]">Page I • L&apos;Ingénierie du Retour</span>
+                        </div>
+
+                        <div className="text-center py-1">
+                          <span className="text-[10px] uppercase tracking-[0.3em] text-[#9E7331] font-sans font-bold block">
+                            INTRODUCTION — EXTRAIT SÉLECTIONNÉ
+                          </span>
+                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#143D2B] mt-1">
+                            La Crise de la Déconnexion &amp; l&apos;Architecture Mentale
+                          </h3>
+                        </div>
+
+                        <p>
+                          Avant d&apos;entrer dans cet ouvrage, vous devez savoir une chose : ce livre ne vous demandera pas plus d&apos;effort. Il vous proposera <strong>moins de combat</strong>. Reprendre sa prière n&apos;est pas une question de volonté héroïque, mais une question d&apos;<strong>architecture mentale</strong>.
+                        </p>
+
+                        <p>
+                          Le cœur humain, conceptualisé dans l&apos;épistémologie islamique sous le terme de <em>Qalb</em>, a toujours été considéré comme l&apos;organe central de la contemplation et de la perception de la transcendance divine. Or, dans l&apos;écosystème moderne, ce centre perceptif est continuellement bombardé par des stimuli éphémères, générant une véritable <strong>entropie spirituelle</strong> (<em>Ghaflah</em>).
+                        </p>
+
+                        <div className="my-3 py-3 px-4 bg-[#F4F1EA] border-l-4 border-[#C59B27] italic text-[#143D2B] text-xs sm:text-sm">
+                          « La souveraineté personnelle ne se définit nullement par une domination exercée sur autrui, mais par la maîtrise absolue du soi (Nafs) face aux dépendances qui aliènent l&apos;homme moderne. »
+                        </div>
+
+                        <p>
+                          Le retour à Allah (<em>At-Tawbah</em>) devient dès lors un processus d&apos;ingénierie intérieure méthodique. Et ce retour est accueilli par une joie divine qui dépasse l&apos;entendement : <em>« Allah est plus heureux du repentir de Son serviteur que l&apos;un de vous ne l&apos;est de retrouver son chameau perdu dans le désert. »</em> (Sahîh Muslim, 2747).
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#C9A84C]/25 flex items-center justify-between text-[11px] text-[#8C7A5B] font-sans">
+                        <span>Mounir BYAR</span>
+                        <span className="font-bold text-[#143D2B]">— 10 —</span>
+                      </div>
+                    </div>
+
+                    {/* PAGE DE DROITE (PAGE PLEINE 2) */}
+                    <div className="p-6 sm:p-9 lg:p-11 flex flex-col justify-between space-y-5 font-serif text-sm sm:text-[15px] leading-[1.8] text-justify select-none">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-[#8C7A5B] font-sans pb-2.5 border-b border-[#C9A84C]/25">
+                          <span>Chapitre Premier</span>
+                          <span className="font-bold text-[#143D2B]">Page II • Le Statut de Khalîfa</span>
+                        </div>
+
+                        <div className="text-center py-1">
+                          <span className="text-[10px] uppercase tracking-[0.3em] text-[#9E7331] font-sans font-bold block">
+                            CHAPITRE I — EXTRAIT SÉLECTIONNÉ
+                          </span>
+                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#143D2B] mt-1">
+                            Le Statut de Khalîfa : L&apos;Honneur de la Responsabilité
+                          </h3>
+                        </div>
+
+                        <p>
+                          Avant d&apos;aborder la mécanique du repentir ou de la prière, il est impératif de comprendre la position ontologique de l&apos;être humain. Allah a conféré à l&apos;homme un honneur cosmique en le désignant comme <em>Khalîfa</em> — vicaire et dépositaire — sur terre :
+                        </p>
+
+                        <div className="p-4 bg-[#F4F1EA] border-l-4 border-[#C59B27] space-y-2">
+                          <p className="text-right text-base sm:text-lg text-[#143D2B] leading-loose" dir="rtl">
+                            وَإِذْ قَالَ رَبُّكَ لِلْمَلَٰٓئِكَةِ إِنِّى جَاعِلٌ فِى ٱلْأَرْضِ خَلِيفَةً
+                          </p>
+                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
+                            « Et lorsque ton Seigneur dit aux Anges : &ldquo;Je vais établir sur la terre un successeur (Khalîfa)&rdquo;... » (Sourate Al-Baqara, 2 : 30)
+                          </p>
+                        </div>
+
+                        <p>
+                          À l&apos;inverse d&apos;Iblîs qui blâma le destin, lorsque Adam et Ève commirent l&apos;erreur, leur réaction fut la fondation même de la souveraineté humaine : la prise de responsabilité radicale (<em>« Seigneur, nous nous sommes fait du tort à nous-mêmes »</em>, Coran 7:23). C&apos;est sur ce socle que la prière (<em>As-Salât</em>) vient ensuite agir comme un véritable algorithme circadien, réduisant le cortisol de 27,3% et restaurant la gouvernance du cœur...
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#C9A84C]/25 flex items-center justify-between text-[11px] text-[#8C7A5B] font-sans">
+                        <span>Suite de l&apos;ouvrage (41 pages) dans l&apos;édition complète</span>
+                        <span className="font-bold text-[#143D2B]">— 12 —</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 bg-[#FAF8F5] text-[#1A1A1A] rounded-sm shadow-2xl border-2 border-[#C9A84C]/40 overflow-hidden relative">
+                    {/* Pliure centrale du livre sur grand écran */}
+                    <div className="hidden lg:block absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-6 bg-gradient-to-r from-black/5 via-black/15 to-black/5 pointer-events-none z-10" />
+
+                    {/* PAGE DE GAUCHE (PAGE PLEINE 1 — AR-RAHMAN) */}
+                    <div className="p-6 sm:p-9 lg:p-11 border-b lg:border-b-0 lg:border-r border-[#C9A84C]/30 flex flex-col justify-between space-y-5 font-serif text-sm sm:text-[15px] leading-[1.8] text-justify select-none">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-[#8C7A5B] font-sans pb-2.5 border-b border-[#C9A84C]/25">
+                          <span>Ar-Rahman — La Mer sans Rivage</span>
+                          <span className="font-bold text-[#0F2847]">Page I • La Science du Nom</span>
+                        </div>
+
+                        <div className="text-center py-1">
+                          <span className="text-[10px] uppercase tracking-[0.3em] text-[#9E7331] font-sans font-bold block">
+                            CHAPITRE I — EXTRAIT SÉLECTIONNÉ
+                          </span>
+                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#0F2847] mt-1">
+                            Les Asma ul Husna &amp; L&apos;Océan d&apos;Ar-Rahman
+                          </h3>
+                        </div>
+
+                        <div className="p-4 bg-[#F4F1EA] border-l-4 border-[#C59B27] space-y-2">
+                          <p className="text-right text-base sm:text-lg text-[#0F2847] leading-loose" dir="rtl">
+                            وَلِلَّهِ ٱلْأَسْمَآءُ ٱلْحُسْنَىٰ فَٱدْعُوهُ بِهَا
+                          </p>
+                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
+                            « Les plus beaux Noms appartiennent à Allah. Invoquez-Le par ces Noms. » (Sourate Al-A&apos;râf, 7 : 180)
+                          </p>
+                        </div>
+
+                        <p>
+                          Ce livre est une méditation approfondie, nourrie des grands savants de l&apos;islam, autour d&apos;un seul nom divin : <strong>Ar-Rahman</strong>. Pourquoi un seul ? Parce que chaque nom d&apos;Allah mérite un livre, et parce qu&apos;Ar-Rahman, le premier des noms invoqués après le Nom suprême, contient à lui seul une cosmologie entière.
+                        </p>
+
+                        <p>
+                          La tradition islamique a développé une science rigoureuse autour des <em>Asma ul Husna</em>. Selon des maîtres de la stature d&apos;Al-Ghazâlî et d&apos;Ibn al-Qayyim, elle est <strong>la clé de voûte de toute vie spirituelle sérieuse</strong> : on ne peut aimer véritablement ni placer sa confiance absolue en Celui que l&apos;on ne connaît pas.
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#C9A84C]/25 flex items-center justify-between text-[11px] text-[#8C7A5B] font-sans">
+                        <span>Mounir BYAR</span>
+                        <span className="font-bold text-[#0F2847]">— 11 —</span>
+                      </div>
+                    </div>
+
+                    {/* PAGE DE DROITE (PAGE PLEINE 2 — AR-RAHMAN) */}
+                    <div className="p-6 sm:p-9 lg:p-11 flex flex-col justify-between space-y-5 font-serif text-sm sm:text-[15px] leading-[1.8] text-justify select-none">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.25em] text-[#8C7A5B] font-sans pb-2.5 border-b border-[#C9A84C]/25">
+                          <span>Chapitres I &amp; II</span>
+                          <span className="font-bold text-[#0F2847]">Page II • Les Trois Niveaux d&apos;Ihsâ&apos;</span>
+                        </div>
+
+                        <div className="text-center py-1">
+                          <span className="text-[10px] uppercase tracking-[0.3em] text-[#9E7331] font-sans font-bold block">
+                            EXÉGÈSE &amp; TRADITION — EXTRAIT SÉLECTIONNÉ
+                          </span>
+                          <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#0F2847] mt-1">
+                            Vivre et Respirer par le Nom Ar-Rahman
+                          </h3>
+                        </div>
+
+                        <p>
+                          Dans le célèbre hadith rapporté par Al-Boukhâri et Muslim : <em>« Allah possède quatre-vingt-dix-neuf noms — cent moins un. Quiconque les retient (ahsâhâ) entrera au Paradis. »</em> Le terme central <em>ahsâhâ</em> dépasse largement la simple mémorisation.
+                        </p>
+
+                        <div className="p-4 bg-[#EFECE6] border-l-4 border-[#0F2847] space-y-1.5">
+                          <span className="text-[10px] uppercase tracking-[0.2em] text-[#0F2847] font-sans font-bold block">
+                            IBN AL-QAYYIM AL-JAWZIYYA (691–751 H)
+                          </span>
+                          <p className="italic text-xs sm:text-sm text-[#1A1A1A] leading-relaxed">
+                            « Le premier niveau d&apos;ihsâ&apos; est la mémorisation des noms. Le deuxième est la compréhension de leurs significations. Le troisième — et c&apos;est le plus élevé — est d&apos;invoquer Allah par ces noms et de réaliser leurs exigences dans ses actes. »
+                          </p>
+                        </div>
+
+                        <p>
+                          Dans la langue arabe, <strong>Ar-Rahman</strong> (construit sur le schème d&apos;intensité <em>Fa&lsquo;lân</em>) désigne l&apos;océan débordant de la Miséricorde qui englobe l&apos;univers entier avant même que nous n&apos;ayons mérité quoi que ce soit. Comprendre ce Nom à travers la racine sacrée <em>R-H-M</em> et les 57 versets coraniques où il resplendit, c&apos;est guérir définitivement le cœur du désespoir...
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#C9A84C]/25 flex items-center justify-between text-[11px] text-[#8C7A5B] font-sans">
+                        <span>Suite de l&apos;ouvrage (84 pages) dans l&apos;édition complète</span>
+                        <span className="font-bold text-[#0F2847]">— 12 —</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Barre inférieure du Pop-up : Appel à l'action pour commander le livre complet */}
+              <div className="px-5 py-4 bg-midnight-light border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4 shrink-0">
+                <div className="flex items-center gap-2 text-xs text-cream-muted">
+                  <FiLock className="text-gold shrink-0" />
+                  <span>
+                    {openPopupBook === "secrets"
+                      ? "Débloquez l'édition intégrale (41 pages • PDF + ePub) immédiatement après commande."
+                      : "Débloquez l'édition intégrale (84 pages • 12 chapitres • PDF + ePub) immédiatement après commande."}
+                  </span>
+                </div>
+
+                <Link
+                  href={
+                    openPopupBook === "secrets"
+                      ? "/paiement?offre=secrets"
+                      : "/paiement?offre=rahman"
+                  }
+                  className="w-full sm:w-auto px-6 py-3 bg-gold hover:bg-gold/90 text-stone-950 font-bold text-xs uppercase tracking-widest rounded-sm flex items-center justify-center gap-2 shrink-0 transition-all shadow-lg"
+                >
+                  <FiShoppingBag />
+                  <span>
+                    {openPopupBook === "secrets"
+                      ? "Commander le Livre Complet (5,90 €) →"
+                      : "Commander le Livre Complet (12,65 €) →"}
+                  </span>
+                </Link>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
