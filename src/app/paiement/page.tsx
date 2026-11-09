@@ -113,10 +113,7 @@ function StripeEmbeddedForm({
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-white/10">
           <span className="text-[11px] uppercase tracking-widest text-[#D4A853] font-semibold flex items-center gap-1.5">
             <FiCreditCard className="text-[#D4A853] text-sm shrink-0" />
-            <span>Terminal Bancaire Chiffré</span>
-          </span>
-          <span className="text-[10px] uppercase tracking-wider text-[#10B981] flex items-center gap-1 font-medium">
-            <FiLock className="shrink-0" /> SSL 256-Bits
+            <span>Informations de Carte Bancaire</span>
           </span>
         </div>
 
@@ -124,6 +121,11 @@ function StripeEmbeddedForm({
           <PaymentElement
             options={{
               layout: "tabs",
+              wallets: {
+                applePay: "auto",
+                googlePay: "auto",
+                link: "never",
+              },
             }}
           />
         </div>

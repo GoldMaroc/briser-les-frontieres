@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const piParams: Stripe.PaymentIntentCreateParams = {
       amount: amountCents,
       currency: "eur",
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ["card"],
       description:
         validInstallments > 1
           ? `${product.title} — Échéance 1/${validInstallments} (Sans frais - 0% Riba)`
