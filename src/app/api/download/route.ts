@@ -34,12 +34,21 @@ export async function GET(request: Request) {
 
     let filename = "";
     if (bookId === "secrets") {
-      filename =
-        format === "epub"
-          ? "Les-Secrets-du-Retour-vers-Allah-92u7e.epub"
-          : "Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET-92u7e.pdf";
+      if (format === "epub") {
+        filename = "Les-Secrets-du-Retour-vers-Allah-92u7e.epub";
+      } else if (format === "kpf") {
+        filename = "Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET.kpf";
+      } else {
+        filename = "Les-Secrets-du-Retour-vers-Allah-LIVRE-COMPLET-92u7e.pdf";
+      }
     } else if (bookId === "rahman") {
-      filename = "Ar-Rahman-LIVRE-COMPLET.pdf";
+      if (format === "epub") {
+        filename = "Ar-Rahman-La-Mer-sans-Rivage.epub";
+      } else if (format === "kpf") {
+        filename = "Ar-Rahman-LIVRE-COMPLET.kpf";
+      } else {
+        filename = "Ar-Rahman-LIVRE-COMPLET.pdf";
+      }
     } else {
       return NextResponse.json({ message: "Ouvrage inconnu." }, { status: 400 });
     }
@@ -52,7 +61,11 @@ export async function GET(request: Request) {
     }
 
     const fileBuffer = fs.readFileSync(filePath);
-    const contentType = filename.endsWith(".epub") ? "application/epub+zip" : "application/pdf";
+    const contentType = filename.endsWith(".epub")
+      ? "application/epub+zip"
+      : filename.endsWith(".kpf")
+      ? "application/octet-stream"
+      : "application/pdf";
 
     return new NextResponse(fileBuffer, {
       status: 200,

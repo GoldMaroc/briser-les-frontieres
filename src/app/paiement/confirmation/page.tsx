@@ -118,34 +118,22 @@ function PaiementConfirmationContent() {
                   Télécharger votre ouvrage immédiatement
                 </h4>
 
-                {offerId === "secrets" ? (
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button
-                      href={`/api/download?payment_intent=${paymentIntentId}&format=pdf`}
-                      variant="primary"
-                      className="py-3.5 px-6 text-center justify-center font-semibold"
-                    >
-                      📥 Télécharger en PDF
-                    </Button>
-                    <Button
-                      href={`/api/download?payment_intent=${paymentIntentId}&format=epub`}
-                      variant="primary"
-                      className="py-3.5 px-6 text-center justify-center font-semibold"
-                    >
-                      📥 Télécharger en EPUB (Liseuse / Mobile)
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex justify-center">
-                    <Button
-                      href={`/api/download?payment_intent=${paymentIntentId}&format=pdf`}
-                      variant="primary"
-                      className="py-3.5 px-8 text-center justify-center font-semibold w-full sm:w-auto"
-                    >
-                      📥 Télécharger le Livre Ar-Rahman (PDF de Prestige)
-                    </Button>
-                  </div>
-                )}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    href={`/api/download?payment_intent=${paymentIntentId}&format=pdf`}
+                    variant="primary"
+                    className="py-3.5 px-6 text-center justify-center font-semibold"
+                  >
+                    📥 Télécharger en PDF
+                  </Button>
+                  <Button
+                    href={`/api/download?payment_intent=${paymentIntentId}&format=epub`}
+                    variant="primary"
+                    className="py-3.5 px-6 text-center justify-center font-semibold"
+                  >
+                    📥 Télécharger en EPUB (Liseuse / Mobile)
+                  </Button>
+                </div>
               </div>
             ) : (
               /* Si c'est un accompagnement : Prochaines étapes */

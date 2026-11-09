@@ -66,22 +66,14 @@ export default function Confirmation() {
             <div className="border-t border-border pt-8 space-y-4">
               <h4 className="font-heading text-lg text-cream font-semibold mb-4">Télécharger votre ouvrage immédiatement</h4>
               
-              {bookId === "secrets" ? (
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button href={`/api/download?session_id=${sessionId}&format=pdf`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
-                    📥 Version PDF
-                  </Button>
-                  <Button href={`/api/download?session_id=${sessionId}&format=epub`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
-                    📥 Version EPUB (Liseuse)
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex justify-center">
-                  <Button href={`/api/download?session_id=${sessionId}&format=pdf`} variant="primary" className="py-3 px-8 text-center justify-center font-semibold w-full sm:w-auto">
-                    📥 Télécharger le Livre Ar-Rahman (PDF de Prestige)
-                  </Button>
-                </div>
-              )}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button href={`/api/download?session_id=${sessionId}&format=pdf`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
+                  📥 Version PDF
+                </Button>
+                <Button href={`/api/download?session_id=${sessionId}&format=epub`} variant="primary" className="py-3 px-6 text-center justify-center font-semibold">
+                  📥 Version EPUB (Liseuse / Mobile)
+                </Button>
+              </div>
             </div>
 
             <p className="text-[10px] text-cream-muted/50 font-body">

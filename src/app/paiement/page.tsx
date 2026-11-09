@@ -489,6 +489,21 @@ function PaiementContent() {
                 </div>
               )}
 
+              {product.id === "rahman" && (
+                <div className="mt-4 grid grid-cols-2 gap-3 bg-[#0A1128] p-3 border border-[#D4A853]/25 rounded-sm">
+                  <img
+                    src="/books/rahman-couverture-recto.png"
+                    alt="1ère de couverture — Ar-Rahman : La Mer sans Rivage"
+                    className="w-full h-auto rounded-sm border border-[#D4A853]/30 shadow-md"
+                  />
+                  <img
+                    src="/books/rahman-couverture-verso.png"
+                    alt="4ème de couverture — Ar-Rahman : La Mer sans Rivage"
+                    className="w-full h-auto rounded-sm border border-[#D4A853]/30 shadow-md"
+                  />
+                </div>
+              )}
+
               <p className="text-xs text-[#A0AEC0] leading-relaxed mt-3 pb-5 border-b border-white/10 font-body">
                 {product.description}
               </p>
