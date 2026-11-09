@@ -111,6 +111,8 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
@@ -119,6 +121,8 @@ body {
   font-family: var(--font-body);
   line-height: 1.618; /* Golden Ratio */
   overflow-x: hidden;
+  max-width: 100%;
+  position: relative;
   transition: background-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
               color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
 }

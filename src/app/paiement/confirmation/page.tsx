@@ -51,10 +51,10 @@ function PaiementConfirmationContent() {
   const product = PRODUCTS_CATALOG[offerId] || PRODUCTS_CATALOG["3m"];
 
   return (
-    <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
+    <div className="relative pt-28 sm:pt-40 pb-24 sm:pb-32 bg-midnight min-h-screen overflow-x-hidden w-full max-w-full">
       <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,var(--color-midnight-light)_0%,var(--color-midnight)_70%)] pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 text-center">
         {status === "loading" && (
           <div className="py-20 space-y-4">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gold mx-auto" />

@@ -100,7 +100,7 @@ function StripeEmbeddedForm({
           error.message || "Le règlement n'a pas pu être validé. Veuillez vérifier vos informations bancaires."
         );
       }
-    } catch (err: any) {
+    } catch {
       setErrorMessage("Une erreur est survenue lors de la validation sécurisée.");
     } finally {
       setSubmitting(false);
@@ -108,27 +108,29 @@ function StripeEmbeddedForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-midnight/90 border border-gold/25 rounded-sm p-5 shadow-inner">
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-border/60">
-          <span className="text-[11px] uppercase tracking-widest text-gold font-semibold flex items-center gap-2">
-            <FiCreditCard className="text-gold text-sm" />
-            Règlement Bancaire Chiffré
+    <form onSubmit={handleSubmit} className="space-y-5 w-full min-w-0">
+      <div className="bg-[#0A1128] border border-[#D4A853]/30 rounded-sm p-3 sm:p-5 shadow-inner w-full min-w-0 overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-white/10">
+          <span className="text-[11px] uppercase tracking-widest text-[#D4A853] font-semibold flex items-center gap-1.5">
+            <FiCreditCard className="text-[#D4A853] text-sm shrink-0" />
+            <span>Terminal Bancaire Chiffré</span>
           </span>
-          <span className="text-[10px] uppercase tracking-wider text-emerald flex items-center gap-1 font-medium">
-            <FiLock /> SSL 256-Bits
+          <span className="text-[10px] uppercase tracking-wider text-[#10B981] flex items-center gap-1 font-medium">
+            <FiLock className="shrink-0" /> SSL 256-Bits
           </span>
         </div>
 
-        <PaymentElement
-          options={{
-            layout: "tabs",
-          }}
-        />
+        <div className="w-full min-w-0 overflow-hidden">
+          <PaymentElement
+            options={{
+              layout: "tabs",
+            }}
+          />
+        </div>
       </div>
 
       {errorMessage && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-sm text-xs text-red-300 font-body leading-relaxed">
+        <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-sm text-xs text-red-300 font-body leading-relaxed">
           {errorMessage}
         </div>
       )}
@@ -136,14 +138,16 @@ function StripeEmbeddedForm({
       <button
         type="submit"
         disabled={!stripe || submitting}
-        className="w-full py-4 px-6 bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-[0.2em] rounded-sm transition-all duration-300 shadow-[0_0_25px_rgba(212,168,83,0.25)] hover:shadow-[0_0_35px_rgba(212,168,83,0.45)] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-3"
+        className="w-full py-4 px-4 sm:px-6 bg-[#D4A853] hover:bg-[#E8C468] text-[#0A1128] font-bold text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] rounded-sm transition-all duration-300 shadow-[0_0_25px_rgba(212,168,83,0.25)] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 text-center"
       >
-        <FiLock className="text-sm" />
-        {submitting
-          ? "Validation sécurisée en cours..."
-          : installments > 1
-          ? `Régler la 1ère échéance (${formatEuros(amountCents)}) ➔`
-          : `Valider mon règlement (${formatEuros(amountCents)}) ➔`}
+        <FiLock className="text-sm shrink-0" />
+        <span>
+          {submitting
+            ? "Validation sécurisée en cours..."
+            : installments > 1
+            ? `Régler la 1ère échéance (${formatEuros(amountCents)}) ➔`
+            : `Valider mon règlement (${formatEuros(amountCents)}) ➔`}
+        </span>
       </button>
     </form>
   );
@@ -171,7 +175,6 @@ function PaiementContent() {
       : 1
   );
 
-  // Synchroniser l'échéancier quand l'offre change
   useEffect(() => {
     if (!product.allowedInstallments.includes(installments)) {
       setInstallments(1);
@@ -187,7 +190,6 @@ function PaiementContent() {
   });
   const [customerError, setCustomerError] = useState("");
 
-  // État Stripe PaymentIntent
   const [loadingIntent, setLoadingIntent] = useState(true);
   const [configured, setConfigured] = useState(false);
   const [clientSecret, setClientSecret] = useState("");
@@ -196,7 +198,6 @@ function PaiementContent() {
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ""
   );
 
-  // Mode pré-réservation / demande de lien direct si les clés Stripe ne sont pas encore activées
   const [fallbackSubmitting, setFallbackSubmitting] = useState(false);
   const [fallbackSuccess, setFallbackSuccess] = useState(false);
 
@@ -223,7 +224,11 @@ function PaiementContent() {
         if (data.publishableKey) {
           setPublishableKey(data.publishableKey);
         }
-        if (data.configured && data.clientSecret && (data.publishableKey || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)) {
+        if (
+          data.configured &&
+          data.clientSecret &&
+          (data.publishableKey || process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+        ) {
           setConfigured(true);
           setClientSecret(data.clientSecret);
           setPaymentIntentId(data.paymentIntentId);
@@ -264,7 +269,7 @@ function PaiementContent() {
           colorTextSecondary: "#a0aec0",
           colorDanger: "#ef4444",
           fontFamily: "Inter, system-ui, sans-serif",
-          spacingUnit: "4px",
+          spacingUnit: "3px",
           borderRadius: "2px",
         },
         rules: {
@@ -272,7 +277,7 @@ function PaiementContent() {
             backgroundColor: "#0a1128",
             border: "1px solid rgba(212, 168, 83, 0.25)",
             color: "#f0ede8",
-            padding: "12px",
+            padding: "10px 12px",
             fontSize: "13px",
           },
           ".Input:focus": {
@@ -283,9 +288,9 @@ function PaiementContent() {
             color: "#a0aec0",
             fontSize: "11px",
             textTransform: "uppercase",
-            letterSpacing: "0.08em",
+            letterSpacing: "0.06em",
             fontWeight: "600",
-            marginBottom: "6px",
+            marginBottom: "5px",
           },
           ".Tab": {
             backgroundColor: "#0a1128",
@@ -365,38 +370,54 @@ function PaiementContent() {
   const bookOffers = ["secrets", "rahman"];
 
   return (
-    <div className="relative pt-32 pb-28 bg-midnight min-h-screen text-cream">
-      {/* Halo lumineux supérieur */}
-      <div className="absolute top-0 left-0 w-full h-[550px] bg-[radial-gradient(circle_at_50%_0%,rgba(212,168,83,0.08)_0%,rgba(10,17,40,0)_70%)] pointer-events-none" />
+    <div className="relative pt-24 sm:pt-32 pb-20 sm:pb-28 bg-[#0A1128] text-[#F0EDE8] min-h-screen overflow-x-hidden w-full max-w-full">
+      {/* Halo lumineux supérieur contenu */}
+      <div className="absolute top-0 left-0 w-full h-[400px] bg-[radial-gradient(circle_at_50%_0%,rgba(212,168,83,0.08)_0%,rgba(10,17,40,0)_70%)] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 relative z-10 w-full min-w-0">
         {/* Barre de retour et en-tête de sécurité */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-8 border-b border-border/60">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-5 sm:pb-7 border-b border-white/10">
           <Link
             href={product.category === "book" ? "/livres" : "/offres"}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-cream-muted hover:text-gold transition-colors"
+            className="inline-flex items-center gap-2 text-[11px] sm:text-xs uppercase tracking-widest text-[#A0AEC0] hover:text-[#D4A853] transition-colors"
           >
-            <FiArrowLeft className="text-gold" />
-            Retour {product.category === "book" ? "aux Ouvrages" : "aux Offres d'Accompagnement"}
+            <FiArrowLeft className="text-[#D4A853] shrink-0" />
+            <span className="truncate">
+              Retour {product.category === "book" ? "aux Ouvrages" : "aux Offres"}
+            </span>
           </Link>
 
-          <div className="flex items-center gap-4 text-[11px] text-cream-muted uppercase tracking-widest">
-            <span className="flex items-center gap-1.5 text-gold">
-              <FiShield /> Portail d&apos;Acquisition Officiel BLF
+          <div className="flex flex-wrap items-center gap-3 text-[10px] sm:text-[11px] text-[#A0AEC0] uppercase tracking-wider">
+            <span className="flex items-center gap-1.5 text-[#D4A853]">
+              <FiShield className="shrink-0" /> Portail Officiel BLF
             </span>
-            <span className="hidden md:inline text-border">|</span>
-            <span className="hidden md:flex items-center gap-1.5 text-emerald">
-              <FiLock /> Zéro Redirection Externe
+            <span className="text-white/20">•</span>
+            <span className="flex items-center gap-1 text-[#10B981]">
+              <FiLock className="shrink-0" /> Zéro Redirection Externe
             </span>
           </div>
         </div>
 
-        {/* Sélecteur rapide de prestation */}
-        <div className="mt-8 mb-10">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-gold font-bold mb-3">
-            Prestation Sélectionnée
-          </p>
-          <div className="flex flex-wrap gap-2">
+        {/* Sélecteur rapide de prestation (Grille 2x2 sur mobile sans aucun débordement) */}
+        <div className="mt-5 sm:mt-8 mb-6 sm:mb-10 w-full min-w-0">
+          <div className="flex items-center justify-between gap-2 mb-2.5">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#D4A853] font-bold">
+              Prestation Sélectionnée
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                const nextId = product.category === "book" ? "3m" : "secrets";
+                setSelectedOfferId(nextId);
+                router.replace(`/paiement?offre=${nextId}`, { scroll: false });
+              }}
+              className="text-[10px] text-[#A0AEC0] hover:text-[#D4A853] underline underline-offset-4 cursor-pointer"
+            >
+              {product.category === "book" ? "Voir Accompagnements ➔" : "Voir Ouvrages ➔"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 w-full">
             {(product.category === "book" ? bookOffers : coachingOffers).map((id) => {
               const item = PRODUCTS_CATALOG[id];
               const isSelected = id === selectedOfferId;
@@ -408,66 +429,66 @@ function PaiementContent() {
                     setSelectedOfferId(id);
                     router.replace(`/paiement?offre=${id}`, { scroll: false });
                   }}
-                  className={`px-4 py-2.5 rounded-sm text-xs font-body transition-all cursor-pointer border ${
+                  className={`p-2.5 sm:px-4 sm:py-2.5 rounded-sm text-left sm:text-center text-[11px] sm:text-xs font-body transition-all cursor-pointer border min-w-0 ${
                     isSelected
-                      ? "bg-gold text-midnight font-bold border-gold shadow-[0_0_20px_rgba(212,168,83,0.25)]"
-                      : "bg-midnight-light/70 text-cream-muted border-border hover:border-gold/40 hover:text-cream"
+                      ? "bg-[#D4A853] text-[#0A1128] font-bold border-[#D4A853] shadow-[0_0_20px_rgba(212,168,83,0.25)]"
+                      : "bg-[#0D1B2A] text-[#A0AEC0] border-white/10 hover:border-[#D4A853]/40 hover:text-[#F0EDE8]"
                   }`}
                 >
-                  {item.title} — <span className={isSelected ? "text-midnight" : "text-gold"}>{item.priceDisplay}</span>
+                  <span className="block truncate">{item.title}</span>
+                  <span
+                    className={`block text-[10px] sm:inline sm:ml-1 font-bold ${
+                      isSelected ? "text-[#0A1128]" : "text-[#D4A853]"
+                    }`}
+                  >
+                    {item.priceDisplay}
+                  </span>
                 </button>
               );
             })}
-            <button
-              type="button"
-              onClick={() => {
-                const nextId = product.category === "book" ? "3m" : "secrets";
-                setSelectedOfferId(nextId);
-                router.replace(`/paiement?offre=${nextId}`, { scroll: false });
-              }}
-              className="px-3.5 py-2.5 rounded-sm text-[11px] font-body text-cream-muted/80 hover:text-gold border border-dashed border-border hover:border-gold/40 transition-colors cursor-pointer ml-auto"
-            >
-              {product.category === "book" ? "Voir les Accompagnements ➔" : "Voir les Ouvrages Numériques ➔"}
-            </button>
           </div>
         </div>
 
         {/* Grille principale : Colonne Gauche (Récapitulatif & Échéancier) / Colonne Droite (Paiement Intégré) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-start w-full min-w-0">
           {/* COLONNE GAUCHE : RÉCAPITULATIF & ÉCHÉANCIER 0% RIBA */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="bg-midnight-light/90 border border-gold/30 rounded-sm p-7 md:p-8 relative overflow-hidden shadow-2xl">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent" />
+          <div className="lg:col-span-5 space-y-5 w-full min-w-0">
+            <div className="bg-[#0D1B2A] border border-[#D4A853]/30 rounded-sm p-4 sm:p-7 md:p-8 relative overflow-hidden shadow-2xl w-full min-w-0">
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#D4A853] to-transparent" />
 
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold text-[10px] font-bold uppercase tracking-widest mb-4">
-                {product.category === "book" ? <FiBookOpen /> : <FiAward />}
-                {product.badge}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#D4A853]/10 border border-[#D4A853]/30 text-[#D4A853] text-[10px] font-bold uppercase tracking-widest mb-3 max-w-full">
+                {product.category === "book" ? (
+                  <FiBookOpen className="shrink-0" />
+                ) : (
+                  <FiAward className="shrink-0" />
+                )}
+                <span className="truncate">{product.badge}</span>
               </div>
 
-              <h1 className="font-heading text-3xl md:text-4xl text-cream font-light leading-tight">
+              <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl text-[#F0EDE8] font-light leading-tight break-words">
                 {product.title}
               </h1>
-              <p className="text-xs text-gold uppercase tracking-widest mt-1.5 font-medium">
+              <p className="text-[11px] sm:text-xs text-[#D4A853] uppercase tracking-widest mt-1 font-medium">
                 {product.subtitle}
               </p>
 
-              <p className="text-xs text-cream-muted leading-relaxed mt-4 pb-6 border-b border-border/60 font-body">
+              <p className="text-xs text-[#A0AEC0] leading-relaxed mt-3 pb-5 border-b border-white/10 font-body">
                 {product.description}
               </p>
 
               {/* CHOIX DE L'ÉCHÉANCIER (1x ou Plusieurs fois sans frais) */}
-              <div className="py-6 border-b border-border/60 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] uppercase tracking-wider text-cream font-semibold flex items-center gap-2">
-                    <FiCalendar className="text-gold" /> Modalité de Règlement
+              <div className="py-5 border-b border-white/10 space-y-3.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[11px] uppercase tracking-wider text-[#F0EDE8] font-semibold flex items-center gap-1.5">
+                    <FiCalendar className="text-[#D4A853] shrink-0" /> Modalité de Règlement
                   </span>
-                  <span className="text-[10px] uppercase tracking-widest text-emerald font-bold px-2 py-0.5 bg-emerald/10 border border-emerald/25 rounded-sm">
+                  <span className="text-[10px] uppercase tracking-widest text-[#10B981] font-bold px-2 py-0.5 bg-[#10B981]/10 border border-[#10B981]/25 rounded-sm">
                     0% Riba • Sans Frais
                   </span>
                 </div>
 
                 {product.allowedInstallments.length > 1 ? (
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {product.allowedInstallments.map((count) => {
                       const active = installments === count;
                       const perMonth = getInstallmentCents(product.totalCents, count);
@@ -476,48 +497,52 @@ function PaiementContent() {
                           key={count}
                           type="button"
                           onClick={() => setInstallments(count)}
-                          className={`p-3.5 rounded-sm border text-left transition-all cursor-pointer ${
+                          className={`p-3.5 rounded-sm border text-left transition-all cursor-pointer w-full min-w-0 ${
                             active
-                              ? "bg-gold/15 border-gold text-cream shadow-[0_0_15px_rgba(212,168,83,0.15)]"
-                              : "bg-midnight/60 border-border text-cream-muted hover:border-gold/40"
+                              ? "bg-[#D4A853]/15 border-[#D4A853] text-[#F0EDE8] shadow-[0_0_15px_rgba(212,168,83,0.15)]"
+                              : "bg-[#0A1128] border-white/10 text-[#A0AEC0] hover:border-[#D4A853]/40"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-1">
-                            <span className="text-xs font-bold uppercase tracking-wider text-gold">
-                              {count === 1 ? "Comptant (1x)" : `En ${count} fois`}
+                            <span className="text-xs font-bold uppercase tracking-wider text-[#D4A853]">
+                              {count === 1 ? "Comptant (1x)" : `En ${count} fois sans frais`}
                             </span>
                             <div
-                              className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                                active ? "border-gold bg-gold text-midnight" : "border-cream-muted/40"
+                              className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
+                                active
+                                  ? "border-[#D4A853] bg-[#D4A853] text-[#0A1128]"
+                                  : "border-[#A0AEC0]/40"
                               }`}
                             >
                               {active && <FiCheck className="text-[10px] stroke-[3]" />}
                             </div>
                           </div>
-                          <div className="text-base font-heading font-semibold text-cream">
+                          <div className="text-lg font-heading font-semibold text-[#F0EDE8]">
                             {formatEuros(perMonth)}
-                            {count > 1 && <span className="text-xs font-body text-cream-muted"> / mois</span>}
+                            {count > 1 && (
+                              <span className="text-xs font-body text-[#A0AEC0]"> / mois</span>
+                            )}
                           </div>
-                          <div className="text-[10px] text-cream-muted mt-0.5">
+                          <div className="text-[10px] text-[#A0AEC0] mt-0.5">
                             {count === 1
                               ? "Règlement unique intégral"
-                              : `${count} mensualités égales • 0 € de frais`}
+                              : `${count} mensualités égales • 0 € d'intérêt`}
                           </div>
                         </button>
                       );
                     })}
                   </div>
                 ) : (
-                  <div className="p-4 rounded-sm bg-midnight/60 border border-gold/25 flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-bold uppercase tracking-wider text-gold block">
+                  <div className="p-3.5 rounded-sm bg-[#0A1128] border border-[#D4A853]/25 flex items-center justify-between gap-2">
+                    <div className="min-w-0">
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#D4A853] block">
                         Règlement Comptant (1 fois)
                       </span>
-                      <span className="text-[11px] text-cream-muted">
+                      <span className="text-[11px] text-[#A0AEC0]">
                         Accès immédiat dès validation
                       </span>
                     </div>
-                    <span className="text-2xl font-heading font-semibold text-cream">
+                    <span className="text-xl sm:text-2xl font-heading font-semibold text-[#F0EDE8] shrink-0">
                       {product.priceDisplay}
                     </span>
                   </div>
@@ -525,39 +550,49 @@ function PaiementContent() {
 
                 {/* Détail de l'échéancier si paiement en plusieurs fois */}
                 {installments > 1 && (
-                  <div className="bg-midnight/80 border border-gold/20 rounded-sm p-4 space-y-2 text-xs">
-                    <p className="text-[10px] uppercase tracking-widest text-gold font-bold mb-2">
+                  <div className="bg-[#0A1128] border border-[#D4A853]/20 rounded-sm p-3.5 space-y-2 text-xs">
+                    <p className="text-[10px] uppercase tracking-widest text-[#D4A853] font-bold mb-1.5">
                       Échéancier Garanti Sans Intérêt (0% Riba)
                     </p>
                     {Array.from({ length: installments }).map((_, idx) => (
-                      <div key={idx} className="flex justify-between items-center text-cream-muted">
+                      <div
+                        key={idx}
+                        className="flex justify-between items-center gap-2 text-[#A0AEC0] text-[11px]"
+                      >
                         <span>
                           {idx === 0
                             ? "Aujourd'hui (1ère échéance)"
                             : `Mois +${idx} (${idx + 1}ème échéance)`}
                         </span>
-                        <span className={idx === 0 ? "text-gold font-bold" : "text-cream"}>
+                        <span
+                          className={`shrink-0 ${
+                            idx === 0 ? "text-[#D4A853] font-bold" : "text-[#F0EDE8]"
+                          }`}
+                        >
                           {formatEuros(amountCents)}
                         </span>
                       </div>
                     ))}
-                    <div className="pt-2 mt-2 border-t border-border/50 flex justify-between items-center font-semibold text-cream">
-                      <span>Total (Strictement identique au comptant)</span>
-                      <span>{product.priceDisplay}</span>
+                    <div className="pt-2 mt-2 border-t border-white/10 flex justify-between items-center font-semibold text-[#F0EDE8] text-xs">
+                      <span>Total (0 € de frais)</span>
+                      <span className="shrink-0">{product.priceDisplay}</span>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Ce qui est inclus */}
-              <div className="pt-6 space-y-3">
-                <span className="text-[10px] uppercase tracking-widest text-gold font-bold block">
+              <div className="pt-5 space-y-2.5">
+                <span className="text-[10px] uppercase tracking-widest text-[#D4A853] font-bold block">
                   Inclus dans votre acquisition :
                 </span>
-                <ul className="space-y-2.5">
+                <ul className="space-y-2">
                   {product.features.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-xs text-cream-muted leading-relaxed">
-                      <span className="w-4 h-4 rounded-full bg-gold/15 border border-gold/30 text-gold flex items-center justify-center shrink-0 mt-0.5 text-[10px]">
+                    <li
+                      key={i}
+                      className="flex items-start gap-2.5 text-xs text-[#A0AEC0] leading-relaxed"
+                    >
+                      <span className="w-4 h-4 rounded-full bg-[#D4A853]/15 border border-[#D4A853]/30 text-[#D4A853] flex items-center justify-center shrink-0 mt-0.5 text-[10px]">
                         ✓
                       </span>
                       <span>{feat}</span>
@@ -567,22 +602,22 @@ function PaiementContent() {
               </div>
 
               {/* Total à régler aujourd'hui */}
-              <div className="mt-7 pt-5 border-t border-gold/25 flex items-baseline justify-between">
-                <div>
-                  <span className="text-[11px] uppercase tracking-widest text-cream-muted block">
+              <div className="mt-6 pt-4 border-t border-[#D4A853]/25 flex items-baseline justify-between gap-2">
+                <div className="min-w-0">
+                  <span className="text-[11px] uppercase tracking-widest text-[#A0AEC0] block">
                     Net à régler aujourd&apos;hui
                   </span>
                   {product.basePriceDisplay && (
-                    <span className="text-xs text-cream-muted/50 line-through">
+                    <span className="text-xs text-[#A0AEC0]/50 line-through">
                       Prix initial : {product.basePriceDisplay}
                     </span>
                   )}
                 </div>
-                <div className="text-right">
-                  <span className="text-3xl font-heading font-bold text-gold">
+                <div className="text-right shrink-0">
+                  <span className="text-2xl sm:text-3xl font-heading font-bold text-[#D4A853]">
                     {formatEuros(amountCents)}
                   </span>
-                  <span className="block text-[10px] text-emerald uppercase tracking-wider">
+                  <span className="block text-[10px] text-[#10B981] uppercase tracking-wider">
                     TTC • Aucuns frais cachés
                   </span>
                 </div>
@@ -590,75 +625,82 @@ function PaiementContent() {
             </div>
 
             {/* Encart Charte Éthique 0% Riba */}
-            <div className="bg-midnight-light/60 border border-border rounded-sm p-5 flex items-start gap-4">
-              <div className="w-9 h-9 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shrink-0 text-sm font-bold">
+            <div className="bg-[#0D1B2A]/80 border border-white/10 rounded-sm p-4 sm:p-5 flex items-start gap-3.5">
+              <div className="w-8 h-8 rounded-full bg-[#D4A853]/10 border border-[#D4A853]/30 flex items-center justify-center text-[#D4A853] shrink-0 text-sm font-bold">
                 ⚖
               </div>
-              <div className="space-y-1">
-                <h4 className="text-xs font-semibold uppercase tracking-wider text-cream">
+              <div className="space-y-1 min-w-0">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-[#F0EDE8]">
                   Engagement Éthique — 0% Riba
                 </h4>
-                <p className="text-[11px] text-cream-muted leading-relaxed">
+                <p className="text-[11px] text-[#A0AEC0] leading-relaxed">
                   Toutes nos facilités de paiement en 2, 3 ou 6 fois sont proposées{" "}
-                  <strong className="text-cream">strictement sans aucun frais de dossier ni intérêt</strong>,
-                  en conformité totale avec nos principes d&apos;éthique spirituelle.
+                  <strong className="text-[#F0EDE8]">
+                    strictement sans aucun frais de dossier ni intérêt
+                  </strong>
+                  , en conformité totale avec nos principes d&apos;éthique spirituelle.
                 </p>
               </div>
             </div>
           </div>
 
           {/* COLONNE DROITE : FORMULAIRE DE SOUSCRIPTION & PAIEMENT INTÉGRÉ */}
-          <div className="lg:col-span-7">
-            <div className="bg-midnight-light/95 border border-gold/30 rounded-sm p-7 md:p-10 shadow-2xl relative">
-              <div className="absolute top-0 left-10 w-24 h-px bg-gold" />
-              <div className="absolute bottom-0 right-10 w-24 h-px bg-gold" />
+          <div className="lg:col-span-7 w-full min-w-0">
+            <div className="bg-[#0D1B2A] border border-[#D4A853]/30 rounded-sm p-4 sm:p-8 md:p-10 shadow-2xl relative w-full min-w-0 overflow-hidden">
+              <div className="absolute top-0 left-6 sm:left-10 w-20 sm:w-24 h-px bg-[#D4A853]" />
+              <div className="absolute bottom-0 right-6 sm:right-10 w-20 sm:w-24 h-px bg-[#D4A853]" />
 
               {fallbackSuccess ? (
-                <div className="py-12 text-center space-y-6">
-                  <div className="w-16 h-16 rounded-full bg-emerald/15 border border-emerald/40 text-emerald flex items-center justify-center mx-auto text-2xl font-bold">
+                <div className="py-10 text-center space-y-5">
+                  <div className="w-16 h-16 rounded-full bg-[#10B981]/15 border border-[#10B981]/40 text-[#10B981] flex items-center justify-center mx-auto text-2xl font-bold">
                     ✓
                   </div>
-                  <h2 className="font-heading text-3xl text-cream font-light">
+                  <h2 className="font-heading text-2xl sm:text-3xl text-[#F0EDE8] font-light">
                     Dossier d&apos;Acquisition Enregistré
                   </h2>
-                  <p className="text-sm text-cream-muted max-w-md mx-auto leading-relaxed">
-                    Merci <strong className="text-cream">{customer.prenom} {customer.nom}</strong>. Votre demande pour{" "}
-                    <strong className="text-gold">{product.title}</strong> (
-                    {installments > 1 ? `en ${installments}x sans frais` : "règlement comptant"}) a été transmise en priorité à Mounir BYAR.
+                  <p className="text-sm text-[#A0AEC0] max-w-md mx-auto leading-relaxed">
+                    Merci{" "}
+                    <strong className="text-[#F0EDE8]">
+                      {customer.prenom} {customer.nom}
+                    </strong>
+                    . Votre demande pour <strong className="text-[#D4A853]">{product.title}</strong>{" "}
+                    ({installments > 1 ? `en ${installments}x sans frais` : "règlement comptant"}) a
+                    été transmise en priorité à Mounir BYAR.
                   </p>
-                  <p className="text-xs text-cream-muted max-w-md mx-auto">
-                    Un e-mail de confirmation vient d&apos;être envoyé à <strong className="text-cream">{customer.email}</strong>.
+                  <p className="text-xs text-[#A0AEC0] max-w-md mx-auto">
+                    Un e-mail de confirmation vient d&apos;être envoyé à{" "}
+                    <strong className="text-[#F0EDE8]">{customer.email}</strong>.
                   </p>
                   <div className="pt-4">
                     <Link
                       href="/"
-                      className="inline-block px-8 py-3.5 bg-gold text-midnight font-bold text-xs uppercase tracking-widest rounded-sm"
+                      className="inline-block px-8 py-3.5 bg-[#D4A853] text-[#0A1128] font-bold text-xs uppercase tracking-widest rounded-sm"
                     >
                       Retour à l&apos;Accueil
                     </Link>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-8">
+                <div className="space-y-7 w-full min-w-0">
                   {/* ÉTAPE 1 : COORDONNÉES */}
-                  <div className="space-y-5">
-                    <div className="border-b border-border/60 pb-3 flex items-center justify-between">
+                  <div className="space-y-4 w-full min-w-0">
+                    <div className="border-b border-white/10 pb-3 flex items-center justify-between gap-2">
                       <div>
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#D4A853] font-bold">
                           Étape 01
                         </span>
-                        <h2 className="font-heading text-2xl text-cream font-light mt-0.5">
+                        <h2 className="font-heading text-xl sm:text-2xl text-[#F0EDE8] font-light mt-0.5">
                           Vos Coordonnées Personnelles
                         </h2>
                       </div>
-                      <span className="text-[10px] text-cream-muted uppercase tracking-wider">
+                      <span className="text-[10px] text-[#A0AEC0] uppercase tracking-wider shrink-0">
                         Confidentiel
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5 min-w-0">
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-[#A0AEC0]">
                           Prénom *
                         </label>
                         <input
@@ -667,12 +709,12 @@ function PaiementContent() {
                           value={customer.prenom}
                           onChange={(e) => setCustomer({ ...customer, prenom: e.target.value })}
                           placeholder="Votre prénom"
-                          className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                          className="w-full px-3.5 py-3 bg-[#0A1128] text-[#F0EDE8] border border-white/15 focus:border-[#D4A853] outline-none text-xs rounded-sm transition-colors"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">
+                      <div className="flex flex-col gap-1.5 min-w-0">
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-[#A0AEC0]">
                           Nom *
                         </label>
                         <input
@@ -681,15 +723,15 @@ function PaiementContent() {
                           value={customer.nom}
                           onChange={(e) => setCustomer({ ...customer, nom: e.target.value })}
                           placeholder="Votre nom"
-                          className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                          className="w-full px-3.5 py-3 bg-[#0A1128] text-[#F0EDE8] border border-white/15 focus:border-[#D4A853] outline-none text-xs rounded-sm transition-colors"
                         />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">
-                          Adresse E-mail (pour votre reçu & accès) *
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5 min-w-0">
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-[#A0AEC0]">
+                          Adresse E-mail (reçu & accès) *
                         </label>
                         <input
                           required
@@ -697,12 +739,12 @@ function PaiementContent() {
                           value={customer.email}
                           onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
                           placeholder="exemple@domaine.fr"
-                          className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                          className="w-full px-3.5 py-3 bg-[#0A1128] text-[#F0EDE8] border border-white/15 focus:border-[#D4A853] outline-none text-xs rounded-sm transition-colors"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">
+                      <div className="flex flex-col gap-1.5 min-w-0">
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-[#A0AEC0]">
                           Téléphone (WhatsApp / Mobile) *
                         </label>
                         <input
@@ -711,26 +753,26 @@ function PaiementContent() {
                           value={customer.telephone}
                           onChange={(e) => setCustomer({ ...customer, telephone: e.target.value })}
                           placeholder="06 12 34 56 78"
-                          className="px-4 py-3 bg-midnight text-cream border border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                          className="w-full px-3.5 py-3 bg-[#0A1128] text-[#F0EDE8] border border-white/15 focus:border-[#D4A853] outline-none text-xs rounded-sm transition-colors"
                         />
                       </div>
                     </div>
 
                     {product.category === "coaching" && (
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">
+                        <label className="text-[11px] font-semibold uppercase tracking-wider text-[#A0AEC0]">
                           Profil d&apos;Accompagnement
                         </label>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {["Homme", "Femme", "Couple / Famille", "Groupe"].map((p) => (
                             <button
                               key={p}
                               type="button"
                               onClick={() => setCustomer({ ...customer, profil: p })}
-                              className={`py-2.5 px-3 text-xs rounded-sm border transition-all cursor-pointer ${
+                              className={`py-2.5 px-2 text-[11px] sm:text-xs rounded-sm border transition-all cursor-pointer truncate ${
                                 customer.profil === p
-                                  ? "bg-gold/15 border-gold text-gold font-semibold"
-                                  : "bg-midnight border-border text-cream-muted hover:border-gold/40"
+                                  ? "bg-[#D4A853]/15 border-[#D4A853] text-[#D4A853] font-semibold"
+                                  : "bg-[#0A1128] border-white/15 text-[#A0AEC0] hover:border-[#D4A853]/40"
                               }`}
                             >
                               {p}
@@ -741,43 +783,43 @@ function PaiementContent() {
                     )}
 
                     {customerError && (
-                      <div className="p-3.5 bg-red-500/10 border border-red-500/30 rounded-sm text-xs text-red-300">
+                      <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-sm text-xs text-red-300">
                         {customerError}
                       </div>
                     )}
                   </div>
 
                   {/* ÉTAPE 2 : PAIEMENT INTÉGRÉ SUR LE SITE */}
-                  <div className="space-y-5">
-                    <div className="border-b border-border/60 pb-3 flex items-center justify-between">
+                  <div className="space-y-4 w-full min-w-0">
+                    <div className="border-b border-white/10 pb-3 flex flex-wrap items-center justify-between gap-2">
                       <div>
-                        <span className="text-[10px] uppercase tracking-[0.2em] text-gold font-bold">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-[#D4A853] font-bold">
                           Étape 02
                         </span>
-                        <h2 className="font-heading text-2xl text-cream font-light mt-0.5">
+                        <h2 className="font-heading text-xl sm:text-2xl text-[#F0EDE8] font-light mt-0.5">
                           Validation du Règlement
                         </h2>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-cream-muted">
-                        <span className="px-2 py-0.5 bg-midnight border border-border rounded text-[10px]">
+                      <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-[#A0AEC0]">
+                        <span className="px-2 py-0.5 bg-[#0A1128] border border-white/15 rounded">
                           CB
                         </span>
-                        <span className="px-2 py-0.5 bg-midnight border border-border rounded text-[10px]">
+                        <span className="px-2 py-0.5 bg-[#0A1128] border border-white/15 rounded">
                           Visa
                         </span>
-                        <span className="px-2 py-0.5 bg-midnight border border-border rounded text-[10px]">
+                        <span className="px-2 py-0.5 bg-[#0A1128] border border-white/15 rounded">
                           Mastercard
                         </span>
-                        <span className="px-2 py-0.5 bg-midnight border border-border rounded text-[10px]">
+                        <span className="px-2 py-0.5 bg-[#0A1128] border border-white/15 rounded">
                           Apple Pay
                         </span>
                       </div>
                     </div>
 
                     {loadingIntent ? (
-                      <div className="py-12 text-center space-y-3 bg-midnight/60 border border-border rounded-sm">
-                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold mx-auto" />
-                        <p className="text-xs text-cream-muted">
+                      <div className="py-10 text-center space-y-3 bg-[#0A1128] border border-white/10 rounded-sm">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#D4A853] mx-auto" />
+                        <p className="text-xs text-[#A0AEC0]">
                           Initialisation du terminal bancaire sécurisé BLF...
                         </p>
                       </div>
@@ -793,28 +835,27 @@ function PaiementContent() {
                         />
                       </Elements>
                     ) : (
-                      /* Si les clés API Stripe Live ne sont pas encore injectées sur Vercel ou si c'est un livre avec lien direct */
-                      <form onSubmit={handleFallbackOrder} className="space-y-5">
-                        <div className="bg-midnight/90 border border-gold/25 rounded-sm p-5 space-y-4">
-                          <div className="flex items-center justify-between pb-3 border-b border-border/60">
-                            <span className="text-[11px] uppercase tracking-widest text-gold font-semibold flex items-center gap-2">
-                              <FiCreditCard className="text-gold text-sm" />
-                              Récapitulatif de Validation Directe
+                      <form onSubmit={handleFallbackOrder} className="space-y-4">
+                        <div className="bg-[#0A1128] border border-[#D4A853]/25 rounded-sm p-4 space-y-3">
+                          <div className="flex items-center justify-between pb-2.5 border-b border-white/10">
+                            <span className="text-[11px] uppercase tracking-widest text-[#D4A853] font-semibold flex items-center gap-1.5">
+                              <FiCreditCard className="text-[#D4A853] text-sm shrink-0" />
+                              Récapitulatif de Validation
                             </span>
-                            <span className="text-[10px] uppercase tracking-wider text-emerald flex items-center gap-1 font-medium">
-                              <FiLock /> Protocole Sécurisé
+                            <span className="text-[10px] uppercase tracking-wider text-[#10B981] flex items-center gap-1 font-medium">
+                              <FiLock /> Sécurisé
                             </span>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs py-2">
-                            <span className="text-cream-muted">Prestation :</span>
-                            <span className="text-cream font-semibold">{product.title}</span>
+                          <div className="flex items-center justify-between text-xs py-1">
+                            <span className="text-[#A0AEC0]">Prestation :</span>
+                            <span className="text-[#F0EDE8] font-semibold">{product.title}</span>
                           </div>
-                          <div className="flex items-center justify-between text-xs py-2 border-t border-border/40">
-                            <span className="text-cream-muted">Échéancier choisi :</span>
-                            <span className="text-gold font-semibold">
+                          <div className="flex items-center justify-between text-xs py-1 border-t border-white/10 pt-2">
+                            <span className="text-[#A0AEC0]">Échéancier choisi :</span>
+                            <span className="text-[#D4A853] font-semibold">
                               {installments > 1
-                                ? `${installments}x ${formatEuros(amountCents)} sans frais (0% Riba)`
+                                ? `${installments}x ${formatEuros(amountCents)} sans frais`
                                 : `${formatEuros(amountCents)} comptant`}
                             </span>
                           </div>
@@ -823,21 +864,24 @@ function PaiementContent() {
                         <button
                           type="submit"
                           disabled={fallbackSubmitting}
-                          className="w-full py-4 px-6 bg-gold hover:bg-gold-light text-midnight font-bold text-xs uppercase tracking-[0.2em] rounded-sm transition-all duration-300 shadow-[0_0_25px_rgba(212,168,83,0.25)] hover:shadow-[0_0_35px_rgba(212,168,83,0.45)] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-3"
+                          className="w-full py-4 px-4 bg-[#D4A853] hover:bg-[#E8C468] text-[#0A1128] font-bold text-xs uppercase tracking-[0.15em] rounded-sm transition-all duration-300 shadow-[0_0_25px_rgba(212,168,83,0.25)] disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
                         >
-                          <FiLock className="text-sm" />
-                          {fallbackSubmitting
-                            ? "Validation en cours..."
-                            : installments > 1
-                            ? `Valider mon inscription en ${installments}x (${formatEuros(amountCents)}/mois) ➔`
-                            : `Valider mon acquisition (${formatEuros(amountCents)}) ➔`}
+                          <FiLock className="text-sm shrink-0" />
+                          <span>
+                            {fallbackSubmitting
+                              ? "Validation en cours..."
+                              : installments > 1
+                              ? `Valider en ${installments}x (${formatEuros(amountCents)}/mois) ➔`
+                              : `Valider mon acquisition (${formatEuros(amountCents)}) ➔`}
+                          </span>
                         </button>
                       </form>
                     )}
 
-                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] text-cream-muted/70">
-                      <span className="flex items-center gap-1.5">
-                        <FiLock className="text-gold" /> Aucune donnée bancaire n&apos;est stockée sur nos serveurs.
+                    <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-1.5 text-[10px] text-[#A0AEC0]/70 text-center sm:text-left">
+                      <span className="flex items-center justify-center gap-1.5">
+                        <FiLock className="text-[#D4A853] shrink-0" /> Aucune donnée bancaire
+                        n&apos;est stockée sur nos serveurs.
                       </span>
                       <span>Cabinet Briser les Frontières — Mounir BYAR</span>
                     </div>
@@ -856,8 +900,8 @@ export default function PaiementPage() {
   return (
     <Suspense
       fallback={
-        <div className="pt-40 pb-32 bg-midnight min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gold" />
+        <div className="pt-40 pb-32 bg-[#0A1128] min-h-screen flex items-center justify-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#D4A853]" />
         </div>
       }
     >
