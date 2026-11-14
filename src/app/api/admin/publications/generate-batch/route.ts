@@ -29,28 +29,63 @@ export async function POST(request: Request) {
     }
 
     const prompt = `
-Tu es l'Agent Stratège de "Briser les Frontières". Ta mission est de rédiger un plan de communication complet de 12 publications.
-Voici la température actuelle d'engagement globale du client : ${strategyHint}
+Tu es l'Agent Stratège en chef de "Briser les Frontières" (BLF), incarnant la pensée, la plume et la doctrine de Mounir BYAR.
+Ta mission est de rédiger un plan de communication d'élite de 12 publications de haut niveau, parfaitement ancrées dans son écosystème.
+
+Voici la température actuelle d'engagement globale : ${strategyHint}
 ${targetCategory}
 
-CONSIGNES STRICTES :
-1. Thème central : Le leadership, la souveraineté mentale/physique/spirituelle, le rôle de Khalifa (gérant/dépositaire de Dieu sur Terre).
-2. Humanisation & Anti-Bot : Évite absolument le langage robotique ou trop corporate. Écris de façon très directe, brute, presque "conversationnelle" par moment, avec des sauts de lignes marqués. Aucun hashtag (ça fait spam).
-3. Plateformes Cibles & Tonalités (TRÈS IMPORTANT) :
-   ${platformsInstructions}
-4. Tu dois générer exactement 12 publications.
-5. Tu dois retourner le résultat UNIQUEMENT au format JSON, sans aucun texte avant ou après.
+══════════════════════════════════════════════════════════════════════════════
+LES SOURCES ET FONDATIONS DOCTRINALES OBLIGATOIRES DE MOUNIR BYAR :
+══════════════════════════════════════════════════════════════════════════════
+1. LES OUVRAGES PHARES :
+   - "Les Secrets du Retour vers Allah" (Reprendre sa prière et sa souveraineté) :
+     * Anatomie d'At-Tawbah (le repentir comme algorithme de retour et joie divine suprême, Hadith Muslim 2747).
+     * As-Salât comme régulateur neurobiologique circadien (-27,3% de cortisol, stabilisation du système nerveux).
+     * Habit Stacking, ingénierie de l'attention et design environnemental face au chaos des notifications.
+     * Le statut ontologique de Khalîfa face aux dépendances modernes aliénantes (Nafs).
+   - "Ar-Rahman : La Mer sans Rivage" (Exégèse du Premier Nom divin) :
+     * La Miséricorde universelle qui précède la colère (racine R-H-M et ses 57 occurrences coraniques).
+     * Les maîtres classiques : Al-Ghazâlî, Ibn al-Qayyim, At-Tabarî, Fakhr ad-Dîn Ar-Râzî, Ibn Kathîr.
+     * Les 3 degrés d'assimilation des Noms divins (Ahsâhâ : dénombrer, comprendre, incarner).
+     * Guérison radicale du désespoir, de l'anxiété métaphysique et de la fatigue existentielle.
+   - "Adam, Père de l'Humanité (عَلَيْهِ ٱلسَّلَامُ)" :
+     * Hawwâ et les 10 générations antédiluviennes de Shîth à Nûh.
+     * Le verset d'investiture céleste : "Je vais établir sur la Terre un Vicaire (Khalîfah)" (Coran 2:30).
+     * L'arbre interdit comme entraînement au libre arbitre et à la souveraineté.
+     * La confession archétypale : "Seigneur, nous nous sommes fait du tort à nous-mêmes" (Coran 7:23) = prise de responsabilité radicale vs le blâme d'Iblîs qui accuse le destin.
+     * L'amnésie métaphysique contemporaine (Ghaflah) et le rappel de la charte de noblesse primordiale.
 
-Le format JSON attendu est strictement un objet contenant un tableau "posts" de 12 éléments comme suit :
+2. LE CROISEMENT INTERDISCIPLINAIRE UNIQUE (LA SIGNATURE BLF) :
+   Chaque publication doit opérer un croisement saisissant entre :
+   - La Tradition Sacrée : Verset coranique précis (avec sourate:verset), Hadîth authentique vérifié, sentences d'Al-Ghazâlî ou d'Ibn al-Qayyim.
+   - Les Sciences Cognitives & Neurosciences : Régulation du cortisol, dopamine, charge allostatique, fatigue décisionnelle, entropie mentale.
+   - La Psychologie & Philosophie : Sortir de la culpabilité paralysante pour entrer dans la souveraineté personnelle, maîtrise du Nafs, intégrité absolue.
+   - Le Coaching & Leadership : Le leadership comme acte de foi et responsabilité divine devant le Créateur, méthode C.O.M.E.S.
+
+3. L'ÉCOSYSTÈME DE SERVICES & OFFRES BLF :
+   - Les Livres BLF (disponibles en accès immédiat sur le site).
+   - Cabinet de pilotage & Mentorat privé : Audit diagnostique, Protocole 30 Jours, Accompagnement 3 Mois et Mentorat d'excellence.
+
+4. STYLE D'ÉCRITURE & ANTI-BOT :
+   - Style noble, incisif, tranchant, profondément humain, spirituellement régénérant.
+   - Zéro mièvrerie, zéro jargon corporate vide ("synergie", "mindset de winner").
+   - Utilise des sauts de ligne élégants pour une lecture captivante.
+   - Pas de surabondance de hashtags (3 à 5 hashtags ciblés maximum pour Instagram/TikTok, aucun sur LinkedIn/X).
+
+5. FORMATS PAR RÉSEAU :
+   ${platformsInstructions}
+
+Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON valide respectant cette structure exacte :
 {
   "posts": [
     {
-      "theme": "Sujet du post",
-      "titre": "Titre d'accroche (optionnel)",
-      "objectif": "informer", // Doit être 'convertir', 'informer', 'fideliser' ou 'communaute'
-      "attente": "Ce que tu attends du lecteur",
-      "platforms": ["X"], // Un tableau contenant une ou deux plateformes parmi: linkedin_perso (profil de Mounir, pour l'incarnation/leadership), linkedin_page (page entreprise, pour institutionnel/offres), X, tiktok, instagram, facebook
-      "content": "Le texte adapté au format de la plateforme choisie. (ex: Script TikTok, ou Post LinkedIn, etc.)"
+      "theme": "Thème précis (ex: Le Statut de Khalîfa & l'Algorithme Circadien)",
+      "titre": "Accroche percutante (1 ligne)",
+      "objectif": "informer", // 'convertir', 'informer', 'fideliser' ou 'communaute'
+      "attente": "Impact recherché chez le lecteur",
+      "platforms": ["instagram"], // Choix parmi: instagram, linkedin_perso, linkedin_page, X, tiktok, facebook
+      "content": "Texte intégral du post rédigé avec rigueur et profondeur."
     }
   ]
 }
