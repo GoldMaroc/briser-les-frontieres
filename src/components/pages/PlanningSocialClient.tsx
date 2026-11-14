@@ -255,10 +255,8 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
       const data = await res.json();
       
       if (data.success) {
-        alert(data.message || "Publication expédiée avec succès !");
-        if (selectedPub && selectedPub.id === id) {
-          setSelectedPub({ ...selectedPub, status: "published" });
-        }
+        alert("🎉 " + (data.message || "Publication expédiée avec succès sur Instagram !"));
+        setSelectedPub(null);
         fetchPublications();
       } else {
         alert("Erreur: " + data.error);
