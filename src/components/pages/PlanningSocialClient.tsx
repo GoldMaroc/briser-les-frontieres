@@ -338,23 +338,13 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
     setEditContent(pub.content);
     setIsEditing(false);
 
-    // Résolution intelligente du visuel Instagram par défaut
+    // Résolution 100% automatique du visuel dédié au sujet précis
     const pubImg = (pub as any).image_url;
     if (pubImg && typeof pubImg === "string" && pubImg.startsWith("http")) {
       setSelectedImage(pubImg);
     } else {
-      const text = ((pub.theme || "") + " " + (pub.content || "")).toLowerCase();
-      if (text.includes("adam") || text.includes("khalif") || text.includes("vicaire") || text.includes("créat")) {
-        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg");
-      } else if (text.includes("rahman") || text.includes("miséricorde") || text.includes("anxiété") || text.includes("ghazali")) {
-        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg");
-      } else if (text.includes("prièr") || text.includes("salât") || text.includes("retour") || text.includes("tawbah") || text.includes("spirituel") || text.includes("cortisol")) {
-        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg");
-      } else if (text.includes("mentorat") || text.includes("cabinet") || text.includes("direction") || text.includes("leadership")) {
-        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg");
-      } else {
-        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_default.jpg");
-      }
+      const dynamicUrl = `https://www.briserlesfrontieres.fr/api/og/instagram?id=${encodeURIComponent(pub.id)}&title=${encodeURIComponent(pub.titre || pub.theme || "La Souveraineté")}&theme=${encodeURIComponent(pub.theme || "Ingénierie de la Souveraineté")}`;
+      setSelectedImage(dynamicUrl);
     }
   };
 
@@ -836,6 +826,9 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
                           onChange={(e) => setSelectedImage(e.target.value)}
                           className="w-full bg-midnight border border-border focus:border-gold p-2 text-xs text-cream rounded outline-none"
                         >
+                          <option value={selectedImage.startsWith("http") && selectedImage.includes("/api/og/instagram") ? selectedImage : `https://www.briserlesfrontieres.fr/api/og/instagram?id=${selectedPub.id}&title=${encodeURIComponent(selectedPub.titre || "La Souveraineté")}&theme=${encodeURIComponent(selectedPub.theme || "Éveil Spirituel")}`}>
+                            ✨ Visuel Dynamique Automatique (Titre & Thème de ce post)
+                          </option>
                           <option value="https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg">📖 Couverture : Adam, Père de l'Humanité</option>
                           <option value="https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg">📖 Couverture : Les Secrets du Retour vers Allah</option>
                           <option value="https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg">📖 Couverture : Ar-Rahman : La Mer sans Rivage</option>
