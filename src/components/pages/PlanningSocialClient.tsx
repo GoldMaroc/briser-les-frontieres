@@ -39,6 +39,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
   const [selectedPub, setSelectedPub] = useState<Publication | null>(null);
   const [editContent, setEditContent] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
   // Drag and drop state
   const [draggedPubId, setDraggedPubId] = useState<string | null>(null);
@@ -242,14 +243,14 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
     }
   };
 
-  const publishNow = async (id: string, content: string, platforms: string[]) => {
+  const publishNow = async (id: string, content: string, platforms: string[], customImg?: string) => {
     if (!confirm("Voulez-vous forcer la publication immédiate sur les réseaux (sans attendre la date planifiée) ?")) return;
     
     try {
       const res = await fetch("/api/admin/social/publish", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id, content, platforms })
+        body: JSON.stringify({ id, content, platforms, imageUrl: customImg || selectedImage })
       });
       const data = await res.json();
       
@@ -336,6 +337,25 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
     setSelectedPub(pub);
     setEditContent(pub.content);
     setIsEditing(false);
+
+    // Résolution intelligente du visuel Instagram par défaut
+    const pubImg = (pub as any).image_url;
+    if (pubImg && typeof pubImg === "string" && pubImg.startsWith("http")) {
+      setSelectedImage(pubImg);
+    } else {
+      const text = ((pub.theme || "") + " " + (pub.content || "")).toLowerCase();
+      if (text.includes("adam") || text.includes("khalif") || text.includes("vicaire") || text.includes("créat")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg");
+      } else if (text.includes("rahman") || text.includes("miséricorde") || text.includes("anxiété") || text.includes("ghazali")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg");
+      } else if (text.includes("prièr") || text.includes("salât") || text.includes("retour") || text.includes("tawbah") || text.includes("spirituel") || text.includes("cortisol")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg");
+      } else if (text.includes("mentorat") || text.includes("cabinet") || text.includes("direction") || text.includes("leadership")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg");
+      } else {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_default.jpg");
+      }
+    }
   };
 
   const getPlatformColors = (platforms: string[]) => {
@@ -788,6 +808,51 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
                     {selectedPub.content}
                   </div>
                 )}
+                {/* Visuel Réseaux Sociaux & Instagram */}
+                {(selectedPub.platforms.includes("instagram") || selectedPub.platforms.includes("planning_instagram")) && (
+                  <div className="bg-surface/40 p-4 rounded border border-gold/30 space-y-3 mt-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs text-gold uppercase tracking-wider font-bold flex items-center gap-2">
+                        📸 Visuel Instagram (Format 1080x1080 Conforme Meta)
+                      </h4>
+                      <span className="text-[10px] text-emerald font-semibold bg-emerald/10 border border-emerald/20 px-2 py-0.5 rounded">
+                        JPEG 1:1 Prêt
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 items-center">
+                      {selectedImage && (
+                        <div className="w-24 h-24 shrink-0 rounded border border-gold/40 overflow-hidden bg-black shadow-md">
+                          <img 
+                            src={selectedImage} 
+                            alt="Visuel Instagram" 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <div className="flex-1 space-y-2 w-full">
+                        <select
+                          value={selectedImage}
+                          onChange={(e) => setSelectedImage(e.target.value)}
+                          className="w-full bg-midnight border border-border focus:border-gold p-2 text-xs text-cream rounded outline-none"
+                        >
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg">📖 Couverture : Adam, Père de l'Humanité</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg">📖 Couverture : Les Secrets du Retour vers Allah</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg">📖 Couverture : Ar-Rahman : La Mer sans Rivage</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_default.jpg">📚 Mockup 3D Prestige (Secrets)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg">🌌 Visuel d'Autorité BLF (Hero)</option>
+                        </select>
+                        <input 
+                          type="url"
+                          placeholder="Ou collez une URL d'image personnalisée (.jpg)"
+                          value={selectedImage}
+                          onChange={(e) => setSelectedImage(e.target.value)}
+                          className="w-full bg-midnight border border-border/60 focus:border-gold p-1.5 text-[11px] text-cream-muted rounded outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -809,7 +874,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
                   )}
                   
                   {selectedPub.status !== "published" && (
-                    <Button onClick={() => publishNow(selectedPub.id, selectedPub.content, selectedPub.platforms)} variant="ghost" className="text-sm border-[#0A66C2]/50 text-[#0A66C2] hover:bg-[#0A66C2]/10 font-bold">🚀 Publier Maintenant</Button>
+                    <Button onClick={() => publishNow(selectedPub.id, selectedPub.content, selectedPub.platforms, selectedImage)} variant="ghost" className="text-sm border-[#0A66C2]/50 text-[#0A66C2] hover:bg-[#0A66C2]/10 font-bold">🚀 Publier Maintenant</Button>
                   )}
                   
                   <Button onClick={() => {

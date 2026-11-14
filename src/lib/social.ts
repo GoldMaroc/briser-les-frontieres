@@ -96,21 +96,40 @@ export async function publishToFacebook(content: string) {
   }
 }
 
+export function resolveInstagramImage(caption?: string, theme?: string, providedUrl?: string): string {
+  if (providedUrl && typeof providedUrl === "string" && providedUrl.trim().startsWith("http")) {
+    return providedUrl.trim();
+  }
+  const text = ((theme || "") + " " + (caption || "")).toLowerCase();
+  if (text.includes("adam") || text.includes("khalif") || text.includes("vicaire") || text.includes("créat")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg";
+  }
+  if (text.includes("rahman") || text.includes("miséricorde") || text.includes("anxiété") || text.includes("ghazali")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg";
+  }
+  if (text.includes("prièr") || text.includes("salât") || text.includes("retour") || text.includes("tawbah") || text.includes("secret") || text.includes("cortisol") || text.includes("spirituel")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg";
+  }
+  if (text.includes("mentorat") || text.includes("cabinet") || text.includes("direction") || text.includes("leadership")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg";
+  }
+  return "https://www.briserlesfrontieres.fr/images/instagram/post_default.jpg";
+}
+
 export async function publishToInstagram(caption: string, imageUrl?: string, mediaType: "IMAGE" | "REELS" = "IMAGE") {
   try {
     const tokens = await getSocialTokens();
     const accessToken = tokens.instagram_access_token || process.env.INSTAGRAM_ACCESS_TOKEN || "EAAUcJghfb14BS8nAJKjip1NHcoGAuhvUpr97dbSPSQJlgYbNw4NCY6Lax2YvCxgKRSu2PglJ6C7ixasF14iB4CBOqjpOVjZC8tykwqUgSDoDZCB3T62wSgnPmei6ZBSz3AA785rjnt5iz6QZCZAQxT7mw4w1uLfXX0OoisvTq6eaXziRTRZCysWfJ4ZAAzZBgPUoZAJLIFF6brSMqkSWZBTDcpLVNybvJeeA9mzmCMA5tvxVcGWUJQjwZDZD";
     const accountId = tokens.instagram_account_id || process.env.INSTAGRAM_ACCOUNT_ID || "17841430181270196";
 
-    if (!imageUrl) {
-      return { success: false, error: "Instagram exige impérativement une image ou une vidéo pour publier." };
-    }
+    // Résolution automatique d'une image JPEG conforme Meta Graph API (1080x1080)
+    const finalImageUrl = resolveInstagramImage(caption, "", imageUrl);
 
     // 1. Créer le conteneur média
     const params = new URLSearchParams({
       access_token: accessToken,
       caption: caption,
-      ...(mediaType === "REELS" ? { media_type: "REELS", video_url: imageUrl } : { image_url: imageUrl })
+      ...(mediaType === "REELS" ? { media_type: "REELS", video_url: finalImageUrl } : { image_url: finalImageUrl })
     });
 
     const createRes = await fetch(`https://graph.facebook.com/v21.0/${accountId}/media`, {
