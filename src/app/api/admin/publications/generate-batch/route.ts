@@ -55,37 +55,53 @@ Le format JSON attendu est strictement un objet contenant un tableau "posts" de 
 }
 `;
 
-    const apiKey = process.env.MISTRAL_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: "MISTRAL_API_KEY non configurée." }, { status: 500 });
+      return NextResponse.json(
+        { error: "GEMINI_API_KEY non configurée. Récupérez votre clé gratuite sur https://aistudio.google.com pour activer la génération par IA." }, 
+        { status: 500 }
+      );
     }
 
-    const res = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    // Appel direct au modèle Google Gemini (DeepMind)
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+    const res = await fetch(geminiUrl, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "mistral-large-latest",
-        messages: [{ role: "user", content: prompt }],
-        response_format: { type: "json_object" }
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.7
+        }
       })
     });
 
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error?.message || "Erreur Mistral");
+      console.error("Gemini API Error:", data);
+      throw new Error(data.error?.message || "Erreur de génération Gemini");
     }
 
-    const rawJson = data.choices[0].message.content;
+    const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawJson) {
+      throw new Error("Réponse vide du modèle Gemini");
+    }
+
     let posts = [];
     try {
-      // Mistral peut renvoyer un objet contenant un tableau, ou directement le tableau.
       const parsed = JSON.parse(rawJson);
       posts = Array.isArray(parsed) ? parsed : (parsed.posts || parsed.publications || Object.values(parsed)[0]);
     } catch (e) {
-      console.error("Erreur parsing JSON Mistral", rawJson);
+      console.error("Erreur parsing JSON Gemini", rawJson);
       return NextResponse.json({ error: "L'IA a généré un format invalide." }, { status: 500 });
     }
 

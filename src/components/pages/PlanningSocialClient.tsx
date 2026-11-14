@@ -477,7 +477,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
               L'IA analyse, planifie et publie. Sélectionnez une catégorie pour orienter la génération.
             </p>
           </div>
-          <span className="text-[10px] text-cream-muted italic shrink-0">Analyse &amp; Génération par Mistral-Large</span>
+          <span className="text-[10px] text-cream-muted italic shrink-0">Analyse &amp; Génération par Google Gemini (DeepMind)</span>
         </div>
 
         {/* Metrics row */}
