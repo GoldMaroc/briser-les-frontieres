@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
-import { getGeminiApiKey } from "@/lib/db";
+import { getGeminiApiKey, setGeminiApiKey } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
-    const { metrics, platforms, category, temperatures } = await request.json();
+    const { metrics, platforms, category, temperatures, customApiKey } = await request.json();
+
+    if (customApiKey && typeof customApiKey === "string" && customApiKey.trim().length > 10) {
+      await setGeminiApiKey(customApiKey.trim());
+    }
     
     // Si la tendance d'engagement (data réelle) baisse...
     // Si elle est haute, on "informe" et "fidelise"
@@ -92,10 +96,10 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
 `;
 
     const dbKey = await getGeminiApiKey();
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || (typeof dbKey === "string" ? dbKey : null);
+    const apiKey = (customApiKey && typeof customApiKey === "string" ? customApiKey.trim() : null) || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || (typeof dbKey === "string" ? dbKey : null);
     if (!apiKey) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY non configurée. Veuillez ajouter votre clé Gemini dans Vercel ou la configuration admin." },
+        { error: "GEMINI_API_KEY non configurée. Veuillez renseigner votre clé Gemini pour activer l'IA." },
         { status: 500 }
       );
     }

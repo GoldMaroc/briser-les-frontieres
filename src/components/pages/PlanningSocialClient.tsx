@@ -151,13 +151,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
     setPlatformTemperatures(prev => ({ ...prev, [p]: val }));
   };
 
-  const handleGenerateBatch = async () => {
-    if (selectedPlatforms.length === 0) {
-      alert("Veuillez sélectionner au moins un réseau social cible.");
-      return;
-    }
-    if (!confirm("L'IA va analyser vos métriques et générer une douzaine de publications pour le mois à venir. Cela peut prendre 30 secondes. Continuer ?")) return;
-    
+  const executeBatchGeneration = async (overrideKey?: string) => {
     setGeneratingBatch(true);
     try {
       const resAI = await fetch("/api/admin/publications/generate-batch", {
@@ -167,12 +161,23 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
           metrics, 
           platforms: selectedPlatforms, 
           temperatures: platformTemperatures,
-          category: filterCategory !== "Toutes" ? filterCategory : undefined 
+          category: filterCategory !== "Toutes" ? filterCategory : undefined,
+          customApiKey: overrideKey
         })
       });
       const dataAI = await resAI.json();
       
-      if (!resAI.ok) throw new Error(dataAI.error || "Erreur IA");
+      if (!resAI.ok) {
+        if (dataAI.error && dataAI.error.includes("GEMINI_API_KEY")) {
+          const userKey = prompt(
+            "🔑 Configuration requise : Entrez ou collez votre clé Gemini API pour l'enregistrer dans votre base de données :"
+          );
+          if (userKey && userKey.trim()) {
+            return executeBatchGeneration(userKey.trim());
+          }
+        }
+        throw new Error(dataAI.error || "Erreur IA");
+      }
 
       const generatedPosts = dataAI.posts;
       
@@ -203,12 +208,22 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
       }
 
       fetchPublications();
-      alert("La stratégie a été générée avec succès ! L'agenda est rempli.");
+      alert("La stratégie a été générée avec succès par Google Gemini ! L'agenda est rempli.");
     } catch (e: any) {
       alert("Erreur: " + e.message);
     } finally {
       setGeneratingBatch(false);
     }
+  };
+
+  const handleGenerateBatch = async () => {
+    if (selectedPlatforms.length === 0) {
+      alert("Veuillez sélectionner au moins un réseau social cible.");
+      return;
+    }
+    if (!confirm("L'IA va analyser vos métriques et générer une douzaine de publications pour le mois à venir. Cela peut prendre 30 secondes. Continuer ?")) return;
+    
+    await executeBatchGeneration();
   };
 
   const updateStatus = async (id: string, status: PubStatus) => {
@@ -477,7 +492,32 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
               L'IA analyse, planifie et publie. Sélectionnez une catégorie pour orienter la génération.
             </p>
           </div>
-          <span className="text-[10px] text-cream-muted italic shrink-0">Analyse &amp; Génération par Google Gemini (DeepMind)</span>
+          <div className="flex items-center gap-2.5 shrink-0">
+            <span className="text-[10px] text-cream-muted italic">Analyse &amp; Génération par Google Gemini (DeepMind)</span>
+            <button
+              type="button"
+              onClick={async () => {
+                const current = prompt("🔑 Entrez votre clé Gemini API pour l'enregistrer dans votre base de données :");
+                if (current && current.trim()) {
+                  const res = await fetch("/api/admin/config", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ key: current.trim() })
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    alert("✅ Clé Gemini API enregistrée avec succès dans votre base de données !");
+                  } else {
+                    alert("Erreur: " + data.error);
+                  }
+                }
+              }}
+              className="text-[10px] uppercase tracking-wider px-2 py-0.5 border border-gold/40 text-gold hover:bg-gold/10 rounded cursor-pointer transition-all"
+              title="Configurer la clé Gemini"
+            >
+              ⚙️ Clé API
+            </button>
+          </div>
         </div>
 
         {/* Metrics row */}
