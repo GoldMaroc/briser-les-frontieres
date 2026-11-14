@@ -104,37 +104,62 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
       );
     }
 
-    // Modèle Google Gemini officiel (DeepMind)
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
+    // Modèles Google Gemini officiels avec basculement automatique en cas de forte affluence (503 / high demand)
+    const candidateModels = [
+      "gemini-3.5-flash",
+      "gemini-3.5-flash-lite",
+      "gemini-3.1-flash-lite",
+      "gemini-3-flash-preview"
+    ];
 
-    const res = await fetch(geminiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [{ text: prompt }]
+    let rawJson: string | null = null;
+    let lastError: any = null;
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      for (const model of candidateModels) {
+        try {
+          const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const res = await fetch(geminiUrl, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: prompt }]
+                }
+              ],
+              generationConfig: {
+                responseMimeType: "application/json",
+                temperature: 0.7
+              }
+            })
+          });
+
+          const data = await res.json();
+          if (res.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            rawJson = data.candidates[0].content.parts[0].text;
+            break;
           }
-        ],
-        generationConfig: {
-          responseMimeType: "application/json",
-          temperature: 0.7
-        }
-      })
-    });
 
-    const data = await res.json();
-    if (!res.ok) {
-      console.error("Gemini API Error:", data);
-      throw new Error(data.error?.message || "Erreur de génération Gemini");
+          console.warn(`Modèle ${model} non disponible (${res.status}):`, data.error?.message);
+          lastError = data.error?.message || `Erreur modèle ${model}`;
+          // Petit délai avant de basculer
+          await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (err: any) {
+          console.warn(`Exception sur le modèle ${model}:`, err.message);
+          lastError = err.message;
+        }
+      }
+      if (rawJson) break;
+      // Pause avant la 2ème passe si tous les modèles étaient saturés
+      await new Promise(resolve => setTimeout(resolve, 1500));
     }
 
-    const rawJson = data.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!rawJson) {
-      throw new Error("Réponse vide du modèle Gemini");
+      throw new Error(lastError || "Les serveurs Gemini ont une micro-latence temporaire. Veuillez relancer.");
     }
 
     let posts = [];
