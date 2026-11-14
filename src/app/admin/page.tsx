@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import AdminClient from "@/components/pages/AdminClient";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "Console de Qualificiation — Administration",
   description: "Portail administratif réservé au pilotage comportemental in situ et au suivi des cohortes de Briser les Frontières.",
