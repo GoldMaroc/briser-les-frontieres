@@ -239,7 +239,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
       const data = await res.json();
       
       if (data.success) {
-        alert("Publication expédiée sur LinkedIn avec succès !");
+        alert(data.message || "Publication expédiée avec succès !");
         if (selectedPub && selectedPub.id === id) {
           setSelectedPub({ ...selectedPub, status: "published" });
         }

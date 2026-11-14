@@ -96,25 +96,86 @@ export async function publishToFacebook(content: string) {
   }
 }
 
-export async function publishPublication(pubId: string, content: string, platforms: string[]) {
+export async function publishToInstagram(caption: string, imageUrl?: string, mediaType: "IMAGE" | "REELS" = "IMAGE") {
+  try {
+    const tokens = await getSocialTokens();
+    const accessToken = tokens.instagram_access_token || process.env.INSTAGRAM_ACCESS_TOKEN || "EAAUcJghfb14BS8nAJKjip1NHcoGAuhvUpr97dbSPSQJlgYbNw4NCY6Lax2YvCxgKRSu2PglJ6C7ixasF14iB4CBOqjpOVjZC8tykwqUgSDoDZCB3T62wSgnPmei6ZBSz3AA785rjnt5iz6QZCZAQxT7mw4w1uLfXX0OoisvTq6eaXziRTRZCysWfJ4ZAAzZBgPUoZAJLIFF6brSMqkSWZBTDcpLVNybvJeeA9mzmCMA5tvxVcGWUJQjwZDZD";
+    const accountId = tokens.instagram_account_id || process.env.INSTAGRAM_ACCOUNT_ID || "17841430181270196";
+
+    if (!imageUrl) {
+      return { success: false, error: "Instagram exige impérativement une image ou une vidéo pour publier." };
+    }
+
+    // 1. Créer le conteneur média
+    const params = new URLSearchParams({
+      access_token: accessToken,
+      caption: caption,
+      ...(mediaType === "REELS" ? { media_type: "REELS", video_url: imageUrl } : { image_url: imageUrl })
+    });
+
+    const createRes = await fetch(`https://graph.facebook.com/v21.0/${accountId}/media`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: params.toString()
+    });
+
+    const createData = await createRes.json();
+    if (!createRes.ok || !createData.id) {
+      console.error("Instagram Media Creation Error:", createData);
+      return { success: false, error: createData.error?.message || "Erreur création conteneur Instagram" };
+    }
+
+    const creationId = createData.id;
+
+    // 2. Publier le conteneur
+    const publishParams = new URLSearchParams({
+      creation_id: creationId,
+      access_token: accessToken
+    });
+
+    const publishRes = await fetch(`https://graph.facebook.com/v21.0/${accountId}/media_publish`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: publishParams.toString()
+    });
+
+    const publishData = await publishRes.json();
+    if (!publishRes.ok || !publishData.id) {
+      console.error("Instagram Publish Error:", publishData);
+      return { success: false, error: publishData.error?.message || "Erreur publication Instagram" };
+    }
+
+    console.log("Published to Instagram successfully:", publishData);
+    return { success: true, mediaId: publishData.id };
+  } catch (error: any) {
+    console.error("publishToInstagram Error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function publishPublication(pubId: string, content: string, platforms: string[], imageUrl?: string) {
   const results: Record<string, any> = {};
 
-  if (platforms.includes("X")) {
+  if (platforms.includes("X") || platforms.includes("planning_X")) {
     results.X = await publishToX(content);
   }
 
   // Compatibilité ascendante : "linkedin" ou "linkedin_perso" = profil personnel
-  if (platforms.includes("linkedin") || platforms.includes("linkedin_perso")) {
+  if (platforms.includes("linkedin") || platforms.includes("linkedin_perso") || platforms.includes("planning_linkedin_perso")) {
     results.linkedin_perso = await publishToLinkedIn(content, false);
   }
 
   // "linkedin_page" = page entreprise
-  if (platforms.includes("linkedin_page")) {
+  if (platforms.includes("linkedin_page") || platforms.includes("planning_linkedin_page")) {
     results.linkedin_page = await publishToLinkedIn(content, true);
   }
 
-  if (platforms.includes("facebook")) {
+  if (platforms.includes("facebook") || platforms.includes("planning_facebook")) {
     results.facebook = await publishToFacebook(content);
+  }
+
+  if (platforms.includes("instagram") || platforms.includes("planning_instagram")) {
+    results.instagram = await publishToInstagram(content, imageUrl);
   }
 
   return results;
