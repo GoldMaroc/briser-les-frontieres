@@ -490,7 +490,7 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
           ) : (
             <>
               <div className="bg-midnight border border-border p-3 rounded">
-                <div className="text-[10px] text-cream-muted uppercase">Vues (Réelles)</div>
+                <div className="text-[10px] text-cream-muted uppercase">Audience / Abonnés (Réels)</div>
                 <div className="text-xl font-bold text-gold">{loadingMetrics ? "..." : metrics.views}</div>
               </div>
               <div className="bg-midnight border border-border p-3 rounded">
