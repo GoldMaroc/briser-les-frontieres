@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AdminPage() {
   return (
-    <div className="relative p-2 sm:p-4 bg-midnight h-screen w-screen overflow-hidden flex flex-col">
+    <div className="relative p-2 sm:p-4 bg-midnight min-h-screen md:h-screen w-full md:w-screen md:overflow-hidden overflow-y-auto flex flex-col">
       {/* Gradients prestigieux thématiques */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_30%_0%,var(--color-midnight-light)_0%,var(--color-midnight)_70%)] pointer-events-none" />
 

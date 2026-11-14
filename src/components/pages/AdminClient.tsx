@@ -655,11 +655,112 @@ export default function AdminClient() {
         </div>
       )}
 
-      {/* Layout Principal: Sidebar à gauche, Contenu à droite */}
+      {/* Navigation Mobile Rapide : Visible uniquement sur smartphone */}
+      <div className="md:hidden flex flex-col gap-3 bg-surface/50 p-3.5 border border-gold/30 rounded-sm shadow-lg">
+        <div className="flex items-center justify-between">
+          <span className="text-[10px] uppercase tracking-widest text-gold font-bold flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+            Menu Rapide Mobile
+          </span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30 font-semibold">
+            {activeTab === "planning_instagram" ? "📸 Instagram" : 
+             activeTab === "planning_facebook" ? "📘 Facebook" : 
+             activeTab === "planning_linkedin_perso" ? "💼 LinkedIn (Mounir)" :
+             activeTab === "planning_linkedin_page" ? "🏢 LinkedIn (Page)" :
+             activeTab === "planning_X" ? "𝕏 Twitter" :
+             activeTab === "candidatures" ? "📋 Candidatures" :
+             activeTab === "audits" ? "🔍 Audits" :
+             activeTab === "messages" ? "✉️ Messages" :
+             activeTab === "gifts" ? "🎁 Cadeaux" :
+             activeTab === "newsletter" ? "📰 Newsletter" :
+             activeTab === "testimonials" ? "⭐ Avis" : activeTab}
+          </span>
+        </div>
+
+        {/* Sélecteur déroulant complet */}
+        <select
+          value={activeTab}
+          onChange={(e) => {
+            if (e.target.value === "link_tiktok") {
+              window.location.href = "/admin/social/tiktok";
+            } else {
+              setActiveTab(e.target.value as TabType);
+              setSuccessMsg("");
+              setErrorMsg("");
+            }
+          }}
+          className="w-full bg-midnight border border-gold/40 text-cream p-3 rounded-sm text-xs font-semibold focus:outline-none focus:border-gold"
+        >
+          <optgroup label="Usines à Contenu (IA)">
+            <option value="planning_instagram">📸 Agent Instagram (Stratégie & Publications)</option>
+            <option value="planning_facebook">📘 Agent Facebook</option>
+            <option value="planning_linkedin_perso">💼 Agent LinkedIn (Mounir)</option>
+            <option value="planning_linkedin_page">🏢 Agent LinkedIn (Page BLF)</option>
+            <option value="planning_X">𝕏 Agent X (Twitter)</option>
+            <option value="link_tiktok">🎬 TikTok Studio (IA) ↗</option>
+          </optgroup>
+          <optgroup label="Relationnel & Ventes">
+            <option value="candidatures">📋 Candidatures ({data.candidatures.length})</option>
+            <option value="audits">🔍 Audits ({data.audits.length})</option>
+            <option value="messages">✉️ Messages ({data.contacts?.length || 0})</option>
+            <option value="gifts">🎁 Cadeaux ({data.gifts?.length || 0})</option>
+          </optgroup>
+          <optgroup label="Marketing & Réputation">
+            <option value="newsletter">📰 Newsletter ({data.subscribers.length})</option>
+            <option value="testimonials">⭐ Avis Modération ({data.testimonials.length})</option>
+          </optgroup>
+        </select>
+
+        {/* Défilement horizontal des boutons réseaux sociaux */}
+        <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
+          {[
+            { key: "planning_instagram", label: "📸 Instagram", highlight: true },
+            { key: "planning_facebook", label: "📘 Facebook", highlight: true },
+            { key: "planning_linkedin_perso", label: "💼 LinkedIn Mounir" },
+            { key: "planning_linkedin_page", label: "🏢 LinkedIn Page" },
+            { key: "planning_X", label: "𝕏 Twitter" },
+            { key: "link_tiktok", label: "🎬 TikTok Studio ↗", isLink: "/admin/social/tiktok" },
+            { key: "candidatures", label: `Candidatures (${data.candidatures.length})` },
+            { key: "audits", label: `Audits (${data.audits.length})` },
+            { key: "messages", label: `Messages (${data.contacts?.length || 0})` },
+          ].map(tab => {
+            if ("isLink" in tab && tab.isLink) {
+              return (
+                <a
+                  key={tab.key}
+                  href={tab.isLink}
+                  className="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-full border border-gold/40 bg-gold/10 text-gold flex items-center gap-1"
+                >
+                  {tab.label}
+                </a>
+              );
+            }
+            const isSelected = activeTab === tab.key;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => { setActiveTab(tab.key as TabType); setSuccessMsg(""); setErrorMsg(""); }}
+                className={`shrink-0 px-3 py-1.5 text-xs font-semibold rounded-full transition-all border ${
+                  isSelected
+                    ? "bg-gold text-midnight font-bold border-gold shadow-md"
+                    : tab.highlight
+                    ? "bg-gold/10 text-gold border-gold/30 hover:bg-gold/20"
+                    : "bg-surface border-border text-cream-muted hover:text-cream"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Layout Principal: Sidebar à gauche (desktop), Contenu à droite */}
       <div className="flex flex-col md:flex-row gap-6 flex-1 min-h-0">
         
-        {/* SIDEBAR DE NAVIGATION */}
-        <div className="w-full md:w-64 shrink-0 flex flex-col gap-6 bg-surface/30 p-4 border border-border rounded-sm overflow-y-auto custom-scrollbar">
+        {/* SIDEBAR DE NAVIGATION (affichée en colonne sur desktop, ou repliable sur mobile) */}
+        <div className="hidden md:flex w-full md:w-64 shrink-0 flex-col gap-6 bg-surface/30 p-4 border border-border rounded-sm overflow-y-auto custom-scrollbar">
         {[
           {
             title: "Relationnel & Ventes",
