@@ -752,6 +752,29 @@ export async function setSocialTokens(tokens: { linkedin_access_token?: string; 
   }
 }
 
+export async function getGeminiApiKey(): Promise<string | null> {
+  try {
+    const { rows } = await sql`SELECT value FROM admin_config WHERE key = 'geminiApiKey'`;
+    if (!rows.length) return null;
+    const val = rows[0].value;
+    return typeof val === "string" ? val : (val?.key || null);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function setGeminiApiKey(key: string) {
+  try {
+    await sql`
+      INSERT INTO admin_config (key, value) VALUES ('geminiApiKey', ${JSON.stringify(key)})
+      ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value
+    `;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // MÉTHODES DE GESTION DES ACHATS (WEBHOOKS)
 // ─────────────────────────────────────────────────────────────────────────────

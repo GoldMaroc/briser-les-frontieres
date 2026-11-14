@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getGeminiApiKey } from "@/lib/db";
 
 export async function POST(request: Request) {
   try {
@@ -55,16 +56,17 @@ Le format JSON attendu est strictement un objet contenant un tableau "posts" de 
 }
 `;
 
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+    const dbKey = await getGeminiApiKey();
+    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || (typeof dbKey === "string" ? dbKey : null);
     if (!apiKey) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY non configurée. Récupérez votre clé gratuite sur https://aistudio.google.com pour activer la génération par IA." }, 
+        { error: "GEMINI_API_KEY non configurée. Veuillez ajouter votre clé Gemini dans Vercel ou la configuration admin." },
         { status: 500 }
       );
     }
 
-    // Appel direct au modèle Google Gemini (DeepMind)
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // Modèle Google Gemini officiel (DeepMind)
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${apiKey}`;
 
     const res = await fetch(geminiUrl, {
       method: "POST",
