@@ -105,96 +105,110 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
       );
     }
 
-    // 1. Découverte dynamique des modèles Gemini actifs et compatibles avec la clé
-    let candidateModels: string[] = [];
-    try {
-      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" }
-      });
-      if (listRes.ok) {
-        const listData = await listRes.json();
-        if (Array.isArray(listData.models)) {
-          const compatible: string[] = listData.models
-            .filter((m: any) => m.supportedGenerationMethods?.includes("generateContent"))
-            .map((m: any) => m.name.replace(/^models\//, ""));
-
-          // Prioriser les versions les plus récentes et performantes
-          const priority = [
-            "gemini-3.1-pro-preview",
-            "gemini-3-flash-preview",
-            "gemini-2.5-flash",
-            "gemini-2.5-flash-lite",
-            "gemini-2.0-flash",
-            "gemini-1.5-flash"
-          ];
-
-          candidateModels = [
-            ...priority.filter(p => compatible.includes(p)),
-            ...compatible.filter(c => !priority.includes(c))
-          ];
-        }
-      }
-    } catch (discoveryErr) {
-      console.warn("Découverte dynamique des modèles échouée:", discoveryErr);
-    }
-
-    // Modèles par défaut si la découverte dynamique n'a rien renvoyé
-    if (candidateModels.length === 0) {
-      candidateModels = [
-        "gemini-3.1-pro-preview",
-        "gemini-3-flash-preview",
-        "gemini-2.5-flash",
-        "gemini-2.5-flash-lite",
-        "gemini-2.0-flash",
-        "gemini-1.5-flash"
-      ];
-    }
-
     let rawJson: string | null = null;
     let lastError: any = null;
 
-    for (let attempt = 0; attempt < 2; attempt++) {
-      for (const model of candidateModels) {
-        try {
-          const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
-          const res = await fetch(geminiUrl, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              contents: [
-                {
-                  role: "user",
-                  parts: [{ text: prompt }]
-                }
-              ],
-              generationConfig: {
-                responseMimeType: "application/json",
-                temperature: 0.7
-              }
-            })
-          });
+    // 1. Priorité absolue : Interactions API officielle (Google AI Studio standard pour Gemini 3)
+    const interactionModels = ["gemini-3.1-pro-preview", "gemini-3-flash-preview"];
+    for (const model of interactionModels) {
+      try {
+        const interactionRes = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": apiKey
+          },
+          body: JSON.stringify({
+            model: model,
+            input: prompt
+          })
+        });
 
-          const data = await res.json();
-          if (res.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            rawJson = data.candidates[0].content.parts[0].text;
+        if (interactionRes.ok) {
+          const interactionData = await interactionRes.json();
+          let generatedText = "";
+          if (Array.isArray(interactionData.steps)) {
+            for (const step of interactionData.steps) {
+              if (Array.isArray(step.content)) {
+                for (const part of step.content) {
+                  if (part.type === "text" && part.text) {
+                    generatedText += part.text;
+                  }
+                }
+              }
+            }
+          }
+          if (generatedText && generatedText.trim().length > 10) {
+            rawJson = generatedText;
             break;
           }
-
-          console.warn(`Modèle ${model} non disponible (${res.status}):`, data.error?.message);
-          lastError = data.error?.message || `Erreur modèle ${model}`;
-          // Petit délai avant de basculer
-          await new Promise(resolve => setTimeout(resolve, 500));
-        } catch (err: any) {
-          console.warn(`Exception sur le modèle ${model}:`, err.message);
-          lastError = err.message;
+        } else {
+          const errData = await interactionRes.json().catch(() => ({}));
+          console.warn(`Interactions API [${model}] échec (${interactionRes.status}):`, errData.error?.message);
+          lastError = errData.error?.message || `Interactions API ${model}`;
         }
+      } catch (interactionErr: any) {
+        console.warn(`Interactions API exception [${model}]:`, interactionErr.message);
+        lastError = interactionErr.message;
       }
-      if (rawJson) break;
-      // Pause avant la 2ème passe si tous les modèles étaient saturés
-      await new Promise(resolve => setTimeout(resolve, 1500));
+    }
+
+    // 2. Basculement sur generateContent si l'Interactions API n'a pas répondu
+    if (!rawJson) {
+      const isDeprecated = (name: string) => 
+        name.includes("2.5-pro") || 
+        name.includes("1.0") || 
+        name.includes("bison") || 
+        name.includes("embedding");
+
+      const candidateModels = [
+        "gemini-3.5-flash-lite",
+        "gemini-3.8-flash-lite",
+        "gemini-3.5-flash",
+        "gemini-3-flash-preview",
+        "gemini-3.1-pro-preview"
+      ].filter(m => !isDeprecated(m));
+
+      for (let attempt = 0; attempt < 2; attempt++) {
+        for (const model of candidateModels) {
+          try {
+            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+            const res = await fetch(geminiUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                contents: [
+                  {
+                    role: "user",
+                    parts: [{ text: prompt }]
+                  }
+                ],
+                generationConfig: {
+                  responseMimeType: "application/json",
+                  temperature: 0.7
+                }
+              })
+            });
+
+            const data = await res.json();
+            if (res.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+              rawJson = data.candidates[0].content.parts[0].text;
+              break;
+            }
+
+            console.warn(`Modèle ${model} non disponible (${res.status}):`, data.error?.message);
+            lastError = data.error?.message || `Erreur modèle ${model}`;
+            await new Promise(resolve => setTimeout(resolve, 500));
+          } catch (err: any) {
+            console.warn(`Exception sur le modèle ${model}:`, err.message);
+            lastError = err.message;
+          }
+        }
+        if (rawJson) break;
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
     }
 
     if (!rawJson) {
