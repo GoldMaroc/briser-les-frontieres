@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getGeminiApiKey, setGeminiApiKey } from "@/lib/db";
+import { resolveInstagramImage } from "@/lib/social";
 
 export async function POST(request: Request) {
   try {
@@ -106,10 +107,12 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
 
     // Modèles Google Gemini officiels avec basculement automatique en cas de forte affluence (503 / high demand)
     const candidateModels = [
-      "gemini-3.5-flash",
-      "gemini-3.5-flash-lite",
-      "gemini-3.1-flash-lite",
-      "gemini-3-flash-preview"
+      "gemini-2.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-flash",
+      "gemini-2.5-flash-lite",
+      "gemini-1.5-pro",
+      "gemini-2.5-pro"
     ];
 
     let rawJson: string | null = null;
@@ -165,7 +168,13 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
     let posts = [];
     try {
       const parsed = JSON.parse(rawJson);
-      posts = Array.isArray(parsed) ? parsed : (parsed.posts || parsed.publications || Object.values(parsed)[0]);
+      const rawPosts = Array.isArray(parsed) ? parsed : (parsed.posts || parsed.publications || Object.values(parsed)[0]);
+      if (Array.isArray(rawPosts)) {
+        posts = rawPosts.map((p: any) => ({
+          ...p,
+          image_url: resolveInstagramImage(p.content, p.theme, undefined, p.titre)
+        }));
+      }
     } catch (e) {
       console.error("Erreur parsing JSON Gemini", rawJson);
       return NextResponse.json({ error: "L'IA a généré un format invalide." }, { status: 500 });
