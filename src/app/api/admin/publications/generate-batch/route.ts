@@ -105,15 +105,51 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
       );
     }
 
-    // Modèles Google Gemini officiels avec basculement automatique en cas de forte affluence (503 / high demand)
-    const candidateModels = [
-      "gemini-2.5-flash",
-      "gemini-2.0-flash",
-      "gemini-1.5-flash",
-      "gemini-2.5-flash-lite",
-      "gemini-1.5-pro",
-      "gemini-2.5-pro"
-    ];
+    // 1. Découverte dynamique des modèles Gemini actifs et compatibles avec la clé
+    let candidateModels: string[] = [];
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" }
+      });
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        if (Array.isArray(listData.models)) {
+          const compatible: string[] = listData.models
+            .filter((m: any) => m.supportedGenerationMethods?.includes("generateContent"))
+            .map((m: any) => m.name.replace(/^models\//, ""));
+
+          // Prioriser les versions les plus récentes et performantes
+          const priority = [
+            "gemini-3.1-pro-preview",
+            "gemini-3-flash-preview",
+            "gemini-2.5-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-2.0-flash",
+            "gemini-1.5-flash"
+          ];
+
+          candidateModels = [
+            ...priority.filter(p => compatible.includes(p)),
+            ...compatible.filter(c => !priority.includes(c))
+          ];
+        }
+      }
+    } catch (discoveryErr) {
+      console.warn("Découverte dynamique des modèles échouée:", discoveryErr);
+    }
+
+    // Modèles par défaut si la découverte dynamique n'a rien renvoyé
+    if (candidateModels.length === 0) {
+      candidateModels = [
+        "gemini-3.1-pro-preview",
+        "gemini-3-flash-preview",
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-1.5-flash"
+      ];
+    }
 
     let rawJson: string | null = null;
     let lastError: any = null;
@@ -167,7 +203,19 @@ Génère exactement 12 publications équilibrées et retourne UNIQUEMENT un JSON
 
     let posts = [];
     try {
-      const parsed = JSON.parse(rawJson);
+      let cleanJson = rawJson.trim();
+      if (cleanJson.startsWith("```json")) {
+        cleanJson = cleanJson.slice(7);
+      }
+      if (cleanJson.startsWith("```")) {
+        cleanJson = cleanJson.slice(3);
+      }
+      if (cleanJson.endsWith("```")) {
+        cleanJson = cleanJson.slice(0, -3);
+      }
+      cleanJson = cleanJson.trim();
+
+      const parsed = JSON.parse(cleanJson);
       const rawPosts = Array.isArray(parsed) ? parsed : (parsed.posts || parsed.publications || Object.values(parsed)[0]);
       if (Array.isArray(rawPosts)) {
         posts = rawPosts.map((p: any) => ({
