@@ -338,11 +338,27 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
 
     // Résolution 100% automatique du visuel dédié au sujet précis
     const pubImg = (pub as any).image_url;
-    if (pubImg && typeof pubImg === "string" && pubImg.startsWith("http")) {
+    if (pubImg && typeof pubImg === "string" && pubImg.startsWith("http") && !pubImg.includes("/api/og/")) {
       setSelectedImage(pubImg);
     } else {
-      const dynamicUrl = `https://www.briserlesfrontieres.fr/api/og/instagram?id=${encodeURIComponent(pub.id)}&title=${encodeURIComponent(pub.titre || pub.theme || "La Souveraineté")}&theme=${encodeURIComponent(pub.theme || "Ingénierie de la Souveraineté")}`;
-      setSelectedImage(dynamicUrl);
+      const text = ((pub.theme || "") + " " + (pub.titre || "") + " " + (pub.content || "")).toLowerCase();
+      if (text.includes("adam") || text.includes("khalif") || text.includes("vicaire") || text.includes("iblis") || text.includes("arbre") || text.includes("péché")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg");
+      } else if (text.includes("rahman") || text.includes("miséricorde") || text.includes("anxiété") || text.includes("ghazali")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg");
+      } else if (text.includes("prièr") || text.includes("salât") || text.includes("tawbah") || text.includes("secret") || text.includes("cortisol")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg");
+      } else if (text.includes("temps") || text.includes("circadien") || text.includes("habit stacking") || text.includes("sablier") || text.includes("entropie")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_sablier.jpg");
+      } else if (text.includes("éveil") || text.includes("paix") || text.includes("âme") || text.includes("cœur") || text.includes("jannah") || text.includes("paradis") || text.includes("sérénité")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_eden.jpg");
+      } else if (text.includes("créat") || text.includes("nature") || text.includes("cosmos") || text.includes("univers")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_creation.jpg");
+      } else if (text.includes("mentorat") || text.includes("cabinet") || text.includes("direction") || text.includes("leadership") || text.includes("comes") || text.includes("souverain")) {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg");
+      } else {
+        setSelectedImage("https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg");
+      }
     }
   };
 
@@ -824,14 +840,14 @@ export default function PlanningSocialClient({ lockedPlatform }: PlanningSocialC
                           onChange={(e) => setSelectedImage(e.target.value)}
                           className="w-full bg-midnight border border-border focus:border-gold p-2 text-xs text-cream rounded outline-none"
                         >
-                          <option value={selectedImage.startsWith("http") && selectedImage.includes("/api/og/instagram") ? selectedImage : `https://www.briserlesfrontieres.fr/api/og/instagram?id=${selectedPub.id}&title=${encodeURIComponent(selectedPub.titre || "La Souveraineté")}&theme=${encodeURIComponent(selectedPub.theme || "Éveil Spirituel")}`}>
-                            ✨ Visuel Dynamique Automatique (Titre & Thème de ce post)
-                          </option>
-                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg">📖 Couverture : Adam, Père de l'Humanité</option>
-                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg">📖 Couverture : Les Secrets du Retour vers Allah</option>
-                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg">📖 Couverture : Ar-Rahman : La Mer sans Rivage</option>
-                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_default.jpg">📚 Mockup 3D Prestige (Secrets)</option>
-                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg">🌌 Visuel d'Autorité BLF (Hero)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg">📖 Livre : Adam, Père de l&apos;Humanité (Couverture officielle)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg">📖 Livre : Les Secrets du Retour vers Allah (Mockup 3D Prestige)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg">📖 Livre : Ar-Rahman : La Mer sans Rivage (Mockup 3D)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_sablier.jpg">⏳ Illustration : Le Sablier Céleste (Temps & Cycles circadiens)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_eden.jpg">🌿 Illustration : L&apos;Arche d&apos;Éden (Éveil Spirituel & Paix)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_creation.jpg">🌌 Illustration : L&apos;Arbre Cosmique & Création (Khalîfa)</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_celestial.jpg">✨ Illustration : Les Cieux & Nébuleuse Métaphysique</option>
+                          <option value="https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg">👑 Illustration : Souveraineté & Mentorat BLF</option>
                         </select>
                         <input 
                           type="url"

@@ -96,20 +96,51 @@ export async function publishToFacebook(content: string) {
   }
 }
 
-export function resolveInstagramImage(caption?: string, theme?: string, providedUrl?: string, pubTitle?: string, pubId?: string): string {
-  if (providedUrl && typeof providedUrl === "string" && providedUrl.trim().startsWith("http") && !providedUrl.includes("/post_default.jpg")) {
+export function resolveInstagramImage(caption?: string, theme?: string, providedUrl?: string, pubTitle?: string): string {
+  // Si une image personnalisée valide est fournie (et qu'il ne s'agit pas de l'ancien endpoint OG)
+  if (providedUrl && typeof providedUrl === "string" && providedUrl.trim().startsWith("http") && !providedUrl.includes("/api/og/")) {
     return providedUrl.trim();
   }
 
-  // Génération 100% dynamique du visuel officiel adapté au sujet précis
-  if (pubId) {
-    return `https://www.briserlesfrontieres.fr/api/og/instagram?id=${encodeURIComponent(pubId)}`;
+  const text = ((theme || "") + " " + (pubTitle || "") + " " + (caption || "")).toLowerCase();
+
+  // 1. Adam, Khalîfa, Responsabilité radicale, Libre arbitre, Iblîs, Vicaire
+  if (text.includes("adam") || text.includes("khalif") || text.includes("vicaire") || text.includes("iblis") || text.includes("péché") || text.includes("arbre")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_adam.jpg";
   }
 
-  const titleToUse = pubTitle || caption?.slice(0, 75) || "La Souveraineté Intérieure";
-  const themeToUse = theme || "Ingénierie de la Souveraineté";
+  // 2. Ar-Rahman, Miséricorde, Noms Divins, Al-Ghazâlî, Anxiété métaphysique
+  if (text.includes("rahman") || text.includes("miséricorde") || text.includes("anxiété") || text.includes("ghazali") || text.includes("noms divins")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_rahman.jpg";
+  }
 
-  return `https://www.briserlesfrontieres.fr/api/og/instagram?title=${encodeURIComponent(titleToUse)}&theme=${encodeURIComponent(themeToUse)}`;
+  // 3. Salât, Prière, Neurosciences, Cortisol, At-Tawbah, Repentir, Secrets
+  if (text.includes("prièr") || text.includes("salât") || text.includes("tawbah") || text.includes("secret") || text.includes("cortisol") || text.includes("repentir")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg";
+  }
+
+  // 4. Temps, Sablier, Cycles circadiens, Entropie, Habit Stacking
+  if (text.includes("temps") || text.includes("circadien") || text.includes("habit stacking") || text.includes("sablier") || text.includes("entropie")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_sablier.jpg";
+  }
+
+  // 5. Éveil spirituel, Paix, Âme, Jannah, Paradis, Sérénité
+  if (text.includes("éveil") || text.includes("paix") || text.includes("âme") || text.includes("cœur") || text.includes("jannah") || text.includes("paradis") || text.includes("sérénité")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_eden.jpg";
+  }
+
+  // 6. Création, Nature, Univers, Ordre cosmologique
+  if (text.includes("créat") || text.includes("nature") || text.includes("cosmos") || text.includes("univers")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_creation.jpg";
+  }
+
+  // 7. Leadership, Mentorat, Cabinet, Souveraineté, Coaching, C.O.M.E.S
+  if (text.includes("mentorat") || text.includes("cabinet") || text.includes("direction") || text.includes("leadership") || text.includes("comes") || text.includes("souverain")) {
+    return "https://www.briserlesfrontieres.fr/images/instagram/post_authority.jpg";
+  }
+
+  // Par défaut : Mockup 3D prestige de l'ouvrage phare
+  return "https://www.briserlesfrontieres.fr/images/instagram/post_secrets.jpg";
 }
 
 export async function publishToInstagram(caption: string, imageUrl?: string, mediaType: "IMAGE" | "REELS" = "IMAGE") {
