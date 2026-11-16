@@ -167,7 +167,7 @@ export default function Home() {
 
 
   return (
-    <div className={`relative overflow-x-clip bg-midnight text-cream ${isFocusMode ? "focus-layout-active" : ""}`}>
+    <div className={`relative overflow-x-clip bg-[#08090A] text-white selection:bg-[#00E599]/30 selection:text-white ${isFocusMode ? "focus-layout-active" : ""}`}>
       
       {/* ═══════════════════════════════════════════
           SECTION 1 : HERO CYBERNÉTIQUE & HUD DE SOUVERAINETÉ
@@ -363,10 +363,10 @@ export default function Home() {
                   {/* Boutons de navigation PC */}
                   {filtered.length > 1 && (
                     <>
-                      <button onClick={() => carouselRef.current?.scrollBy({ left: -400, behavior: 'smooth' })} className="hidden md:flex absolute -left-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-border shadow-sm rounded-full items-center justify-center text-emerald hover:bg-emerald hover:text-white transition-all duration-300 cursor-pointer text-xl">
+                      <button onClick={() => carouselRef.current?.scrollBy({ left: -400, behavior: 'smooth' })} className="hidden md:flex absolute -left-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-[#121316] border border-white/20 shadow-xl rounded-full items-center justify-center text-white hover:border-[#00E599] hover:text-[#00E599] transition-all duration-300 cursor-pointer text-xl">
                         ←
                       </button>
-                      <button onClick={() => carouselRef.current?.scrollBy({ left: 400, behavior: 'smooth' })} className="hidden md:flex absolute -right-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-border shadow-sm rounded-full items-center justify-center text-emerald hover:bg-emerald hover:text-white transition-all duration-300 cursor-pointer text-xl">
+                      <button onClick={() => carouselRef.current?.scrollBy({ left: 400, behavior: 'smooth' })} className="hidden md:flex absolute -right-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-[#121316] border border-white/20 shadow-xl rounded-full items-center justify-center text-white hover:border-[#00E599] hover:text-[#00E599] transition-all duration-300 cursor-pointer text-xl">
                         →
                       </button>
                     </>
@@ -385,28 +385,28 @@ export default function Home() {
                   {filtered.map((t) => (
                     <div
                       key={t.id}
-                      className="w-[85vw] sm:w-[450px] flex-shrink-0 snap-center group p-8 border border-border bg-surface/30 rounded-sm transition-all duration-500 hover:border-emerald/30 hover:-translate-y-1 flex flex-col justify-between"
+                      className="w-[85vw] sm:w-[450px] flex-shrink-0 snap-center group p-8 border border-white/10 bg-[#121316] rounded-2xl transition-all duration-500 hover:border-[#00E599]/40 hover:-translate-y-1 flex flex-col justify-between shadow-xl"
                     >
                       <div className="space-y-6">
                         {/* Haut de carte : Nom et Éléments techniques */}
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
-                            <h4 className="font-heading text-lg sm:text-xl text-cream group-hover:text-emerald transition-colors duration-300">
+                            <h4 className="font-heading text-lg sm:text-xl text-white group-hover:text-[#00E599] transition-colors duration-300">
                               {t.name}
                             </h4>
                             {t.role && (
-                              <p className="text-xs text-cream-muted font-body italic mt-1">{t.role}</p>
+                              <p className="text-xs text-neutral-400 font-body italic mt-1">{t.role}</p>
                             )}
                           </div>
                           
                           <div className="flex flex-col items-end gap-1.5 font-body">
                             {t.score !== undefined && (
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald px-2.5 py-1 border border-emerald/20 rounded-full bg-emerald-muted/5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#00E599] px-2.5 py-1 border border-[#00E599]/20 rounded-full bg-[#00E599]/10">
                                 Audit : {t.score}%
                               </span>
                             )}
                             {t.period && (
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald px-2.5 py-1 border border-emerald/20 rounded-full bg-emerald-muted/5">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-amber-400 px-2.5 py-1 border border-amber-400/20 rounded-full bg-amber-400/10">
                                 {t.period}
                               </span>
                             )}
@@ -414,16 +414,16 @@ export default function Home() {
                         </div>
 
                         {/* Corps : Texte de témoignage */}
-                        <p className="text-sm text-cream-muted leading-relaxed font-body italic before:content-['«_'] after:content-['_»']">
+                        <p className="text-sm text-neutral-300 leading-relaxed font-body italic before:content-['«_'] after:content-['_»']">
                           {t.text}
                         </p>
                       </div>
 
                       {/* Bas de carte : Localisation */}
                       {t.location && (
-                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-[10px] uppercase tracking-wider text-emerald font-body">
-                          <span>Localisation</span>
-                          <span className="text-cream-muted font-bold">{t.location}</span>
+                        <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-[10px] uppercase tracking-wider text-[#00E599] font-mono">
+                          <span className="text-neutral-500">Localisation</span>
+                          <span className="text-neutral-300 font-bold">{t.location}</span>
                         </div>
                       )}
                     </div>
@@ -492,19 +492,19 @@ export default function Home() {
                       onChange={(e) => setRevNom(e.target.value)}
                       disabled={revLoading}
                       placeholder="Ex: Yacine, Leïla, La Famille M..."
-                      className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
+                      className="px-4 py-3 bg-[#121316] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner"
                     />
                   </div>
 
                   {/* Champ Categorie */}
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="rev-cat" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold">Vous êtes :</label>
+                    <label htmlFor="rev-cat" className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Vous êtes :</label>
                     <select
                       id="rev-cat"
                       value={revCat}
                       onChange={(e) => setRevCat(e.target.value as any)}
                       disabled={revLoading}
-                      className="px-4 py-3 bg-surface/30 text-cream border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm cursor-pointer"
+                      className="px-4 py-3 bg-[#121316] text-white border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl cursor-pointer"
                     >
                       <option value="homme">Un Homme particulier</option>
                       <option value="femme">Une Femme particulière</option>
@@ -518,13 +518,13 @@ export default function Home() {
                   
                   {/* Champ Période / Accompagnement */}
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="rev-period" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold">Accompagnement Suivi</label>
+                    <label htmlFor="rev-period" className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Accompagnement Suivi</label>
                     <select
                       id="rev-period"
                       value={revPeriod}
                       onChange={(e) => setRevPeriod(e.target.value)}
                       disabled={revLoading}
-                      className="px-4 py-3 bg-surface/30 text-cream border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm cursor-pointer"
+                      className="px-4 py-3 bg-[#121316] text-white border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl cursor-pointer"
                     >
                       <option value="Protocole 9 Mois">Protocole de 9 Mois — Accompagnement Complet</option>
                       <option value="Protocole 3 Mois">Protocole de 3 Mois — Structure Intense</option>
@@ -535,7 +535,7 @@ export default function Home() {
 
                   {/* Champ Localisation (Ville / Commune) */}
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="rev-localisation" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold">Votre Ville / Commune</label>
+                    <label htmlFor="rev-localisation" className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Votre Ville / Commune</label>
                     <input
                       required
                       type="text"
@@ -544,14 +544,14 @@ export default function Home() {
                       onChange={(e) => setRevLocalisation(e.target.value)}
                       disabled={revLoading}
                       placeholder="Ex: Chartres, Cormontreuil, Gueux..."
-                      className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
+                      className="px-4 py-3 bg-[#121316] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner"
                     />
                   </div>
                 </div>
 
                 {/* Champ Message */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="rev-message" className="text-[9px] uppercase tracking-wider text-cream-muted font-semibold">Votre Récit (Pourquoi étiez-vous perdu ? Quel est l&apos;impact de la Salat ?)</label>
+                  <label htmlFor="rev-message" className="text-[9px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Votre Récit (Pourquoi étiez-vous perdu ? Quel est l&apos;impact de la Salat ?)</label>
                   <textarea
                     required
                     id="rev-message"
@@ -560,7 +560,7 @@ export default function Home() {
                     onChange={(e) => setRevMsg(e.target.value)}
                     disabled={revLoading}
                     placeholder="Parlez avec sincérité de vos blocages résolus (At-Taswîf, prière saccadée, doutes, péchés abandonnés, retour au Fajr...) et de votre renouveau spirituel..."
-                    className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm leading-relaxed"
+                    className="px-4 py-3 bg-[#121316] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner leading-relaxed"
                   />
                 </div>
 
@@ -585,38 +585,38 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION : FORMULAIRE DE CONTACT PROTOCOLE C.O.M.E.S.
           ═══════════════════════════════════════════ */}
-      <section id="contact-comes" className="relative py-28 bg-surface border-t border-border text-cream">
+      <section id="contact-comes" className="relative py-28 bg-[#08090A] border-t border-white/10 text-white">
         <div className="max-w-5xl mx-auto px-6 lg:px-8">
           
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-emerald mb-4 block font-body">
-              Muhasaba & Accompagnement
+            <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#00E599] mb-4 block font-mono">
+              04 // MUHASABA & ACCOMPAGNEMENT
             </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-light text-cream">
+            <h2 className="font-heading text-3xl sm:text-5xl font-bold text-white">
               Solliciter un Accompagnement Privé
             </h2>
-            <p className="mt-6 text-sm text-cream-muted leading-relaxed font-body max-w-xl mx-auto">
-              Que ce soit pour le **Protocole de 30 Jours** (eBook) ou pour postuler à notre accompagnement ultime, le **Protocole de 9 Mois** (compagnonnage intense et interposition behavioriste), déposez votre demande.
+            <p className="mt-6 text-sm text-neutral-400 leading-relaxed font-sans max-w-xl mx-auto">
+              Que ce soit pour le <strong className="text-white">Protocole de 30 Jours</strong> (eBook) ou pour postuler à notre accompagnement ultime, le <strong className="text-white">Protocole de 9 Mois</strong> (compagnonnage intense et interposition behavioriste), déposez votre demande confidentielle.
             </p>
           </div>
 
-          <div className="relative p-10 md:p-16 border border-border bg-surface-muted/30 shadow-sm rounded-sm max-w-2xl mx-auto">
-            <div className="absolute top-0 left-10 w-24 h-px bg-gold" />
-            <div className="absolute bottom-0 right-10 w-24 h-px bg-gold" />
+          <div className="relative p-8 md:p-14 border border-white/10 bg-[#121316] shadow-2xl rounded-3xl max-w-2xl mx-auto">
+            <div className="absolute top-0 left-10 w-24 h-px bg-[#00E599]" />
+            <div className="absolute bottom-0 right-10 w-24 h-px bg-[#00E599]" />
 
             {submitted ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-6 bg-emerald/5 border border-emerald/20 text-emerald text-xs tracking-wider uppercase text-center rounded-sm max-w-md mx-auto font-body font-semibold"
+                className="p-6 bg-[#00E599]/10 border border-[#00E599]/30 text-[#00E599] text-xs tracking-wider uppercase text-center rounded-2xl max-w-md mx-auto font-mono font-semibold"
               >
                 Votre demande a été enregistrée en toute discrétion. Mounir BYAR reprendra contact avec vous.
               </motion.div>
             ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-6 max-w-md mx-auto font-body">
+              <form onSubmit={handleContactSubmit} className="space-y-6 max-w-md mx-auto font-sans">
                 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="nom-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Identité / Prénom</label>
+                  <label htmlFor="nom-field" className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Identité / Prénom</label>
                   <input
                     required
                     type="text"
@@ -625,12 +625,12 @@ export default function Home() {
                     onChange={(e) => setNom(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: Yacine, Dr. Sliman..."
-                    className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
+                    className="px-4 py-3 bg-[#181A20] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="email-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Adresse Email</label>
+                  <label htmlFor="email-field" className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Adresse Email Professionnelle</label>
                   <input
                     required
                     type="email"
@@ -639,18 +639,18 @@ export default function Home() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: contact@votre-domaine.com"
-                    className="px-4 py-3 bg-surface/30 text-cream placeholder-cream-muted/30 border border-border focus:border-gold outline-none text-xs transition-colors rounded-sm"
+                    className="px-4 py-3 bg-[#181A20] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner"
                   />
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="accompagnement-select" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Protocole Souhaité</label>
+                  <label htmlFor="accompagnement-select" className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Protocole Souhaité</label>
                   <select
                     id="accompagnement-select"
                     value={accompagnementSelect}
                     onChange={(e) => setAccompagnementSelect(e.target.value)}
                     disabled={loading}
-                    className="px-4 py-3 bg-surface/30 text-cream border border-border focus:border-gold outline-none text-xs transition-colors cursor-pointer rounded-sm"
+                    className="px-4 py-3 bg-[#181A20] text-white border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors cursor-pointer rounded-xl"
                   >
                     <option value="9mois">Protocole de 9 Mois — Accompagnement Complet</option>
                     <option value="30jours">Protocole de 30 Jours — Validation d&apos;eBook</option>
@@ -659,7 +659,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message-field" className="text-[10px] uppercase tracking-wider text-cream-muted font-semibold">Votre Situation / Vos Obstacles</label>
+                  <label htmlFor="message-field" className="text-[10px] uppercase tracking-wider text-neutral-400 font-semibold font-mono">Votre Situation / Vos Obstacles</label>
                   <textarea
                     required
                     id="message-field"
@@ -668,7 +668,7 @@ export default function Home() {
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
                     placeholder="Qu&apos;est-ce qui sabote votre constance (Salat/spiritualité) ? Pourquoi repoussez-vous à plus tard ? Expliquez brièvement en toute franchise..."
-                    className="px-4 py-3 bg-stone-50 text-stone-950 placeholder-stone-400/40 border border-stone-200 focus:border-gold outline-none text-xs transition-colors leading-relaxed"
+                    className="px-4 py-3 bg-[#181A20] text-white placeholder-neutral-500 border border-white/10 focus:border-[#00E599] outline-none text-xs transition-colors rounded-xl shadow-inner leading-relaxed resize-y"
                   />
                 </div>
 
@@ -676,32 +676,41 @@ export default function Home() {
                   <p className="text-xs text-red-500 font-semibold text-center">{error}</p>
                 )}
 
-                <Button type="submit" disabled={loading} className="w-full py-4 text-center justify-center">
-                  {loading ? "Transmission confidentielle..." : "Soumettre ma candidature confidentielle"}
-                </Button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-4 rounded-full bg-[#00E599] text-black font-sans font-bold text-xs tracking-wider uppercase transition-all duration-300 shadow-[0_0_25px_rgba(0,229,153,0.35)] hover:shadow-[0_0_35px_rgba(0,229,153,0.6)] hover:scale-[1.02] cursor-pointer"
+                >
+                  {loading ? "Transmission confidentielle..." : "Soumettre ma candidature confidentielle →"}
+                </button>
               </form>
             )}
 
-            <p className="mt-8 text-center text-[9px] text-stone-400 max-w-xs mx-auto leading-relaxed">
-              Confidentialité Absolue garantie. Vos échanges avec Mounir BYAR sont confidentiels, sécurisés et protégés par une éthique de conseil irréprochable.
+            <p className="mt-8 text-center text-[10px] text-neutral-500 max-w-xs mx-auto leading-relaxed font-mono">
+              CONFIDENTIALITÉ ABSOLUE GARANTIE • CADRE RIGOUROUX ET PROTÉGÉ
             </p>
           </div>
         </div>
       </section>
 
       {/* SECTION TRANSITION PARCOURS LINÉAIRE */}
-      <section className="relative py-20 bg-stone-950 border-t border-gold/15 text-center">
+      <section className="relative py-24 bg-[#08090A] border-t border-white/10 text-center">
         <div className="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold block">➔ Passer à la phase supérieure</span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-light text-stone-100">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#00E599] font-mono font-semibold block">➔ 05 // PASSER À LA PHASE SUPÉRIEURE</span>
+          <h2 className="font-heading text-3xl sm:text-5xl font-bold text-white">
             Étape 02 : Lancez Votre Diagnostic
           </h2>
-          <p className="text-sm text-stone-400 font-body max-w-lg mx-auto leading-relaxed">
+          <p className="text-sm text-neutral-400 font-sans max-w-lg mx-auto leading-relaxed">
             Vous avez pris conscience des illusions mondaines. Il est temps d&apos;auditer avec précision votre organisation pour retrouver clarté, sérénité et alignement spirituel.
           </p>
-          <Button href="/audit" variant="primary" className="shadow-lg shadow-gold/5 font-bold tracking-widest px-10 py-4">
-            Commencer le Bilan Gratuit →
-          </Button>
+          <div className="pt-4">
+            <Link 
+              href="/audit" 
+              className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#00E599] text-black font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_30px_rgba(0,229,153,0.4)] hover:shadow-[0_0_45px_rgba(0,229,153,0.7)] hover:scale-105 transition-all cursor-pointer"
+            >
+              Commencer le Bilan Gratuit [3 min] →
+            </Link>
+          </div>
         </div>
       </section>
 

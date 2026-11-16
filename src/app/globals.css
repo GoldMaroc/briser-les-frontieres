@@ -6,79 +6,79 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Default Theme: ZENITH (Plein jour - Contraste Alabastre / Onyx) */
-  --bg-base: #FFFFFF;
-  --bg-surface: #F8F6F2;
-  --bg-surface-alt: #EBEBE6;
-  --bg-surface-hover: #EAEAE2;
-  --text-main: #111111;
-  --text-muted: #444444;
-  --color-accent-emerald: #056B46;
-  --color-accent-emerald-dark: #034E32;
-  --color-accent-gold: #A67C37;
-  --color-accent-gold-light: #BD954E;
-  --color-accent-gold-muted: rgba(166, 124, 55, 0.08);
-  --color-accent-emerald-muted: rgba(5, 107, 70, 0.08);
-  --color-border-line: rgba(17, 17, 17, 0.25);
-  --color-border-hover-line: rgba(17, 17, 17, 0.40);
-  --transition-speed: 1s; /* Transition lente et organique pour les thèmes */
-  --celestial-bg-opacity: 0.025;
+  /* Default Theme: CYBERNETIC OBSIDIAN (Terminal Luxury Prestige) */
+  --bg-base: #08090A;
+  --bg-surface: #121316;
+  --bg-surface-alt: #181A20;
+  --bg-surface-hover: #22252F;
+  --text-main: #FFFFFF;
+  --text-muted: #9CA3AF;
+  --color-accent-emerald: #00E599;
+  --color-accent-emerald-dark: #00B377;
+  --color-accent-gold: #D4A853;
+  --color-accent-gold-light: #E8C468;
+  --color-accent-gold-muted: rgba(212, 168, 83, 0.12);
+  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
+  --color-border-line: rgba(255, 255, 255, 0.10);
+  --color-border-hover-line: rgba(255, 255, 255, 0.25);
+  --transition-speed: 0.5s;
+  --celestial-bg-opacity: 0.08;
 }
 
-/* Thème AUBE (Fajr) — Teintes calmes de brume beige-sable */
+/* Thème AUBE (Fajr) — Sanctuaire à l'Aube Sombre et Doré */
 .theme-fajr {
-  --bg-base: #FAF8F5;
-  --bg-surface: #F4EFEA;
-  --bg-surface-alt: #EDE6DE;
-  --bg-surface-hover: #E2D7CC;
-  --text-main: #1A1A1A;
-  --text-muted: #4A4A4A;
-  --color-accent-emerald: #087B53;
-  --color-accent-emerald-dark: #055C3E;
-  --color-accent-gold: #9E7331;
-  --color-accent-gold-light: #B58943;
-  --color-accent-gold-muted: rgba(158, 115, 49, 0.08);
-  --color-accent-emerald-muted: rgba(8, 123, 83, 0.08);
-  --color-border-line: rgba(44, 43, 41, 0.25);
-  --color-border-hover-line: rgba(44, 43, 41, 0.40);
-  --celestial-bg-opacity: 0.03;
+  --bg-base: #0B0D11;
+  --bg-surface: #14171E;
+  --bg-surface-alt: #1B202B;
+  --bg-surface-hover: #242A38;
+  --text-main: #FFFFFF;
+  --text-muted: #9DA5B4;
+  --color-accent-emerald: #00E599;
+  --color-accent-emerald-dark: #00B377;
+  --color-accent-gold: #E5B45E;
+  --color-accent-gold-light: #F3CA7D;
+  --color-accent-gold-muted: rgba(229, 180, 94, 0.12);
+  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
+  --color-border-line: rgba(255, 255, 255, 0.12);
+  --color-border-hover-line: rgba(255, 255, 255, 0.28);
+  --celestial-bg-opacity: 0.08;
 }
 
-/* Thème CRÉPUSCULE (Maghrib) — Cuivre chaud et argile doux */
+/* Thème CRÉPUSCULE (Maghrib) — Cuivre Sombre & Ambre */
 .theme-maghrib {
-  --bg-base: #F3EBE1;
-  --bg-surface: #E8DCD0;
-  --bg-surface-alt: #DECFC0;
-  --bg-surface-hover: #CFAF96;
-  --text-main: #1D1410;
-  --text-muted: #524035;
-  --color-accent-emerald: #0B6A47;
-  --color-accent-emerald-dark: #064D33;
-  --color-accent-gold: #A06A26;
-  --color-accent-gold-light: #B77E3C;
-  --color-accent-gold-muted: rgba(160, 106, 38, 0.08);
-  --color-accent-emerald-muted: rgba(11, 106, 71, 0.08);
-  --color-border-line: rgba(58, 49, 42, 0.25);
-  --color-border-hover-line: rgba(58, 49, 42, 0.40);
-  --celestial-bg-opacity: 0.04;
+  --bg-base: #0D0A08;
+  --bg-surface: #171310;
+  --bg-surface-alt: #221B16;
+  --bg-surface-hover: #2E251E;
+  --text-main: #FFFFFF;
+  --text-muted: #B49F93;
+  --color-accent-emerald: #00E599;
+  --color-accent-emerald-dark: #00B377;
+  --color-accent-gold: #E08E45;
+  --color-accent-gold-light: #F0A563;
+  --color-accent-gold-muted: rgba(224, 142, 69, 0.12);
+  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
+  --color-border-line: rgba(255, 255, 255, 0.12);
+  --color-border-hover-line: rgba(255, 255, 255, 0.28);
+  --celestial-bg-opacity: 0.08;
 }
 
 /* Thème ISHA (Nuit / Kosmos / Sombre Prestige) — Noir obsidienne profond */
 .theme-isha {
-  --bg-base: #0A0A0C;
-  --bg-surface: #121216;
-  --bg-surface-alt: #18181F;
-  --bg-surface-hover: #22222B;
+  --bg-base: #08090A;
+  --bg-surface: #121316;
+  --bg-surface-alt: #181A20;
+  --bg-surface-hover: #22252F;
   --text-main: #FFFFFF;
-  --text-muted: #B3B3BB;
-  --color-accent-emerald: #10B981;
-  --color-accent-emerald-dark: #059669;
+  --text-muted: #9CA3AF;
+  --color-accent-emerald: #00E599;
+  --color-accent-emerald-dark: #00B377;
   --color-accent-gold: #D4A853;
   --color-accent-gold-light: #E8C468;
   --color-accent-gold-muted: rgba(212, 168, 83, 0.15);
-  --color-accent-emerald-muted: rgba(16, 185, 129, 0.15);
-  --color-border-line: rgba(160, 174, 192, 0.25);
-  --color-border-hover-line: rgba(160, 174, 192, 0.45);
+  --color-accent-emerald-muted: rgba(0, 229, 153, 0.15);
+  --color-border-line: rgba(255, 255, 255, 0.12);
+  --color-border-hover-line: rgba(255, 255, 255, 0.30);
   --celestial-bg-opacity: 0.12;
 }
 

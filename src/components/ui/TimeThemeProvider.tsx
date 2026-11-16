@@ -30,7 +30,7 @@ interface TimeThemeContextType {
 const TimeThemeContext = createContext<TimeThemeContextType | undefined>(undefined);
 
 export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
-  const [activeTheme, setActiveTheme] = useState<ThemeType>("zenith");
+  const [activeTheme, setActiveTheme] = useState<ThemeType>("isha");
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [prayerTimings, setPrayerTimings] = useState<Record<string, string> | null>(null);
@@ -169,11 +169,10 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
     const interval = setInterval(() => {
       const now = new Date();
       
-      // A. Désactivation du thème circadien automatique (visibilité trop variable)
-      // Le thème est désormais verrouillé sur "fajr" (clair, premium et lisible)
+      // A. Verrouillage du thème sombre cybernétique (Terminal UX)
       if (!manualOverride) {
-        if (activeTheme !== "fajr") {
-          setActiveTheme("fajr");
+        if (activeTheme !== "isha") {
+          setActiveTheme("isha");
         }
       }
 
