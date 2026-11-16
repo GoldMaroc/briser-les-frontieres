@@ -167,7 +167,7 @@ export default function Home() {
 
 
   return (
-    <div className={`relative overflow-x-clip bg-[#08090A] text-white selection:bg-[#00E599]/30 selection:text-white ${isFocusMode ? "focus-layout-active" : ""}`}>
+    <div className={`relative bg-[#08090A] text-white selection:bg-[#00E599]/30 selection:text-white ${isFocusMode ? "focus-layout-active" : ""}`}>
       
       {/* ═══════════════════════════════════════════
           SECTION 1 : HERO CYBERNÉTIQUE & HUD DE SOUVERAINETÉ
