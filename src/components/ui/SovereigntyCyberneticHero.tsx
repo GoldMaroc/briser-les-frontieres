@@ -4,112 +4,164 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-interface SalatStageNode {
-  title: string;
-  metric: string;
-  description: string;
-  coords: { x: number; y: number }; // Pourcentage exact dans le repère carré 1:1
-}
-
-interface SalatStage {
+interface SalatPosture {
   id: string;
-  stepNumber: string;
+  image: string;
+  angleTarget: number;
   postureArabic: string;
   postureFrench: string;
-  subtitle: string;
-  angle: string;
-  image: string;
+  phaseLabel: string;
   keyMetric: string;
-  metricLabel: string;
-  sacredVerse: string;
+  subtitle: string;
   scientificInsight: string;
-  nodes: SalatStageNode[];
+  sacredVerse: string;
 }
 
-const salatStages: SalatStage[] = [
+const salatPostures: SalatPosture[] = [
   {
     id: "qiyam",
-    stepNumber: "01",
+    image: "/images/salat_cycle/salat_01_qiyam_debout.jpg",
+    angleTarget: 180,
     postureArabic: "QIYÂM",
     postureFrench: "DEBOUT",
-    subtitle: "Alignement Vertébral & Ancrage Cognitif",
-    angle: "180°",
-    image: "/images/salat_cycle/salat_01_qiyam_debout.jpg",
+    phaseLabel: "STATION VERTICALE",
     keyMetric: "+35% FOCUS PRÉFRONTAL",
-    metricLabel: "IMMUNITÉ COGNITIVE & ANCRAGE RADICAL",
-    sacredVerse: "« Tiens-toi debout avec droiture pour la Vérité »",
+    subtitle: "Alignement Vertébral & Ancrage Cognitif",
     scientificInsight: "La station debout rigoureuse désactive les micro-mouvements distractifs et synchronise l'attention sélective sur un point focal unique. Rupture immédiate avec la surcharge sensorielle et l'entropie numérique.",
-    nodes: [
-      { title: "Cortex Préfrontal (Cerveau)", metric: "DORSOLATÉRAL ACTIF", description: "Focalisation attentionnelle maximale et extinction du multitâche", coords: { x: 51, y: 13 } },
-      { title: "Cœur & Thorax (Plexus)", metric: "MAIN SUR LE CŒUR", description: "Fermeture du circuit proprioceptif et apaisement cardio-respiratoire", coords: { x: 52, y: 32 } },
-      { title: "Axe Vertébral (Rachis 180°)", metric: "TENSION RACHIDIENNE : 0", description: "Alignement vertical parfait éliminant les compensations posturales", coords: { x: 47, y: 46 } },
-      { title: "Pieds & Ancrage au Sol", metric: "STABILITÉ TERRESTRE", description: "Enracinement au sol rétablissant la proprioception spatiale", coords: { x: 49, y: 91 } }
-    ]
+    sacredVerse: "« Tiens-toi debout avec droiture pour la Vérité »"
+  },
+  {
+    id: "incline_trans",
+    image: "/images/salat_cycle/salat_01b_incline_transition.jpg",
+    angleTarget: 135,
+    postureArabic: "INFLEXION",
+    postureFrench: "AMORCE DE FLEXION",
+    phaseLabel: "AMORCE DE FLEXION 135°",
+    keyMetric: "-8 BPM DÉBUT DE FREIN VAGAL",
+    subtitle: "Désengagement de la Posture Dominante",
+    scientificInsight: "Le buste bascule en avant à 45°. Les récepteurs proprioceptifs dorsaux signalent le passage d'une posture de contrôle à une posture d'humilité consentie.",
+    sacredVerse: "« Ils se courbent et s'inclinent en cherchant Sa Grâce »"
   },
   {
     id: "ruku",
-    stepNumber: "02",
+    image: "/images/salat_cycle/salat_02_ruku_incline.jpg",
+    angleTarget: 90,
     postureArabic: "RUKÛ'",
     postureFrench: "INCLINÉ",
-    subtitle: "Flexion Rachidienne & Désengagement de l'Ego",
-    angle: "90°",
-    image: "/images/salat_cycle/salat_02_ruku_incline.jpg",
+    phaseLabel: "ANGLE DROIT 90°",
     keyMetric: "-15 BPM DÉCÉLÉRATION VAGALE",
-    metricLabel: "DÉCOMPRESSION DU RACHIS & SOUMISSION CONSCIENTE",
-    sacredVerse: "« Et inclinez-vous avec ceux qui s'inclinent »",
-    scientificInsight: "L'inclinaison à 90° dos plat étire toute la chaîne postérieure et décompresse les vertèbres lombaires. L'inversion hydrostatique partielle prépare le cerveau à l'afflux sanguin tout en soumettant consciemment la volonté de l'ego.",
-    nodes: [
-      { title: "Cerveau & Boîte Crânienne", metric: "PULSE CÉRÉBRAL INVERSÉ", description: "Abaissement du flux d'urgence et afflux sanguin modéré", coords: { x: 26, y: 28 } },
-      { title: "Rachis Lombaire (Dos Plat 90°)", metric: "DÉCOMPRESSION DISCO-RACHIDIENNE", description: "Traction axiale douce éliminant les spasmes posturaux", coords: { x: 54, y: 24 } },
-      { title: "Cœur & Cage Thoracique", metric: "-15 BPM IMMÉDIAT", description: "Frein vagal actif diminuant la pression systolique", coords: { x: 38, y: 36 } },
-      { title: "Mains aux Genoux", metric: "VERROUILLAGE BIOMÉCANIQUE", description: "Angle droit parfait stabilisant le centre de gravité", coords: { x: 57, y: 56 } }
-    ]
+    subtitle: "Flexion Rachidienne & Décompression Lombaire",
+    scientificInsight: "L'inclinaison à 90° dos plat étire toute la chaîne postérieure et décompresse les disques lombaires. L'inversion hydrostatique partielle prépare le cerveau à l'afflux sanguin.",
+    sacredVerse: "« Et inclinez-vous avec ceux qui s'inclinent »"
+  },
+  {
+    id: "descent_trans",
+    image: "/images/salat_cycle/salat_02b_descent_transition.jpg",
+    angleTarget: 45,
+    postureArabic: "DESCENTE",
+    postureFrench: "PLONGÉE VERS LE SOL",
+    phaseLabel: "DESCENTE VERS LA TERRE 45°",
+    keyMetric: "-20% CHUTE DU CORTISOL",
+    subtitle: "Transition vers l'Ancrage Terrestre",
+    scientificInsight: "Les genoux se posent au sol, les mains devancent le front. Le centre de gravité chute radicalement, préparant la décharge complète des tensions allostatiques.",
+    sacredVerse: "« De la terre Nous vous avons créés, et en elle Nous vous ferons retourner »"
   },
   {
     id: "sujud",
-    stepNumber: "03",
+    image: "/images/salat_cycle/salat_03_sujud_prosterne.jpg",
+    angleTarget: 0,
     postureArabic: "SUJÛD",
     postureFrench: "PROSTERNÉ",
-    subtitle: "Irrigation Frontale & Earthing (7 Points au Sol)",
-    angle: "0°",
-    image: "/images/salat_cycle/salat_03_sujud_prosterne.jpg",
+    phaseLabel: "CONTACT TERRESTRE 0°",
     keyMetric: "-27.3% CORTISOL · 0V POTENTIEL",
-    metricLabel: "EXTINCTION DU DMN & DÉCHARGE ÉLECTROSTATIQUE",
-    sacredVerse: "« Prosterne-toi et rapproche-toi » (Sourate Al-'Alaq)",
-    scientificInsight: "L'acmé suprême de la Salât. Le front au sol induit une hyper-irrigation sanguine directe du cortex préfrontal et éteint le réseau du mode par défaut (DMN). Les 7 points au contact de la terre évacuent les charges électrostatiques (Earthing absolu).",
-    nodes: [
-      { title: "Cortex Préfrontal (Front au Sol)", metric: "+40% PERFUSION SANGUINE", description: "Irrigation massive du lobe de la décision et extinction du bavardage mental", coords: { x: 20, y: 76 } },
-      { title: "Cœur & Nerf Vague", metric: "PARASYMPATHIQUE 100%", description: "Stimulation mécanique profonde du nerf vague par la posture", coords: { x: 42, y: 52 } },
-      { title: "Earthing 7 Points au Sol", metric: "DIFFÉRENTIEL 0V", description: "Neutralisation instantanée des charges électrostatiques des écrans", coords: { x: 18, y: 84 } },
-      { title: "Rachis & Statut de Khalîfa", metric: "DISCIPLINE DU NAFS", description: "L'abandon complet devant l'Absolu restaure la souveraineté sur son monde", coords: { x: 62, y: 44 } }
-    ]
+    subtitle: "Irrigation Frontale & Earthing (7 Points au Sol)",
+    scientificInsight: "L'acmé suprême de la Salât. Le front au sol induit une hyper-irrigation sanguine directe du cortex préfrontal et éteint le réseau du mode par défaut (DMN). Les 7 points au contact de la terre évacuent les charges électrostatiques.",
+    sacredVerse: "« Prosterne-toi et rapproche-toi » (Sourate Al-'Alaq)"
   },
   {
     id: "dua",
-    stepNumber: "04",
+    image: "/images/salat_cycle/salat_04_dua_invocation.jpg",
+    angleTarget: 90,
     postureArabic: "DU'Â",
     postureFrench: "INVOCATION",
-    subtitle: "Ondes Thêta & Mandat de Souveraineté",
-    angle: "90°",
-    image: "/images/salat_cycle/salat_04_dua_invocation.jpg",
+    phaseLabel: "ASSISE SOUVERAINE",
     keyMetric: "ONDES THÊTA (4-8 HZ) · COHÉRENCE 0.1 HZ",
-    metricLabel: "RÉCEPTIVITÉ SPIRITUELLE & DISSIPATION DU NAFS",
-    sacredVerse: "« Invoquez-Moi, Je répondrai à votre appel » (Sourate Ghafir)",
-    scientificInsight: "L'assise méditative (Jalassah) avec les mains levées installe une cohérence cardio-respiratoire parfaite (0.1 Hz). Le cerveau baigne dans les ondes Thêta favorables à l'intuition profonde, au pardon et à la formulation souveraine de ses desseins.",
-    nodes: [
-      { title: "Cerveau (Ondes Thêta)", metric: "FRÉQUENCE 4-8 HZ", description: "Clarté exégétique et réorganisation mémorielle sans bruit mental", coords: { x: 53, y: 20 } },
-      { title: "Mains Ouvertes en Du'â", metric: "CANAL DE RÉCEPTIVITÉ", description: "Posture d'abandon actif et d'accueil des requêtes spirituelles", coords: { x: 34, y: 43 } },
-      { title: "Cœur & Cohérence Cardiaque", metric: "RÉSONANCE 0.1 HZ", description: "Synchronisation parfaite entre respiration et pulsation cardiaque", coords: { x: 54, y: 42 } },
-      { title: "Assise sur Talons", metric: "ANCRAGE PELVIEN", description: "Stabilité pyramidale parfaite verrouillant l'attention", coords: { x: 59, y: 80 } }
-    ]
+    subtitle: "Ondes Thêta & Mandat de Souveraineté",
+    scientificInsight: "L'assise sur les talons avec les mains levées installe une cohérence cardio-respiratoire idéale (0.1 Hz). Le cerveau baigne dans les ondes Thêta favorables à l'intuition profonde et à la formulation souveraine de ses desseins.",
+    sacredVerse: "« Invoquez-Moi, Je répondrai à votre appel » (Sourate Ghafir)"
   }
 ];
+
+// Trajectoires continues des 4 nœuds biomécaniques clés
+interface TrajectoryPoint {
+  p: number;
+  x: number;
+  y: number;
+  title: string;
+  metric: string;
+}
+
+const trajectoryCerveau: TrajectoryPoint[] = [
+  { p: 0.00, x: 51, y: 13, title: "Cortex Préfrontal", metric: "DORSOLATÉRAL ACTIF" },
+  { p: 0.18, x: 38, y: 19, title: "Cortex Préfrontal", metric: "BASCULE EN COURS" },
+  { p: 0.36, x: 26, y: 28, title: "Cerveau & Boîte Crânienne", metric: "PULSE INVERSÉ" },
+  { p: 0.54, x: 22, y: 52, title: "Cerveau (Descente)", metric: "IRRIGATION GRADUELLE" },
+  { p: 0.72, x: 20, y: 76, title: "Cortex Préfrontal (Front au Sol)", metric: "+40% PERFUSION SANGUINE" },
+  { p: 1.00, x: 53, y: 20, title: "Cerveau (Ondes Thêta)", metric: "FRÉQUENCE 4-8 HZ" }
+];
+
+const trajectoryCoeur: TrajectoryPoint[] = [
+  { p: 0.00, x: 52, y: 32, title: "Cœur & Thorax (Plexus)", metric: "MAIN SUR LE CŒUR" },
+  { p: 0.18, x: 45, y: 34, title: "Cœur & Thorax", metric: "AMORCE FREIN VAGAL" },
+  { p: 0.36, x: 38, y: 36, title: "Cœur & Cage Thoracique", metric: "-15 BPM DÉCÉLÉRATION" },
+  { p: 0.54, x: 40, y: 44, title: "Cœur & Nerf Vague", metric: "STIMULATION PARASYMPATHIQUE" },
+  { p: 0.72, x: 42, y: 52, title: "Cœur & Nerf Vague", metric: "PARASYMPATHIQUE 100%" },
+  { p: 1.00, x: 54, y: 42, title: "Cœur & Cohérence Cardiaque", metric: "RÉSONANCE 0.1 HZ" }
+];
+
+const trajectoryRachis: TrajectoryPoint[] = [
+  { p: 0.00, x: 47, y: 46, title: "Axe Vertébral", metric: "RACHIS 180° · TENSION 0" },
+  { p: 0.18, x: 50, y: 35, title: "Axe Vertébral (135°)", metric: "FLEXION DORSALE 45°" },
+  { p: 0.36, x: 54, y: 24, title: "Rachis Lombaire", metric: "DOS PLAT 90° · DÉCOMPRESSION" },
+  { p: 0.54, x: 58, y: 34, title: "Rachis Lombaire (45°)", metric: "TRACTION LOMBO-SACRÉE" },
+  { p: 0.72, x: 62, y: 44, title: "Rachis & Soumission", metric: "DISCIPLINE DU NAFS" },
+  { p: 1.00, x: 59, y: 80, title: "Assise sur Talons", metric: "ANCRAGE PELVIEN" }
+];
+
+const trajectoryPieds: TrajectoryPoint[] = [
+  { p: 0.00, x: 49, y: 91, title: "Pieds & Ancrage au Sol", metric: "STABILITÉ TERRESTRE" },
+  { p: 0.18, x: 53, y: 74, title: "Mains aux Cuisses", metric: "GUIDAGE BIOMÉCANIQUE" },
+  { p: 0.36, x: 57, y: 56, title: "Mains aux Genoux", metric: "VERROUILLAGE BIOMÉCANIQUE" },
+  { p: 0.54, x: 38, y: 70, title: "Genoux à Terre", metric: "APPROCHE DU SOL" },
+  { p: 0.72, x: 18, y: 84, title: "Earthing 7 Points", metric: "DIFFÉRENTIEL 0V" },
+  { p: 1.00, x: 34, y: 43, title: "Mains en Du'â", metric: "CANAL DE RÉCEPTIVITÉ" }
+];
+
+function interpolateNode(trajectory: TrajectoryPoint[], progress: number) {
+  if (progress <= trajectory[0].p) return trajectory[0];
+  if (progress >= trajectory[trajectory.length - 1].p) return trajectory[trajectory.length - 1];
+  for (let i = 0; i < trajectory.length - 1; i++) {
+    const p1 = trajectory[i];
+    const p2 = trajectory[i + 1];
+    if (progress >= p1.p && progress <= p2.p) {
+      const t = (progress - p1.p) / (p2.p - p1.p);
+      const smoothT = (1 - Math.cos(t * Math.PI)) / 2;
+      return {
+        x: p1.x + (p2.x - p1.x) * smoothT,
+        y: p1.y + (p2.y - p1.y) * smoothT,
+        title: t < 0.5 ? p1.title : p2.title,
+        metric: t < 0.5 ? p1.metric : p2.metric
+      };
+    }
+  }
+  return trajectory[0];
+}
 
 export default function SovereigntyCyberneticHero() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const trackRef = useRef<HTMLElement>(null);
 
-  // Synchronisation continue du cycle de la Salât avec le scroll de l'utilisateur
+  // Synchronisation continue du cycle de la Salât avec le scroll
   useEffect(() => {
     const handleScroll = () => {
       if (!trackRef.current) return;
@@ -127,41 +179,61 @@ export default function SovereigntyCyberneticHero() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Calcul de l'étape active selon la progression du scroll (0.0 à 1.0)
-  const activeIdx = Math.min(3, Math.max(0, Math.floor(scrollProgress * 3.999)));
-  const activeStage = salatStages[activeIdx];
+  // 1. CALCUL DE L'ANGLE DEGRÉ PAR DEGRÉ EN TEMPS RÉEL (180° -> 179° -> ... -> 0°)
+  let currentRachisAngle = 180;
+  if (scrollProgress <= 0.72) {
+    const t = scrollProgress / 0.72;
+    currentRachisAngle = Math.round(180 - t * 180); // 180° -> 0°
+  } else {
+    const t = (scrollProgress - 0.72) / 0.28;
+    currentRachisAngle = Math.round(t * 90); // 0° -> 90° (Du'â)
+  }
 
-  // Fonction de crossfade continu et fluide entre les 4 postures
-  const getStageOpacity = (stageIndex: number, p: number) => {
-    if (stageIndex === 0) {
-      if (p <= 0.20) return 1;
-      if (p >= 0.28) return 0;
-      return (0.28 - p) / 0.08;
+  // 2. DESCENTE PHYSIQUE DU PERSONNAGE DANS LE FOND AU FIL DU SCROLL
+  // "le personnage est dans le fond général et on descend là, le personnage doit descendre dans le scroll de la page"
+  let avatarTranslateY = 0;
+  if (scrollProgress <= 0.72) {
+    const t = scrollProgress / 0.72;
+    // Descente fluide de 0px jusqu'à 135px (le personnage plonge vers la grille terrestre)
+    avatarTranslateY = Math.pow(t, 1.25) * 135;
+  } else {
+    const t = (scrollProgress - 0.72) / 0.28;
+    avatarTranslateY = 135 - t * 55; // Reste au sol en assise (80px)
+  }
+
+  const avatarPitch = Math.sin(Math.min(1, scrollProgress / 0.72) * Math.PI) * 12;
+  const avatarScale = 1 - (scrollProgress <= 0.72 ? (scrollProgress / 0.72) * 0.08 : (1 - (scrollProgress - 0.72) / 0.28) * 0.08);
+
+  // 3. INDEX ACTIF DE LA POSTURE PRINCIPALE (SUR 6 ÉTAPES DENSES)
+  const postureTargets = [0.00, 0.18, 0.36, 0.54, 0.72, 0.90];
+  let activePostureIndex = 0;
+  let minDiff = 999;
+  postureTargets.forEach((tgt, idx) => {
+    const diff = Math.abs(scrollProgress - tgt);
+    if (diff < minDiff) {
+      minDiff = diff;
+      activePostureIndex = idx;
     }
-    if (stageIndex === 1) {
-      if (p < 0.20) return 0;
-      if (p >= 0.20 && p < 0.28) return (p - 0.20) / 0.08;
-      if (p >= 0.28 && p <= 0.47) return 1;
-      if (p > 0.47 && p < 0.55) return (0.55 - p) / 0.08;
-      return 0;
-    }
-    if (stageIndex === 2) {
-      if (p < 0.47) return 0;
-      if (p >= 0.47 && p < 0.55) return (p - 0.47) / 0.08;
-      if (p >= 0.55 && p <= 0.72) return 1;
-      if (p > 0.72 && p < 0.80) return (0.80 - p) / 0.08;
-      return 0;
-    }
-    if (stageIndex === 3) {
-      if (p < 0.72) return 0;
-      if (p >= 0.72 && p < 0.80) return (p - 0.72) / 0.08;
-      return 1;
-    }
-    return 0;
+  });
+  const activePosture = salatPostures[activePostureIndex];
+
+  // Opacité continue des 6 images en transition fluide
+  const getPostureOpacity = (index: number, p: number) => {
+    const target = postureTargets[index];
+    const span = 0.18;
+    const dist = Math.abs(p - target);
+    if (dist >= span) return 0;
+    return (1 + Math.cos((dist / span) * Math.PI)) / 2;
   };
 
-  const currentRotationDegrees = Math.round((scrollProgress * 360) % 360);
-  const dynamicYaw = Math.sin(scrollProgress * Math.PI * 4) * 8; // Légère rotation 3D continue
+  // 4. COORDONNÉES DES NŒUDS ANATOMIQUES INTERPOLÉES EN CONTINU
+  const nodeCerveau = interpolateNode(trajectoryCerveau, scrollProgress);
+  const nodeCoeur = interpolateNode(trajectoryCoeur, scrollProgress);
+  const nodeRachis = interpolateNode(trajectoryRachis, scrollProgress);
+  const nodePieds = interpolateNode(trajectoryPieds, scrollProgress);
+
+  const activeNodes = [nodeCerveau, nodeCoeur, nodeRachis, nodePieds];
+  const radarRotation = Math.round((scrollProgress * 360) % 360);
 
   return (
     <div className="relative w-full bg-[#08090A] text-white">
@@ -266,36 +338,44 @@ export default function SovereigntyCyberneticHero() {
 
       {/* ════════════════════════════════════════════════════════════
           2. SECTION SCROLLYTELLING PLEINE LARGEUR DU CYCLE DE LA SALÂT
-          "en pleine large pas de btn ou bouton, il faut vraiment voir qu'un seul personnage, 
-          pas dans une fenetre, et on voit les mouvements quand on scroll les infos s'affichent"
+          "on voit le 180°, 179°, 178° etc. jusqu'au 0°"
+          "le personnage doit descendre dans le scroll de la page"
           ════════════════════════════════════════════════════════════ */}
       <section 
         id="salat-kinetic-telemetry" 
         ref={trackRef} 
-        className="relative w-full h-[380vh] bg-[#08090A]"
+        className="relative w-full h-[420vh] bg-[#08090A]"
       >
         {/* Conteneur Plein Écran Épinglé (Sticky Top Viewport) */}
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-6 sm:py-8 px-6 sm:px-12 lg:px-16 pointer-events-none select-none">
           
-          {/* Grille vectorielle discrète en arrière-plan (Plein écran sans bordure) */}
+          {/* Grille vectorielle de perspective au sol (Plein écran sans bordure) */}
           <div 
-            className="absolute inset-0 opacity-15 pointer-events-none"
+            className="absolute inset-0 opacity-20 pointer-events-none"
             style={{
               backgroundImage: `
-                linear-gradient(to right, rgba(0,229,153,0.18) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0,229,153,0.18) 1px, transparent 1px)
+                linear-gradient(to right, rgba(0,229,153,0.2) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,229,153,0.2) 1px, transparent 1px)
               `,
               backgroundSize: "80px 80px",
-              maskImage: "radial-gradient(ellipse at 50% 60%, black 25%, transparent 85%)",
-              WebkitMaskImage: "radial-gradient(ellipse at 50% 60%, black 25%, transparent 85%)"
+              maskImage: "radial-gradient(ellipse at 50% 65%, black 25%, transparent 85%)",
+              WebkitMaskImage: "radial-gradient(ellipse at 50% 65%, black 25%, transparent 85%)"
+            }}
+          />
+
+          {/* Faisceau Laser LiDAR en balayage vertical synchronisé au scroll */}
+          <div 
+            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00E599] to-transparent shadow-[0_0_20px_#00E599] pointer-events-none opacity-40 transition-all duration-75"
+            style={{
+              top: `${(scrollProgress * 90 + 5)}%`
             }}
           />
 
           {/* Anneau Gyroscopique LiDAR Orbital (Radar en rotation continue au scroll) */}
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[540px] sm:w-[720px] sm:h-[720px] lg:w-[860px] lg:h-[860px] rounded-full border border-dashed border-[#00E599]/15 pointer-events-none transition-transform duration-100 ease-out"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[540px] sm:w-[720px] sm:h-[720px] lg:w-[880px] lg:h-[880px] rounded-full border border-dashed border-[#00E599]/15 pointer-events-none transition-transform duration-100 ease-out"
             style={{
-              transform: `translate(-50%, -50%) rotate(${currentRotationDegrees}deg)`
+              transform: `translate(-50%, -50%) rotate(${radarRotation}deg)`
             }}
           >
             <span className="absolute top-2 left-1/2 -translate-x-1/2 font-mono text-[9px] text-[#00E599]/60 bg-black/60 px-2 py-0.5 rounded">0° RADAR</span>
@@ -309,71 +389,87 @@ export default function SovereigntyCyberneticHero() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#00E599] animate-ping" />
               <span className="text-[#00E599] font-bold tracking-widest uppercase">
-                TÉLÉMÉTRIE DU CYCLE // SCROLL KINÉTIQUE
+                TÉLÉMÉTRIE DYNAMIQUE DU CYCLE // KINÉTIQUE TEMPS RÉEL
               </span>
             </div>
             <div className="hidden sm:flex items-center gap-6">
-              <span>ANGLE DU RACHIS : <strong className="text-[#00E599]">{activeStage.angle}</strong></span>
-              <span>ROTATION 360° : <strong className="text-white">{currentRotationDegrees}°</strong></span>
-              <span>POSTURE ACTUELLE : <strong className="text-white">{activeStage.postureFrench}</strong></span>
+              <span>ANGLE DU RACHIS : <strong className="text-[#00E599] font-mono text-sm">{currentRachisAngle}°</strong></span>
+              <span>ROTATION RADAR : <strong className="text-white">{radarRotation}°</strong></span>
+              <span>PHASE : <strong className="text-white">{activePosture.phaseLabel}</strong></span>
             </div>
           </div>
 
-          {/* ── SCÈNE PRINCIPALE : L'AVATAR UNIQUE AU CENTRE & LES INFOS EN TYPOGRAPHIE SWISS MONUMENTALE ── */}
+          {/* ── SCÈNE PRINCIPALE : L'AVATAR UNIQUE QUI DESCEND ET LES DONNÉES EN DIRECT ── */}
           <div className="relative z-20 w-full max-w-7xl mx-auto my-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* COLONNE GAUCHE : LES INFOS DYNAMIQUES QUI S'AFFICHENT AU SCROLL (TERMINAL STYLE) */}
-            <div className="lg:col-span-4 space-y-4 text-left transition-all duration-500">
+            {/* COLONNE GAUCHE : COMPTEUR D'ANGLE 180° -> 0° & INFOS SWISS DYNAMIQUES */}
+            <div className="lg:col-span-4 space-y-4 text-left transition-all duration-300">
               
-              <div className="inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs uppercase tracking-[0.25em] text-[#00E599] bg-[#00E599]/10 border border-[#00E599]/25 px-3 py-1 rounded-full">
-                <span>CYCLE 0{activeIdx + 1} / 04</span>
-                <span>•</span>
-                <span>{activeStage.angle}</span>
+              {/* COMPTEUR EN DIRECT DEGRÉ PAR DEGRÉ (180° -> 179° -> 178° ... -> 0°) */}
+              <div className="flex items-baseline gap-2">
+                <span className="font-mono font-black text-6xl sm:text-7xl lg:text-9xl text-white tracking-tighter leading-none drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
+                  {currentRachisAngle}
+                </span>
+                <span className="font-mono font-bold text-4xl sm:text-5xl text-[#00E599]">
+                  °
+                </span>
+                <div className="flex flex-col pl-3 border-l border-[#00E599]/40 ml-2">
+                  <span className="font-mono text-[10px] sm:text-xs uppercase tracking-widest text-[#00E599] font-bold">
+                    INCLINAISON RACHIDIENNE
+                  </span>
+                  <span className="font-mono text-[9px] text-neutral-400">
+                    {currentRachisAngle > 90 
+                      ? "QIYÂM ➔ RUKÛ' (FLEXION)" 
+                      : currentRachisAngle > 0 
+                      ? "RUKÛ' ➔ SUJÛD (DESCENTE)" 
+                      : "SUJÛD (PROSTERNATION)"}
+                  </span>
+                </div>
               </div>
 
               {/* Titre Posture Monumental */}
               <div>
-                <h2 className="font-sans font-extrabold text-4xl sm:text-6xl lg:text-7xl tracking-tight text-white leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
-                  {activeStage.postureArabic}
+                <h2 className="font-sans font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
+                  {activePosture.postureArabic}
                 </h2>
-                <p className="font-sans font-bold text-lg sm:text-2xl text-neutral-300 mt-1">
-                  {activeStage.postureFrench} · <span className="text-[#00E599] font-mono text-base sm:text-lg">{activeStage.subtitle}</span>
+                <p className="font-sans font-bold text-base sm:text-xl text-neutral-300 mt-1">
+                  {activePosture.postureFrench} · <span className="text-[#00E599] font-mono text-sm sm:text-base">{activePosture.subtitle}</span>
                 </p>
               </div>
 
               {/* Badge Métrique Clé */}
               <div className="inline-block font-mono text-xs sm:text-sm font-bold text-[#00E599] bg-[#00E599]/15 border border-[#00E599]/30 px-3.5 py-1.5 rounded-full shadow-[0_0_20px_rgba(0,229,153,0.3)]">
-                {activeStage.keyMetric}
+                {activePosture.keyMetric}
               </div>
 
               {/* Explication Scientifique & Neurobiologique */}
               <p className="text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed max-w-md drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                {activeStage.scientificInsight}
+                {activePosture.scientificInsight}
               </p>
 
               {/* Verset Sacré */}
               <p className="text-[11px] sm:text-xs font-serif italic text-amber-300/80 max-w-md border-l-2 border-[#00E599]/50 pl-3 py-0.5">
-                {activeStage.sacredVerse}
+                {activePosture.sacredVerse}
               </p>
 
             </div>
 
-            {/* COLONNE CENTRALE : LE PERSONNAGE UNIQUE EN LIBERTÉ DANS L'ESPACE (PAS DANS UNE FENÊTRE) */}
+            {/* COLONNE CENTRALE : LE PERSONNAGE UNIQUE EN DESCENTE PHYSIQUE AU SOL */}
             <div className="lg:col-span-6 relative flex items-center justify-center">
               
-              {/* Repère Carré 1:1 pour Ancrage Rigoureux au Millimètre des Points */}
+              {/* Repère Carré 1:1 avec DESCENTE DYNAMIQUE AU FIL DU SCROLL (translateY + pitch) */}
               <div 
-                className="relative aspect-square w-[320px] sm:w-[460px] md:w-[540px] lg:w-[620px] max-h-[70vh] mx-auto flex items-center justify-center transition-transform duration-200 ease-out"
+                className="relative aspect-square w-[320px] sm:w-[460px] md:w-[540px] lg:w-[620px] max-h-[70vh] mx-auto flex items-center justify-center transition-transform duration-100 ease-out"
                 style={{
                   perspective: "1200px",
-                  transform: `perspective(1200px) rotateY(${dynamicYaw}deg)`,
+                  transform: `perspective(1200px) translateY(${avatarTranslateY}px) rotateX(${avatarPitch}deg) scale(${avatarScale})`,
                   transformStyle: "preserve-3d"
                 }}
               >
                 
-                {/* 1. Métamorphose Continue : Crossfade Fluide des 4 Postures au Fil du Scroll */}
-                {salatStages.map((stg, idx) => {
-                  const op = getStageOpacity(idx, scrollProgress);
+                {/* 1. Métamorphose Dense (6 Postures Progressifs du Debout au Sol) */}
+                {salatPostures.map((stg, idx) => {
+                  const op = getPostureOpacity(idx, scrollProgress);
                   return (
                     <div
                       key={stg.id}
@@ -396,13 +492,13 @@ export default function SovereigntyCyberneticHero() {
                   );
                 })}
 
-                {/* 2. Réticules Biomécaniques : Exactement Ancrés sur l'Anatomie (Cerveau, Cœur, Dos, Pieds) */}
+                {/* 2. Réticules Biomécaniques : INTERPOLÉS ET EN MOUVEMENT CONTINU SUR L'ANATOMIE */}
                 <div className="absolute inset-0 z-30 pointer-events-none">
-                  {activeStage.nodes.map((node, nIdx) => (
+                  {activeNodes.map((node, nIdx) => (
                     <div
-                      key={`${activeStage.id}-${nIdx}`}
-                      style={{ left: `${node.coords.x}%`, top: `${node.coords.y}%` }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ease-out"
+                      key={nIdx}
+                      style={{ left: `${node.x}%`, top: `${node.y}%` }}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-100 ease-out"
                     >
                       <div className="flex items-center gap-2 group">
                         
@@ -431,21 +527,30 @@ export default function SovereigntyCyberneticHero() {
 
             </div>
 
-            {/* COLONNE DROITE : INDICATEUR VERTICAL DE DÉFILEMENT ÉPURÉ (TERMINAL STYLE) */}
-            <div className="lg:col-span-2 hidden lg:flex flex-col items-end space-y-8 font-mono text-xs">
-              <div className="relative pl-4 border-l border-white/15 space-y-8">
-                {salatStages.map((stg, idx) => {
-                  const isActive = activeIdx === idx;
+            {/* COLONNE DROITE : INDICATEUR VERTICAL D'ANGLE ET DE PROGRESSION (TERMINAL STYLE) */}
+            <div className="lg:col-span-2 hidden lg:flex flex-col items-end space-y-6 font-mono text-xs">
+              <div className="relative pl-4 border-l border-white/15 space-y-6">
+                {[
+                  { label: "QIYÂM", deg: "180°", min: 135, isDua: false },
+                  { label: "INFLEXION", deg: "135°", min: 110, isDua: false },
+                  { label: "RUKÛ'", deg: "90°", min: 65, isDua: false },
+                  { label: "DESCENTE", deg: "45°", min: 20, isDua: false },
+                  { label: "SUJÛD", deg: "0°", min: -1, isDua: false },
+                  { label: "DU'Â", deg: "90°", min: 0, isDua: true }
+                ].map((item, idx) => {
+                  const isActive = item.isDua 
+                    ? scrollProgress > 0.72 
+                    : (scrollProgress <= 0.72 && currentRachisAngle <= (idx === 0 ? 180 : item.min + 45) && currentRachisAngle >= item.min);
                   return (
-                    <div key={stg.id} className="relative transition-all duration-300">
+                    <div key={idx} className="relative transition-all duration-200">
                       {isActive && (
                         <span className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#00E599] shadow-[0_0_12px_#00E599]" />
                       )}
                       <p className={`font-mono text-[10px] tracking-widest uppercase ${isActive ? "text-[#00E599] font-bold" : "text-neutral-500"}`}>
-                        {stg.stepNumber} // {stg.postureArabic}
+                        {item.label}
                       </p>
                       <p className={`font-sans font-bold text-xs ${isActive ? "text-white" : "text-neutral-500"}`}>
-                        {stg.postureFrench} ({stg.angle})
+                        {item.deg}
                       </p>
                     </div>
                   );
@@ -454,10 +559,10 @@ export default function SovereigntyCyberneticHero() {
 
               {/* Jauge de progression continue */}
               <div className="w-32 text-right">
-                <span className="text-[10px] text-neutral-400 block mb-1">MÉTAMORPHOSE</span>
+                <span className="text-[10px] text-neutral-400 block mb-1">DESCENTE RACHIDIENNE</span>
                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-[#00E599] transition-all duration-100" 
+                    className="h-full bg-[#00E599] transition-all duration-75" 
                     style={{ width: `${Math.round(scrollProgress * 100)}%` }}
                   />
                 </div>
@@ -469,17 +574,17 @@ export default function SovereigntyCyberneticHero() {
           {/* ── BARRE INFÉRIEURE : TÉLÉMÉTRIE EN DIRECT & INVITATION AU SCROLL ── */}
           <div className="relative z-10 w-full flex flex-col sm:flex-row items-center justify-between font-mono text-[10px] text-neutral-400 gap-2 border-t border-white/10 pt-4">
             <div className="flex items-center gap-3">
-              <span>SCAN : <strong className="text-[#00E599]">ACTIF</strong></span>
+              <span>SCAN LASER : <strong className="text-[#00E599]">ACTIF</strong></span>
               <span>•</span>
-              <span>AFFLUX SANGUIN PRÉFRONTAL : <strong className="text-white">EN ÉLÉVATION</strong></span>
+              <span>DESCENTE AU SOL : <strong className="text-white">{Math.round(avatarTranslateY)} PX</strong></span>
               <span>•</span>
-              <span>COURBURE RACHIDIENNE : <strong className="text-white">{activeStage.angle}</strong></span>
+              <span>COURBURE RACHIDIENNE : <strong className="text-[#00E599] font-bold text-xs">{currentRachisAngle}°</strong></span>
             </div>
 
             <div className="flex items-center gap-2 text-[#00E599]">
               <span className="animate-pulse">↓</span>
               <span className="uppercase tracking-widest font-bold">
-                DÉFILEZ POUR POURSUIVRE LA MÉTAMORPHOSE [ {activeIdx + 1} / 04 ]
+                DÉFILEZ POUR POURSUIVRE LA DESCENTE [ {currentRachisAngle}° ]
               </span>
             </div>
           </div>
