@@ -10,6 +10,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Card from "@/components/ui/Card";
 import { useTimeTheme } from "@/components/ui/TimeThemeProvider";
 import { testimonials, Testimonial } from "@/lib/testimonials";
+import SovereigntyCyberneticHero from "@/components/ui/SovereigntyCyberneticHero";
 
 
 export default function Home() {
@@ -169,119 +170,10 @@ export default function Home() {
     <div className={`relative overflow-hidden bg-midnight text-cream ${isFocusMode ? "focus-layout-active" : ""}`}>
       
       {/* ═══════════════════════════════════════════
-          SECTION 1 : HERO IMMERSIF ET CINÉMATOGRAPHIQUE
+          SECTION 1 : HERO CYBERNÉTIQUE & HUD DE SOUVERAINETÉ
+          (Inspiré de l'ingénierie et de la télémétrie de Terminal)
           ═══════════════════════════════════════════ */}
-      <section className="relative min-h-[95vh] flex flex-col justify-center pt-40 pb-24 bg-midnight">
-        
-        {/* Arche Florale (Eden) - Arrière-plan */}
-        <div 
-          className="absolute top-0 left-0 w-full h-[60vh] md:h-[80vh] z-0 pointer-events-none opacity-60 mix-blend-screen"
-          style={{
-            backgroundImage: "url('/floral_arch_eden.png')",
-            backgroundPosition: "top center",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat"
-          }}
-        />
-
-
-        <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-20 text-center flex flex-col items-center">
-          
-          <motion.span
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-[10px] font-bold uppercase tracking-[0.4em] text-emerald bg-emerald-muted/10 px-5 py-2 rounded-full border border-emerald/20 mb-8 font-body"
-          >
-            Il n&apos;est jamais trop tard
-          </motion.span>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="font-heading text-4xl md:text-5xl font-medium leading-[1.3] tracking-wide text-cream max-w-4xl"
-          >
-            Restaurez votre clarté intellectuelle et maîtrisez vos passions pour retrouver une prière (Salat) apaisée et accomplir sereinement votre mission sur terre.
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-8 text-sm md:text-base text-cream-muted max-w-3xl font-body leading-relaxed"
-          >
-            Sachez que la porte est toujours ouverte. Allah a partagé Sa miséricorde en cent parts, et Il accueille le retour de Ses serviteurs avec une indulgence absolue. L&apos;investissement de cet accompagnement n&apos;est rien face à la récompense ultime : la félicité éternelle (Al-Falah) et la reconquête de la Souveraineté de votre âme.
-          </motion.p>
-
-          {/* DOUBLE BOUTON D'ACTION (CTA) STRATÉGIQUE : AUDIT & LIVRES */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45 }}
-            className="mt-10 w-full max-w-2xl flex flex-col sm:flex-row items-stretch justify-center gap-4 sm:gap-6 z-30"
-          >
-            {/* CTA 1 : AUDIT DE SOUVERAINETÉ & PRIÈRE */}
-            <Link
-              href="/audit"
-              className="group flex-1 relative flex flex-col items-center justify-center py-5 px-6 rounded-xl bg-gradient-to-b from-emerald/20 to-emerald/10 border-2 border-emerald text-cream hover:bg-emerald hover:text-midnight transition-all duration-300 shadow-xl shadow-emerald/10 hover:shadow-emerald/25 hover:-translate-y-0.5 cursor-pointer"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 rounded-full bg-emerald group-hover:bg-midnight animate-pulse" />
-                <span className="font-heading text-base md:text-lg font-semibold tracking-wide uppercase">
-                  Passer l&apos;Audit Gratuit
-                </span>
-                <span className="text-emerald group-hover:text-midnight transition-transform group-hover:translate-x-1">→</span>
-              </div>
-              <span className="text-[11px] text-cream-muted group-hover:text-midnight/80 font-body transition-colors">
-                Diagnostic Salât & Clarté • 3 minutes
-              </span>
-            </Link>
-
-            {/* CTA 2 : OUVRAGES & LIVRES DE RÉFÉRENCE */}
-            <Link
-              href="/livres"
-              className="group flex-1 relative flex flex-col items-center justify-center py-5 px-6 rounded-xl bg-surface/80 border border-gold/40 hover:border-gold text-cream hover:bg-gold/10 transition-all duration-300 shadow-xl shadow-black/40 hover:shadow-gold/15 hover:-translate-y-0.5 cursor-pointer backdrop-blur-sm"
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-heading text-base md:text-lg font-semibold tracking-wide text-gold group-hover:text-gold-light uppercase">
-                  Découvrir les Livres
-                </span>
-                <span className="text-gold group-hover:text-gold-light transition-transform group-hover:translate-x-1">→</span>
-              </div>
-              <span className="text-[11px] text-cream-muted group-hover:text-cream font-body transition-colors">
-                Adam • Les Secrets • Ar-Rahman
-              </span>
-            </Link>
-          </motion.div>
-
-          {/* BOUTON D'ÉVEIL DE CONSCIENCE IMMERSIF */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6 }}
-            className="mt-8 flex flex-col items-center gap-3"
-          >
-            <button
-              onClick={() => setIsVideoOpen(true)}
-              className="group relative flex items-center justify-center py-2.5 px-6 border border-emerald/40 text-emerald-light/90 rounded-full font-heading text-xs tracking-widest uppercase hover:bg-emerald/10 hover:border-emerald transition-all duration-300 cursor-pointer bg-midnight/80 backdrop-blur-sm"
-            >
-              <span className="mr-2 inline-block w-1.5 h-1.5 rounded-full bg-emerald animate-ping" />
-              Écouter l&apos;Appel — 90 secondes (Audio immersif)
-            </button>
-            <span className="text-[10px] tracking-[0.2em] text-cream-muted/70 uppercase font-body font-semibold">
-              Cabinet BLF • Ingénierie comportementale & Exégèse • Confidentiel
-            </span>
-          </motion.div>
-
-        </div>
-
-        {/* Petite flèche animée */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none opacity-60">
-          <span className="text-[9px] tracking-[0.25em] uppercase text-emerald font-body font-bold">Commencer l&apos;Audit</span>
-          <div className="w-1.5 h-1.5 rounded-full bg-emerald animate-bounce" />
-        </div>
-      </section>
+      <SovereigntyCyberneticHero />
 
       {/* ═══════════════════════════════════════════
           MODALE VIDÉO D&apos;ÉVEIL DE CONSCIENCE (PLEIN ÉCRAN)
