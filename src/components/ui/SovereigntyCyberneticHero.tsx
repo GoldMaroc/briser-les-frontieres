@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BiometricNode {
   id: string;
@@ -60,44 +60,15 @@ const biometricNodes: BiometricNode[] = [
 ];
 
 export default function SovereigntyCyberneticHero() {
-  const scrollTrackRef = useRef<HTMLDivElement>(null);
   const [activeNode, setActiveNode] = useState<BiometricNode>(biometricNodes[0]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Scroll Progress across the 300vh sticky sequence
-  const { scrollYProgress } = useScroll({
-    target: scrollTrackRef,
-    offset: ["start start", "end end"]
-  });
-
-  // ═══════════════════════════════════════════════════════════
-  // TRANSFORMATION VALUES FOR SCROLLYTELLING
-  // ═══════════════════════════════════════════════════════════
-
-  // Phase 0: Initial Hero Visual (Dawn sanctuary)
-  const heroImageScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.08]);
-  const heroImageOpacity = useTransform(scrollYProgress, [0, 0.35, 0.48], [1, 0.9, 0]);
-
-  // Phase 0: Initial Micro elements (Scroll indicator, Ticker)
-  const initialOverlayOpacity = useTransform(scrollYProgress, [0, 0.12, 0.22], [1, 0.5, 0]);
-
-  // Phase 1: The Kinetic Monolith Statement ("Nous avons réinventé...")
-  const statement1Opacity = useTransform(scrollYProgress, [0.15, 0.24, 0.42, 0.50], [0, 1, 1, 0]);
-  const statement1Y = useTransform(scrollYProgress, [0.15, 0.24, 0.42, 0.50], [30, 0, 0, -30]);
-  const statement1Scale = useTransform(scrollYProgress, [0.15, 0.30], [0.96, 1]);
-
-  // Phase 2: 3D LiDAR Point Cloud & Sujûd Telemetry ("L'ingénierie sacrée...")
-  const pointCloudOpacity = useTransform(scrollYProgress, [0.42, 0.52, 0.90, 0.99], [0, 1, 1, 0]);
-  const pointCloudScale = useTransform(scrollYProgress, [0.45, 0.70], [1.04, 1]);
-
-  const statement2Opacity = useTransform(scrollYProgress, [0.48, 0.58, 0.88, 0.97], [0, 1, 1, 0]);
-  const statement2Y = useTransform(scrollYProgress, [0.48, 0.58, 0.88, 0.97], [30, 0, 0, -25]);
-
-  const hudNodesOpacity = useTransform(scrollYProgress, [0.58, 0.68, 0.90, 0.98], [0, 1, 1, 0]);
-
-  const handleScrollExplore = () => {
+  const scrollToSection = (id: string) => {
     if (typeof window !== "undefined") {
-      window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -134,15 +105,15 @@ export default function SovereigntyCyberneticHero() {
 
           {/* Navigation Centrale (Desktop) */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-medium text-neutral-300">
-            <button onClick={handleScrollExplore} className="hover:text-white transition-colors cursor-pointer">
+            <button onClick={() => scrollToSection("sujud-scan")} className="hover:text-white transition-colors cursor-pointer">
               Sujûd
             </button>
-            <a href="#telemetry-cortex" className="hover:text-white transition-colors">
+            <button onClick={() => scrollToSection("telemetry-cortex")} className="hover:text-white transition-colors cursor-pointer">
               Neurobiologie
-            </a>
-            <a href="#bento-ecosystem" className="hover:text-white transition-colors">
+            </button>
+            <button onClick={() => scrollToSection("bento-ecosystem")} className="hover:text-white transition-colors cursor-pointer">
               Méthode
-            </a>
+            </button>
             <Link href="/livres" className="hover:text-white transition-colors">
               Les Traités
             </Link>
@@ -204,9 +175,9 @@ export default function SovereigntyCyberneticHero() {
               exit={{ opacity: 0, y: -10 }}
               className="lg:hidden mt-2 p-4 rounded-3xl bg-[#121316]/95 backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col gap-3 text-center font-sans text-sm"
             >
-              <button onClick={() => { setMobileMenuOpen(false); handleScrollExplore(); }} className="py-2 hover:text-[#00E599]">Sujûd (Prosternation)</button>
-              <a href="#telemetry-cortex" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#00E599]">Neurobiologie & Énergie</a>
-              <a href="#bento-ecosystem" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#00E599]">Méthode & Piliers</a>
+              <button onClick={() => { setMobileMenuOpen(false); scrollToSection("sujud-scan"); }} className="py-2 hover:text-[#00E599]">Sujûd (Prosternation)</button>
+              <button onClick={() => { setMobileMenuOpen(false); scrollToSection("telemetry-cortex"); }} className="py-2 hover:text-[#00E599]">Neurobiologie & Énergie</button>
+              <button onClick={() => { setMobileMenuOpen(false); scrollToSection("bento-ecosystem"); }} className="py-2 hover:text-[#00E599]">Méthode & Piliers</button>
               <Link href="/livres" onClick={() => setMobileMenuOpen(false)} className="py-2 text-white font-semibold">Les Traités de l&apos;Ingénieur</Link>
               <Link href="/articles" onClick={() => setMobileMenuOpen(false)} className="py-2 text-neutral-400">Journal & Recherches</Link>
               <Link href="/candidature" onClick={() => setMobileMenuOpen(false)} className="py-2 text-neutral-400">Candidature Privée</Link>
@@ -216,256 +187,237 @@ export default function SovereigntyCyberneticHero() {
       </header>
 
       {/* ═══════════════════════════════════════════════════════════
-          1. LE SCROLL TRACK & VIEWPORT STICKY FULL-BLEED (100vw × 100vh)
-          Séquence cinématique de scrollytelling en 3 phases
+          1. SECTION HERO PRINCIPALE (100vw × 100vh FULL BLEED)
+          L'Aube & Le Monolithe Typographique Monumental (Terminal style)
           ═══════════════════════════════════════════════════════════ */}
-      <div ref={scrollTrackRef} className="relative h-[320vh]">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
+      <section className="relative w-full min-h-screen flex flex-col justify-between pt-32 pb-12 px-6 sm:px-12 overflow-hidden">
+        
+        {/* Image de fond : Sanctuaire à l'Aube (Plein écran immersif) */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="/images/instagram/hero_terminal_dawn.jpg"
+            alt="Sanctuaire à l'Aube"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center filter brightness-90 contrast-105"
+          />
+          {/* Dégradés cinématiques pour contraste et lisibilité */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08090A] via-black/30 to-[#08090A]/70" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,9,10,0.85)_100%)]" />
+        </div>
 
-          {/* ─────────────────────────────────────────────────────────
-              CALQUE A : VISUEL CINÉMATIQUE DE L'AUBE (PHASE INITIALE)
-              ───────────────────────────────────────────────────────── */}
-          <motion.div 
-            style={{ 
-              opacity: heroImageOpacity,
-              scale: heroImageScale
-            }}
-            className="absolute inset-0 z-0 w-full h-full pointer-events-none"
-          >
-            <Image
-              src="/images/instagram/hero_terminal_dawn.jpg"
-              alt="Sanctuaire à l'Aube"
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center filter brightness-90 contrast-105"
-            />
-            {/* Dégradés cinématiques pour contraste des textes */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08090A] via-transparent to-[#08090A]/60" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(8,9,10,0.85)_100%)]" />
-          </motion.div>
+        {/* Badge Télémétrie Supérieur */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="w-2 h-2 rounded-full bg-[#00E599] animate-ping" />
+            <span className="font-mono text-[10px] sm:text-xs tracking-[0.25em] text-neutral-300 uppercase">
+              CABINET BLF // ARCHITECTURE DU CERVEAU & EXÉGÈSE
+            </span>
+          </div>
+          <span className="hidden md:inline-block font-mono text-[10px] tracking-widest text-[#00E599] bg-[#00E599]/10 px-3 py-1 rounded-full border border-[#00E599]/20">
+            SYSTÈME OPÉRATIONNEL ACTIF
+          </span>
+        </div>
 
-          {/* ─────────────────────────────────────────────────────────
-              CALQUE B : VISUEL 3D LIDAR / POINT-CLOUD DU SUJÛD (PHASE 2)
-              ───────────────────────────────────────────────────────── */}
-          <motion.div 
-            style={{ 
-              opacity: pointCloudOpacity,
-              scale: pointCloudScale
-            }}
-            className="absolute inset-0 z-0 w-full h-full pointer-events-none"
-          >
-            <Image
-              src="/images/instagram/point_cloud_sujud_telemetry.jpg"
-              alt="Scan 3D LiDAR Prosternation"
-              fill
-              sizes="100vw"
-              className="object-cover object-center filter contrast-125 brightness-95"
-            />
-            {/* Lignes techniques et grille vectorielle façon Terminal */}
-            <div 
-              className="absolute inset-0 opacity-[0.12]"
-              style={{
-                backgroundImage: `
-                  linear-gradient(to right, rgba(0,229,153,0.3) 1px, transparent 1px),
-                  linear-gradient(to bottom, rgba(0,229,153,0.3) 1px, transparent 1px)
-                `,
-                backgroundSize: "60px 60px"
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#08090A] via-transparent to-[#08090A]/70" />
-          </motion.div>
-
-          {/* ─────────────────────────────────────────────────────────
-              OVERLAY 0 : HERO INITIAL ÉPURÉ + SCROLL TO EXPLORE ↓
-              ───────────────────────────────────────────────────────── */}
+        {/* ── LE MONOLITHE TYPOGRAPHIQUE AU CENTRE (TERMINAL STYLE) ── */}
+        <div className="relative z-10 max-w-5xl mx-auto text-center my-auto py-12">
           <motion.div
-            style={{ opacity: initialOverlayOpacity }}
-            className="relative z-10 w-full h-full flex flex-col justify-between pt-36 pb-12 px-6 sm:px-12 max-w-7xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            {/* Badge Télémétrie Supérieur */}
-            <div className="flex items-center gap-3">
-              <span className="w-2 h-2 rounded-full bg-[#00E599] animate-ping" />
-              <span className="font-mono text-[10px] sm:text-xs tracking-[0.25em] text-neutral-300 uppercase">
-                CABINET BLF // ARCHITECTURE DU CERVEAU & EXÉGÈSE
-              </span>
-            </div>
+            <span className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#00E599] bg-[#00E599]/10 border border-[#00E599]/30 px-4 py-1.5 rounded-full mb-6">
+              // RÉINITIALISATION BIOLOGIQUE
+            </span>
 
-            {/* Bas de page initial : Ticker & Bouton Scroll */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 pb-4">
-              
-              {/* Ticker télémétrique */}
-              <div className="font-mono text-[11px] text-neutral-400 space-y-1">
-                <p className="text-white font-semibold">SOVEREIGNTY OPERATING SYSTEM // V.3.1</p>
-                <p>CYCLES CIRCADIENS : SYNCHRONISÉS SUR L&apos;ANGLE SOLAIRE</p>
-                <p className="text-[#00E599]">STATUS : CHARGE ALLOSTATIQUE EN RÉDUCTION</p>
-              </div>
+            <h1 className="font-sans font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white leading-[1.06] drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
+              Nous avons réinventé<br />
+              la reconquête de l&apos;âme<br />
+              par la prosternation.
+            </h1>
 
-              {/* Indicateur de Défilement (Terminal style - Cliquable) */}
-              <button
-                onClick={handleScrollExplore}
-                className="flex items-center gap-3 text-right group cursor-pointer"
+            <p className="mt-8 text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto font-sans leading-relaxed drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
+              La prosternation (Sujûd) n&apos;est pas une soumission passive. C&apos;est l&apos;arme neurobiologique suprême pour dompter le cortisol et commander son esprit.
+            </p>
+
+            {/* CTAs Centraux Intégrés */}
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/audit"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#00E599] text-black font-sans font-bold text-sm tracking-wider uppercase shadow-[0_0_30px_rgba(0,229,153,0.5)] hover:scale-105 transition-all"
               >
-                <div className="flex flex-col items-end">
-                  <span className="font-sans font-bold text-xs tracking-widest uppercase text-white group-hover:text-[#00E599] transition-colors">
-                    SCROLL TO EXPLORE
-                  </span>
-                  <span className="font-mono text-[10px] text-neutral-400">
-                    [ 01 / 03 ] INITIATION
-                  </span>
-                </div>
-                <div className="w-8 h-8 rounded-full border border-white/20 group-hover:border-[#00E599] flex items-center justify-center animate-bounce text-[#00E599] transition-colors">
-                  ↓
-                </div>
-              </button>
-
+                Passer l&apos;Audit Prière & Cerveau (3 min) →
+              </Link>
+              <Link
+                href="/livres"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-sans font-semibold text-sm tracking-wider uppercase transition-all"
+              >
+                Les Traités de l&apos;Ingénieur
+              </Link>
             </div>
           </motion.div>
+        </div>
 
-          {/* ─────────────────────────────────────────────────────────
-              OVERLAY 1 (SCROLL 1) : LE MONOLITHE CINÉMATIQUE (TERMINAL STYLE)
-              "We have reinvented the future of logistics through the yard."
-              ➔ "Nous avons réinventé la reconquête de l'âme par la prosternation."
-              ───────────────────────────────────────────────────────── */}
-          <motion.div
-            style={{
-              opacity: statement1Opacity,
-              y: statement1Y,
-              scale: statement1Scale
-            }}
-            className="absolute inset-0 z-20 flex flex-col items-center justify-center px-6 text-center pointer-events-none"
+        {/* Bas de page initial : Ticker & Bouton Scroll */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 pb-2">
+          
+          {/* Ticker télémétrique */}
+          <div className="font-mono text-[11px] text-neutral-400 space-y-1">
+            <p className="text-white font-semibold">SOVEREIGNTY OPERATING SYSTEM // V.3.1</p>
+            <p>CYCLES CIRCADIENS : SYNCHRONISÉS SUR L&apos;ANGLE SOLAIRE</p>
+            <p className="text-[#00E599]">STATUS : CHARGE ALLOSTATIQUE EN RÉDUCTION</p>
+          </div>
+
+          {/* Indicateur de Défilement (Terminal style - Cliquable) */}
+          <button
+            onClick={() => scrollToSection("sujud-scan")}
+            className="flex items-center gap-3 text-right group cursor-pointer"
           >
-            <div className="max-w-5xl mx-auto">
-              <span className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#00E599] bg-[#00E599]/10 border border-[#00E599]/30 px-4 py-1.5 rounded-full mb-6">
-                // RÉINITIALISATION BIOLOGIQUE
+            <div className="flex flex-col items-end">
+              <span className="font-sans font-bold text-xs tracking-widest uppercase text-white group-hover:text-[#00E599] transition-colors">
+                SCROLL TO EXPLORE
               </span>
-              
-              <h1 className="font-sans font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white leading-[1.06] drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
-                Nous avons réinventé<br />
-                la reconquête de l&apos;âme<br />
-                par la prosternation.
-              </h1>
-
-              <p className="mt-8 text-base sm:text-xl text-neutral-300 max-w-2xl mx-auto font-sans leading-relaxed drop-shadow-[0_4px_10px_rgba(0,0,0,0.9)]">
-                La prosternation (Sujûd) n&apos;est pas une soumission passive. C&apos;est l&apos;arme neurobiologique suprême pour dompter le cortisol et commander son esprit.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* ─────────────────────────────────────────────────────────
-              OVERLAY 2 (SCROLL 2) : LE SCAN 3D DU SUJÛD & HUD VECTEUR
-              "AI-native technology that turns the space between your gate"
-              ➔ "L'ingénierie sacrée qui réinitialise le cerveau et l'énergie du croyant."
-              ───────────────────────────────────────────────────────── */}
-          <motion.div
-            id="sujud-scan"
-            style={{
-              opacity: statement2Opacity,
-              y: statement2Y
-            }}
-            className="absolute inset-0 z-20 flex flex-col justify-between pt-28 pb-12 px-6 sm:px-12 max-w-7xl mx-auto pointer-events-none"
-          >
-            {/* Titre Monumental avec la lettre mise en vert comme Terminal */}
-            <div className="text-center pt-8">
-              <span className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#00E599] mb-3">
-                // TÉLÉMÉTRIE & CARTOGRAPHIE EN TEMPS RÉEL
+              <span className="font-mono text-[10px] text-neutral-400">
+                [ 01 / 03 ] INITIATION
               </span>
-              <h2 className="font-sans font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-[1.1] max-w-5xl mx-auto drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
-                L&apos;ingénierie sacrée qui réinitialise le cerveau et l&apos;énerg<span className="text-[#00E599]">i</span>e.
-              </h2>
             </div>
-
-            {/* Réticules Biométriques Flottants sur le Corps (Interactifs) */}
-            <motion.div 
-              style={{ opacity: hudNodesOpacity }}
-              className="relative w-full h-[360px] sm:h-[420px] pointer-events-auto"
-            >
-              {biometricNodes.map((node) => {
-                const isSelected = activeNode.id === node.id;
-                return (
-                  <div
-                    key={node.id}
-                    style={{ left: `${node.coordinates.x}%`, top: `${node.coordinates.y}%` }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 z-30"
-                  >
-                    <button
-                      onClick={() => setActiveNode(node)}
-                      className={`group relative p-2 flex items-center gap-3 transition-all duration-300 cursor-pointer ${isSelected ? "scale-110" : "hover:scale-105"}`}
-                    >
-                      {/* Anneau de ciblage LiDAR */}
-                      <span className="relative flex h-5 w-5 items-center justify-center">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E599] opacity-70" />
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00E599] border-2 border-black" />
-                      </span>
-
-                      {/* Étiquette d'ingénierie */}
-                      <div className={`px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all text-left ${isSelected ? "bg-[#121316]/95 border-[#00E599] shadow-[0_0_20px_rgba(0,229,153,0.3)]" : "bg-black/75 border-white/15 hover:border-white/40"}`}>
-                        <span className="block font-mono text-[9px] uppercase tracking-wider text-neutral-400">
-                          {node.category.split("//")[1] || node.category}
-                        </span>
-                        <span className="block font-sans font-bold text-xs text-white">
-                          {node.title}
-                        </span>
-                        <span className="block font-mono text-[10px] text-[#00E599] font-semibold">
-                          {node.metric}
-                        </span>
-                      </div>
-                    </button>
-                  </div>
-                );
-              })}
-
-              {/* Fiche active d'analyse scientifique en bas de l'écran */}
-              <div id="telemetry-cortex" className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeNode.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.3 }}
-                    className="p-4 sm:p-5 rounded-2xl bg-[#121316]/90 backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="w-2 h-2 rounded-full bg-[#00E599]" />
-                        <span className="font-mono text-[10px] text-[#00E599] uppercase tracking-widest font-bold">
-                          {activeNode.category}
-                        </span>
-                      </div>
-                      <h3 className="font-sans font-bold text-base sm:text-lg text-white">
-                        {activeNode.title} — <span className="font-mono text-[#00E599]">{activeNode.metric}</span>
-                      </h3>
-                      <p className="text-xs sm:text-sm text-neutral-300 font-sans mt-1 leading-snug">
-                        {activeNode.scientificInsight}
-                      </p>
-                    </div>
-
-                    <Link
-                      href="/audit"
-                      className="flex-shrink-0 px-4 py-2 rounded-xl bg-[#00E599] text-black font-sans font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md shadow-[#00E599]/30"
-                    >
-                      Mesurer Mon État
-                    </Link>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-
-            </motion.div>
-
-            {/* Footer de l'écran de télémétrie */}
-            <div className="flex items-center justify-between font-mono text-[10px] text-neutral-500 pt-2 border-t border-white/10">
-              <span>SCAN BIOMÉTRIQUE CONFIRMÉ • DÉCHARGE ÉLECTROSTATIQUE VALIDÉE</span>
-              <span className="text-[#00E599] font-bold">[ 02 / 03 ] ARCHITECTURE DU CERVEAU</span>
+            <div className="w-8 h-8 rounded-full border border-white/20 group-hover:border-[#00E599] flex items-center justify-center animate-bounce text-[#00E599] transition-colors">
+              ↓
             </div>
-
-          </motion.div>
+          </button>
 
         </div>
-      </div>
+
+      </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          2. LA BENTO GRID DE TRANSITION (01, 02, 03 - TERMINAL STYLE)
+          2. SECTION 3D LIDAR / POINT-CLOUD & TÉLÉMÉTRIE DU SUJÛD
+          "AI-native technology that turns the space between your gate"
+          ➔ "L'ingénierie sacrée qui réinitialise le cerveau et l'énergie."
+          ═══════════════════════════════════════════════════════════ */}
+      <section id="sujud-scan" className="relative w-full min-h-screen flex flex-col justify-between py-24 px-6 sm:px-12 bg-[#08090A] border-t border-white/10 overflow-hidden">
+        
+        {/* Arrière-plan 3D LiDAR Point-Cloud du Sujûd */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="/images/instagram/point_cloud_sujud_telemetry.jpg"
+            alt="Scan 3D LiDAR Prosternation"
+            fill
+            sizes="100vw"
+            className="object-cover object-center filter contrast-125 brightness-95"
+          />
+          {/* Lignes techniques et grille vectorielle façon Terminal */}
+          <div 
+            className="absolute inset-0 opacity-[0.12]"
+            style={{
+              backgroundImage: `
+                linear-gradient(to right, rgba(0,229,153,0.3) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,229,153,0.3) 1px, transparent 1px)
+              `,
+              backgroundSize: "60px 60px"
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#08090A] via-black/50 to-[#08090A]/80" />
+        </div>
+
+        {/* Titre Monumental avec la lettre mise en vert comme Terminal */}
+        <div className="relative z-10 text-center max-w-5xl mx-auto pt-6">
+          <span className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#00E599] mb-3">
+            // TÉLÉMÉTRIE & CARTOGRAPHIE EN TEMPS RÉEL
+          </span>
+          <h2 className="font-sans font-extrabold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight text-white leading-[1.1] drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
+            L&apos;ingénierie sacrée qui réinitialise le cerveau et l&apos;énerg<span className="text-[#00E599]">i</span>e.
+          </h2>
+        </div>
+
+        {/* Réticules Biométriques Flottants sur le Corps (Interactifs) */}
+        <div className="relative z-20 max-w-7xl mx-auto w-full my-auto py-12">
+          <div className="relative w-full h-[360px] sm:h-[440px]">
+            {biometricNodes.map((node) => {
+              const isSelected = activeNode.id === node.id;
+              return (
+                <div
+                  key={node.id}
+                  style={{ left: `${node.coordinates.x}%`, top: `${node.coordinates.y}%` }}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 z-30"
+                >
+                  <button
+                    onClick={() => setActiveNode(node)}
+                    className={`group relative p-2 flex items-center gap-3 transition-all duration-300 cursor-pointer ${isSelected ? "scale-110" : "hover:scale-105"}`}
+                  >
+                    {/* Anneau de ciblage LiDAR */}
+                    <span className="relative flex h-5 w-5 items-center justify-center">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E599] opacity-70" />
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00E599] border-2 border-black" />
+                    </span>
+
+                    {/* Étiquette d'ingénierie */}
+                    <div className={`px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all text-left ${isSelected ? "bg-[#121316]/95 border-[#00E599] shadow-[0_0_20px_rgba(0,229,153,0.3)]" : "bg-black/75 border-white/15 hover:border-white/40"}`}>
+                      <span className="block font-mono text-[9px] uppercase tracking-wider text-neutral-400">
+                        {node.category.split("//")[1] || node.category}
+                      </span>
+                      <span className="block font-sans font-bold text-xs text-white">
+                        {node.title}
+                      </span>
+                      <span className="block font-mono text-[10px] text-[#00E599] font-semibold">
+                        {node.metric}
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+
+            {/* Fiche active d'analyse scientifique en bas du radar */}
+            <div id="telemetry-cortex" className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeNode.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3 }}
+                  className="p-5 sm:p-6 rounded-2xl bg-[#121316]/95 backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="w-2 h-2 rounded-full bg-[#00E599]" />
+                      <span className="font-mono text-[10px] text-[#00E599] uppercase tracking-widest font-bold">
+                        {activeNode.category}
+                      </span>
+                    </div>
+                    <h3 className="font-sans font-bold text-base sm:text-lg text-white">
+                      {activeNode.title} — <span className="font-mono text-[#00E599]">{activeNode.metric}</span>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-neutral-300 font-sans mt-1 leading-snug">
+                      {activeNode.scientificInsight}
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/audit"
+                    className="flex-shrink-0 px-4 py-2 rounded-xl bg-[#00E599] text-black font-sans font-bold text-xs uppercase tracking-wider hover:brightness-110 transition-all shadow-md shadow-[#00E599]/30"
+                  >
+                    Mesurer Mon État
+                  </Link>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Footer de l'écran de télémétrie */}
+        <div className="relative z-10 max-w-7xl mx-auto w-full flex items-center justify-between font-mono text-[10px] text-neutral-400 pt-4 border-t border-white/10">
+          <span>SCAN BIOMÉTRIQUE CONFIRMÉ • DÉCHARGE ÉLECTROSTATIQUE VALIDÉE</span>
+          <span className="text-[#00E599] font-bold">[ 02 / 03 ] ARCHITECTURE DU CERVEAU</span>
+        </div>
+
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════
+          3. LA BENTO GRID DE TRANSITION (01, 02, 03 - TERMINAL STYLE)
           Transition fluide vers l'écosystème d'ingénierie BLF
           ═══════════════════════════════════════════════════════════ */}
       <section id="bento-ecosystem" className="relative z-30 py-28 px-6 sm:px-12 bg-[#08090A] border-t border-white/10">
