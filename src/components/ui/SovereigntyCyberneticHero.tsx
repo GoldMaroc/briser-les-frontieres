@@ -60,18 +60,13 @@ const biometricNodes: BiometricNode[] = [
 ];
 
 export default function SovereigntyCyberneticHero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollTrackRef = useRef<HTMLDivElement>(null);
   const [activeNode, setActiveNode] = useState<BiometricNode>(biometricNodes[0]);
-  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Scroll Progress across the 350vh sticky sequence
+  // Scroll Progress across the 300vh sticky sequence
   const { scrollYProgress } = useScroll({
-    target: containerRef,
+    target: scrollTrackRef,
     offset: ["start start", "end end"]
   });
 
@@ -81,27 +76,33 @@ export default function SovereigntyCyberneticHero() {
 
   // Phase 0: Initial Hero Visual (Dawn sanctuary)
   const heroImageScale = useTransform(scrollYProgress, [0, 0.45], [1, 1.08]);
-  const heroImageOpacity = useTransform(scrollYProgress, [0, 0.38, 0.52], [1, 1, 0]);
+  const heroImageOpacity = useTransform(scrollYProgress, [0, 0.35, 0.48], [1, 0.9, 0]);
 
   // Phase 0: Initial Micro elements (Scroll indicator, Ticker)
-  const initialOverlayOpacity = useTransform(scrollYProgress, [0, 0.15, 0.25], [1, 0.8, 0]);
+  const initialOverlayOpacity = useTransform(scrollYProgress, [0, 0.12, 0.22], [1, 0.5, 0]);
 
   // Phase 1: The Kinetic Monolith Statement ("Nous avons réinventé...")
-  const statement1Opacity = useTransform(scrollYProgress, [0.18, 0.28, 0.42, 0.52], [0, 1, 1, 0]);
-  const statement1Y = useTransform(scrollYProgress, [0.18, 0.28, 0.42, 0.52], [40, 0, 0, -40]);
-  const statement1Scale = useTransform(scrollYProgress, [0.18, 0.35], [0.95, 1]);
+  const statement1Opacity = useTransform(scrollYProgress, [0.15, 0.24, 0.42, 0.50], [0, 1, 1, 0]);
+  const statement1Y = useTransform(scrollYProgress, [0.15, 0.24, 0.42, 0.50], [30, 0, 0, -30]);
+  const statement1Scale = useTransform(scrollYProgress, [0.15, 0.30], [0.96, 1]);
 
   // Phase 2: 3D LiDAR Point Cloud & Sujûd Telemetry ("L'ingénierie sacrée...")
-  const pointCloudOpacity = useTransform(scrollYProgress, [0.45, 0.58, 0.88, 0.98], [0, 1, 1, 0]);
-  const pointCloudScale = useTransform(scrollYProgress, [0.50, 0.75], [1.05, 1]);
+  const pointCloudOpacity = useTransform(scrollYProgress, [0.42, 0.52, 0.90, 0.99], [0, 1, 1, 0]);
+  const pointCloudScale = useTransform(scrollYProgress, [0.45, 0.70], [1.04, 1]);
 
-  const statement2Opacity = useTransform(scrollYProgress, [0.52, 0.62, 0.85, 0.95], [0, 1, 1, 0]);
-  const statement2Y = useTransform(scrollYProgress, [0.52, 0.62, 0.85, 0.95], [40, 0, 0, -30]);
+  const statement2Opacity = useTransform(scrollYProgress, [0.48, 0.58, 0.88, 0.97], [0, 1, 1, 0]);
+  const statement2Y = useTransform(scrollYProgress, [0.48, 0.58, 0.88, 0.97], [30, 0, 0, -25]);
 
-  const hudNodesOpacity = useTransform(scrollYProgress, [0.65, 0.72, 0.90, 0.98], [0, 1, 1, 0]);
+  const hudNodesOpacity = useTransform(scrollYProgress, [0.58, 0.68, 0.90, 0.98], [0, 1, 1, 0]);
+
+  const handleScrollExplore = () => {
+    if (typeof window !== "undefined") {
+      window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" });
+    }
+  };
 
   return (
-    <div ref={containerRef} className="relative w-full bg-[#08090A] text-white">
+    <div className="relative w-full bg-[#08090A] text-white">
 
       {/* ═══════════════════════════════════════════════════════════
           0. LA CAPSULE DE COMMANDE FLOTTANTE (STYLE TERMINAL INDUSTRIES)
@@ -133,9 +134,9 @@ export default function SovereigntyCyberneticHero() {
 
           {/* Navigation Centrale (Desktop) */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-medium text-neutral-300">
-            <a href="#sujud-scan" className="hover:text-white transition-colors">
+            <button onClick={handleScrollExplore} className="hover:text-white transition-colors cursor-pointer">
               Sujûd
-            </a>
+            </button>
             <a href="#telemetry-cortex" className="hover:text-white transition-colors">
               Neurobiologie
             </a>
@@ -184,7 +185,7 @@ export default function SovereigntyCyberneticHero() {
             {/* Bouton Mobile Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+              className="lg:hidden p-2 rounded-full text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
               aria-label="Menu"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -203,7 +204,7 @@ export default function SovereigntyCyberneticHero() {
               exit={{ opacity: 0, y: -10 }}
               className="lg:hidden mt-2 p-4 rounded-3xl bg-[#121316]/95 backdrop-blur-2xl border border-white/15 shadow-2xl flex flex-col gap-3 text-center font-sans text-sm"
             >
-              <a href="#sujud-scan" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#00E599]">Sujûd (Prosternation)</a>
+              <button onClick={() => { setMobileMenuOpen(false); handleScrollExplore(); }} className="py-2 hover:text-[#00E599]">Sujûd (Prosternation)</button>
               <a href="#telemetry-cortex" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#00E599]">Neurobiologie & Énergie</a>
               <a href="#bento-ecosystem" onClick={() => setMobileMenuOpen(false)} className="py-2 hover:text-[#00E599]">Méthode & Piliers</a>
               <Link href="/livres" onClick={() => setMobileMenuOpen(false)} className="py-2 text-white font-semibold">Les Traités de l&apos;Ingénieur</Link>
@@ -215,10 +216,10 @@ export default function SovereigntyCyberneticHero() {
       </header>
 
       {/* ═══════════════════════════════════════════════════════════
-          1. LE VIEWPORT STICKY FULL-BLEED (100vw × 100vh)
+          1. LE SCROLL TRACK & VIEWPORT STICKY FULL-BLEED (100vw × 100vh)
           Séquence cinématique de scrollytelling en 3 phases
           ═══════════════════════════════════════════════════════════ */}
-      <div className="relative h-[340vh]">
+      <div ref={scrollTrackRef} className="relative h-[320vh]">
         <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
 
           {/* ─────────────────────────────────────────────────────────
@@ -280,7 +281,7 @@ export default function SovereigntyCyberneticHero() {
               ───────────────────────────────────────────────────────── */}
           <motion.div
             style={{ opacity: initialOverlayOpacity }}
-            className="relative z-10 w-full h-full flex flex-col justify-between pt-36 pb-12 px-6 sm:px-12 max-w-7xl mx-auto pointer-events-none"
+            className="relative z-10 w-full h-full flex flex-col justify-between pt-36 pb-12 px-6 sm:px-12 max-w-7xl mx-auto"
           >
             {/* Badge Télémétrie Supérieur */}
             <div className="flex items-center gap-3">
@@ -300,20 +301,23 @@ export default function SovereigntyCyberneticHero() {
                 <p className="text-[#00E599]">STATUS : CHARGE ALLOSTATIQUE EN RÉDUCTION</p>
               </div>
 
-              {/* Indicateur de Défilement (Terminal style) */}
-              <div className="flex items-center gap-3 text-right">
+              {/* Indicateur de Défilement (Terminal style - Cliquable) */}
+              <button
+                onClick={handleScrollExplore}
+                className="flex items-center gap-3 text-right group cursor-pointer"
+              >
                 <div className="flex flex-col items-end">
-                  <span className="font-sans font-bold text-xs tracking-widest uppercase text-white">
+                  <span className="font-sans font-bold text-xs tracking-widest uppercase text-white group-hover:text-[#00E599] transition-colors">
                     SCROLL TO EXPLORE
                   </span>
                   <span className="font-mono text-[10px] text-neutral-400">
                     [ 01 / 03 ] INITIATION
                   </span>
                 </div>
-                <div className="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center animate-bounce text-[#00E599]">
+                <div className="w-8 h-8 rounded-full border border-white/20 group-hover:border-[#00E599] flex items-center justify-center animate-bounce text-[#00E599] transition-colors">
                   ↓
                 </div>
-              </div>
+              </button>
 
             </div>
           </motion.div>
@@ -386,7 +390,7 @@ export default function SovereigntyCyberneticHero() {
                   >
                     <button
                       onClick={() => setActiveNode(node)}
-                      className={`group relative p-2 flex items-center gap-3 transition-all duration-300 ${isSelected ? "scale-110" : "hover:scale-105"}`}
+                      className={`group relative p-2 flex items-center gap-3 transition-all duration-300 cursor-pointer ${isSelected ? "scale-110" : "hover:scale-105"}`}
                     >
                       {/* Anneau de ciblage LiDAR */}
                       <span className="relative flex h-5 w-5 items-center justify-center">

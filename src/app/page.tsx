@@ -167,7 +167,7 @@ export default function Home() {
 
 
   return (
-    <div className={`relative overflow-hidden bg-midnight text-cream ${isFocusMode ? "focus-layout-active" : ""}`}>
+    <div className={`relative overflow-x-clip bg-midnight text-cream ${isFocusMode ? "focus-layout-active" : ""}`}>
       
       {/* ═══════════════════════════════════════════
           SECTION 1 : HERO CYBERNÉTIQUE & HUD DE SOUVERAINETÉ
