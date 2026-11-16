@@ -214,21 +214,64 @@ export default function Home() {
             Sachez que la porte est toujours ouverte. Allah a partagé Sa miséricorde en cent parts, et Il accueille le retour de Ses serviteurs avec une indulgence absolue. L&apos;investissement de cet accompagnement n&apos;est rien face à la récompense ultime : la félicité éternelle (Al-Falah) et la reconquête de la Souveraineté de votre âme.
           </motion.p>
 
-          {/* BOUTON D&apos;ÉVEIL DE CONSCIENCE CENTRAL */}
+          {/* DOUBLE BOUTON D'ACTION (CTA) STRATÉGIQUE : AUDIT & LIVRES */}
+          <motion.div
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
+            className="mt-10 w-full max-w-2xl flex flex-col sm:flex-row items-stretch justify-center gap-4 sm:gap-6 z-30"
+          >
+            {/* CTA 1 : AUDIT DE SOUVERAINETÉ & PRIÈRE */}
+            <Link
+              href="/audit"
+              className="group flex-1 relative flex flex-col items-center justify-center py-5 px-6 rounded-xl bg-gradient-to-b from-emerald/20 to-emerald/10 border-2 border-emerald text-cream hover:bg-emerald hover:text-midnight transition-all duration-300 shadow-xl shadow-emerald/10 hover:shadow-emerald/25 hover:-translate-y-0.5 cursor-pointer"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-emerald group-hover:bg-midnight animate-pulse" />
+                <span className="font-heading text-base md:text-lg font-semibold tracking-wide uppercase">
+                  Passer l&apos;Audit Gratuit
+                </span>
+                <span className="text-emerald group-hover:text-midnight transition-transform group-hover:translate-x-1">→</span>
+              </div>
+              <span className="text-[11px] text-cream-muted group-hover:text-midnight/80 font-body transition-colors">
+                Diagnostic Salât & Clarté • 3 minutes
+              </span>
+            </Link>
+
+            {/* CTA 2 : OUVRAGES & LIVRES DE RÉFÉRENCE */}
+            <Link
+              href="/livres"
+              className="group flex-1 relative flex flex-col items-center justify-center py-5 px-6 rounded-xl bg-surface/80 border border-gold/40 hover:border-gold text-cream hover:bg-gold/10 transition-all duration-300 shadow-xl shadow-black/40 hover:shadow-gold/15 hover:-translate-y-0.5 cursor-pointer backdrop-blur-sm"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="font-heading text-base md:text-lg font-semibold tracking-wide text-gold group-hover:text-gold-light uppercase">
+                  Découvrir les Livres
+                </span>
+                <span className="text-gold group-hover:text-gold-light transition-transform group-hover:translate-x-1">→</span>
+              </div>
+              <span className="text-[11px] text-cream-muted group-hover:text-cream font-body transition-colors">
+                Adam • Les Secrets • Ar-Rahman
+              </span>
+            </Link>
+          </motion.div>
+
+          {/* BOUTON D'ÉVEIL DE CONSCIENCE IMMERSIF */}
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.45 }}
-            className="mt-12 flex flex-col items-center gap-6"
+            transition={{ duration: 1, delay: 0.6 }}
+            className="mt-8 flex flex-col items-center gap-3"
           >
             <button
               onClick={() => setIsVideoOpen(true)}
-              className="group relative flex items-center justify-center p-6 border-2 border-emerald text-emerald rounded-full font-heading text-lg tracking-widest uppercase hover:bg-emerald hover:text-midnight transition-all duration-500 shadow-xl shadow-emerald/10 cursor-pointer bg-midnight"
+              className="group relative flex items-center justify-center py-2.5 px-6 border border-emerald/40 text-emerald-light/90 rounded-full font-heading text-xs tracking-widest uppercase hover:bg-emerald/10 hover:border-emerald transition-all duration-300 cursor-pointer bg-midnight/80 backdrop-blur-sm"
             >
-              <span className="absolute inset-0 rounded-full border border-emerald/40 animate-ping opacity-75" />
-              Écouter l&apos;Appel — 90 secondes
+              <span className="mr-2 inline-block w-1.5 h-1.5 rounded-full bg-emerald animate-ping" />
+              Écouter l&apos;Appel — 90 secondes (Audio immersif)
             </button>
-            <span className="text-[10px] tracking-[0.2em] text-cream-muted uppercase font-body font-bold">Pour les croyants cherchant à renouer avec la Prière et la constance</span>
+            <span className="text-[10px] tracking-[0.2em] text-cream-muted/70 uppercase font-body font-semibold">
+              Cabinet BLF • Ingénierie comportementale & Exégèse • Confidentiel
+            </span>
           </motion.div>
 
         </div>
