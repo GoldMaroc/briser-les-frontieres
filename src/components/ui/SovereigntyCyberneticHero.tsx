@@ -221,12 +221,8 @@ export default function SovereigntyCyberneticHero() {
         </div>
 
         {/* ── LE MONOLITHE TYPOGRAPHIQUE AU CENTRE (TERMINAL STYLE) ── */}
-        <div className="relative z-10 max-w-5xl mx-auto text-center my-auto py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
+        <div className="relative z-10 max-w-5xl mx-auto text-center my-auto py-8 sm:py-12">
+          <div className="transition-all duration-700">
             <span className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.3em] text-[#00E599] bg-[#00E599]/10 border border-[#00E599]/30 px-4 py-1.5 rounded-full mb-6">
               // RÉINITIALISATION BIOLOGIQUE
             </span>
@@ -256,7 +252,7 @@ export default function SovereigntyCyberneticHero() {
                 Les Traités de l&apos;Ingénieur
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Bas de page initial : Ticker & Bouton Scroll */}
