@@ -205,7 +205,7 @@ export default function SovereigntyCyberneticHero() {
               // RÉINITIALISATION BIOLOGIQUE
             </span>
 
-            <h1 className="font-sans font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white leading-[1.06] drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
+            <h1 className="font-heading font-bold text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-[-0.035em] text-white leading-[1.02] drop-shadow-[0_20px_50px_rgba(0,0,0,0.95)]">
               Nous avons réinventé<br />
               la reconquête de l&apos;âme<br />
               par la prosternation.
@@ -215,19 +215,25 @@ export default function SovereigntyCyberneticHero() {
               La prosternation (Sujûd) n&apos;est pas une soumission passive. C&apos;est l&apos;arme neurobiologique suprême pour dompter le cortisol et commander son esprit.
             </p>
 
-            {/* CTAs Centraux Intégrés */}
+            {/* CTAs Centraux Intégrés — Style Ayocin Floating Pill */}
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/audit"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#00E599] text-black font-sans font-bold text-sm tracking-wider uppercase shadow-[0_0_30px_rgba(0,229,153,0.5)] hover:scale-105 transition-all"
+                className="group w-full sm:w-auto inline-flex items-center justify-between gap-4 px-8 py-4 rounded-full bg-[#00E599] text-black font-heading font-semibold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_35px_rgba(0,229,153,0.45)] hover:shadow-[0_0_55px_rgba(0,229,153,0.75)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                Passer l&apos;Audit Prière & Cerveau (3 min) →
+                <span>Passer l&apos;Audit Prière & Cerveau (3 min)</span>
+                <span className="w-7 h-7 rounded-full bg-black/15 flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  ↗
+                </span>
               </Link>
               <Link
                 href="/livres"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-sans font-semibold text-sm tracking-wider uppercase transition-all"
+                className="group w-full sm:w-auto inline-flex items-center justify-between gap-4 px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-white font-heading font-medium text-xs sm:text-sm tracking-wider uppercase backdrop-blur-xl hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                Les Traités de l&apos;Ingénieur
+                <span>Les Traités de l&apos;Ingénieur</span>
+                <span className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  ↗
+                </span>
               </Link>
             </div>
           </div>
@@ -415,7 +421,7 @@ export default function SovereigntyCyberneticHero() {
 
               {/* Titre Posture Monumental */}
               <div>
-                <h2 className="font-sans font-extrabold text-3xl sm:text-5xl lg:text-6xl tracking-tight text-white leading-none drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]">
+                <h2 className="font-heading font-bold text-3xl sm:text-5xl lg:text-6xl tracking-[-0.03em] text-white leading-none drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]">
                   {activePosture.postureArabic}
                 </h2>
                 <p className="font-sans font-bold text-base sm:text-xl text-neutral-300 mt-1">
@@ -515,7 +521,7 @@ export default function SovereigntyCyberneticHero() {
               <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#00E599] block mb-3">
                 03 // LES TROIS PILIERS OPÉRATIONNELS
               </span>
-              <h2 className="font-sans font-bold text-3xl sm:text-5xl text-white tracking-tight">
+              <h2 className="font-heading font-bold text-3xl sm:text-5xl lg:text-[3.25rem] text-white tracking-[-0.03em] leading-[1.05]">
                 Une infrastructure complète<br />
                 pour reprendre votre souveraineté.
               </h2>
@@ -542,7 +548,7 @@ export default function SovereigntyCyberneticHero() {
                     ↗
                   </span>
                 </div>
-                <h3 className="font-sans font-bold text-2xl text-white group-hover:text-[#00E599] transition-colors mb-4">
+                <h3 className="font-heading font-bold text-2xl text-white group-hover:text-[#00E599] tracking-[-0.02em] transition-colors mb-4">
                   L&apos;Audit de Souveraineté
                 </h3>
                 <p className="text-sm text-neutral-400 font-sans leading-relaxed">
@@ -570,7 +576,7 @@ export default function SovereigntyCyberneticHero() {
                     ↗
                   </span>
                 </div>
-                <h3 className="font-sans font-bold text-2xl text-white mb-4">
+                <h3 className="font-heading font-bold text-2xl text-white tracking-[-0.02em] mb-4">
                   Les 3 Livres Majeurs
                 </h3>
                 <p className="text-sm text-neutral-400 font-sans leading-relaxed">
@@ -598,7 +604,7 @@ export default function SovereigntyCyberneticHero() {
                     ↗
                   </span>
                 </div>
-                <h3 className="font-sans font-bold text-2xl text-white group-hover:text-amber-400 transition-colors mb-4">
+                <h3 className="font-heading font-bold text-2xl text-white group-hover:text-amber-400 tracking-[-0.02em] transition-colors mb-4">
                   Mentorat & Protocole C.O.M.E.S.
                 </h3>
                 <p className="text-sm text-neutral-400 font-sans leading-relaxed">

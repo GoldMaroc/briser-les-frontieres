@@ -102,8 +102,10 @@
   --color-border: var(--color-border-line);
   --color-border-hover: var(--color-border-hover-line);
 
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: var(--font-systemia), var(--font-fallback-sans), 'Systemia', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-sans: var(--font-systemia), var(--font-fallback-sans), 'Systemia', 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: var(--font-systemia), var(--font-fallback-sans), var(--font-body), system-ui, sans-serif;
+  --font-mono: var(--font-mono-systemia), 'Azeret Mono', monospace;
 }
 
 /* ═══ Reset, Base & Transitions Organiques ═══ */
@@ -134,12 +136,51 @@ header, footer, main, section, div, span, p, a, h1, h2, h3, h4, h5, h6 {
               border-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* ═══ Typographie Golden Ratio ═══ */
+/* ═══ Typographie Pure Inspiration Ayocin (Systemia Neo-Grotesque) ═══ */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.06;
+}
+
+h1 {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+}
+
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.05;
+}
+
+h3 {
   font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.15;
+  letter-spacing: -0.022em;
+  line-height: 1.12;
+}
+
+h4 {
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+/* Ayocin Pill Buttons & Badges */
+.btn-ayocin-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+.group:hover .btn-ayocin-icon {
+  transform: translate(2px, -2px);
 }
 
 /* ═══ Sélection ═══ */

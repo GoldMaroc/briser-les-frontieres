@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import localFont from "next/font/local";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -7,11 +8,44 @@ import { TimeThemeProvider } from "@/components/ui/TimeThemeProvider";
 import SalatTakeover from "@/components/ui/SalatTakeover";
 import CookieBanner from "@/components/layout/CookieBanner";
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-heading",
+const systemia = localFont({
+  src: [
+    {
+      path: "../fonts/Systemia-Regular.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../fonts/Systemia-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../fonts/Systemia-SemiBold.woff2",
+      weight: "600",
+      style: "normal",
+    },
+  ],
+  variable: "--font-systemia",
+  display: "swap",
+});
+
+const azeretMono = localFont({
+  src: [
+    {
+      path: "../fonts/AzeretMono-Medium.woff2",
+      weight: "500",
+      style: "normal",
+    },
+  ],
+  variable: "--font-mono-systemia",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-fallback-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -70,9 +104,9 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${cormorant.variable} ${inter.variable} h-full antialiased`}
+      className={`${systemia.variable} ${azeretMono.variable} ${jakarta.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-midnight text-cream grain-overlay relative">
+      <body className="min-h-full flex flex-col bg-midnight text-cream grain-overlay relative font-sans">
         {/* Arrière-plan céleste sacré (Temps, Vie, Mort, Miséricorde) */}
         <div 
           className="fixed inset-0 bg-[url('/celestial_bg.png')] bg-cover bg-center pointer-events-none z-0 transition-opacity duration-1000" 

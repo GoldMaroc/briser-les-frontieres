@@ -449,7 +449,7 @@ export default function Home() {
               <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-gold mb-3 block font-body">
                 Partagez votre parcours
               </span>
-              <h3 className="font-heading text-2xl sm:text-3xl font-light text-cream">
+              <h3 className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-white">
                 Laisser un Témoignage
               </h3>
               <p className="mt-4 text-xs text-cream-muted leading-relaxed font-body max-w-md mx-auto">
@@ -466,7 +466,7 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-full border border-emerald/30 flex items-center justify-center mx-auto text-emerald">
                   ✓
                 </div>
-                <h4 className="font-heading text-xl font-light text-cream">Témoignage transmis avec succès</h4>
+                <h4 className="font-heading text-xl font-bold tracking-tight text-white">Témoignage transmis avec succès</h4>
                 <p className="text-xs text-cream-muted font-body leading-relaxed max-w-sm mx-auto">
                   Barakallahu feekum pour votre retour. Mounir Byar étudiera votre message avec attention avant sa publication officielle sur le Kosmos.
                 </p>
@@ -706,9 +706,12 @@ export default function Home() {
           <div className="pt-4">
             <Link 
               href="/audit" 
-              className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-[#00E599] text-black font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_30px_rgba(0,229,153,0.4)] hover:shadow-[0_0_45px_rgba(0,229,153,0.7)] hover:scale-105 transition-all cursor-pointer"
+              className="group inline-flex items-center justify-between gap-4 px-8 sm:px-10 py-4 rounded-full bg-[#00E599] text-black font-heading font-semibold text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_35px_rgba(0,229,153,0.45)] hover:shadow-[0_0_55px_rgba(0,229,153,0.75)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
             >
-              Commencer le Bilan Gratuit [3 min] →
+              <span>Commencer le Bilan Gratuit [ 3 min ]</span>
+              <span className="w-7 h-7 rounded-full bg-black/15 flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                ↗
+              </span>
             </Link>
           </div>
         </div>

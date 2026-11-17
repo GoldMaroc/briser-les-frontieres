@@ -4,8 +4,8 @@ import Link from "next/link";
 import { type ReactNode } from "react";
 
 /* ═══════════════════════════════════════════
-   Composant Button — Design System BLF
-   Variantes : primary | ghost
+   Composant Button — Style Ayocin Floating Pill
+   Variantes : primary (Émeraude / Sombre) | ghost (Glassmorphism)
    ═══════════════════════════════════════════ */
 
 interface ButtonProps {
@@ -16,16 +16,17 @@ interface ButtonProps {
   onClick?: () => void;
   className?: string;
   disabled?: boolean;
+  withArrow?: boolean;
 }
 
 const baseStyles =
-  "inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.12em] rounded-sm transition-all duration-400 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 focus-visible:ring-offset-2 focus-visible:ring-offset-midnight";
+  "group inline-flex items-center justify-between gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-heading font-semibold text-xs sm:text-sm tracking-wide uppercase transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00E599]/50 select-none";
 
 const variants = {
   primary:
-    "bg-transparent border border-gold text-gold hover:bg-gold hover:text-stone-950 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed",
+    "bg-[#00E599] text-black shadow-[0_0_30px_rgba(0,229,153,0.4)] hover:shadow-[0_0_45px_rgba(0,229,153,0.7)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed",
   ghost:
-    "bg-transparent text-cream border border-cream/20 hover:border-gold hover:text-gold active:scale-[0.97]",
+    "bg-white/10 text-white backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:border-white/40 active:scale-[0.98] disabled:opacity-50",
 };
 
 export default function Button({
@@ -36,13 +37,31 @@ export default function Button({
   onClick,
   className = "",
   disabled = false,
+  withArrow = true,
 }: ButtonProps) {
   const classes = `${baseStyles} ${variants[variant]} ${className}`;
+
+  const content = (
+    <>
+      <span>{children}</span>
+      {withArrow && (
+        <span
+          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
+            variant === "primary"
+              ? "bg-black/15 text-black"
+              : "bg-white/15 text-white"
+          }`}
+        >
+          ↗
+        </span>
+      )}
+    </>
+  );
 
   if (href) {
     return (
       <Link href={href} className={classes}>
-        {children}
+        {content}
       </Link>
     );
   }
@@ -54,7 +73,7 @@ export default function Button({
       className={classes}
       disabled={disabled}
     >
-      {children}
+      {content}
     </button>
   );
 }
