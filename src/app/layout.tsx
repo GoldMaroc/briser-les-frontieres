@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -39,20 +38,6 @@ const azeretMono = localFont({
     },
   ],
   variable: "--font-mono-systemia",
-  display: "swap",
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  variable: "--font-fallback-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -104,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${systemia.variable} ${azeretMono.variable} ${jakarta.variable} ${inter.variable} h-full antialiased`}
+      className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-midnight text-cream grain-overlay relative font-sans">
         {/* Arrière-plan céleste sacré (Temps, Vie, Mort, Miséricorde) */}
