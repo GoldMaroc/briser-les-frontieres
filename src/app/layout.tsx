@@ -96,12 +96,7 @@ export default function RootLayout({
       lang="fr"
       className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-midnight text-cream grain-overlay relative font-sans">
-        {/* Arrière-plan céleste sacré (Temps, Vie, Mort, Miséricorde) */}
-        <div 
-          className="fixed inset-0 bg-[url('/celestial_bg.png')] bg-cover bg-center pointer-events-none z-0 transition-opacity duration-1000" 
-          style={{ opacity: 'var(--celestial-bg-opacity, 0.05)' }}
-        />
+      <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#181512] relative font-sans">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
