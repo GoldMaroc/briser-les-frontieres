@@ -30,7 +30,7 @@ interface TimeThemeContextType {
 const TimeThemeContext = createContext<TimeThemeContextType | undefined>(undefined);
 
 export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
-  const [activeTheme, setActiveTheme] = useState<ThemeType>("isha");
+  const [activeTheme, setActiveTheme] = useState<ThemeType>("fajr");
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [prayerTimings, setPrayerTimings] = useState<Record<string, string> | null>(null);

@@ -6,80 +6,80 @@
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* Default Theme: CYBERNETIC OBSIDIAN (Terminal Luxury Prestige) */
-  --bg-base: #08090A;
-  --bg-surface: #121316;
-  --bg-surface-alt: #181A20;
-  --bg-surface-hover: #22252F;
-  --text-main: #FFFFFF;
-  --text-muted: #9CA3AF;
-  --color-accent-emerald: #00E599;
-  --color-accent-emerald-dark: #00B377;
-  --color-accent-gold: #D4A853;
-  --color-accent-gold-light: #E8C468;
-  --color-accent-gold-muted: rgba(212, 168, 83, 0.12);
-  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
-  --color-border-line: rgba(255, 255, 255, 0.10);
-  --color-border-hover-line: rgba(255, 255, 255, 0.25);
+  /* Default Theme: BEIGE & DORÉ (Prestige Albâtre, Lin & Or Impérial) */
+  --bg-base: #FAF8F5;
+  --bg-surface: #F3EDE4;
+  --bg-surface-alt: #EDE5D8;
+  --bg-surface-hover: #E4DACB;
+  --text-main: #181512;
+  --text-muted: #5C534A;
+  --color-accent-emerald: #087B53;
+  --color-accent-emerald-dark: #055C3E;
+  --color-accent-gold: #B88E3E;
+  --color-accent-gold-light: #D4A853;
+  --color-accent-gold-muted: rgba(184, 142, 62, 0.12);
+  --color-accent-emerald-muted: rgba(8, 123, 83, 0.10);
+  --color-border-line: rgba(55, 45, 35, 0.12);
+  --color-border-hover-line: rgba(184, 142, 62, 0.40);
   --transition-speed: 0.5s;
-  --celestial-bg-opacity: 0.08;
+  --celestial-bg-opacity: 0.03;
 }
 
-/* Thème AUBE (Fajr) — Sanctuaire à l'Aube Sombre et Doré */
+/* Thème AUBE (Fajr) — Teintes calmes de brume beige-sable & or */
 .theme-fajr {
-  --bg-base: #0B0D11;
-  --bg-surface: #14171E;
-  --bg-surface-alt: #1B202B;
-  --bg-surface-hover: #242A38;
-  --text-main: #FFFFFF;
-  --text-muted: #9DA5B4;
-  --color-accent-emerald: #00E599;
-  --color-accent-emerald-dark: #00B377;
-  --color-accent-gold: #E5B45E;
-  --color-accent-gold-light: #F3CA7D;
-  --color-accent-gold-muted: rgba(229, 180, 94, 0.12);
-  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
-  --color-border-line: rgba(255, 255, 255, 0.12);
-  --color-border-hover-line: rgba(255, 255, 255, 0.28);
-  --celestial-bg-opacity: 0.08;
+  --bg-base: #FAF8F5;
+  --bg-surface: #F4EFEA;
+  --bg-surface-alt: #EDE6DE;
+  --bg-surface-hover: #E2D7CC;
+  --text-main: #1A1612;
+  --text-muted: #4A433B;
+  --color-accent-emerald: #087B53;
+  --color-accent-emerald-dark: #055C3E;
+  --color-accent-gold: #B88E3E;
+  --color-accent-gold-light: #D4A853;
+  --color-accent-gold-muted: rgba(184, 142, 62, 0.12);
+  --color-accent-emerald-muted: rgba(8, 123, 83, 0.10);
+  --color-border-line: rgba(44, 43, 41, 0.12);
+  --color-border-hover-line: rgba(184, 142, 62, 0.40);
+  --celestial-bg-opacity: 0.03;
 }
 
-/* Thème CRÉPUSCULE (Maghrib) — Cuivre Sombre & Ambre */
+/* Thème CRÉPUSCULE (Maghrib) — Cuivre chaud et argile doré */
 .theme-maghrib {
-  --bg-base: #0D0A08;
-  --bg-surface: #171310;
-  --bg-surface-alt: #221B16;
-  --bg-surface-hover: #2E251E;
-  --text-main: #FFFFFF;
-  --text-muted: #B49F93;
-  --color-accent-emerald: #00E599;
-  --color-accent-emerald-dark: #00B377;
-  --color-accent-gold: #E08E45;
-  --color-accent-gold-light: #F0A563;
-  --color-accent-gold-muted: rgba(224, 142, 69, 0.12);
-  --color-accent-emerald-muted: rgba(0, 229, 153, 0.12);
-  --color-border-line: rgba(255, 255, 255, 0.12);
-  --color-border-hover-line: rgba(255, 255, 255, 0.28);
-  --celestial-bg-opacity: 0.08;
+  --bg-base: #F5EBE1;
+  --bg-surface: #E8DCD0;
+  --bg-surface-alt: #DECFC0;
+  --bg-surface-hover: #CFAF96;
+  --text-main: #1D1410;
+  --text-muted: #524035;
+  --color-accent-emerald: #0B6A47;
+  --color-accent-emerald-dark: #064D33;
+  --color-accent-gold: #A06A26;
+  --color-accent-gold-light: #B77E3C;
+  --color-accent-gold-muted: rgba(160, 106, 38, 0.10);
+  --color-accent-emerald-muted: rgba(11, 106, 71, 0.10);
+  --color-border-line: rgba(58, 49, 42, 0.14);
+  --color-border-hover-line: rgba(184, 142, 62, 0.40);
+  --celestial-bg-opacity: 0.04;
 }
 
-/* Thème ISHA (Nuit / Kosmos / Sombre Prestige) — Noir obsidienne profond */
+/* Thème ISHA (Nuit / Kosmos / Sombre Prestige) */
 .theme-isha {
-  --bg-base: #08090A;
-  --bg-surface: #121316;
-  --bg-surface-alt: #181A20;
-  --bg-surface-hover: #22252F;
-  --text-main: #FFFFFF;
-  --text-muted: #9CA3AF;
-  --color-accent-emerald: #00E599;
-  --color-accent-emerald-dark: #00B377;
-  --color-accent-gold: #D4A853;
-  --color-accent-gold-light: #E8C468;
-  --color-accent-gold-muted: rgba(212, 168, 83, 0.15);
-  --color-accent-emerald-muted: rgba(0, 229, 153, 0.15);
-  --color-border-line: rgba(255, 255, 255, 0.12);
-  --color-border-hover-line: rgba(255, 255, 255, 0.30);
-  --celestial-bg-opacity: 0.12;
+  --bg-base: #FAF8F5;
+  --bg-surface: #F3EDE4;
+  --bg-surface-alt: #EDE5D8;
+  --bg-surface-hover: #E4DACB;
+  --text-main: #181512;
+  --text-muted: #5C534A;
+  --color-accent-emerald: #087B53;
+  --color-accent-emerald-dark: #055C3E;
+  --color-accent-gold: #B88E3E;
+  --color-accent-gold-light: #D4A853;
+  --color-accent-gold-muted: rgba(184, 142, 62, 0.12);
+  --color-accent-emerald-muted: rgba(8, 123, 83, 0.10);
+  --color-border-line: rgba(55, 45, 35, 0.12);
+  --color-border-hover-line: rgba(184, 142, 62, 0.40);
+  --celestial-bg-opacity: 0.03;
 }
 
 @theme {
