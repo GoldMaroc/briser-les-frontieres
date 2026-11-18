@@ -7,14 +7,11 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navSteps = [
-  { href: "/", label: "Éveil", num: "01" },
-  { href: "/audit", label: "Diagnostic", num: "02" },
-  { href: "/fondements", label: "Compréhension", num: "03" },
-  { href: "/protocole", label: "Méthode", num: "04" },
-  { href: "/articles", label: "Journal", num: "05" },
-  { href: "/offres", label: "Offres", num: "06" },
-  { href: "/livres", label: "Outils", num: "07" },
-  { href: "/contact", label: "Contact", num: "08" },
+  { href: "/fondements", label: "La Méthode" },
+  { href: "/livres", label: "Les Livres" },
+  { href: "/offres", label: "Accompagnement" },
+  { href: "/articles", label: "Journal" },
+  { href: "/#temoignages", label: "Témoignages" },
 ];
 
 export default function Header() {
@@ -51,69 +48,47 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Navigation Centrale (Les 8 Étapes du Stepper — Typographie Ayocin Systemia + Azeret Mono) */}
-        <div className="hidden xl:flex items-center gap-2 2xl:gap-3.5 text-neutral-300">
+        {/* Navigation Centrale Épurée & Aérée */}
+        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-neutral-300">
           {navSteps.map((step) => {
             const isActive = pathname === step.href;
             return (
               <Link
                 key={step.href}
                 href={step.href}
-                className={`relative flex items-center gap-1 px-1.5 py-1 text-[10px] 2xl:text-[11px] font-mono uppercase tracking-wider transition-all duration-300 group whitespace-nowrap ${
+                className={`relative py-1 text-xs xl:text-[13px] font-heading font-medium tracking-normal transition-all duration-300 group whitespace-nowrap ${
                   isActive
-                    ? "text-[#00E599] font-bold"
+                    ? "text-[#00E599] font-semibold"
                     : "text-neutral-300 hover:text-white"
                 }`}
               >
-                <span className={`text-[9px] ${isActive ? "text-[#00E599]" : "text-neutral-500 font-mono"}`}>
-                  {step.num}.
-                </span>
-                <span className="font-heading font-medium tracking-normal text-[11px] 2xl:text-xs">
-                  {step.label}
-                </span>
+                <span>{step.label}</span>
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1.5 right-1.5 h-0.5 bg-[#00E599] rounded-full shadow-[0_0_8px_rgba(0,229,153,0.8)]" />
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#00E599] rounded-full shadow-[0_0_8px_rgba(0,229,153,0.8)]" />
                 )}
               </Link>
             );
           })}
         </div>
 
-        {/* Boutons d'Action — Style Ayocin Floating Pills */}
-        <div className="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
-          
-          {/* CTA 1 : AUDIT GRATUIT (Signal Vert Électrique #00E599) */}
+        {/* Bouton d'Action Unique & Prestigieux */}
+        <div className="flex items-center gap-3 flex-shrink-0">
           <Link
             href="/audit"
-            className="group relative overflow-hidden px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-[#00E599] text-black font-heading font-semibold text-[11px] sm:text-xs tracking-wider uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,229,153,0.35)] hover:shadow-[0_0_30px_rgba(0,229,153,0.6)] hover:scale-[1.02]"
+            className="group relative overflow-hidden px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#00E599] text-black font-heading font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,229,153,0.35)] hover:shadow-[0_0_30px_rgba(0,229,153,0.6)] hover:scale-[1.02]"
           >
-            <span className="relative z-10 flex items-center gap-1.5">
+            <span className="relative z-10 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
-              Audit Gratuit
-              <span className="hidden sm:inline font-mono opacity-80 text-[10px]">[3 min]</span>
+              <span>Audit Gratuit</span>
+              <span className="font-mono opacity-80 text-[10px] hidden sm:inline">[3 min]</span>
+              <span className="text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
             </span>
-          </Link>
-
-          {/* CTA 2 : LES LIVRES (Bouton Blanc pur) */}
-          <Link
-            href="/livres"
-            className="hidden sm:inline-flex items-center px-3.5 py-1.5 sm:py-2 rounded-full bg-white text-black font-heading font-semibold text-[11px] sm:text-xs tracking-wider uppercase hover:bg-neutral-200 transition-all duration-300 hover:scale-[1.02]"
-          >
-            Les Livres
-          </Link>
-
-          {/* CTA 3 : CANDIDATURE (Sur grands écrans 2xl+) */}
-          <Link
-            href="/candidature"
-            className="hidden 2xl:inline-flex items-center px-3.5 py-2 rounded-full border border-white/20 text-white/90 font-heading font-medium text-[11px] tracking-wider uppercase hover:bg-white/10 hover:border-white/40 transition-all duration-300"
-          >
-            Candidature
           </Link>
 
           {/* Bouton Mobile Toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2 rounded-full text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+            className="lg:hidden p-2 rounded-full text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Menu"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -136,9 +111,9 @@ export default function Header() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="xl:hidden mt-2 p-5 rounded-3xl bg-[#121316]/95 backdrop-blur-2xl border border-white/15 shadow-2xl space-y-4"
+            className="lg:hidden mt-2 p-5 rounded-3xl bg-[#121316]/95 backdrop-blur-2xl border border-white/15 shadow-2xl space-y-4"
           >
-            <div className="grid grid-cols-2 gap-2">
+            <div className="flex flex-col gap-2">
               {navSteps.map((step) => {
                 const isActive = pathname === step.href;
                 return (
@@ -146,14 +121,14 @@ export default function Header() {
                     key={step.href}
                     href={step.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center gap-2 p-2.5 rounded-xl transition-all ${
+                    className={`flex items-center justify-between p-3 rounded-xl transition-all ${
                       isActive 
                         ? "bg-[#00E599]/15 text-[#00E599] font-bold border border-[#00E599]/30" 
                         : "text-neutral-300 hover:bg-white/5 hover:text-white"
                     }`}
                   >
-                    <span className="text-[10px] font-mono text-neutral-500">{step.num}.</span>
-                    <span className="text-xs font-heading font-medium">{step.label}</span>
+                    <span className="text-sm font-heading font-medium">{step.label}</span>
+                    <span className="text-xs text-neutral-500 font-mono">→</span>
                   </Link>
                 );
               })}
@@ -163,9 +138,10 @@ export default function Header() {
               <Link
                 href="/audit"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full bg-[#00E599] text-black font-heading font-bold text-xs text-center uppercase tracking-wider"
+                className="w-full py-3 rounded-full bg-[#00E599] text-black font-heading font-bold text-xs text-center uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
               >
-                Passer l&apos;Audit Gratuit [3 min]
+                <span>Passer l&apos;Audit Gratuit [3 min]</span>
+                <span>↗</span>
               </Link>
               <Link
                 href="/livres"

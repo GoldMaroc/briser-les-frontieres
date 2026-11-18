@@ -43,19 +43,24 @@ const azeretMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Briser les Frontières — Ingénierie de la Souveraineté",
+    default: "Briser les Frontières — L'Ingénierie de la Prière (Salât) | Mounir BYAR",
     template: "%s | Briser les Frontières",
   },
   description:
-    "Protocole C.O.M.E.S. — Ingénierie comportementale pour restaurer la clarté intellectuelle, maîtriser le Nafs et assumer le mandat de Khalifa.",
+    "Protocole C.O.M.E.S. par Mounir Byar. Ingénierie comportementale et neurobiologie du Sujûd pour vaincre la procrastination (At-Taswîf), maîtriser le cortisol et instaurer une constance inébranlable dans la Salât.",
   keywords: [
-    "ingénierie comportementale",
-    "souveraineté cognitive",
+    "prière islam",
+    "salat",
+    "sujud",
+    "vaincre la procrastination",
+    "at-taswif",
     "protocole COMES",
-    "Khalifa",
-    "Nafs",
-    "Salat",
     "Mounir BYAR",
+    "neurobiologie salat",
+    "ingénierie comportementale",
+    "secrets de la salat",
+    "livre islam",
+    "khalifa",
   ],
   authors: [{ name: "Mounir BYAR" }],
   openGraph: {

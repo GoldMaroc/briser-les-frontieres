@@ -311,7 +311,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION 2.6 : TÉMOIGNAGES & RÉCITS DE TRANSFORMATION (43 Avis Interactifs & Dynamiques)
           ═══════════════════════════════════════════ */}
-      <section className="relative py-32 bg-midnight border-b border-border overflow-hidden">
+      <section id="temoignages" className="relative py-32 bg-[#08090A] border-t border-white/[0.08] overflow-hidden">
         
         {/* Fond décoratif en filigrane */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(212,168,83,0.025)_0%,rgba(0,0,0,0)_80%)] pointer-events-none" />
