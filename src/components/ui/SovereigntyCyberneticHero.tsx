@@ -6,111 +6,119 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function SovereigntyCyberneticHero() {
+  // Variables de preuve sociale modifiables
+  const VARIABLE_ACCOMPAGNES = "+328 personnes accompagnées";
+  const VARIABLE_AVIS = "Note 4,9/5 sur avis vérifiés";
+  const VARIABLE_METHODE = "Méthode C.O.M.E.S. • Livres & Accompagnement";
+
   return (
-    <div className="relative w-full bg-[#FAF8F5] text-[#181512] selection:bg-[#B88E3E]/20">
+    <div className="relative w-full bg-[#FAF9F6] text-[#111827]">
 
       {/* ════════════════════════════════════════════════════════════
-          SECTION 1 : LE HERO (LE CHOC & L'APPEL À L'ACTION)
-          - Palette Beige & Doré (Albâtre, Lin, Or Impérial)
-          - Visuel authentique : homme musulman en Qiyâm devant la nature brumeuse
-          - Typographie Systemia soignée : line-height généreux, aucun chevauchement
-          - Slogan exact demandé par l'utilisateur : "Reprenez le contrôle de votre vie. La Salât comme arme de souveraineté."
+          SECTION HERO : SPLIT-SCREEN ASYMÉTRIQUE HAUTE CONVERSION (CRO)
+          - Fond uni clair #FAF9F6, aucune superposition de texte sur photo
+          - Colonne Gauche (58%) : Contenu éditorial percutant & CTA
+          - Colonne Droite (42%) : Cadre vertical portrait dédié (4/5)
+          - Mobile-first : Eyebrow, H1, sous-titre et CTA au-dessus de la ligne de flottaison (375x667px)
+          - Conformité stricte WCAG 2.1 AA (contraste > 15:1 sur H1, > 9:1 sur sous-titre)
           ════════════════════════════════════════════════════════════ */}
-      <section className="relative w-full min-h-[92vh] flex flex-col justify-between pt-32 sm:pt-36 pb-12 px-5 sm:px-10 lg:px-16 overflow-hidden">
-        
-        {/* Photographie de fond : Homme musulman en station debout humble et concentrée (Qiyâm) */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <Image
-            src="/images/sanctuaire/muslim_qiyam_focus.jpg"
-            alt="Homme musulman en prière Qiyâm dans un sanctuaire contemporain lumineux"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top sm:object-center filter brightness-[0.92] contrast-105"
-          />
-          {/* Dégradé lumineux chaud ton-sur-ton pour fondre parfaitement l'image dans l'arrière-plan beige #FAF8F5 */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#FAF8F5]/80 via-[#FAF8F5]/40 to-[#FAF8F5]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(250,248,245,0.75)_85%)]" />
+      <section className="relative w-full bg-[#FAF9F6] border-b border-[#E5E7EB]">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 lg:pt-14 pb-8 sm:pb-12 lg:pb-16">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:gap-12 xl:gap-14">
+            
+            {/* COLONNE GAUCHE (58%) : Contenu éditorial aligné à gauche */}
+            <div className="w-full lg:w-[58%] flex flex-col items-start text-left">
+              
+              {/* Sur-titre (eyebrow) */}
+              <p className="text-[12px] sm:text-[13px] font-sans font-medium uppercase tracking-[0.08em] text-[#4B5563] mb-2 sm:mb-3">
+                PARIS • REIMS — PAR MOUNIR BYAR
+              </p>
+
+              {/* Titre H1 avec text-wrap: balance */}
+              <h1 
+                style={{ textWrap: "balance" }}
+                className="font-heading font-bold text-[27px] sm:text-[36px] lg:text-[42px] xl:text-[45px] text-[#111827] leading-[1.14] tracking-[-0.025em]"
+              >
+                Reprenez le contrôle de votre attention grâce à la Salât.
+              </h1>
+
+              {/* Sous-titre cadré positivement */}
+              <p className="mt-3 sm:mt-4 text-[17px] sm:text-[18px] text-[#374151] leading-[1.55] max-w-xl font-sans">
+                Méthode structurée, livres et accompagnements pour faire de vos 5 prières quotidiennes un ancrage cognitif, réguler le stress et passer à l&apos;action avec constance.
+              </p>
+
+              {/* Boutons d'action : CTA Primaire & Secondaire */}
+              <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                <Link
+                  href="/audit"
+                  className="inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-[#0D6E52] hover:bg-[#09523D] text-white font-semibold text-sm transition-colors duration-200 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] focus-visible:ring-offset-2 text-center"
+                >
+                  Faire l&apos;audit gratuit (3 min) →
+                </Link>
+
+                <Link
+                  href="#methode"
+                  className="inline-flex items-center justify-center px-6 py-3 min-h-[48px] rounded-lg bg-transparent hover:bg-[#F3F4F6] border border-[#111827] text-[#111827] font-medium text-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#111827] focus-visible:ring-offset-2 text-center"
+                >
+                  Découvrir la méthode
+                </Link>
+              </div>
+
+              {/* Preuve Sociale (Intégrée et Vérifiable) : espacement 28px */}
+              <div className="mt-7 pt-5 sm:pt-6 border-t border-[#E5E7EB] w-full flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 sm:gap-6 text-sm text-[#374151]">
+                <div className="inline-flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#0D6E52] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span className="font-medium text-[#374151]">{VARIABLE_ACCOMPAGNES}</span>
+                </div>
+
+                <Link 
+                  href="/#temoignages" 
+                  className="inline-flex items-center gap-2 hover:text-[#0D6E52] transition-colors group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] rounded"
+                >
+                  <svg className="w-4 h-4 text-[#8C6214] flex-shrink-0 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                  <span className="font-medium text-[#374151] underline underline-offset-4 decoration-[#D1D5DB] group-hover:decoration-[#0D6E52] group-hover:text-[#0D6E52] transition-colors">
+                    {VARIABLE_AVIS}
+                  </span>
+                </Link>
+
+                <div className="inline-flex items-center gap-2">
+                  <svg className="w-4 h-4 text-[#4B5563] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span className="font-medium text-[#374151]">{VARIABLE_METHODE}</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* COLONNE DROITE (42%) : Conteneur visuel vertical dédié */}
+            <div className="w-full lg:w-[42%] flex justify-center lg:justify-end mt-8 lg:mt-0">
+              <div className="w-full max-w-[420px] lg:max-w-none">
+                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_12px_32px_rgba(17,24,39,0.08)] border border-[#E5E7EB] bg-[#F3F4F6]">
+                  <Image
+                    src="/images/portrait-mounir.jpg"
+                    alt="Mounir Byar - Fondateur de Briser les Frontières"
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover object-[top_center]"
+                  />
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
-
-        {/* 1.1 Micro-Badge d'autorité discret en Or & Beige */}
-        <header className="relative z-10 max-w-7xl mx-auto w-full flex items-center justify-between">
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#E5DDD2] backdrop-blur-md shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
-            <span className="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] text-[#5C534A] uppercase font-semibold">
-              CABINET BLF // L&apos;INGÉNIERIE DE LA SOUVERAINETÉ
-            </span>
-          </div>
-          <span className="hidden md:inline-block font-mono text-[10px] tracking-[0.2em] text-[#7A6F64] uppercase">
-            PARIS // REIMS • PAR MOUNIR BYAR
-          </span>
-        </header>
-
-        {/* 1.2 Le Message Central (Le Choc & L'Appel à l'Action) */}
-        <div className="relative z-10 max-w-5xl mx-auto text-center my-auto py-10 sm:py-16">
-          
-          <h1 className="font-heading font-bold text-3xl sm:text-5xl md:text-6xl lg:text-[4.75rem] tracking-[-0.025em] text-[#181512] leading-[1.08] drop-shadow-sm">
-            Reprenez le contrôle de votre vie.<br />
-            <span className="text-[#B88E3E]">La Salât comme arme de souveraineté.</span>
-          </h1>
-
-          <p className="mt-6 sm:mt-8 text-base sm:text-xl text-[#4A433B] max-w-2xl mx-auto font-sans leading-[1.65]">
-            La prière n&apos;est pas une corvée répétitive. C&apos;est le protocole neurobiologique suprême révélé à l&apos;humanité pour dompter le cortisol, briser la procrastination et commander son existence.
-          </p>
-
-          {/* Boutons d'Action — Style Ayocin Floating Pills en Émeraude & Or */}
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/audit"
-              className="group w-full sm:w-auto inline-flex items-center justify-between gap-4 px-8 py-4 rounded-full bg-[#087B53] text-white font-heading font-semibold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_25px_rgba(8,123,83,0.30)] hover:bg-[#066343] hover:shadow-[0_0_35px_rgba(8,123,83,0.50)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
-            >
-              <span>Passer l&apos;Audit Prière & Cerveau (3 min)</span>
-              <span className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                ↗
-              </span>
-            </Link>
-
-            <Link
-              href="/prix"
-              className="group w-full sm:w-auto inline-flex items-center justify-between gap-4 px-8 py-4 rounded-full bg-white hover:bg-[#F3EDE4] border border-[#E5DDD2] hover:border-[#B88E3E] text-[#181512] font-heading font-medium text-xs sm:text-sm tracking-wider uppercase shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer"
-            >
-              <span>Consulter les Prix & Formats</span>
-              <span className="w-6 h-6 rounded-full bg-[#181512]/5 flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5">
-                →
-              </span>
-            </Link>
-          </div>
-
-        </div>
-
-        {/* 1.3 Preuves Rassurantes et Indicateur de Scroll */}
-        <div className="relative z-10 max-w-7xl mx-auto w-full pt-6 border-t border-[#E5DDD2] flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 sm:gap-10 text-[#5C534A] text-xs font-sans">
-            <span className="flex items-center gap-2">
-              <span className="text-[#087B53] font-bold">✓</span> +1 200 Musulmans accompagnés
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="text-[#087B53] font-bold">✓</span> 43 Récits de transformation vérifiés
-            </span>
-            <span className="flex items-center gap-2">
-              <span className="text-[#087B53] font-bold">✓</span> Fondé sur 10 ans de recherche
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2 text-[#7A6F64] font-mono text-[10px] sm:text-xs uppercase tracking-widest">
-            <span>Défiler pour comprendre</span>
-            <span className="text-[#B88E3E] animate-bounce">↓</span>
-          </div>
-        </div>
-
       </section>
 
       {/* ════════════════════════════════════════════════════════════
-          SECTION 2 : LE CHOC DE CONSCIENCE (LE MIROIR)
-          - Le contraste brutal : Épuisement moderne vs Paix du Sujûd
-          - Cartes blanches et beiges épurées avec bordures douces
+          SECTION 2 : LA MÉTHODE C.O.M.E.S. & LE CHOC DE CONSCIENCE
           ════════════════════════════════════════════════════════════ */}
-      <section id="choc-conscience" className="relative py-24 sm:py-32 px-5 sm:px-10 lg:px-16 bg-[#FAF8F5] border-t border-[#E5DDD2]">
+      <section id="methode" className="relative py-24 sm:py-32 px-5 sm:px-10 lg:px-16 bg-[#FAF8F5] border-t border-[#E5DDD2]">
         <div className="max-w-7xl mx-auto space-y-16">
           
           <div className="text-center max-w-3xl mx-auto space-y-4">

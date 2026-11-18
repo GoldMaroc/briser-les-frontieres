@@ -8,9 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navSteps = [
   { href: "/fondements", label: "La Méthode" },
-  { href: "/livres", label: "Les Livres" },
   { href: "/offres", label: "Accompagnement" },
-  { href: "/prix", label: "Prix" },
+  { href: "/livres", label: "Les Livres" },
   { href: "/#temoignages", label: "Témoignages" },
 ];
 
@@ -24,74 +23,82 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[96%] max-w-7xl pointer-events-auto">
-      <nav className="flex items-center justify-between px-4 sm:px-6 py-2.5 rounded-full bg-[#FAF8F5]/92 backdrop-blur-2xl border border-[#E5DDD2] shadow-[0_10px_35px_rgba(50,40,30,0.08)] transition-all duration-300">
+    <header className="sticky top-0 z-50 h-[72px] w-full bg-[#FFFFFF] border-b border-[#E5E7EB] transition-colors">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
         
-        {/* Logo BLF & Identité (Slogan : L'Ingénierie de la Souveraineté) */}
-        <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group flex-shrink-0">
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#DCD2C4] group-hover:border-[#B88E3E] transition-colors bg-[#F3EDE4] flex items-center justify-center">
+        {/* GAUCHE : Logo + BRISER LES FRONTIÈRES + Sous-titre unique */}
+        <Link 
+          href="/" 
+          className="flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] focus-visible:ring-offset-2 rounded-lg py-1 flex-shrink-0"
+        >
+          <div className="relative w-9 h-9 rounded-full overflow-hidden border border-[#E5E7EB] bg-[#FAF9F6] flex items-center justify-center flex-shrink-0 group-hover:border-[#0D6E52] transition-colors">
             <Image 
               src="/logo_blf.png" 
-              alt="Logo BLF" 
-              width={26} 
-              height={26} 
+              alt="Logo Briser les Frontières" 
+              width={28} 
+              height={28} 
               className="object-contain" 
+              priority
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-heading font-bold text-xs sm:text-[13px] tracking-wide uppercase text-[#181512] group-hover:text-[#B88E3E] transition-colors leading-none">
-              Briser les Frontières
+            <span className="font-heading font-bold text-sm sm:text-[15px] tracking-[0.04em] uppercase text-[#111827] group-hover:text-[#0D6E52] transition-colors leading-none">
+              BRISER LES FRONTIÈRES
             </span>
-            <span className="text-[9px] font-mono tracking-widest text-[#7A6F64] uppercase leading-none mt-1">
-              L&apos;Ingénierie de la Souveraineté
+            <span className="text-[11px] sm:text-[12px] font-sans tracking-normal text-[#4B5563] leading-none mt-1">
+              L&apos;ingénierie de la souveraineté
             </span>
           </div>
         </Link>
 
-        {/* Navigation Centrale Épurée & Aérée (avec Prix) */}
-        <div className="hidden lg:flex items-center gap-6 xl:gap-8 text-[#4A433B]">
+        {/* CENTRE : 4 liens de navigation clairs (Desktop) */}
+        <nav 
+          aria-label="Navigation principale" 
+          className="hidden md:flex items-center gap-7 lg:gap-8"
+        >
           {navSteps.map((step) => {
             const isActive = pathname === step.href;
             return (
               <Link
                 key={step.href}
                 href={step.href}
-                className={`relative py-1 text-xs xl:text-[13px] font-heading font-medium tracking-normal transition-all duration-300 group whitespace-nowrap ${
+                className={`text-sm font-medium transition-colors duration-150 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] focus-visible:ring-offset-2 rounded-md ${
                   isActive
-                    ? "text-[#B88E3E] font-semibold"
-                    : "text-[#4A433B] hover:text-[#181512]"
+                    ? "text-[#0D6E52] font-semibold"
+                    : "text-[#374151] hover:text-[#111827]"
                 }`}
               >
-                <span>{step.label}</span>
-                {isActive && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[#B88E3E] rounded-full shadow-[0_0_8px_rgba(184,142,62,0.8)]" />
-                )}
+                {step.label}
               </Link>
             );
           })}
-        </div>
+        </nav>
 
-        {/* Bouton d'Action Unique & Prestigieux */}
+        {/* DROITE : Bouton CTA principal + Burger mobile */}
         <div className="flex items-center gap-3 flex-shrink-0">
           <Link
             href="/audit"
-            className="group relative overflow-hidden px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-[#087B53] text-white font-heading font-semibold text-xs tracking-wider uppercase transition-all duration-300 shadow-[0_0_20px_rgba(8,123,83,0.30)] hover:bg-[#066343] hover:shadow-[0_0_25px_rgba(8,123,83,0.50)] hover:scale-[1.02]"
+            className="hidden sm:inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] rounded-lg bg-[#0D6E52] hover:bg-[#09523D] text-white font-medium text-sm shadow-sm transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] focus-visible:ring-offset-2"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>Audit Gratuit</span>
-              <span className="font-mono opacity-80 text-[10px] hidden sm:inline">[3 min]</span>
-              <span className="text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
-            </span>
+            Audit gratuit (3 min)
           </Link>
 
-          {/* Bouton Mobile Toggle */}
+          {/* Bouton Burger Mobile accessible */}
           <button
+            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 rounded-full text-[#4A433B] hover:text-[#181512] hover:bg-[#EAE2D5] transition-colors cursor-pointer"
-            aria-label="Menu"
+            className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-[#374151] hover:text-[#111827] hover:bg-[#F3F4F6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52] transition-colors cursor-pointer"
+            aria-label={mobileMenuOpen ? "Fermer le menu de navigation" : "Ouvrir le menu de navigation"}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg 
+              className="w-6 h-6" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor" 
+              aria-hidden="true"
+            >
               {mobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -101,19 +108,20 @@ export default function Header() {
           </button>
         </div>
 
-      </nav>
+      </div>
 
-      {/* Menu Déroulant Mobile Plein Écran */}
+      {/* Menu Mobile Déroulant accessible */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            id="mobile-navigation"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.2 }}
-            className="lg:hidden mt-2 p-5 rounded-3xl bg-[#FAF8F5]/98 backdrop-blur-2xl border border-[#E5DDD2] shadow-2xl space-y-4"
+            className="md:hidden border-b border-[#E5E7EB] bg-[#FFFFFF] shadow-lg overflow-hidden"
           >
-            <div className="flex flex-col gap-2">
+            <nav className="px-4 pt-3 pb-5 space-y-2">
               {navSteps.map((step) => {
                 const isActive = pathname === step.href;
                 return (
@@ -121,36 +129,27 @@ export default function Header() {
                     key={step.href}
                     href={step.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between p-3 rounded-xl transition-all ${
-                      isActive 
-                        ? "bg-[#B88E3E]/15 text-[#B88E3E] font-bold border border-[#B88E3E]/30" 
-                        : "text-[#4A433B] hover:bg-[#EDE5D8] hover:text-[#181512]"
+                    className={`block px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
+                      isActive
+                        ? "bg-[#0D6E52]/10 text-[#0D6E52] font-semibold"
+                        : "text-[#374151] hover:bg-[#F3F4F6] hover:text-[#111827]"
                     }`}
                   >
-                    <span className="text-sm font-heading font-medium">{step.label}</span>
-                    <span className="text-xs text-[#7A6F64] font-mono">→</span>
+                    {step.label}
                   </Link>
                 );
               })}
-            </div>
 
-            <div className="pt-3 border-t border-[#E5DDD2] flex flex-col gap-2">
-              <Link
-                href="/audit"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full bg-[#087B53] text-white font-heading font-bold text-xs text-center uppercase tracking-wider shadow-lg flex items-center justify-center gap-2"
-              >
-                <span>Passer l&apos;Audit Gratuit [3 min]</span>
-                <span>↗</span>
-              </Link>
-              <Link
-                href="/prix"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full bg-[#B88E3E] text-white font-heading font-semibold text-xs text-center uppercase tracking-wider"
-              >
-                Consulter les Prix & Formats
-              </Link>
-            </div>
+              <div className="pt-3 border-t border-[#E5E7EB]">
+                <Link
+                  href="/audit"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full inline-flex items-center justify-center px-4 py-3 min-h-[48px] rounded-lg bg-[#0D6E52] hover:bg-[#09523D] text-white font-semibold text-sm shadow-sm transition-colors text-center"
+                >
+                  Audit gratuit (3 min)
+                </Link>
+              </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
