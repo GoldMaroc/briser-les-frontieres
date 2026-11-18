@@ -363,19 +363,33 @@ export default function SovereigntyCyberneticHero() {
         ref={trackRef} 
         className="relative w-full h-[450vh] bg-[#08090A]"
       >
-        {/* Conteneur Plein Écran Épinglé (Sticky Top 0 Viewport) */}
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-16 sm:pt-20 pb-3 sm:pb-4 px-3 sm:px-8 lg:px-12 pointer-events-none select-none">
+        {/* Conteneur Plein Écran Épinglé (Sticky Top 0 Viewport - Pinned across 450vh) */}
+        <div className="sticky top-0 h-screen w-full overflow-hidden pointer-events-none select-none">
           
-          {/* FOND COSMIQUE QUI DESCEND AU SCROLL (PARALLAXE INVERSÉE) */}
+          {/* 1. FOND COSMIQUE ÉTOILÉ QUI DESCEND AU SCROLL (PARALLAXE INVERSÉE) */}
           <div 
-            className="absolute inset-0 pointer-events-none transition-transform duration-75 ease-out"
+            className="absolute -top-[25%] -bottom-[25%] -left-[10%] -right-[10%] pointer-events-none transition-transform duration-75 ease-out overflow-hidden"
             style={{
               transform: `translateY(${spaceBackgroundTranslateY}px)`
             }}
           >
+            {/* Image Haute Définition du Ciel Étoilé Cosmique */}
+            <Image
+              src="/images/cosmic_starfield.webp"
+              alt="Fond Ciel Étoilé Cosmique"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center filter brightness-115 contrast-125 pointer-events-none select-none"
+            />
+            
+            {/* Voiles sombres progressifs pour sublimer la lisibilité de la télémétrie */}
+            <div className="absolute inset-0 bg-[#08090A]/45 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,9,10,0.85)_100%)] pointer-events-none" />
+
             {/* Grille vectorielle perspective */}
             <div 
-              className="absolute inset-0 opacity-25"
+              className="absolute inset-0 opacity-20 pointer-events-none"
               style={{
                 backgroundImage: `
                   linear-gradient(to right, rgba(0,229,153,0.18) 1px, transparent 1px),
@@ -387,56 +401,41 @@ export default function SovereigntyCyberneticHero() {
               }}
             />
 
-            {/* Canvas des poussières cosmiques qui dérivent vers le bas */}
+            {/* Canvas des poussières cosmiques et étoiles scintillantes en dérive */}
             <canvas 
               ref={starsCanvasRef} 
               width={1200} 
               height={800} 
-              className="absolute inset-0 w-full h-full opacity-60"
+              className="absolute inset-0 w-full h-full opacity-60 mix-blend-screen pointer-events-none"
             />
           </div>
 
-          {/* Anneau Radar LiDAR Orbital 360° */}
+          {/* 2. ANNEAU RADAR LIDAR ORBITAL 360° */}
           <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] lg:w-[560px] lg:h-[560px] rounded-full border border-dashed border-[#00E599]/15 pointer-events-none transition-transform duration-100 ease-out"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[290px] sm:w-[440px] sm:h-[440px] lg:w-[540px] lg:h-[540px] rounded-full border border-dashed border-[#00E599]/20 pointer-events-none transition-transform duration-100 ease-out"
             style={{
               transform: `translate(-50%, -50%) rotate(${Math.round(scrollProgress * 360)}deg)`
             }}
           >
-            <span className="absolute top-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/60 bg-black/60 px-1.5 py-0.5 rounded">0° FACE</span>
-            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/60 bg-black/60 px-1.5 py-0.5 rounded">45° DROITE</span>
-            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/60 bg-black/60 px-1.5 py-0.5 rounded">90° PROFIL D.</span>
-            <span className="absolute left-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/60 bg-black/60 px-1.5 py-0.5 rounded">90° PROFIL G.</span>
+            <span className="absolute top-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">0° FACE</span>
+            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">45° DROITE</span>
+            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">90° PROFIL D.</span>
+            <span className="absolute left-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">90° PROFIL G.</span>
           </div>
 
-          {/* ── BARRE SUPÉRIEURE TÉLÉMÉTRIQUE (RESPONSIVE MOBILE / DESKTOP) ── */}
-          <div className="relative z-10 w-full flex items-center justify-between text-neutral-400 font-mono text-[9px] sm:text-xs">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00E599] animate-ping" />
-              <span className="text-[#00E599] font-bold tracking-widest uppercase">
-                {activePosture.postureFrench} // {activePosture.cameraAngle}
-              </span>
-            </div>
-            <div className="flex items-center gap-4 sm:gap-6">
-              <span>ANGLE : <strong className="text-[#00E599] font-mono text-xs sm:text-sm">{currentRachisAngle}°</strong></span>
-              <span className="hidden sm:inline">FRAME : <strong className="text-white font-mono">{currentFrame + 1} / {TOTAL_FRAMES}</strong></span>
-            </div>
-          </div>
-
-          {/* ── LE MANNEQUIN QUI S'ÉLÈVE VERS LE HAUT AU SCROLL (L'HOMME QUI MONTE DANS L'ESPACE) ── */}
-          <div className="relative z-10 flex-1 w-full flex items-center justify-center my-auto pointer-events-none">
+          {/* 3. LE MANNEQUIN AU CENTRE ABSOLU (L'HOMME QUI MONTE DANS L'ESPACE, TOUJOURS VISIBLE) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div 
-              className="relative h-[42vh] sm:h-[48vh] lg:h-[52vh] max-h-[460px] aspect-square flex items-center justify-center transition-transform duration-100 ease-out"
+              className="relative w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] lg:w-[490px] lg:h-[490px] flex items-center justify-center transition-transform duration-100 ease-out"
               style={{
                 transform: `translateY(${characterAscentTranslateY}px)`
               }}
             >
-              {/* CANVAS PRINCIPAL DE RENDU DES 96 FRAMES */}
-              <canvas
-                ref={canvasRef}
-                width={800}
-                height={800}
-                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_35px_rgba(0,229,153,0.35)]"
+              {/* Image directe de la frame courante : garantie 100% visible, décodage immédiat, zéro scintillement */}
+              <img
+                src={`/images/salat_frames/frame_${currentFrame.toString().padStart(3, "0")}.webp`}
+                alt={`Salât Posture ${currentFrame}`}
+                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_45px_rgba(0,229,153,0.45)] pointer-events-none select-none"
                 style={{
                   maskImage: "radial-gradient(circle at 50% 50%, black 72%, rgba(0,0,0,0.8) 86%, transparent 100%)",
                   WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 72%, rgba(0,0,0,0.8) 86%, transparent 100%)"
@@ -469,26 +468,35 @@ export default function SovereigntyCyberneticHero() {
                   </div>
                 ))}
               </div>
-
             </div>
           </div>
 
-          {/* ── COUCHE HUD FLOTTANTE SUPÉRIEURE & LATÉRALE ── */}
-          <div className="relative z-20 w-full max-w-7xl mx-auto my-auto flex items-end justify-between pointer-events-none">
+          {/* 4. COUCHE TÉLÉMÉTRIQUE SUPÉRIEURE (FIXÉE SOUS LE HEADER) */}
+          <div className="absolute top-16 sm:top-20 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-center justify-between text-neutral-400 font-mono text-[9px] sm:text-xs pointer-events-none">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00E599] animate-ping" />
+              <span className="text-[#00E599] font-bold tracking-widest uppercase">
+                {activePosture.postureFrench} // {activePosture.cameraAngle}
+              </span>
+            </div>
+            <div className="flex items-center gap-4 sm:gap-6">
+              <span>ANGLE : <strong className="text-[#00E599] font-mono text-xs sm:text-sm">{currentRachisAngle}°</strong></span>
+              <span className="hidden sm:inline">FRAME : <strong className="text-white font-mono">{currentFrame + 1} / {TOTAL_FRAMES}</strong></span>
+            </div>
+          </div>
+
+          {/* 5. COUCHE HUD FLOTTANTE BASSE (GAUCHE & DROITE) */}
+          <div className="absolute bottom-10 sm:bottom-12 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-end justify-between pointer-events-none">
             
-            {/* BLOC GAUCHE : COMPTEUR D'ANGLE EN DIRECT & EXÉGÈSE */}
-            <div className="max-w-xs sm:max-w-md lg:max-w-lg space-y-1.5 sm:space-y-2 text-left pointer-events-auto">
-              
-              {/* Compteur d'angle monumental */}
+            {/* BLOC GAUCHE : ANGLE ET POSTURE */}
+            <div className="max-w-xs sm:max-w-md lg:max-w-lg space-y-1 sm:space-y-1.5 text-left pointer-events-auto bg-[#08090A]/80 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
               <div className="flex items-baseline gap-1.5 sm:gap-2">
-                <span className="font-mono font-black text-4xl sm:text-6xl lg:text-7xl text-white tracking-tighter leading-none drop-shadow-[0_15px_40px_rgba(0,0,0,0.95)]">
+                <span className="font-mono font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tighter leading-none">
                   {currentRachisAngle}
                 </span>
-                <span className="font-mono font-bold text-2xl sm:text-3xl text-[#00E599]">
-                  °
-                </span>
-                <div className="flex flex-col pl-2 border-l border-[#00E599]/40 ml-1.5">
-                  <span className="font-mono text-[8px] sm:text-[10px] uppercase tracking-widest text-[#00E599] font-bold">
+                <span className="font-mono font-bold text-xl sm:text-2xl text-[#00E599]">°</span>
+                <div className="flex flex-col pl-2 border-l border-[#00E599]/40 ml-1">
+                  <span className="font-mono text-[8px] sm:text-[9px] uppercase tracking-widest text-[#00E599] font-bold">
                     INCLINAISON RACHIDIENNE
                   </span>
                   <span className="font-mono text-[7px] sm:text-[8px] text-neutral-400">
@@ -497,36 +505,31 @@ export default function SovereigntyCyberneticHero() {
                 </div>
               </div>
 
-              {/* Titre Posture Monumental Systemia */}
               <div>
-                <h2 className="font-heading font-bold text-xl sm:text-3xl lg:text-4xl tracking-[-0.03em] text-white leading-none drop-shadow-[0_15px_35px_rgba(0,0,0,0.95)]">
+                <h2 className="font-heading font-bold text-lg sm:text-2xl lg:text-3xl tracking-[-0.03em] text-white leading-none">
                   {activePosture.postureArabic}
                 </h2>
-                <p className="font-sans font-bold text-xs sm:text-base text-neutral-300 mt-0.5">
-                  {activePosture.postureFrench} · <span className="text-[#00E599] font-mono text-[10px] sm:text-xs">{activePosture.subtitle}</span>
+                <p className="font-sans font-bold text-[11px] sm:text-sm text-neutral-300 mt-0.5">
+                  {activePosture.postureFrench} · <span className="text-[#00E599] font-mono text-[9px] sm:text-[11px]">{activePosture.subtitle}</span>
                 </p>
               </div>
 
-              {/* Badge Métrique Clé */}
-              <div className="inline-block font-mono text-[9px] sm:text-xs font-bold text-[#00E599] bg-[#00E599]/15 border border-[#00E599]/30 px-2.5 py-0.5 rounded-full shadow-[0_0_15px_rgba(0,229,153,0.3)]">
+              <div className="inline-block font-mono text-[8px] sm:text-[10px] font-bold text-[#00E599] bg-[#00E599]/15 border border-[#00E599]/30 px-2 py-0.5 rounded-full">
                 {activePosture.keyMetric}
               </div>
 
-              {/* Explication Scientifique (masquée sur très petits écrans) */}
-              <p className="hidden sm:block text-[11px] sm:text-xs text-neutral-300 font-sans leading-relaxed max-w-sm drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+              <p className="hidden sm:block text-[10px] sm:text-[11px] text-neutral-300 font-sans leading-snug max-w-sm">
                 {activePosture.scientificInsight}
               </p>
 
-              {/* Verset Sacré */}
-              <p className="text-[9px] sm:text-[11px] font-sans italic text-amber-300/80 max-w-sm border-l-2 border-[#00E599]/50 pl-2 py-0.5">
+              <p className="text-[8px] sm:text-[10px] font-sans italic text-amber-300/80 max-w-sm border-l-2 border-[#00E599]/50 pl-2">
                 {activePosture.sacredVerse}
               </p>
-
             </div>
 
             {/* BLOC DROIT : JAUGE DES 4 ÉTAPES EXACTES */}
-            <div className="hidden lg:flex flex-col items-end space-y-3 font-mono text-xs pointer-events-auto">
-              <div className="relative pl-3 border-l border-white/15 space-y-4">
+            <div className="hidden lg:flex flex-col items-end space-y-2.5 font-mono text-xs pointer-events-auto bg-[#08090A]/80 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
+              <div className="relative pl-3 border-l border-white/15 space-y-3">
                 {[
                   { label: "DEBOUT DE FACE", deg: "180°", cam: "VUE 0°", idx: 0 },
                   { label: "INCLINÉ 45° DROITE", deg: "90°", cam: "VUE 3/4 DROITE", idx: 1 },
@@ -550,7 +553,6 @@ export default function SovereigntyCyberneticHero() {
                 })}
               </div>
 
-              {/* Jauge de progression continue */}
               <div className="w-32 text-right">
                 <span className="text-[8px] text-neutral-400 block mb-1 font-mono">FRAME {currentFrame + 1}/96</span>
                 <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
@@ -564,9 +566,9 @@ export default function SovereigntyCyberneticHero() {
 
           </div>
 
-          {/* ── BARRE INFÉRIEURE : TÉLÉMÉTRIE & CONSEIL DE DÉFILEMENT ── */}
-          <div className="relative z-10 w-full flex flex-col sm:flex-row items-center justify-between font-mono text-[8px] sm:text-[9px] text-neutral-400 gap-1.5 border-t border-white/10 pt-2">
-            <div className="flex items-center gap-2 flex-wrap justify-center">
+          {/* 6. BARRE INFÉRIEURE : STATUT & CUE */}
+          <div className="absolute bottom-2 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-center justify-between font-mono text-[8px] text-neutral-400 border-t border-white/10 pt-1 pointer-events-none">
+            <div className="flex items-center gap-2 flex-wrap">
               <span>SCAN : <strong className="text-[#00E599]">ACTIF</strong></span>
               <span>•</span>
               <span>CAMÉRA : <strong className="text-white">{activePosture.cameraAngle}</strong></span>
