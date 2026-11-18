@@ -127,11 +127,14 @@ body {
               color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-/* Appliquer des transitions douces sur tous les conteneurs principaux de structure */
-header, footer, main, section, div, span, p, a, h1, h2, h3, h4, h5, h6 {
-  transition: background-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
-              color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1),
-              border-color var(--transition-speed) cubic-bezier(0.25, 0.8, 0.25, 1);
+/* Transitions douces ciblées (uniquement sur le body et les composants interactifs) */
+body {
+  background-color: var(--bg-base);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  line-height: 1.618;
+  max-width: 100%;
+  position: relative;
 }
 
 /* ═══ Typographie Pure Inspiration Ayocin (Systemia Neo-Grotesque) ═══ */
