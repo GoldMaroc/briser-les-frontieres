@@ -16,12 +16,15 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Colonne 1 - Marque */}
           <div>
-            <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/10 group hover:border-gold-500/30 transition-all duration-300">
-              <Image src="/logo_blf.png" alt="Logo Briser les Frontières" width={40} height={40} className="object-contain group-hover:scale-105 transition-transform duration-300" />
-              <span className="text-xl font-bold font-serif tracking-wide bg-gradient-to-r from-gold-300 to-gold-500 bg-clip-text text-transparent group-hover:from-gold-400 group-hover:to-gold-600 transition-all">
+            <div className="inline-flex items-center gap-3 bg-white px-4 py-2 rounded-full border border-stone-200 shadow-sm group hover:border-[#8C6214]/40 transition-all duration-300">
+              <Image src="/logo_blf.png" alt="Logo Briser les Frontières" width={32} height={32} className="object-contain" />
+              <span className="text-base font-bold font-heading tracking-wide text-[#111827]">
                 Briser les Frontières
               </span>
             </div>
+            <p className="mt-4 text-xs tracking-wider uppercase font-mono text-[#8C6214] font-semibold">
+              L&apos;Ingénierie de la Souveraineté
+            </p>
             <p className="mt-4 text-sm text-stone-600 leading-relaxed max-w-xs font-body">
               Ingénierie de la Souveraineté — Accompagnement exégétique et neuro-cognitif pour restaurer la clarté spirituelle, discipliner le Nafs et assumer le mandat de Khalifa.
             </p>

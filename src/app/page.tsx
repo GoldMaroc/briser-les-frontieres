@@ -28,7 +28,7 @@ export default function Home() {
 
   // États pour les témoignages interactifs (43 avis + avis dynamiques approuvés)
   const [allTestimonials, setAllTestimonials] = useState<Testimonial[]>(testimonials);
-  const [activeTab, setActiveTab] = useState<'homme' | 'femme' | 'famille' | 'groupe'>("homme");
+  const [activeTab, setActiveTab] = useState<'tous' | 'homme' | 'femme' | 'famille' | 'groupe'>("tous");
   const carouselRef = useRef<HTMLDivElement>(null);
   const dragHandlers = useDraggableScroll(carouselRef);
   const [currentTestimonialPage, setCurrentTestimonialPage] = useState(1);
@@ -310,42 +310,39 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SECTION 2.6 : TÉMOIGNAGES & RÉCITS DE TRANSFORMATION (43 Avis Interactifs & Dynamiques)
           ═══════════════════════════════════════════ */}
-      <section id="temoignages" className="relative py-32 bg-[#F4EFEA] border-t border-[#E5DDD2] overflow-hidden text-[#181512]">
+      <section id="temoignages" className="relative py-16 sm:py-24 bg-[#F4EFEA] border-t border-[#E5E7EB] overflow-hidden text-[#111827]">
         
-        {/* Fond décoratif en filigrane */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(184,142,62,0.05)_0%,transparent_80%)] pointer-events-none" />
+        {/* Fond décoratif subtil */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(184,142,62,0.06)_0%,transparent_80%)] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           
           <SectionHeading
             label="Bilan & Élévation"
             title="43 Récits de Transformation"
-            subtitle="Découvrez les témoignages authentiques d'hommes, de femmes, de familles et de cohortes qui ont restauré leur clarté d'esprit et vaincu la procrastination grâce au protocole C.O.M.E.S."
+            subtitle="Découvrez les témoignages authentiques de croyants qui ont restauré leur constance, maîtrisé la charge mentale et réinstauré la prière comme pivot de leur vie."
           />
 
           {/* Onglets interactifs de catégories avec compteurs */}
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-12">
-            {(['homme', 'femme', 'famille', 'groupe'] as const).map((cat) => {
-              const count = allTestimonials.filter(t => t.category === cat).length;
-              const labels = {
-                homme: "Hommes",
-                femme: "Femmes",
-                famille: "Familles",
-                groupe: "Groupes d'amis"
-              };
-              const isActive = activeTab === cat;
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
+            {[
+              { id: 'tous' as const, label: 'Tous les récits', count: allTestimonials.length },
+              { id: 'homme' as const, label: 'Hommes', count: allTestimonials.filter(t => t.category === 'homme').length },
+              { id: 'femme' as const, label: 'Femmes', count: allTestimonials.filter(t => t.category === 'femme').length },
+            ].map((tab) => {
+              const isActive = activeTab === tab.id;
 
               return (
                 <button
-                  key={cat}
-                  onClick={() => setActiveTab(cat)}
-                  className={`px-6 py-3 border text-xs font-semibold uppercase tracking-[0.15em] font-body transition-all duration-300 cursor-pointer rounded-full ${
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-5 py-2.5 text-xs font-semibold tracking-wider transition-all duration-200 cursor-pointer rounded-full border shadow-sm ${
                     isActive
-                      ? "border-[#B88E3E] text-[#B88E3E] bg-[#B88E3E]/10 font-bold"
-                      : "border-[#E5DDD2] text-[#5C534A] hover:border-[#B88E3E]/50 bg-white"
+                      ? "bg-[#111827] text-white border-[#111827]"
+                      : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#111827] hover:text-[#111827]"
                   }`}
                 >
-                  {labels[cat]} <span className="text-[10px] text-[#B88E3E] ml-1 font-bold">({count})</span>
+                  {tab.label} <span className={`ml-1.5 font-bold ${isActive ? "text-[#E5E7EB]" : "text-[#8C6214]"}`}>({tab.count})</span>
                 </button>
               );
             })}
@@ -353,7 +350,9 @@ export default function Home() {
 
           {/* Carousel de témoignages */}
           {(() => {
-            const filtered = allTestimonials.filter(t => t.category === activeTab);
+            const filtered = activeTab === 'tous' 
+              ? allTestimonials 
+              : allTestimonials.filter(t => t.category === activeTab);
 
             return (
               <div className="space-y-6">
@@ -362,10 +361,18 @@ export default function Home() {
                   {/* Boutons de navigation PC */}
                   {filtered.length > 1 && (
                     <>
-                      <button onClick={() => carouselRef.current?.scrollBy({ left: -400, behavior: 'smooth' })} className="hidden md:flex absolute -left-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-[#E5DDD2] shadow-xl rounded-full items-center justify-center text-[#181512] hover:border-[#B88E3E] hover:text-[#B88E3E] transition-all duration-300 cursor-pointer text-xl">
+                      <button 
+                        onClick={() => carouselRef.current?.scrollBy({ left: -420, behavior: 'smooth' })} 
+                        className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 bg-white border border-[#E5E7EB] shadow-lg rounded-full items-center justify-center text-[#111827] hover:border-[#0D6E52] hover:text-[#0D6E52] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52]"
+                        aria-label="Témoignage précédent"
+                      >
                         ←
                       </button>
-                      <button onClick={() => carouselRef.current?.scrollBy({ left: 400, behavior: 'smooth' })} className="hidden md:flex absolute -right-6 top-[45%] -translate-y-1/2 z-10 w-12 h-12 bg-white border border-[#E5DDD2] shadow-xl rounded-full items-center justify-center text-[#181512] hover:border-[#B88E3E] hover:text-[#B88E3E] transition-all duration-300 cursor-pointer text-xl">
+                      <button 
+                        onClick={() => carouselRef.current?.scrollBy({ left: 420, behavior: 'smooth' })} 
+                        className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 bg-white border border-[#E5E7EB] shadow-lg rounded-full items-center justify-center text-[#111827] hover:border-[#0D6E52] hover:text-[#0D6E52] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D6E52]"
+                        aria-label="Témoignage suivant"
+                      >
                         →
                       </button>
                     </>
@@ -375,65 +382,70 @@ export default function Home() {
                     ref={carouselRef}
                     {...dragHandlers}
                     key={activeTab}
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: 16 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 scroll-smooth hide-scrollbar"
+                    transition={{ duration: 0.4 }}
+                    className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 scroll-smooth hide-scrollbar px-1"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                   >
                   {filtered.map((t) => (
-                    <div
+                    <article
                       key={t.id}
-                      className="w-[85vw] sm:w-[450px] flex-shrink-0 snap-center group p-8 border border-[#E5DDD2] bg-white rounded-2xl transition-all duration-500 hover:border-[#B88E3E]/50 hover:-translate-y-1 flex flex-col justify-between shadow-[0_8px_25px_rgba(50,40,30,0.04)]"
+                      className="w-[85vw] sm:w-[420px] flex-shrink-0 snap-center p-7 sm:p-8 border border-[#E5E7EB] bg-white rounded-2xl transition-all duration-300 hover:border-[#8C6214]/50 hover:shadow-md flex flex-col justify-between shadow-[0_4px_20px_rgba(17,24,39,0.04)]"
                     >
-                      <div className="space-y-6">
-                        {/* Haut de carte : Nom et Éléments techniques */}
-                        <div className="flex flex-wrap items-start justify-between gap-4">
-                          <div>
-                            <h4 className="font-heading text-lg sm:text-xl text-[#181512] group-hover:text-[#B88E3E] transition-colors duration-300 font-bold">
-                              {t.name}
-                            </h4>
-                            {t.role && (
-                              <p className="text-xs text-[#7A6F64] font-body italic mt-1">{t.role}</p>
-                            )}
+                      <div className="space-y-4">
+                        {/* 5 étoiles dorées pour preuve sociale immédiate */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1 text-[#8C6214] text-sm" aria-label="5 étoiles sur 5">
+                            <span aria-hidden="true">★★★★★</span>
                           </div>
                           
-                          <div className="flex flex-col items-end gap-1.5 font-body">
+                          <div className="flex items-center gap-2">
                             {t.score !== undefined && (
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#087B53] px-2.5 py-1 border border-[#087B53]/25 rounded-full bg-[#087B53]/10">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#0D6E52] px-2.5 py-1 border border-[#0D6E52]/25 rounded-full bg-[#0D6E52]/10 font-mono">
                                 Audit : {t.score}%
                               </span>
                             )}
                             {t.period && (
-                              <span className="text-[9px] font-bold uppercase tracking-wider text-[#B88E3E] px-2.5 py-1 border border-[#B88E3E]/25 rounded-full bg-[#B88E3E]/10">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C6214] px-2.5 py-1 border border-[#8C6214]/25 rounded-full bg-[#8C6214]/10 font-mono">
                                 {t.period}
                               </span>
                             )}
                           </div>
                         </div>
 
-                        {/* Corps : Texte de témoignage */}
-                        <p className="text-sm text-[#4A433B] leading-relaxed font-body italic before:content-['«_'] after:content-['_»']">
-                          {t.text}
+                        {/* Auteur */}
+                        <div>
+                          <h3 className="font-heading text-lg text-[#111827] font-bold leading-tight">
+                            {t.name}
+                          </h3>
+                          {t.role && (
+                            <p className="text-xs text-[#4B5563] mt-0.5">{t.role}</p>
+                          )}
+                        </div>
+
+                        {/* Corps : Texte du témoignage */}
+                        <p className="text-[15px] text-[#374151] leading-[1.6] font-sans">
+                          « {t.text} »
                         </p>
                       </div>
 
                       {/* Bas de carte : Localisation */}
                       {t.location && (
-                        <div className="mt-6 pt-4 border-t border-[#E5DDD2] flex items-center justify-between text-[10px] uppercase tracking-wider text-[#B88E3E] font-mono">
-                          <span className="text-[#7A6F64]">Localisation</span>
-                          <span className="text-[#181512] font-bold">{t.location}</span>
+                        <div className="mt-6 pt-4 border-t border-[#E5E7EB] flex items-center justify-between text-[11px] font-mono">
+                          <span className="text-[#6B7280]">Localisation</span>
+                          <span className="text-[#111827] font-semibold">{t.location}</span>
                         </div>
                       )}
-                    </div>
+                    </article>
                   ))}
                 </motion.div>
                 </div>
 
-                {/* Indicateur de défilement */}
+                {/* Indicateur de défilement mobile */}
                 {filtered.length > 1 && (
-                  <div className="flex items-center justify-center gap-2 pt-2 opacity-60">
-                    <span className="text-[10px] uppercase tracking-widest text-[#7A6F64] font-bold">← Glisser horizontalement pour voir plus d&apos;avis →</span>
+                  <div className="flex items-center justify-center gap-2 pt-2 text-[#6B7280]">
+                    <span className="text-[11px] uppercase tracking-wider font-mono">← Glissez pour découvrir plus de témoignages →</span>
                   </div>
                 )}
               </div>
