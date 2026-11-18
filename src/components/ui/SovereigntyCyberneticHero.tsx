@@ -366,112 +366,54 @@ export default function SovereigntyCyberneticHero() {
         {/* Conteneur Plein Écran Épinglé (Sticky Top 0 Viewport - Pinned across 450vh) */}
         <div className="sticky top-0 h-screen w-full overflow-hidden pointer-events-none select-none">
           
-          {/* 1. FOND COSMIQUE ÉTOILÉ QUI DESCEND AU SCROLL (PARALLAXE INVERSÉE) */}
+          {/* 1. FOND COSMIQUE GALACTIQUE PROFOND (INSPIRATION AYOCIN - HAUTE DÉFINITION NATURELLE SANS QUADRILLAGE) */}
           <div 
             className="absolute -top-[25%] -bottom-[25%] -left-[10%] -right-[10%] pointer-events-none transition-transform duration-75 ease-out overflow-hidden"
             style={{
               transform: `translateY(${spaceBackgroundTranslateY}px)`
             }}
           >
-            {/* Image Haute Définition du Ciel Étoilé Cosmique */}
+            {/* Image Haute Définition de la Galaxie Cosmique et du Champ Stellaire */}
             <Image
               src="/images/cosmic_starfield.webp"
-              alt="Fond Ciel Étoilé Cosmique"
+              alt="Galaxie Céleste et Ciel Étoilé"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center filter brightness-115 contrast-125 pointer-events-none select-none"
+              className="object-cover object-center filter brightness-110 contrast-120 pointer-events-none select-none"
             />
             
-            {/* Voiles sombres progressifs pour sublimer la lisibilité de la télémétrie */}
-            <div className="absolute inset-0 bg-[#08090A]/45 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,9,10,0.85)_100%)] pointer-events-none" />
-
-            {/* Grille vectorielle perspective */}
-            <div 
-              className="absolute inset-0 opacity-20 pointer-events-none"
-              style={{
-                backgroundImage: `
-                  linear-gradient(to right, rgba(0,229,153,0.18) 1px, transparent 1px),
-                  linear-gradient(to bottom, rgba(0,229,153,0.18) 1px, transparent 1px)
-                `,
-                backgroundSize: "60px 60px",
-                maskImage: "radial-gradient(ellipse at 50% 60%, black 30%, transparent 85%)",
-                WebkitMaskImage: "radial-gradient(ellipse at 50% 60%, black 30%, transparent 85%)"
-              }}
-            />
+            {/* Voile sombre très subtil pour préserver la lisibilité de la typographie Ayocin */}
+            <div className="absolute inset-0 bg-[#08090A]/30 pointer-events-none" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(8,9,10,0.85)_100%)] pointer-events-none" />
 
             {/* Canvas des poussières cosmiques et étoiles scintillantes en dérive */}
             <canvas 
               ref={starsCanvasRef} 
               width={1200} 
               height={800} 
-              className="absolute inset-0 w-full h-full opacity-60 mix-blend-screen pointer-events-none"
+              className="absolute inset-0 w-full h-full opacity-50 mix-blend-screen pointer-events-none"
             />
           </div>
 
-          {/* 2. ANNEAU RADAR LIDAR ORBITAL 360° */}
-          <div 
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[290px] h-[290px] sm:w-[440px] sm:h-[440px] lg:w-[540px] lg:h-[540px] rounded-full border border-dashed border-[#00E599]/20 pointer-events-none transition-transform duration-100 ease-out"
-            style={{
-              transform: `translate(-50%, -50%) rotate(${Math.round(scrollProgress * 360)}deg)`
-            }}
-          >
-            <span className="absolute top-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">0° FACE</span>
-            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">45° DROITE</span>
-            <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">90° PROFIL D.</span>
-            <span className="absolute left-1.5 top-1/2 -translate-y-1/2 font-mono text-[8px] text-[#00E599]/70 bg-black/70 px-1.5 py-0.5 rounded border border-[#00E599]/30">90° PROFIL G.</span>
-          </div>
-
-          {/* 3. LE MANNEQUIN AU CENTRE ABSOLU (L'HOMME QUI MONTE DANS L'ESPACE, TOUJOURS VISIBLE) */}
+          {/* 2. LE MANNEQUIN AU CENTRE ABSOLU (L'HOMME QUI VOGUE DANS LA GALAXIE, PUR ET SANS CADRE NI POINTS PARASITES) */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div 
-              className="relative w-[280px] h-[280px] sm:w-[420px] sm:h-[420px] lg:w-[490px] lg:h-[490px] flex items-center justify-center transition-transform duration-100 ease-out"
+              className="relative w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] lg:w-[540px] lg:h-[540px] flex items-center justify-center transition-transform duration-75 ease-out"
               style={{
                 transform: `translateY(${characterAscentTranslateY}px)`
               }}
             >
-              {/* Image directe de la frame courante : garantie 100% visible, décodage immédiat, zéro scintillement */}
+              {/* Image transparente PNG/WebP avec mode screen : aucun fond, aucun carré noir, intégration 100% pure */}
               <img
                 src={`/images/salat_frames/frame_${currentFrame.toString().padStart(3, "0")}.webp`}
                 alt={`Salât Posture ${currentFrame}`}
-                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_45px_rgba(0,229,153,0.45)] pointer-events-none select-none"
-                style={{
-                  maskImage: "radial-gradient(circle at 50% 50%, black 72%, rgba(0,0,0,0.8) 86%, transparent 100%)",
-                  WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 72%, rgba(0,0,0,0.8) 86%, transparent 100%)"
-                }}
+                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_50px_rgba(0,229,153,0.5)] pointer-events-none select-none mix-blend-screen"
               />
-
-              {/* Réticules Anatomiques Rigoureux pour la Posture Actuelle */}
-              <div className="absolute inset-0 z-30 pointer-events-none">
-                {activePosture.nodes.map((node, nIdx) => (
-                  <div
-                    key={nIdx}
-                    style={{ left: `${node.coords.x}%`, top: `${node.coords.y}%` }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ease-out"
-                  >
-                    <div className="flex items-center gap-1 sm:gap-1.5 group">
-                      <span className="relative flex h-3.5 w-3.5 sm:h-4 sm:w-4 items-center justify-center">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E599] opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E599] border border-black" />
-                      </span>
-
-                      <div className="px-1.5 sm:px-2 py-0.5 rounded-md bg-[#08090A]/95 backdrop-blur-md border border-[#00E599]/40 shadow-[0_0_10px_rgba(0,229,153,0.35)]">
-                        <span className="block font-heading font-semibold text-[8px] sm:text-[10px] text-white whitespace-nowrap leading-tight">
-                          {node.title}
-                        </span>
-                        <span className="block font-mono text-[7px] sm:text-[8px] text-[#00E599] font-medium whitespace-nowrap leading-tight">
-                          {node.metric}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
 
-          {/* 4. COUCHE TÉLÉMÉTRIQUE SUPÉRIEURE (FIXÉE SOUS LE HEADER) */}
+          {/* 3. COUCHE TÉLÉMÉTRIQUE SUPÉRIEURE (FIXÉE SOUS LE HEADER) */}
           <div className="absolute top-16 sm:top-20 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-center justify-between text-neutral-400 font-mono text-[9px] sm:text-xs pointer-events-none">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#00E599] animate-ping" />
@@ -485,7 +427,7 @@ export default function SovereigntyCyberneticHero() {
             </div>
           </div>
 
-          {/* 5. COUCHE HUD FLOTTANTE BASSE (GAUCHE & DROITE) */}
+          {/* 4. COUCHE HUD FLOTTANTE BASSE (GAUCHE & DROITE) */}
           <div className="absolute bottom-10 sm:bottom-12 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-end justify-between pointer-events-none">
             
             {/* BLOC GAUCHE : ANGLE ET POSTURE */}
@@ -566,7 +508,7 @@ export default function SovereigntyCyberneticHero() {
 
           </div>
 
-          {/* 6. BARRE INFÉRIEURE : STATUT & CUE */}
+          {/* 5. BARRE INFÉRIEURE : STATUT & CUE */}
           <div className="absolute bottom-2 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-center justify-between font-mono text-[8px] text-neutral-400 border-t border-white/10 pt-1 pointer-events-none">
             <div className="flex items-center gap-2 flex-wrap">
               <span>SCAN : <strong className="text-[#00E599]">ACTIF</strong></span>
