@@ -380,35 +380,34 @@ export default function SovereigntyCyberneticHero() {
               fill
               priority
               sizes="100vw"
-              className="object-cover object-center filter brightness-110 contrast-120 pointer-events-none select-none"
+              className="object-cover object-center filter brightness-105 contrast-115 pointer-events-none select-none"
             />
             
             {/* Voile sombre très subtil pour préserver la lisibilité de la typographie Ayocin */}
-            <div className="absolute inset-0 bg-[#08090A]/30 pointer-events-none" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(8,9,10,0.85)_100%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[#08090A]/20 pointer-events-none" />
 
             {/* Canvas des poussières cosmiques et étoiles scintillantes en dérive */}
             <canvas 
               ref={starsCanvasRef} 
               width={1200} 
               height={800} 
-              className="absolute inset-0 w-full h-full opacity-50 mix-blend-screen pointer-events-none"
+              className="absolute inset-0 w-full h-full opacity-40 mix-blend-screen pointer-events-none"
             />
           </div>
 
-          {/* 2. LE MANNEQUIN AU CENTRE ABSOLU (L'HOMME QUI VOGUE DANS LA GALAXIE, PUR ET SANS CADRE NI POINTS PARASITES) */}
+          {/* 2. LE MANNEQUIN AU CENTRE ABSOLU (PUR PNG/WEBP TRANSPARENT, AUCUN FOND, AUCUN CADRE NOIR, AUCUN CADRILLAGE NI RETICULE) */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
             <div 
-              className="relative w-[320px] h-[320px] sm:w-[460px] sm:h-[460px] lg:w-[540px] lg:h-[540px] flex items-center justify-center transition-transform duration-75 ease-out"
+              className="relative w-[300px] h-[300px] sm:w-[440px] sm:h-[440px] lg:w-[500px] lg:h-[500px] flex items-center justify-center transition-transform duration-75 ease-out"
               style={{
                 transform: `translateY(${characterAscentTranslateY}px)`
               }}
             >
-              {/* Image transparente PNG/WebP avec mode screen : aucun fond, aucun carré noir, intégration 100% pure */}
+              {/* Image transparente pure : zéro pixel de fond, zéro carré noir, fondu parfait sur la galaxie */}
               <img
                 src={`/images/salat_frames/frame_${currentFrame.toString().padStart(3, "0")}.webp`}
                 alt={`Salât Posture ${currentFrame}`}
-                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_50px_rgba(0,229,153,0.5)] pointer-events-none select-none mix-blend-screen"
+                className="w-full h-full object-contain filter contrast-125 brightness-110 drop-shadow-[0_0_35px_rgba(0,229,153,0.45)] pointer-events-none select-none"
               />
             </div>
           </div>
@@ -431,7 +430,7 @@ export default function SovereigntyCyberneticHero() {
           <div className="absolute bottom-10 sm:bottom-12 inset-x-3 sm:inset-x-8 lg:inset-x-12 z-20 flex items-end justify-between pointer-events-none">
             
             {/* BLOC GAUCHE : ANGLE ET POSTURE */}
-            <div className="max-w-xs sm:max-w-md lg:max-w-lg space-y-1 sm:space-y-1.5 text-left pointer-events-auto bg-[#08090A]/80 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
+            <div className="max-w-xs sm:max-w-md lg:max-w-lg space-y-1 sm:space-y-1.5 text-left pointer-events-auto bg-[#08090A]/85 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
               <div className="flex items-baseline gap-1.5 sm:gap-2">
                 <span className="font-mono font-black text-3xl sm:text-5xl lg:text-6xl text-white tracking-tighter leading-none">
                   {currentRachisAngle}
@@ -470,7 +469,7 @@ export default function SovereigntyCyberneticHero() {
             </div>
 
             {/* BLOC DROIT : JAUGE DES 4 ÉTAPES EXACTES */}
-            <div className="hidden lg:flex flex-col items-end space-y-2.5 font-mono text-xs pointer-events-auto bg-[#08090A]/80 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
+            <div className="hidden lg:flex flex-col items-end space-y-2.5 font-mono text-xs pointer-events-auto bg-[#08090A]/85 backdrop-blur-md p-3 sm:p-4 rounded-xl border border-white/10 shadow-2xl">
               <div className="relative pl-3 border-l border-white/15 space-y-3">
                 {[
                   { label: "DEBOUT DE FACE", deg: "180°", cam: "VUE 0°", idx: 0 },
