@@ -40,11 +40,11 @@ export default function PrixPage() {
                 onClick={() => setActiveTab("services")}
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === "services"
-                    ? "bg-[#141210] text-white shadow-sm"
+                    ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm"
                     : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                <span className={`w-2 h-2 rounded-full ${activeTab === "services" ? "bg-[#087B53]" : "bg-neutral-300"}`} />
+                <span className={`w-2 h-2 rounded-full ${activeTab === "services" ? "bg-[#087B53]" : "bg-neutral-400"}`} />
                 <span>Prestations &amp; Consultations</span>
               </button>
 
@@ -53,11 +53,11 @@ export default function PrixPage() {
                 onClick={() => setActiveTab("livres")}
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === "livres"
-                    ? "bg-[#141210] text-white shadow-sm"
+                    ? "bg-[var(--text-primary)] text-[var(--bg)] shadow-sm"
                     : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
-                <span className={`w-2 h-2 rounded-full ${activeTab === "livres" ? "bg-[#B88E3E]" : "bg-neutral-300"}`} />
+                <span className={`w-2 h-2 rounded-full ${activeTab === "livres" ? "bg-[#B88E3E]" : "bg-neutral-400"}`} />
                 <span>La Librairie (Traités Écrits)</span>
               </button>
             </div>

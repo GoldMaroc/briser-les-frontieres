@@ -32,8 +32,8 @@ export default function TransformationSlider() {
   };
 
   return (
-    <section className="py-20 sm:py-24 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[#E8E0D2]">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
         
         {/* COLONNE GAUCHE : SLIDER INTERACTIF AVANT / APRÈS */}
         <div className="lg:col-span-7">
@@ -42,34 +42,34 @@ export default function TransformationSlider() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-[32px] overflow-hidden border border-[#E8E0D2] shadow-[0_20px_50px_rgba(20,18,16,0.08)] cursor-ew-resize select-none bg-white"
+            className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-[24px] sm:rounded-[32px] overflow-hidden border border-[var(--border)] shadow-[0_20px_50px_rgba(0,0,0,0.12)] cursor-ew-resize select-none bg-neutral-900"
           >
-            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ & CLARTÉ DU KHALIFA) */}
+            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ, HORIZON DE PAIX & ANCRAGE SACRÉ) */}
             <div className="absolute inset-0">
               <Image
-                src="/images/photo_khalifa_sunrise.jpg"
-                alt="Après : Souveraineté rétablie, clarté mentale et horizon dégagé"
+                src="/images/instagram/photo_ocean_rahman.jpg"
+                alt="Après : Souveraineté, paix intérieure et sérénité de l'esprit"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 650px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#141210]/90 via-[#141210]/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
               
               {/* BADGE ÉTAT APRÈS */}
               <div className="absolute bottom-6 right-6 text-right text-white">
                 <span className="inline-block px-3 py-1 rounded-full bg-[#087B53] text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-md mb-1.5">
-                  ✓ APRÈS LE PROTOCOLE
+                  ✓ APRÈS L&apos;ALIGNEMENT
                 </span>
                 <h4 className="font-heading font-extrabold text-lg sm:text-xl text-white">
-                  Souveraineté & Clarté Mentale
+                  Souveraineté &amp; Sérénité Somatique
                 </h4>
-                <p className="text-xs text-white/80 font-sans max-w-xs">
-                  Système nerveux régulé, esprit libéré du chaos, foi vivante et pivot sacré sanctuarisé.
+                <p className="text-xs text-white/85 font-sans max-w-xs">
+                  Système nerveux apaisé, clarté mentale inaltérable, prières sanctuarisées.
                 </p>
               </div>
             </div>
 
-            {/* COUCHE 2 : ÉTAT AVANT (PROCRASTINATION & CHARGE COGNITIVE) - CLIP PÉRIMÈTRE DYNAMIQUE */}
+            {/* COUCHE 2 : ÉTAT AVANT (SURCHARGE COGNITIVE, STRESS & AT-TASWÎF) */}
             <div
               style={{
                 clipPath: `inset(0 ${100 - splitPct}% 0 0)`,
@@ -79,23 +79,23 @@ export default function TransformationSlider() {
             >
               <Image
                 src="/images/photo_man_stressed.png"
-                alt="Avant : Surcharge cognitive, fatigue nerveuse et dispersion"
+                alt="Avant : Surcharge cognitive, anxiété et procrastination subie"
                 fill
-                className="object-cover filter grayscale contrast-125 brightness-90"
+                className="object-cover filter contrast-125 brightness-90"
                 sizes="(max-width: 1024px) 100vw, 650px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
               
               {/* BADGE ÉTAT AVANT */}
               <div className="absolute bottom-6 left-6 text-left text-white">
                 <span className="inline-block px-3 py-1 rounded-full bg-red-600/90 text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-md mb-1.5">
-                  ✕ AVANT LE PROTOCOLE
+                  ✕ AVANT L&apos;ACCOMPAGNEMENT
                 </span>
                 <h4 className="font-heading font-extrabold text-lg sm:text-xl text-white">
-                  Charge Mentale & At-Taswîf
+                  Surcharge Mentale &amp; At-Taswîf
                 </h4>
-                <p className="text-xs text-white/80 font-sans max-w-xs">
-                  Micro-décisions inutiles, pic de cortisol, dispersion constante et perte de présence.
+                <p className="text-xs text-white/85 font-sans max-w-xs">
+                  Pic de cortisol, dispersion perpétuelle, fatigue de décision et culpabilité.
                 </p>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default function TransformationSlider() {
               <div className="w-[2px] h-full bg-white shadow-[0_0_12px_rgba(0,0,0,0.5)]" />
               
               {/* BOUTON POIGNÉE AVEC ICÔNE DRAG */}
-              <div className="absolute w-11 h-11 rounded-full bg-white border-2 border-[#141210] shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center text-[#141210]">
+              <div className="absolute w-10 h-10 rounded-full bg-white border-2 border-neutral-900 shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-center text-neutral-900">
                 <svg
                   width="18"
                   height="18"
@@ -144,32 +144,32 @@ export default function TransformationSlider() {
 
             {/* INDICATEUR D'AIDE */}
             <div className="absolute top-4 inset-x-0 text-center pointer-events-none">
-              <span className="inline-block px-3 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white/90 text-[10px] font-mono uppercase tracking-wider">
+              <span className="inline-block px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white/90 text-[10px] font-mono uppercase tracking-wider">
                 Glissez pour comparer l&apos;état Avant / Après
               </span>
             </div>
           </div>
 
           {/* BOUTONS PRÉDÉFINIS POUR BASCULER RAPIDEMENT */}
-          <div className="mt-4 flex justify-center gap-3">
+          <div className="mt-4 flex flex-wrap justify-center gap-2.5">
             <button
               type="button"
               onClick={() => updateSplit(10, true)}
-              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
                 splitPct <= 20
-                  ? "bg-[#141210] text-white font-bold"
-                  : "bg-white border border-[#E8E0D2] text-[#5C534A] hover:border-[#141210]"
+                  ? "bg-[var(--text-primary)] text-[var(--bg)] font-bold shadow-xs"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
-              Afficher : État Avant (Taswîf)
+              Afficher : État Avant (Surcharge)
             </button>
             <button
               type="button"
               onClick={() => updateSplit(50, true)}
-              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
                 splitPct > 20 && splitPct < 80
-                  ? "bg-[#141210] text-white font-bold"
-                  : "bg-white border border-[#E8E0D2] text-[#5C534A] hover:border-[#141210]"
+                  ? "bg-[var(--text-primary)] text-[var(--bg)] font-bold shadow-xs"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
               }`}
             >
               50 / 50 (Scission)
@@ -177,10 +177,10 @@ export default function TransformationSlider() {
             <button
               type="button"
               onClick={() => updateSplit(90, true)}
-              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
                 splitPct >= 80
-                  ? "bg-[#087B53] text-white font-bold"
-                  : "bg-white border border-[#E8E0D2] text-[#5C534A] hover:border-[#087B53]"
+                  ? "bg-[#087B53] text-white font-bold shadow-xs"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[#087B53]"
               }`}
             >
               Afficher : État Après (Souveraineté)
@@ -190,41 +190,41 @@ export default function TransformationSlider() {
 
         {/* COLONNE DROITE : EXPLICATION COGNITIVE & SCIENTIFIQUE */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/30 text-[#8C6214]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/30 text-[#8C6214] dark:text-[#D4A853]">
             <span className="font-mono text-[11px] font-bold uppercase tracking-[0.16em]">
               PREUVE DU PROTOCOLE C.O.M.E.S.
             </span>
           </div>
 
-          <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[#141210] tracking-tight leading-tight">
-            De la Procrastination Subie à l&apos;Autorité Absolue.
+          <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--text-primary)] tracking-tight leading-tight">
+            De la Procrastination Subie à la Clarté d&apos;Intention.
           </h2>
 
-          <p className="text-sm sm:text-base text-[#403B35] font-sans leading-relaxed">
-            La majorité des musulmans pensent que leur manque de régularité dans la prière est une simple « faiblesse de foi ». C&apos;est une erreur diagnostique fatale.
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
+            La dispersion mentale et la difficulté à maintenir une présence authentique dans ses prières et ses projets ne sont pas une « faiblesse coupable » : elles sont le symptôme direct d&apos;une <strong>surcharge allostatique</strong> et d&apos;un environnement saturé d&apos;injonctions parasites.
           </p>
 
-          <p className="text-sm sm:text-base text-[#403B35] font-sans leading-relaxed">
-            Votre incapacité à prier à l&apos;heure est d&apos;abord le résultat d&apos;un <strong>système nerveux saturé par le cortisol</strong>, de boucles mentales ouvertes et d&apos;un environnement toxique pour le cortex préfrontal.
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] font-sans leading-relaxed">
+            En réinitialisant les circuits dopaminergiques, en libérant les tensions corporelles et en restaurant la prière comme pivot d&apos;ancrage invariable, vous récupérez votre bande passante cognitive et votre lucidité d&apos;action.
           </p>
 
-          {/* MÉTRIQUES COMPARATIVES */}
+          {/* MÉTRIQUES COMPARATIVES ÉPURÉES */}
           <div className="grid grid-cols-2 gap-4 pt-2">
-            <div className="p-4 rounded-2xl bg-white border border-[#E8E0D2]">
-              <span className="block text-2xl font-heading font-extrabold text-[#B88E3E]">
+            <div className="p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)]">
+              <span className="block text-2xl sm:text-3xl font-heading font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
                 -40%
               </span>
-              <span className="block text-xs font-mono text-[#5C534A] mt-1">
-                De cortisol sanguin dès la première semaine
+              <span className="block text-xs font-mono text-[var(--text-secondary)] mt-1.5">
+                De cortisol sanguin et réduction du stress physiologique dès 7 jours
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-white border border-[#E8E0D2]">
-              <span className="block text-2xl font-heading font-extrabold text-[#087B53]">
+            <div className="p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)]">
+              <span className="block text-2xl sm:text-3xl font-heading font-extrabold text-[#087B53] dark:text-[#4ade80]">
                 98%
               </span>
-              <span className="block text-xs font-mono text-[#5C534A] mt-1">
-                De régularité maintenue après 30 jours
+              <span className="block text-xs font-mono text-[var(--text-secondary)] mt-1.5">
+                De constance retrouvée dans les 8 piliers de vie après 30 jours
               </span>
             </div>
           </div>

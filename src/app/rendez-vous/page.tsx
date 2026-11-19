@@ -36,13 +36,13 @@ export default function RendezVousPage() {
           </p>
 
           <div className="pt-2 flex flex-wrap justify-center gap-4 text-xs font-mono text-[var(--text-secondary)]">
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)]">
+            <span className="inline-flex items-center gap-1.5 bg-[var(--surface)] px-3 py-1.5 rounded-full border border-[var(--border)]">
               ⏱ Durée : <strong>45 min (tél) ou 1h15 (domicile)</strong>
             </span>
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)]">
+            <span className="inline-flex items-center gap-1.5 bg-[var(--surface)] px-3 py-1.5 rounded-full border border-[var(--border)]">
               📅 Lun–Sam 09h–18h (Ven matin 09h–12h)
             </span>
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)] text-[#087B53] font-semibold">
+            <span className="inline-flex items-center gap-1.5 bg-[var(--surface)] px-3 py-1.5 rounded-full border border-[var(--border)] text-[#087B53] dark:text-[#4ade80] font-semibold">
               ✓ Validation immédiate &amp; Paiement sécurisé
             </span>
           </div>

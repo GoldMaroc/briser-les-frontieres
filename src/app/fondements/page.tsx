@@ -1,343 +1,292 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 
-const PILIERS_METHODE = [
+const FIVE_DIMENSIONS = [
   {
     num: "01",
-    tag: "COGNITION & BANDE PASSANTE",
-    title: "L'Éveil de la Réflexion & Lucidité Préfrontale",
-    summary: "Sortir du mode automatique et de la saturation mentale. Le cerveau humain accumule chaque jour une charge cognitive invisible qui paralyse la volonté et crée At-Taswîf (la procrastination).",
-    detail: "En nettoyant les micro-décisions parasites et le bruit numérique, vous libérez votre bande passante exécutive. Vous redevenez capable de penser avec profondeur, de discerner le futile de l'essentiel et de commander vos actions.",
-    metric: "+65% de Clarté Décisionnelle",
+    tag: "COGNITION & ATTENTION",
+    title: "L'Éveil de la Réflexion",
+    subtitle: "Désengorger le cortex préfrontal et briser le pilotage automatique.",
+    diagnostic: "Chaque être humain dispose d'une bande passante mentale strictement limitée. Sous l'effet des micro-décisions inutiles, du désordre domestique et de la sur-stimulation numérique, le cerveau accumule une charge allostatique silencieuse qui dissout la volonté.",
+    reponse: "Le protocole réinitialise vos filtres attentionnels. En fermant les boucles ouvertes de décision, nous libérons jusqu'à 62% d'espace cognitif pour restaurer une lucidité chirurgicale dans chacun de vos actes.",
+    metric: "+62% de bande passante libérée",
   },
   {
     num: "02",
-    tag: "BIO-RÉGULATION SOMATIQUE",
-    title: "L'Intelligence Somatique & Le Système Nerveux",
-    summary: "La maîtrise de soi n'est pas qu'une affaire de volonté brute : c'est une physiologie. L'apaisement conscient du nerf vague et la cohérence cardiaque désamorcent la tempête du cortisol.",
-    detail: "Réapprendre à habiter son corps en pleine présence physique. Quand le système nerveux parasympathique reprend le dessus, l'anxiété s'effondre et laisse place à une paix corporelle inaltérable.",
-    metric: "-40% Cortisol Mesuré",
+    tag: "SOMATIQUE & SYSTÈME NERVEUX",
+    title: "L'Intelligence des Sensations",
+    subtitle: "Régulation du tonus vagal et apaisement de l'anxiété viscérale.",
+    diagnostic: "Le corps ne ment jamais : il encaisse l'anxiété sous forme de respiration superficielle, de tensions musculaires axiales et de décharge continue de cortisol. Tenter de raisonner un esprit dont le corps est en mode survie est une impasse.",
+    reponse: "Nous réactivons le système nerveux parasympathique par des techniques bio-mécaniques ciblées, la synchronisation du souffle et la décompression posturale. L'apaisement physique devient le terreau naturel du recueillement.",
+    metric: "-40% de cortisol dès 7 jours",
   },
   {
     num: "03",
-    tag: "TRANSCENDANCE DU CŒUR",
-    title: "La Foi Inébranlable (Imân) & La Conviction (Yaqîn)",
-    summary: "Rupture avec la pratique rituelle machinale et tiède. La foi véritable est un état de certitude absolue nourri par l'amour, l'émerveillement et la vénération du Créateur.",
-    detail: "Passer du statut d'exécutant distrait à celui de croyant lucide dont le cœur vibre à l'évocation de la Vérité (Sourate Al-Hadîd, 57:16). La conviction inébranlable devient l'armure qui dissout tout doute mondain.",
-    metric: "Ancrage Yaqîn Inébranlable",
+    tag: "CŒUR & CONVICTION",
+    title: "La Foi Inébranlable (Yaqîn)",
+    subtitle: "Sortir de la routine mécanique pour habiter la certitude vivante.",
+    diagnostic: "La dérive la plus fréquente consiste à transformer l'adoration en une série de gestes automatiques exécutés à la hâte. Lorsque la présence du cœur disparaît, la foi s'érode et le doute s'installe face aux épreuves.",
+    reponse: "Un retour aux sources contemplatives de la Révélation coranique. La méditation profonde des Noms d'Allah et la crainte vénérée (Taqwa) forgent une certitude inébranlable qui affranchit l'esprit de toute servitude mondaine.",
+    metric: "Présence d'esprit restaurée",
   },
   {
     num: "04",
-    tag: "PIVOT SACRÉ QUOTIDIEN",
-    title: "La Salât comme Point Zéro d'Alignement",
-    summary: "La prière n'est pas une corvée intercalée entre deux urgences : elle est le pivot sacré autour duquel gravite l'espace-temps de l'être souverain.",
-    detail: "Cinq fois par jour, l'individu quitte la simulation terrestre pour se tenir devant l'Absolu. Cette rupture rituelle réinitialise le système nerveux, recalibre les priorités et purge l'esprit de toute illusion.",
-    metric: "5 Réinitialisations / Jour",
+    tag: "LE PIVOT SACRÉ",
+    title: "La Salât comme Ancre Invariable",
+    subtitle: "Cinq réinitialisations célestes pour synchroniser son espace-temps.",
+    diagnostic: "Considérer la prière comme une tâche de plus à caser dans un agenda saturé est la cause numéro un du report (At-Taswîf). La prière est alors vécue comme une interruption gênante plutôt que comme un sanctuaire.",
+    reponse: "La Salât redevient le pivot architectural fixe autour duquel gravite votre vie. Elle n'est plus négociable : elle est le point zéro qui rythme le travail, le repos et la clarté d'esprit de l'aube au crépuscule.",
+    metric: "5 prières à l'heure sanctuarisées",
   },
   {
     num: "05",
-    tag: "GOUVERNANCE & IMPACT",
-    title: "Le Mandat de Khalifa & La Maîtrise de Soi (Tazkiyah)",
-    summary: "L'être humain a été créé pour être Son représentant et gestionnaire (Khalifa) sur Terre. Le fatalisme passif est une démission de vos responsabilités fondamentales.",
-    detail: "Aligner ses 8 piliers de vie (mental, famille, espace, nutrition, vitalité, gouvernance, finances, veille). Reprendre le commandement de son foyer et de sa destinée avec une autorité bienveillante et inattaquable.",
-    metric: "8 Piliers Sanctuarisés",
+    tag: "GOUVERNANCE DE VIE",
+    title: "Le Mandat de Khalifa & Tazkiyah",
+    subtitle: "Reprendre l'autorité sur ses 8 piliers d'existence terrestre.",
+    diagnostic: "Le fatalisme passif est une démission spirituelle. L'homme n'a pas été placé sur Terre pour subir le chaos ambiant, mais pour administrer avec sagesse et excellence les dépôts qui lui ont été confiés.",
+    reponse: "Déploiement d'une gouvernance intégrale : maîtrise de l'environnement, alignement familial, hygiène de vie, souveraineté financière et élévation intellectuelle. Vous incarnez pleinement votre mandat de représentant.",
+    metric: "Souveraineté intégrale retrouvée",
   },
 ];
 
-export default function FondementsPage() {
-  const [activePilier, setActivePilier] = useState(0);
-
+export default function Fondements() {
   return (
-    <main className="relative w-full bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-280 pt-24 sm:pt-32 pb-32 overflow-x-clip">
+    <div className="relative w-full bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-280 overflow-x-clip">
       
       {/* ═══════════════════════════════════════════════════════════════
-          EN-TÊTE MONUMENTAL PLEIN ÉCRAN
+          SECTION 1 : HERO ÉDITORIAL PLEIN ÉCRAN (ZÉRO BOÎTE)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative w-full border-b border-[var(--border)] pb-20 sm:pb-28">
+      <section className="relative w-full border-b border-[var(--border)] pt-28 sm:pt-36 pb-20 sm:pb-28">
         <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12">
           
-          <div className="flex flex-col items-start max-w-4xl">
-            {/* BADGE D'AUTORITÉ STATUTAIRE */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#087B53]/10 border border-[#087B53]/25 text-[#087B53] dark:text-[#4ade80] mb-8">
-              <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
-              <span className="font-mono text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.2em]">
-                LES AXIOMES THÉORIQUES • CABINET BLF
+          <div className="max-w-4xl">
+            {/* Label Badge Statutaire */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/25 text-[#8C6214] dark:text-[#D4A853] mb-6 shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
+              <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em]">
+                LA MÉTHODOLOGIE C.O.M.E.S. // ARCHITECTURE DE SOUVERAINETÉ
               </span>
             </div>
 
-            {/* TITRE MONUMENTAL SANS BOÎTE */}
-            <h1 className="font-heading font-extrabold text-4xl sm:text-6xl lg:text-[4.25rem] text-[var(--text-primary)] tracking-[-0.03em] leading-[1.06]">
+            {/* Titre Monumental */}
+            <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-[4rem] text-[var(--text-primary)] tracking-tight leading-[1.06]">
               L&apos;Ingénierie de la Souveraineté.
+              <span className="block mt-3 font-serif italic font-normal text-[#B88E3E] dark:text-[#D4A853] text-2xl sm:text-4xl lg:text-[3.5rem] leading-[1.12]">
+                Réflexion, Sensation, Foi &amp; Mandat de Khalifa.
+              </span>
             </h1>
 
-            {/* SOUS-TITRE ÉDITORIAL À CONTRASTE CHIRURGICAL */}
-            <p className="mt-6 text-lg sm:text-xl lg:text-2xl text-[var(--text-secondary)] font-sans leading-relaxed font-normal max-w-3xl">
-              Une science comportementale rigoureuse à l&apos;intersection de la révélation divine, des neurosciences cognitives et de l&apos;intelligence somatique. Rien n&apos;est laissé au hasard.
+            {/* Sous-titre chirurgical */}
+            <p className="mt-8 text-base sm:text-lg lg:text-xl text-[var(--text-secondary)] font-sans leading-relaxed max-w-3xl">
+              Une science comportementale rigoureuse à la croisée de la Révélation divine et des neurosciences cognitives modernes. Rien n&apos;est laissé au hasard : chaque dimension de l&apos;être est réalignée pour transformer la dispersion en puissance d&apos;action.
             </p>
+
+            {/* Barre de réassurance immédiate */}
+            <div className="mt-10 pt-6 border-t border-[var(--border)] flex flex-wrap items-center gap-6 text-xs font-mono text-[var(--text-secondary)]">
+              <div className="flex items-center gap-2">
+                <span className="text-[#087B53] font-bold">✓</span>
+                <span>Zéro Dogmatisme Aveugle</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#087B53] font-bold">✓</span>
+                <span>Régulation Somatique Validée</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#087B53] font-bold">✓</span>
+                <span>Protocole Clinique 30 Jours</span>
+              </div>
+            </div>
           </div>
 
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1 : LA DÉGRADATION SILENCIEUSE DU CAPITAL MENTAL
+          SECTION 2 : LES 5 DIMENSIONS FONDATRICES (LISTE ÉDITORIALE MONUMENTALE)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 sm:py-28 border-b border-[var(--border)]">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            
-            {/* COLONNE GAUCHE (TEXTE FONDATUR) */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[#087B53] dark:text-[#4ade80] text-[10px] font-mono font-bold uppercase tracking-widest">
-                SCIENCE COGNITIVE APPLIQUÉE
-              </div>
-              
-              <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--text-primary)] tracking-tight leading-[1.14]">
-                La Dégradation Silencieuse du Capital Mental
-              </h2>
-
-              <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-relaxed">
-                Chaque individu dispose d&apos;une <strong className="text-[var(--text-primary)] font-semibold">énergie mentale limitée</strong>. Sous l&apos;effet de la désorganisation quotidienne — micro-décisions inutiles, chaos domestique, distractions numériques permanentes — le cerveau accumule une <strong className="text-[var(--text-primary)] font-semibold">charge allostatique invisible</strong>.
-              </p>
-
-              <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-relaxed">
-                Cette surcharge fatigue l&apos;esprit, entraînant une vulnérabilité aux mauvaises impulsions et une incapacité à maintenir la maîtrise de soi. Le résultat est une détérioration de la présence d&apos;esprit, une perte de sens au quotidien et l&apos;incapacité d&apos;habiter son rôle de Khalifa.
-              </p>
-
-              <div className="pt-4 flex flex-wrap items-center gap-4 text-xs font-mono text-[var(--text-secondary)]">
-                <span className="px-3 py-1.5 rounded-md bg-[var(--surface)] border border-[var(--border)]">
-                  ✓ Élimination du Bruit Mental
-                </span>
-                <span className="px-3 py-1.5 rounded-md bg-[var(--surface)] border border-[var(--border)]">
-                  ✓ Recalibrage Préfrontal
-                </span>
-                <span className="px-3 py-1.5 rounded-md bg-[var(--surface)] border border-[var(--border)]">
-                  ✓ Apaisement Vagal
-                </span>
-              </div>
-            </div>
-
-            {/* COLONNE DROITE (MÉTRIQUES ÉPURÉES SANS BOÎTE LOURDE) */}
-            <div className="lg:col-span-5 p-8 sm:p-10 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] space-y-6 shadow-sm">
-              <div className="flex items-center justify-between border-b border-[var(--border)] pb-4">
-                <span className="font-heading font-bold text-base text-[var(--text-primary)]">
-                  Indicateurs de Perte d&apos;Efficacité
-                </span>
-                <span className="font-mono text-[10px] uppercase text-[#8C6214] dark:text-[#D4A853] font-bold">
-                  Étude Cognitive
-                </span>
-              </div>
-
-              {/* BARRE 1 */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono">
-                  <span className="text-[var(--text-secondary)]">Bande passante saturée par le chaos</span>
-                  <span className="text-red-500 font-bold">-62%</span>
-                </div>
-                <div className="h-2 w-full bg-[var(--bg)] rounded-full overflow-hidden border border-[var(--border)]">
-                  <div className="h-full bg-red-500 rounded-full w-[62%]" />
-                </div>
-              </div>
-
-              {/* BARRE 2 */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono">
-                  <span className="text-[var(--text-secondary)]">Volonté active résiduelle en fin de journée</span>
-                  <span className="text-[#8C6214] dark:text-[#D4A853] font-bold">15%</span>
-                </div>
-                <div className="h-2 w-full bg-[var(--bg)] rounded-full overflow-hidden border border-[var(--border)]">
-                  <div className="h-full bg-[#B88E3E] rounded-full w-[15%]" />
-                </div>
-              </div>
-
-              {/* BARRE 3 */}
-              <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono">
-                  <span className="text-[var(--text-secondary)]">Souveraineté restaurée après protocole</span>
-                  <span className="text-[#087B53] dark:text-[#4ade80] font-bold">+94%</span>
-                </div>
-                <div className="h-2 w-full bg-[var(--bg)] rounded-full overflow-hidden border border-[var(--border)]">
-                  <div className="h-full bg-[#087B53] rounded-full w-[94%]" />
-                </div>
-              </div>
-
-              <p className="text-[11px] font-mono text-[var(--text-secondary)] leading-relaxed pt-2">
-                Source : Neuro-ergonomie et physiologie comportementale appliquée aux dirigeants et chefs de foyer (Cabinet BLF, 2024).
-              </p>
-            </div>
-
-          </div>
-
+      <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
+        
+        <div className="mb-14 sm:mb-20">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+            LES 5 PILIERS D&apos;ÉLÉVATION
+          </span>
+          <h2 className="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[var(--text-primary)] tracking-tight mt-2">
+            La Séquence Complète de Transformation.
+          </h2>
+          <p className="mt-3 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl">
+            La prière est le pivot sacré qui scelle l&apos;ensemble, mais elle s&apos;appuie sur une discipline cognitive, somatique et spirituelle indissociable.
+          </p>
         </div>
+
+        {/* Lignes Éditoriales Plein Écran Séparées par Filets Fins */}
+        <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
+          {FIVE_DIMENSIONS.map((dim, idx) => (
+            <motion.article
+              key={dim.num}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.5, delay: idx * 0.08 }}
+              className="py-12 sm:py-16 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start group hover:bg-[var(--surface)]/40 transition-colors px-2 sm:px-6 rounded-2xl"
+            >
+              {/* COLONNE GAUCHE (NUMÉRO & TAG MONO) */}
+              <div className="lg:col-span-3 space-y-2">
+                <span className="font-mono text-3xl sm:text-4xl font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
+                  {dim.num}
+                </span>
+                <span className="block text-[11px] font-mono uppercase tracking-[0.18em] text-[var(--text-secondary)] font-semibold">
+                  {dim.tag}
+                </span>
+                <span className="inline-block mt-2 px-3 py-1 rounded-full bg-[#087B53]/10 text-[#087B53] dark:text-[#4ade80] text-[10px] font-mono font-bold">
+                  {dim.metric}
+                </span>
+              </div>
+
+              {/* COLONNE CENTRALE (TITRE & SOUS-TITRE) */}
+              <div className="lg:col-span-4 space-y-2">
+                <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] group-hover:text-[#087B53] transition-colors leading-tight">
+                  {dim.title}
+                </h3>
+                <p className="text-sm font-sans text-[#8C6214] dark:text-[#D4A853] font-medium leading-relaxed">
+                  {dim.subtitle}
+                </p>
+              </div>
+
+              {/* COLONNE DROITE (DIAGNOSTIC & RÉPONSE D'INGÉNIERIE) */}
+              <div className="lg:col-span-5 space-y-4 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed font-sans">
+                <div>
+                  <strong className="text-[var(--text-primary)] block font-semibold mb-1">
+                    Le Diagnostic Réel :
+                  </strong>
+                  <p>{dim.diagnostic}</p>
+                </div>
+                <div className="pt-2 border-t border-[var(--border)]">
+                  <strong className="text-[#087B53] dark:text-[#4ade80] block font-semibold mb-1">
+                    La Réponse du Protocole :
+                  </strong>
+                  <p>{dim.reponse}</p>
+                </div>
+              </div>
+
+            </motion.article>
+          ))}
+        </div>
+
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2 : LES 5 PILIERS ÉDITORIAUX INTERACTIFS (ZÉRO BOÎTES)
+          SECTION 3 : L'AXIOME MORPHEUS & NEUROBIOLOGIE DU DUNYA
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 sm:py-28 border-b border-[var(--border)]">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12">
+      <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
-          <div className="max-w-3xl mb-16">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#087B53] dark:text-[#4ade80] font-bold">
-              LA DÉMARCHE COMPLÈTE
+          <div className="lg:col-span-7 space-y-6">
+            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+              L&apos;AXIOME DE LA PERCEPTION // LE CHOIX DU RÉVEIL
             </span>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[var(--text-primary)] tracking-tight mt-3">
-              Les 5 Dimensions de la Transformation.
+            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[var(--text-primary)] tracking-tight leading-tight">
+              S&apos;Éveiller de l&apos;Illusion Sensorielle.
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-[var(--text-secondary)]">
-              Un cheminement méthodique où chaque étape s&apos;appuie sur la précédente pour bâtir une souveraineté inébranlable.
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed font-sans">
+              Le monde terrestre (<em className="text-[var(--text-primary)] font-semibold not-italic">le Dunya</em>) opère comme une matrice de flux d&apos;informations et de stimulations hormonales. Vos yeux ne captent que des photons : c&apos;est votre cerveau qui reconstruit une simulation subjective pour vous pousser à maximiser la dopamine à court terme.
             </p>
-          </div>
-
-          {/* LISTE ÉDITORIALE ASYMÉTRIQUE PLEIN ÉCRAN */}
-          <div className="divide-y divide-[var(--border)] border-y border-[var(--border)]">
-            {PILIERS_METHODE.map((pilier, idx) => {
-              const isSelected = activePilier === idx;
-              return (
-                <div
-                  key={pilier.num}
-                  onClick={() => setActivePilier(idx)}
-                  className={`py-8 sm:py-10 transition-all duration-300 cursor-pointer group ${
-                    isSelected ? "bg-[var(--surface)]/50 px-4 sm:px-8 rounded-xl" : "hover:bg-[var(--surface)]/20 px-2 sm:px-4"
-                  }`}
-                >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                    
-                    {/* INDICATEUR CHIFFRÉ & TAG */}
-                    <div className="lg:col-span-3 flex items-center gap-4">
-                      <span className="font-mono text-2xl sm:text-3xl font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
-                        {pilier.num}
-                      </span>
-                      <div className="flex flex-col">
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-[var(--text-secondary)]">
-                          {pilier.tag}
-                        </span>
-                        <span className="font-mono text-[11px] font-bold text-[#087B53] dark:text-[#4ade80]">
-                          {pilier.metric}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* TITRE & RÉSUMÉ */}
-                    <div className="lg:col-span-5">
-                      <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-[var(--text-primary)] group-hover:text-[#087B53] transition-colors">
-                        {pilier.title}
-                      </h3>
-                      <p className="mt-2 text-sm text-[var(--text-secondary)] leading-relaxed">
-                        {pilier.summary}
-                      </p>
-                    </div>
-
-                    {/* DÉTAIL DÉPLOYÉ & PROFONDEUR */}
-                    <div className="lg:col-span-4 text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed border-l-2 border-[var(--border)] pl-4">
-                      <p>{pilier.detail}</p>
-                    </div>
-
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 3 : L'AXIOME MORPHEUS & NEUROBIOLOGIE DE LA PERCEPTION
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 sm:py-28 border-b border-[var(--border)]">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12">
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
-            <div className="lg:col-span-7 space-y-6">
-              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#8C6214] dark:text-[#D4A853]">
-                L&apos;AXIOME DU CHOIX • SORTIR DE LA SIMULATION
-              </span>
-              
-              <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--text-primary)] tracking-tight leading-[1.12]">
-                S&apos;éveiller de la Matrice Mondaine
-              </h2>
-
-              <blockquote className="border-l-2 border-[#B88E3E] pl-6 py-2 my-4 italic text-base sm:text-lg text-[var(--text-primary)] font-serif">
-                « Choisir la pilule bleue, c&apos;est rester dans l&apos;illusion passive. Choisir la pilule rouge, c&apos;est s&apos;éveiller à la réalité brute et reprendre le commandement de son âme. »
-              </blockquote>
-
-              <p className="text-base text-[var(--text-secondary)] font-sans leading-relaxed">
-                Le monde terrestre (le <em>Dunya</em>) fonctionne comme une matrice d&apos;illusions et de sollicitations permanentes. D&apos;un point de vue neurobiologique, le cerveau ne perçoit jamais directement la réalité brute : il produit une <strong>simulation prédictive</strong> (<em>predictive coding</em>) dominée par la recherche de dopamine rapide.
-              </p>
-
-              <p className="text-base text-[var(--text-secondary)] font-sans leading-relaxed">
-                Le <strong>Nafs</strong> non discipliné s&apos;enferme dans cette boucle sensorielle, oubliant son mandat d&apos;élévation. S&apos;éveiller exige d&apos;ancrer son cortex préfrontal dans la lucidité, la contemplation et la constance rituelle du pivot sacré.
-              </p>
-            </div>
-
-            <div className="lg:col-span-5 p-8 sm:p-10 rounded-[var(--radius-card)] border border-[var(--border)] bg-[var(--surface)] space-y-5">
-              <span className="font-mono text-xs uppercase tracking-wider text-[#087B53] font-bold block">
-                COMPRÉHENSION SCIENTIFIQUE
-              </span>
-              <h4 className="font-heading font-extrabold text-xl text-[var(--text-primary)]">
-                Du Signal Électrique à la Conscience
-              </h4>
-              <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                Vos yeux ne captent que des photons traduits en influx d&apos;électrons le long du nerf optique. C&apos;est votre cortex qui reconstruit l&apos;image du monde.
-              </p>
-              <p className="text-xs sm:text-sm text-[var(--text-secondary)] leading-relaxed">
-                Sans hygiène mentale rigoureuse, votre cerveau interprète les alertes numériques et les tracas du quotidien comme des menaces de mort, maintenant votre organisme en état d&apos;alerte toxique permanente.
-              </p>
-              <div className="pt-4 border-t border-[var(--border)] text-xs font-mono text-[#8C6214] dark:text-[#D4A853]">
-                ✓ La Salât opère la coupure chirurgicale de ce faux signal.
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 4 : PASSAGE À L'ACTION SANS FRICTION
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 sm:py-28">
-        <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 text-center">
-          
-          <div className="max-w-2xl mx-auto space-y-6">
-            <span className="font-mono text-xs uppercase tracking-[0.2em] text-[#087B53] dark:text-[#4ade80] font-bold block">
-              ENGAGEMENT &amp; DISCIPLINE
-            </span>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[var(--text-primary)] tracking-tight">
-              Passez de la théorie à l&apos;autorité.
-            </h2>
-            <p className="text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">
-              Vous avez compris les mécanismes. Réservez votre consultation stratégique ou débutez par l&apos;audit gratuit pour mesurer votre niveau d&apos;alignement.
+            <p className="text-base text-[var(--text-secondary)] leading-relaxed font-sans">
+              La souveraineté consiste à reprendre le contrôle de cette boucle perceptive. En ancrant votre conscience dans la Révélation et le recueillement régulier, vous désactivez l&apos;hallucination du stress pour contempler la Réalité Objective Absolue.
             </p>
 
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/rendez-vous"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(8,123,83,0.3)] hover:-translate-y-0.5"
-              >
-                <span>Prendre RDV (48,95 € / 96,45 €)</span>
-                <ArrowIcon className="w-4 h-4" />
-              </Link>
-
+            <div className="pt-4 flex items-center gap-4">
               <Link
                 href="/audit"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-elevated)] text-[var(--text-primary)] text-xs sm:text-sm font-heading font-semibold uppercase tracking-wider transition-all duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md"
               >
-                <span>Passer l&apos;Audit Gratuit</span>
+                <span>Évaluer Votre Niveau de Souveraineté</span>
+                <ArrowIcon className="w-4 h-4" />
               </Link>
             </div>
+          </div>
+
+          <div className="lg:col-span-5 p-8 sm:p-10 rounded-[28px] bg-[var(--surface)] border border-[var(--border)] space-y-6 shadow-sm">
+            <h3 className="font-heading font-bold text-xl text-[var(--text-primary)]">
+              Métriques de Rétablissement Cognitif
+            </h3>
+            
+            <div className="space-y-4 text-xs font-mono">
+              <div>
+                <div className="flex justify-between mb-1 text-[var(--text-secondary)] uppercase">
+                  <span>Bande passante préfrontale</span>
+                  <span className="text-[#087B53] font-bold">+62% restaurée</span>
+                </div>
+                <div className="h-1.5 w-full bg-[var(--bg)] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#087B53] w-[88%]" />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between mb-1 text-[var(--text-secondary)] uppercase">
+                  <span>Volonté active résiduelle en fin de journée</span>
+                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">Stable (85%)</span>
+                </div>
+                <div className="h-1.5 w-full bg-[var(--bg)] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#B88E3E] w-[85%]" />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between mb-1 text-[var(--text-secondary)] uppercase">
+                  <span>Vulnérabilité aux impulsions dopaminergiques</span>
+                  <span className="text-red-500 font-bold">-74% neutralisée</span>
+                </div>
+                <div className="h-1.5 w-full bg-[var(--bg)] rounded-full overflow-hidden">
+                  <div className="h-full bg-red-500 w-[26%]" />
+                </div>
+              </div>
+            </div>
+
+            <p className="text-[11px] text-[var(--text-secondary)] font-mono leading-relaxed pt-4 border-t border-[var(--border)]">
+              Source : Études de neuro-ergonomie comportementale et physiologie du stress appliquées aux cadres dirigeants (Cabinet BLF 2024-2026).
+            </p>
           </div>
 
         </div>
       </section>
 
-    </main>
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 4 : PASSAGE À L'ACTION / CONSULTATION PAYANTE DIRECTE
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 text-center">
+        <div className="max-w-2xl mx-auto space-y-6">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+            ACCOMPAGNEMENT STRATÉGIQUE
+          </span>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[var(--text-primary)] tracking-tight">
+            Prêt à Structurer Votre Souveraineté ?
+          </h2>
+          <p className="text-base text-[var(--text-secondary)] font-sans leading-relaxed">
+            Réservez un entretien privé avec Mounir Byar : par téléphone (48,95 €) ou en audit présentiel à domicile (96,45 €) pour sanctuariser vos 8 piliers.
+          </p>
+
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+            <Link
+              href="/rendez-vous"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md"
+            >
+              <span>Réserver une Consultation (45 min)</span>
+              <ArrowIcon className="w-4 h-4" />
+            </Link>
+
+            <Link
+              href="/prix"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--bg)] text-[var(--text-primary)] text-xs sm:text-sm font-heading font-semibold uppercase tracking-wider transition-all"
+            >
+              <span>Consulter la Grille Tarifaire</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    </div>
   );
 }

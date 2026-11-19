@@ -47,13 +47,13 @@ export default function SovereigntyCyberneticHero() {
               >
                 L&apos;Ingénierie de la Souveraineté.
                 <span className="block mt-2 font-serif italic font-normal text-[#B88E3E] dark:text-[#D4A853] text-2xl sm:text-4xl lg:text-[3.25rem] leading-[1.12]">
-                  Restaurez votre mandat de Khalifa.
+                  Le Retour au Khalifa par la Maîtrise de Soi.
                 </span>
               </h1>
 
-              {/* Sous-titre cadré et scientifique */}
+              {/* Sous-titre équilibré : Réflexion, Sensations, Foi, Pivot Sacré */}
               <p className="mt-6 text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-[1.65] max-w-xl font-normal">
-                Un travail d&apos;orfèvre unissant neurosciences cognitives, intelligence somatique et foi inébranlable (Yaqîn). Sortez du chaos mental, réactivez vos sensations et commandez votre existence avec la Salât comme pivot sacré d&apos;alignement.
+                Réveillez la réflexion profonde, apaisez vos sensations et fortifiez une foi inébranlable (Yaqîn). Une démarche d&apos;excellence cognitive et spirituelle où la prière agit comme le pivot sacré d&apos;alignement et de souveraineté.
               </p>
 
               {/* Actions Clés (Zéro mention 3 min, flèches SVG vectorielles) */}
@@ -78,11 +78,11 @@ export default function SovereigntyCyberneticHero() {
               <div className="mt-8 flex flex-wrap items-center gap-6 pt-6 border-t border-[var(--border)] w-full text-xs font-mono text-[var(--text-secondary)]">
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
-                  <span>Réflexion &amp; Clarté Cognitive</span>
+                  <span>43 Témoignages Vérifiés</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
-                  <span>Régulation Somatique &amp; Vagal</span>
+                  <span>Corpus Neurobiologique &amp; Exégèse</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
@@ -102,9 +102,10 @@ export default function SovereigntyCyberneticHero() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2 : PINNED SHOWCASE STAGE (100VW / 100VH FULL-BLEED NOUVEAU DOSSIER 4)
+          SECTION 2 : PINNED SHOWCASE STAGE PLEIN ÉCRAN (100vw / 100vh)
+          Séquence épinglée au scroll : 4 panoramas grandioses sans posture de prière
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative w-full border-b border-[var(--border)] overflow-hidden">
+      <section className="w-full border-b border-[var(--border)] overflow-hidden">
         <ShowcaseStage />
       </section>
 
