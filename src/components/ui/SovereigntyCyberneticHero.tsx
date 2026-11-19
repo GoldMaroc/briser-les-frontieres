@@ -45,15 +45,15 @@ export default function SovereigntyCyberneticHero() {
                 style={{ textWrap: "balance" }}
                 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-[3.65rem] text-[var(--text-primary)] tracking-[-0.03em] leading-[1.08]"
               >
-                Reprenez le contrôle de votre vie.
+                L&apos;Ingénierie de la Souveraineté.
                 <span className="block mt-2 font-serif italic font-normal text-[#B88E3E] dark:text-[#D4A853] text-2xl sm:text-4xl lg:text-[3.25rem] leading-[1.12]">
-                  La Salât comme arme de souveraineté.
+                  Restaurez votre mandat de Khalifa.
                 </span>
               </h1>
 
               {/* Sous-titre cadré et scientifique */}
               <p className="mt-6 text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-[1.65] max-w-xl font-normal">
-                La prière n&apos;est pas une corvée répétitive. C&apos;est le protocole neurobiologique suprême révélé à l&apos;humanité pour dompter le cortisol, briser la procrastination et commander son existence avec une clarté inaltérable.
+                Un travail d&apos;orfèvre unissant neurosciences cognitives, intelligence somatique et foi inébranlable (Yaqîn). Sortez du chaos mental, réactivez vos sensations et commandez votre existence avec la Salât comme pivot sacré d&apos;alignement.
               </p>
 
               {/* Actions Clés (Zéro mention 3 min, flèches SVG vectorielles) */}
@@ -78,11 +78,11 @@ export default function SovereigntyCyberneticHero() {
               <div className="mt-8 flex flex-wrap items-center gap-6 pt-6 border-t border-[var(--border)] w-full text-xs font-mono text-[var(--text-secondary)]">
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
-                  <span>43 Témoignages Vérifiés</span>
+                  <span>Réflexion &amp; Clarté Cognitive</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
-                  <span>Corpus Neurobiologique &amp; Exégèse</span>
+                  <span>Régulation Somatique &amp; Vagal</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#087B53] font-bold">✓</span>
@@ -102,9 +102,9 @@ export default function SovereigntyCyberneticHero() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2 : PINNED SHOWCASE STAGE (IDENTIQUE AUX CAPTURES NOUVEAU DOSSIER 4)
+          SECTION 2 : PINNED SHOWCASE STAGE (100VW / 100VH FULL-BLEED NOUVEAU DOSSIER 4)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
+      <section className="relative w-full border-b border-[var(--border)] overflow-hidden">
         <ShowcaseStage />
       </section>
 

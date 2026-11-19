@@ -44,11 +44,11 @@ export default function TransformationSlider() {
             onPointerCancel={handlePointerUp}
             className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-[32px] overflow-hidden border border-[#E8E0D2] shadow-[0_20px_50px_rgba(20,18,16,0.08)] cursor-ew-resize select-none bg-white"
           >
-            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ & ANCRAGE) */}
+            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ & CLARTÉ DU KHALIFA) */}
             <div className="absolute inset-0">
               <Image
-                src="/images/sanctuaire/muslim_sujud_focus.jpg"
-                alt="Après : Souveraineté du Sujûd et paix intérieure"
+                src="/images/photo_khalifa_sunrise.jpg"
+                alt="Après : Souveraineté rétablie, clarté mentale et horizon dégagé"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 650px"
@@ -64,7 +64,7 @@ export default function TransformationSlider() {
                   Souveraineté & Clarté Mentale
                 </h4>
                 <p className="text-xs text-white/80 font-sans max-w-xs">
-                  5 prières ancrées, cortisol -40%, esprit libéré du chaos.
+                  Système nerveux régulé, esprit libéré du chaos, foi vivante et pivot sacré sanctuarisé.
                 </p>
               </div>
             </div>
@@ -78,8 +78,8 @@ export default function TransformationSlider() {
               className="absolute inset-0"
             >
               <Image
-                src="/images/sanctuaire/muslim_qiyam_focus.jpg"
-                alt="Avant : Surcharge cognitive et procrastination"
+                src="/images/photo_man_stressed.png"
+                alt="Avant : Surcharge cognitive, fatigue nerveuse et dispersion"
                 fill
                 className="object-cover filter grayscale contrast-125 brightness-90"
                 sizes="(max-width: 1024px) 100vw, 650px"
@@ -95,7 +95,7 @@ export default function TransformationSlider() {
                   Charge Mentale & At-Taswîf
                 </h4>
                 <p className="text-xs text-white/80 font-sans max-w-xs">
-                  Prières décalées ou bâclées, pic de cortisol, dispersion constante.
+                  Micro-décisions inutiles, pic de cortisol, dispersion constante et perte de présence.
                 </p>
               </div>
             </div>

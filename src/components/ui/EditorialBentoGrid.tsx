@@ -29,19 +29,19 @@ export default function EditorialBentoGrid() {
       {/* GRILLE BENTO ASYMÉTRIQUE ÉDITORIALE (STYLE MATERIAL FLASK BENTO) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* TUILE 1 : TALL (COLONNE GAUCHE 7 COLS) - NEUROBIOLOGIE DU SUJÛD */}
-        <article className="lg:col-span-7 rounded-[32px] overflow-hidden border border-[#E8E0D2] bg-white shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+        {/* TUILE 1 : TALL (COLONNE GAUCHE 7 COLS) - INTELLIGENCE SOMATIQUE & RÉINITIALISATION VAGALE */}
+        <article className="lg:col-span-7 rounded-[32px] overflow-hidden border border-[var(--border)] bg-[var(--surface)] shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
           <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] overflow-hidden">
             <Image
-              src="/images/sanctuaire/muslim_sujud_focus.jpg"
-              alt="Neurobiologie du Sujûd et activation vagale"
+              src="/images/photo_ocean_rahman.jpg"
+              alt="Intelligence somatique et apaisement profond du système nerveux"
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-700"
               sizes="(max-width: 1024px) 100vw, 700px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#141210]/80 via-transparent to-transparent" />
             <div className="absolute top-6 left-6">
-              <span className="px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md text-[#141210] text-[11px] font-mono font-bold uppercase tracking-wider shadow-sm">
+              <span className="px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-sm border border-white/10">
                 Axiome 01 • Neurophysiologie
               </span>
             </div>
@@ -51,17 +51,17 @@ export default function EditorialBentoGrid() {
               </span>
             </div>
             <div className="absolute bottom-6 left-6 right-6 text-white">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#B88E3E]">
-                Le Point Zéro Cognitif
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#D4A853]">
+                Le Point Zéro Somatique
               </span>
               <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-white mt-1">
-                Le Sujûd comme Réinitialisation Vagale
+                L&apos;Apaisement Somatique &amp; Le Nerf Vague
               </h3>
             </div>
           </div>
           <div className="p-6 sm:p-8 space-y-3">
-            <p className="text-xs sm:text-sm text-[#403B35] font-sans leading-relaxed">
-              Poser le front au sol n&apos;est pas seulement un geste symbolique. La gravité inverse le flux sanguin vers le lobe frontal, comprimant les barorécepteurs carotidiens et forçant le système nerveux parasympathique à freiner la libération d&apos;adrénaline.
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
+              La paix intérieure n&apos;est pas une simple idée abstraite : elle s&apos;enracine dans la physiologie. L&apos;abaissement conscient du rythme cardiaque et respiratoire comprime les barorécepteurs, forçant le système nerveux parasympathique à freiner la tempête d&apos;adrénaline et à réinstaller un calme souverain.
             </p>
             <div className="pt-3 border-t border-[#E8E0D2] flex items-center justify-between text-xs font-mono text-[#7A6F64]">
               <span>Durée minimale recommandée : 40 secondes</span>
