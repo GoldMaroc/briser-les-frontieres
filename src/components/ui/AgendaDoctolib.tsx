@@ -70,14 +70,12 @@ export default function AgendaDoctolib() {
 
       // Horaires :
       // Lundi au Samedi : 9h00 à 18h00
-      // Vendredi : 9h00 à 12h00 UNIQUEMENT
+      // Vendredi : 9h00 à 12h00 UNIQUEMENT (Salât al-Jumu'ah)
       let slots: string[] = [];
       if (!isSunday) {
         if (isFriday) {
-          // Vendredi de 9h à 12h uniquement (Salât al-Jumu'ah)
           slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
         } else {
-          // Lundi à Samedi : 9h00 à 18h00
           slots = [
             "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
             "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
@@ -147,7 +145,12 @@ export default function AgendaDoctolib() {
   };
 
   return (
-    <div id="agenda" className="w-full max-w-5xl mx-auto p-5 sm:p-8 lg:p-10 rounded-3xl bg-white border border-[#E8E0D2] shadow-[0_15px_45px_rgba(40,30,20,0.06)] text-[#141210]">
+    <div 
+      id="agenda" 
+      data-cursor="view" 
+      data-cursor-text="AGENDA ✦"
+      className="w-full max-w-5xl mx-auto p-5 sm:p-8 lg:p-10 rounded-3xl bg-white border border-[#E8E0D2] shadow-[0_15px_45px_rgba(40,30,20,0.06)] text-[#141210] transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(40,30,20,0.09)]"
+    >
       
       {/* En-tête de l'agenda Doctolib */}
       <div className="border-b border-[#E8E0D2] pb-6 sm:pb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -170,6 +173,7 @@ export default function AgendaDoctolib() {
         <div className="inline-flex p-1.5 rounded-2xl bg-[#F5EFEB] border border-[#E8E0D2] self-start md:self-auto">
           <button
             type="button"
+            data-cursor="pointer"
             onClick={() => setMeetingType("telephone")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all cursor-pointer ${
               meetingType === "telephone"
@@ -181,6 +185,7 @@ export default function AgendaDoctolib() {
           </button>
           <button
             type="button"
+            data-cursor="pointer"
             onClick={() => setMeetingType("presentiel")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all cursor-pointer ${
               meetingType === "presentiel"
@@ -248,6 +253,7 @@ export default function AgendaDoctolib() {
               setSelectedDate(null);
               setSelectedSlot(null);
             }}
+            data-cursor="pointer"
             className="px-6 py-3 rounded-full bg-[#141210] text-white font-heading font-semibold text-xs uppercase tracking-wider hover:bg-[#2A241F] transition-all cursor-pointer shadow-md"
           >
             Prendre un autre rendez-vous
@@ -270,8 +276,9 @@ export default function AgendaDoctolib() {
                 <button
                   key={m.label}
                   type="button"
+                  data-cursor="pointer"
                   onClick={() => setMotif(m.label)}
-                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer ${
+                  className={`p-4 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
                     motif === m.label
                       ? "border-[#B88E3E] bg-[#B88E3E]/5 shadow-sm ring-1 ring-[#B88E3E]"
                       : "border-[#E8E0D2] bg-white hover:border-[#B88E3E]/40"
@@ -298,16 +305,18 @@ export default function AgendaDoctolib() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  data-cursor="pointer"
                   disabled={weekOffset <= 0}
                   onClick={() => setWeekOffset(prev => Math.max(0, prev - 1))}
-                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#F5EFEB] transition-colors"
+                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#F5EFEB] transition-colors cursor-pointer"
                 >
                   ← Semaine précédente
                 </button>
                 <button
                   type="button"
+                  data-cursor="pointer"
                   onClick={() => setWeekOffset(prev => prev + 1)}
-                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono hover:bg-[#F5EFEB] transition-colors"
+                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono hover:bg-[#F5EFEB] transition-colors cursor-pointer"
                 >
                   Semaine suivante →
                 </button>
@@ -350,11 +359,13 @@ export default function AgendaDoctolib() {
                           <button
                             key={slot}
                             type="button"
+                            data-cursor="book"
+                            data-cursor-text={`${slot} ✦`}
                             onClick={() => handleSelectSlot(dateKey, slot)}
                             className={`w-full py-2 px-1 text-center rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                               isSelected
-                                ? "bg-[#087B53] text-white shadow-sm ring-2 ring-[#087B53]/50 scale-[1.02]"
-                                : "bg-white text-[#141210] border border-[#E8E0D2] hover:bg-[#087B53]/10 hover:border-[#087B53]/40 hover:text-[#087B53]"
+                                ? "bg-[#087B53] text-white shadow-sm ring-2 ring-[#087B53]/50 scale-[1.03]"
+                                : "bg-white text-[#141210] border border-[#E8E0D2] hover:bg-[#087B53]/10 hover:border-[#087B53]/40 hover:text-[#087B53] hover:scale-[1.01]"
                             }`}
                           >
                             {slot}
@@ -375,7 +386,7 @@ export default function AgendaDoctolib() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 15 }}
-                className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#B88E3E]/30 space-y-6"
+                className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#B88E3E]/30 space-y-6 shadow-sm"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E0D2] pb-4">
                   <div>
@@ -480,7 +491,8 @@ export default function AgendaDoctolib() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 rounded-full bg-[#087B53] hover:bg-[#066343] text-white font-heading font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
+                    data-cursor="book"
+                    className="w-full py-4 rounded-full bg-[#087B53] hover:bg-[#066343] text-white font-heading font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 hover:-translate-y-0.5 active:translate-y-0"
                   >
                     {loading ? (
                       <span>Confirmation en cours...</span>

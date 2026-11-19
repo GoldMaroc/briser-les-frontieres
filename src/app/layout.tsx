@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import { TimeThemeProvider } from "@/components/ui/TimeThemeProvider";
 import SalatTakeover from "@/components/ui/SalatTakeover";
 import CookieBanner from "@/components/layout/CookieBanner";
+import KomCursor from "@/components/ui/KomCursor";
 
 const systemia = localFont({
   src: [
@@ -123,6 +124,9 @@ export default function RootLayout({
             })
           }}
         />
+        {/* Curseur dynamique fluide inspiré de KÖM */}
+        <KomCursor />
+        
         <TimeThemeProvider>
           <Header />
           <main className="flex-1">{children}</main>
