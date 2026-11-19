@@ -1,128 +1,259 @@
 "use client";
 
-import Image from "next/image";
+import { useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 
+const FIL_CONDUCTEUR = [
+  {
+    step: "01",
+    tag: "RUPTURE DU CHAOS MENTAL",
+    metric: "+62%",
+    metricLabel: "Bande passante cognitive libérée",
+    title: "Nettoyage Cognitif & Précision Décisionnelle",
+    shortSummary: "Fermer les boucles mentales ouvertes, désamorcer l'urgence permanente et éliminer le bruit qui paralyse votre discernement.",
+    stateBefore: "Surcharge mentale, procrastination masquée, dispersion et perte d'énergie vitale.",
+    stateAfter: "Clarté d'esprit immédiate, concentration profonde et libération de l'attention.",
+    keyPoints: [
+      "Extinction des boucles ouvertes dans le cortex préfrontal",
+      "Élimination des micro-décisions superflues",
+      "Restauration de la capacité d'action immédiate",
+    ],
+    accent: "#B88E3E",
+  },
+  {
+    step: "02",
+    tag: "LE PIVOT SACRÉ (SALÂT & NEURO)",
+    metric: "-40%",
+    metricLabel: "De cortisol dès 7 jours de protocole",
+    title: "L'Ancrage Neuro-Spirituel de la Salât",
+    shortSummary: "La prière n'est pas un rituel machinal : c'est le pivot d'alignement physiologique, vagal et spirituel qui ordonne votre journée.",
+    stateBefore: "Prières expédiées ou repoussées, déconnexion intérieure, culpabilité constante.",
+    stateAfter: "5 réinitialisations souveraines par jour, apaisement du nerf vague et foi vivante.",
+    keyPoints: [
+      "Activation du système parasympathique et régulation du rythme cardiaque",
+      "Alignement circadien sur les 5 portes célestes solaires",
+      "Sanctuarisation de l'espace domestique (Tahara 360°)",
+    ],
+    accent: "#087B53",
+  },
+  {
+    step: "03",
+    tag: "LE STATUT DE KHALIFA",
+    metric: "8 Piliers",
+    metricLabel: "Souveraineté & Maîtrise de Soi durable",
+    title: "Gouvernance de Vie & Autorité Intérieure",
+    shortSummary: "Reprendre l'autorité sur votre esprit, votre foyer, vos finances et votre temps pour assumer pleinement votre mandat terrestre.",
+    stateBefore: "Sentiment d'impuissance, vie subie au lieu d'être dirigée, compromis constants.",
+    stateAfter: "Maîtrise de soi inaltérable, droiture, sérénité et impact fécond sur votre entourage.",
+    keyPoints: [
+      "Autonomie spirituelle et émotionnelle face aux épreuves",
+      "Alignement de l'activité professionnelle sur l'éthique sacrée",
+      "Rayonnement protecteur et structurant sur votre famille",
+    ],
+    accent: "#D4A853",
+  },
+];
+
 export default function EditorialBentoGrid() {
+  const [activeStep, setActiveStep] = useState(0);
+  const currentItem = FIL_CONDUCTEUR[activeStep];
+
   return (
-    <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
-      {/* EN-TÊTE DE SECTION */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 sm:mb-16">
+    <section className="py-14 sm:py-20 lg:py-24 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
+      
+      {/* EN-TÊTE ÉDITORIAL AVEC EYEBROW STATUTAIRE */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/25 text-[#8C6214] dark:text-[#D4A853] text-[11px] font-mono font-bold uppercase tracking-wider mb-3">
-            ARCHITECTURE DU SYSTÈME
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/30 text-[#B88E3E] dark:text-[#D4A853] text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider mb-2.5">
+            LE FIL CONDUCTEUR // SOUVERAINETÉ EN 3 ACTES
           </div>
           <h2 className="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[var(--text-primary)] tracking-tight">
-            Ingénierie Conçue pour Durer.
+            De la Saturation Mentale à l&apos;Autorité Souveraine.
           </h2>
+          <p className="mt-2 text-xs sm:text-base text-[var(--text-secondary)] font-sans max-w-xl leading-relaxed">
+            Un fil conducteur limpide, sans jargon ni charge cognitive : comprenez la cause, activez le pivot sacré et gouvernez votre vie.
+          </p>
         </div>
+
         <Link
           href="/fondements"
-          className="inline-flex items-center gap-2 text-xs font-heading font-bold uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853] hover:text-[#8C6214] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-heading font-bold uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853] hover:underline"
         >
           <span>Comprendre les 5 Dimensions</span>
           <ArrowIcon className="w-3.5 h-3.5" />
         </Link>
       </div>
 
-      {/* GRILLE BENTO ASYMÉTRIQUE ÉDITORIALE SANS BOÎTES LOURDES */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-        
-        {/* TUILE 1 : TALL (COLONNE GAUCHE 7 COLS) - ARCHITECTURE COGNITIVE & CALME VAGAL */}
-        <article className="lg:col-span-7 rounded-[24px] sm:rounded-[32px] overflow-hidden border border-[var(--border)] bg-[var(--surface)] shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-          <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] overflow-hidden">
-            <Image
-              src="/images/instagram/photo_sanctuary_dawn_editorial.jpg"
-              alt="Architecture du sanctuaire et éveil de la lucidité"
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
-              sizes="(max-width: 1024px) 100vw, 750px"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-            <div className="absolute top-6 left-6">
-              <span className="px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-[11px] font-mono font-bold uppercase tracking-wider border border-white/20 shadow-xs">
-                Axiome 01 • Neurophysiologie
+      {/* SÉLECTEUR D'ACTES DYNAMIQUE TACTILE SUR MOBILE & DESKTOP */}
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 p-1.5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] mb-8">
+        {FIL_CONDUCTEUR.map((item, idx) => {
+          const isActive = activeStep === idx;
+          return (
+            <button
+              key={item.step}
+              type="button"
+              onClick={() => setActiveStep(idx)}
+              className={`py-3 px-2 sm:px-4 rounded-xl text-center transition-all duration-200 cursor-pointer flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 ${
+                isActive
+                  ? "bg-[var(--bg)] text-[var(--text-primary)] shadow-sm border border-[#B88E3E]/40"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              }`}
+            >
+              <span className="font-mono text-xs sm:text-sm font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
+                ACTE {item.step}
               </span>
-            </div>
-            <div className="absolute top-6 right-6">
-              <span className="px-3 py-1.5 rounded-full bg-[#087B53] text-white text-[11px] font-mono font-bold shadow-md">
-                -40% Cortisol
+              <span className="text-[10px] sm:text-xs font-heading font-bold uppercase tracking-wider truncate max-w-[90px] sm:max-w-none">
+                {idx === 0 ? "Le Chaos" : idx === 1 ? "Le Pivot" : "Le Khalifa"}
               </span>
-            </div>
-            <div className="absolute bottom-6 left-6 right-6 text-white">
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#B88E3E] dark:text-[#D4A853]">
-                Le Point Zéro Cognitif
-              </span>
-              <h3 className="font-heading font-extrabold text-xl sm:text-2xl lg:text-3xl text-white mt-1">
-                La Réinitialisation Parasympathique
-              </h3>
-            </div>
-          </div>
-          <div className="p-6 sm:p-8 space-y-4">
-            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
-              La prière et le recueillement profond exercent une régulation immédiate sur l&apos;axe limbique. La stimulation du tonus vagal permet de réduire drastiquement l&apos;adrénaline et de libérer la bande passante du cortex préfrontal pour une prise de décision lucide.
-            </p>
-            <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between text-xs font-mono text-[var(--text-secondary)]">
-              <span>Régulation somatique mesurée</span>
-              <span className="text-[#087B53] font-semibold">✓ Preuve clinique validée</span>
-            </div>
-          </div>
-        </article>
-
-        {/* COLONNE DROITE (5 COLS) : 2 TUILES VERTICALES */}
-        <div className="lg:col-span-5 flex flex-col gap-6 lg:gap-8">
-          
-          {/* TUILE 2 (TOP) : ARCHITECTURE DE L'ESPACE & TAHARA */}
-          <article className="rounded-[24px] sm:rounded-[32px] overflow-hidden border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/20 text-[#8C6214] dark:text-[#D4A853] text-[10px] font-mono font-bold uppercase tracking-wider">
-                  Axiome 02 • Environnement
-                </span>
-                <span className="text-xs font-mono text-[var(--text-secondary)]">Tahara 360°</span>
-              </div>
-              <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">
-                Le Verrouillage Environnemental
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                Votre esprit est le reflet direct de votre espace. Éliminer la friction domestique et fermer les boucles de décision parasites pour que chaque moment d&apos;élévation devienne un refuge naturel, jamais une épreuve logistique.
-              </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono text-[#087B53] font-semibold">
-              <span>Sanctuarisation des 8 Piliers</span>
-              <span>→ Zéro dispersion</span>
-            </div>
-          </article>
-
-          {/* TUILE 3 (BOTTOM) : HARMONISATION CIRCADIENNE */}
-          <article className="rounded-[24px] sm:rounded-[32px] overflow-hidden border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full bg-[#087B53]/10 border border-[#087B53]/20 text-[#087B53] dark:text-[#4ade80] text-[10px] font-mono font-bold uppercase tracking-wider">
-                  Axiome 03 • Chronobiologie
-                </span>
-                <span className="text-xs font-mono text-[#8C6214] dark:text-[#D4A853] font-semibold">5 Paliers</span>
-              </div>
-              <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">
-                L&apos;Harmonisation Circadienne Céleste
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                De l&apos;aurore de l&apos;Aube (Fajr) au crépuscule d&apos;Isha, chaque temps de recueillement s&apos;accorde avec les oscillations hormonales de vigilance, de créativité et de restauration de l&apos;organisme humain.
-              </p>
-            </div>
-            <div className="mt-6 pt-4 border-t border-[var(--border)] grid grid-cols-5 gap-1.5 text-center font-mono text-[10px]">
-              <div className="p-2 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-primary)]">Fajr</div>
-              <div className="p-2 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-primary)]">Dhuhr</div>
-              <div className="p-2 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-primary)]">Asr</div>
-              <div className="p-2 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-primary)]">Maghrib</div>
-              <div className="p-2 rounded-lg bg-[var(--bg)] border border-[var(--border)] text-[var(--text-primary)]">Isha</div>
-            </div>
-          </article>
-
-        </div>
-
+            </button>
+          );
+        })}
       </div>
+
+      {/* PANNEAU ACTIF INTERACTIF : FOCUS SUR LE PALIER SÉLECTIONNÉ */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentItem.step}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.28, ease: "easeOut" }}
+          className="p-6 sm:p-10 rounded-2xl sm:rounded-[var(--radius-card)] bg-[var(--surface)] border border-[#B88E3E]/35 dark:border-[#D4A853]/40 shadow-md mb-8"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Colonne Gauche : Chiffre Clé & Métrique */}
+            <div className="lg:col-span-5 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[var(--border)] pb-6 lg:pb-0 lg:pr-8">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853]">
+                    ACTE {currentItem.step} • {currentItem.tag}
+                  </span>
+                </div>
+                <div className="font-heading font-extrabold text-4xl sm:text-6xl text-[var(--text-primary)] tracking-tight">
+                  {currentItem.metric}
+                </div>
+                <p className="text-xs sm:text-sm font-mono text-[#087B53] dark:text-[#10B981] font-semibold">
+                  {currentItem.metricLabel}
+                </p>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-[var(--border)]">
+                <h3 className="font-heading font-extrabold text-xl sm:text-2xl text-[var(--text-primary)] mb-2">
+                  {currentItem.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
+                  {currentItem.shortSummary}
+                </p>
+              </div>
+            </div>
+
+            {/* Colonne Droite : Avant / Après & Leviers Concrets */}
+            <div className="lg:col-span-7 space-y-6">
+              
+              {/* Comparatif Synthétique Avant / Après */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="p-4 rounded-xl bg-[var(--bg)]/70 border border-red-500/20 space-y-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-red-500 dark:text-red-400 font-bold flex items-center gap-1.5">
+                    <span>✕</span> ÉTAT INITIAL SUBI
+                  </span>
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
+                    {currentItem.stateBefore}
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[var(--bg)]/70 border border-[#087B53]/30 space-y-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#087B53] dark:text-[#10B981] font-bold flex items-center gap-1.5">
+                    <span>✓</span> ÉTAT SOUVERAIN ACQUIS
+                  </span>
+                  <p className="text-xs text-[var(--text-primary)] font-medium leading-relaxed">
+                    {currentItem.stateAfter}
+                  </p>
+                </div>
+              </div>
+
+              {/* 3 Leviers d'Action Clairs */}
+              <div className="space-y-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-semibold block">
+                  LEVIERS CONCRETS DU PROTOCOLE :
+                </span>
+                <div className="space-y-2">
+                  {currentItem.keyPoints.map((point) => (
+                    <div key={point} className="flex items-center gap-2.5 text-xs sm:text-sm text-[var(--text-primary)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] shrink-0" />
+                      <span>{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Bouton d'Action Immédiat pour ce Palier */}
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/rendez-vous"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-xs"
+                >
+                  <span>Activer ce palier en consultation (48,95 €)</span>
+                  <ArrowIcon className="w-3.5 h-3.5" />
+                </Link>
+
+                <Link
+                  href="/audit"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--border)] hover:border-[#087B53] text-[var(--text-primary)] text-xs font-heading font-semibold uppercase tracking-wider transition-all"
+                >
+                  <span>Évaluer mon score</span>
+                </Link>
+              </div>
+
+            </div>
+
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* VUE D'ENSEMBLE DES 3 CARTES (POUR LES UTILISATEURS QUI SCROLLENT LIBREMENT) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {FIL_CONDUCTEUR.map((item, idx) => {
+          const isSelected = activeStep === idx;
+          return (
+            <div
+              key={item.step}
+              onClick={() => setActiveStep(idx)}
+              className={`p-5 sm:p-6 rounded-xl border transition-all duration-200 cursor-pointer flex flex-col justify-between ${
+                isSelected
+                  ? "bg-[var(--surface)] border-[#B88E3E] dark:border-[#D4A853] ring-1 ring-[#B88E3E]/30"
+                  : "bg-[var(--surface)]/50 border-[var(--border)] hover:border-[#B88E3E]/50"
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-mono text-xl font-bold text-[#B88E3E] dark:text-[#D4A853]">
+                    {item.step}
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-semibold">
+                    {item.tag}
+                  </span>
+                </div>
+                <h4 className="font-heading font-bold text-base text-[var(--text-primary)] mb-1">
+                  {item.title}
+                </h4>
+                <p className="text-xs text-[var(--text-secondary)] font-sans line-clamp-2">
+                  {item.shortSummary}
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono">
+                <span className={isSelected ? "text-[#B88E3E] dark:text-[#D4A853] font-bold" : "text-[var(--text-secondary)]"}>
+                  {isSelected ? "Sélectionné" : "Toucher pour voir"}
+                </span>
+                <span className="text-xs">→</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
     </section>
   );
 }

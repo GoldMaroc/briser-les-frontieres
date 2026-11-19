@@ -1,22 +1,22 @@
 @import "tailwindcss";
 
 :root[data-theme='dark'] {
-  /* Alpine Basalt & Pine Sage (Nouveau dossier 4) */
-  --bg: #0c100e;
-  --surface: #141a17;
-  --surface-elevated: #1b221e;
-  --text-primary: #eff3f1;
-  --text-secondary: #98a49e;
-  --border: rgba(239, 243, 241, 0.12);
-  --border-strong: rgba(239, 243, 241, 0.24);
-  --accent: #48634b;
-  --accent-hover: #56765a;
-  --accent-text: #f4f6f5;
+  /* Bleu Nuit Impérial & Or Royal (Inspiration Page Paiement) */
+  --bg: #0A1128;
+  --surface: #0D1B2A;
+  --surface-elevated: #142238;
+  --text-primary: #F0EDE8;
+  --text-secondary: #A0AEC0;
+  --border: rgba(212, 168, 83, 0.22);
+  --border-strong: rgba(212, 168, 83, 0.45);
+  --accent: #10B981;
+  --accent-hover: #059669;
+  --accent-text: #0A1128;
   --gold: #D4A853;
   --gold-hover: #E8C468;
-  --glass-bg: rgba(18, 24, 21, 0.85);
-  --glass-border: rgba(239, 243, 241, 0.16);
-  --shadow-tinted: 0 24px 64px rgba(5, 8, 7, 0.56);
+  --glass-bg: rgba(10, 17, 40, 0.88);
+  --glass-border: rgba(212, 168, 83, 0.25);
+  --shadow-tinted: 0 24px 64px rgba(0, 0, 0, 0.65);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -24,33 +24,32 @@
    Ingénierie de la Souveraineté & Cycles Circadiens
    ═══════════════════════════════════════════════════════════ */
 
-
 :root {
   --font-sans: var(--font-sans), 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: var(--font-mono), 'DM Mono', monospace;
 
-  /* Easing Curves & Shape Standards (Nouveau dossier 4) */
+  /* Easing Curves & Shape Standards */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --radius-card: 12px;
+  --radius-card: 16px;
   --radius-pill: 999px;
 
-  /* Cold Alpine Mineral & Pine Sage (Nouveau dossier 4) */
-  --bg: #f3f6f4;
-  --surface: #e8eeea;
-  --surface-elevated: #dde5e0;
-  --text-primary: #111614;
-  --text-secondary: #48544e;
-  --border: rgba(17, 22, 20, 0.12);
-  --border-strong: rgba(17, 22, 20, 0.24);
-  --accent: #3d5740;
-  --accent-hover: #314734;
-  --accent-text: #f3f6f4;
+  /* Beige Albâtre & Or Impérial (Mode Jour Haute Joaillerie) */
+  --bg: #FAF8F5;
+  --surface: #F3EDE4;
+  --surface-elevated: #EFE6D8;
+  --text-primary: #0A1128;
+  --text-secondary: #5C534A;
+  --border: rgba(184, 142, 62, 0.22);
+  --border-strong: rgba(184, 142, 62, 0.45);
+  --accent: #087B53;
+  --accent-hover: #065F40;
+  --accent-text: #FFFFFF;
   --gold: #B88E3E;
   --gold-hover: #8C6214;
-  --glass-bg: rgba(243, 246, 244, 0.85);
-  --glass-border: rgba(17, 22, 20, 0.14);
-  --shadow-tinted: 0 24px 64px rgba(17, 22, 20, 0.12);
+  --glass-bg: rgba(250, 248, 245, 0.90);
+  --glass-border: rgba(184, 142, 62, 0.25);
+  --shadow-tinted: 0 20px 50px rgba(184, 142, 62, 0.12);
 
   /* Default Theme: BEIGE & DORÉ (Prestige Albâtre, Lin & Or Impérial) */
   --bg-base: #FAF8F5;
