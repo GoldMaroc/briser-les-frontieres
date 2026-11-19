@@ -26,12 +26,12 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/92 backdrop-blur-xl border-b border-[#E8E0D2] shadow-[0_4px_20px_rgba(20,18,16,0.03)] transition-all">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 h-[76px] flex items-center justify-between">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 h-[76px] flex items-center justify-between gap-6">
         
-        {/* GAUCHE : Logo Médaillon Joaillerie + Slogan Impérial */}
+        {/* GAUCHE : Logo Médaillon Joaillerie + Slogan Officiel */}
         <Link 
           href="/" 
-          className="flex items-center gap-3.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E] rounded-full py-1 flex-shrink-0"
+          className="flex items-center gap-3.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E] rounded-full py-1 flex-shrink-0 mr-2 xl:mr-6"
         >
           <div className="relative w-10 h-10 rounded-full overflow-hidden border border-[#B88E3E]/40 bg-white flex items-center justify-center flex-shrink-0 shadow-[0_2px_10px_rgba(184,142,62,0.15)] group-hover:border-[#B88E3E] transition-all duration-300">
             <Image 
@@ -44,10 +44,10 @@ export default function Header() {
             />
           </div>
           <div className="flex flex-col">
-            <span className="font-heading font-extrabold text-[13px] sm:text-[14px] tracking-[0.14em] uppercase text-[#141210] group-hover:text-[#B88E3E] transition-colors leading-none">
+            <span className="font-heading font-extrabold text-[12.5px] sm:text-[13.5px] tracking-[0.14em] uppercase text-[#141210] group-hover:text-[#B88E3E] transition-colors leading-none">
               BRISER LES FRONTIÈRES
             </span>
-            <span className="text-[10px] sm:text-[10.5px] font-mono tracking-[0.18em] uppercase text-[#8C6214] font-semibold leading-none mt-1.5">
+            <span className="text-[9.5px] sm:text-[10px] font-mono tracking-[0.18em] uppercase text-[#8C6214] font-semibold leading-none mt-1.5">
               L&apos;Ingénierie de la Souveraineté
             </span>
           </div>
@@ -56,7 +56,7 @@ export default function Header() {
         {/* CENTRE : Navigation Haute Joaillerie (Desktop) */}
         <nav 
           aria-label="Navigation principale" 
-          className="hidden lg:flex items-center gap-7"
+          className="hidden lg:flex items-center gap-5 xl:gap-7 flex-shrink-0"
         >
           {navSteps.map((step) => {
             const isActive = pathname === step.href;
@@ -64,7 +64,7 @@ export default function Header() {
               <Link
                 key={step.href}
                 href={step.href}
-                className={`relative text-[13px] tracking-wider uppercase transition-colors duration-200 py-1 font-heading ${
+                className={`relative text-[12.5px] xl:text-[13px] tracking-wider uppercase transition-colors duration-200 py-1 font-heading whitespace-nowrap ${
                   isActive
                     ? "text-[#B88E3E] font-bold"
                     : "text-[#5C534A] hover:text-[#141210] font-medium"
@@ -84,10 +84,10 @@ export default function Header() {
         </nav>
 
         {/* DROITE : Dual CTAs Haute Conversion (Prendre RDV + Audit Gratuit) */}
-        <div className="hidden sm:flex items-center gap-3">
+        <div className="hidden sm:flex items-center gap-2.5 xl:gap-3 flex-shrink-0">
           <Link
             href="/rendez-vous"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-[#B88E3E]/40 bg-white hover:bg-[#FAF8F5] text-[#141210] text-[11px] font-heading font-semibold uppercase tracking-wider transition-all duration-300 shadow-sm hover:border-[#B88E3E]"
+            className="inline-flex items-center gap-2 px-3.5 xl:px-4 py-2.5 rounded-full border border-[#B88E3E]/40 bg-white hover:bg-[#FAF8F5] text-[#141210] text-[11px] font-heading font-semibold uppercase tracking-wider transition-all duration-300 shadow-sm hover:border-[#B88E3E] whitespace-nowrap"
           >
             <span className="text-sm">📅</span>
             <span>Prendre RDV</span>
@@ -95,7 +95,7 @@ export default function Header() {
 
           <Link
             href="/audit"
-            className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#087B53] hover:bg-[#066343] text-white text-[11px] font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_2px_12px_rgba(8,123,83,0.25)] hover:shadow-[0_4px_18px_rgba(8,123,83,0.4)]"
+            className="group relative inline-flex items-center gap-2 px-4 xl:px-5 py-2.5 rounded-full bg-[#087B53] hover:bg-[#066343] text-white text-[11px] font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_2px_12px_rgba(8,123,83,0.25)] hover:shadow-[0_4px_18px_rgba(8,123,83,0.4)] whitespace-nowrap"
           >
             <span>AUDIT GRATUIT [3 MIN]</span>
             <span className="transition-transform duration-300 group-hover:translate-x-0.5">↗</span>
@@ -176,7 +176,7 @@ export default function Header() {
               <Link
                 href="/rendez-vous"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full border border-[#B88E3E]/40 bg-white text-[#141210] text-center text-xs font-heading font-semibold uppercase tracking-wider"
+                className="w-full py-3 rounded-full border border-[#B88E3E]/40 bg-white text-[#141210] text-center text-xs font-heading font-semibold uppercase tracking-wider shadow-sm"
               >
                 Prendre un Rendez-vous (Tél / Présentiel) 📅
               </Link>
