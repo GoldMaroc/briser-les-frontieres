@@ -118,15 +118,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>45 min d&apos;analyse confidentielle</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Cartographie des déclencheurs de stress</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Déductible si engagement sous 7j</span>
                     </li>
                   </ul>
@@ -171,15 +171,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Déplacement physique à votre domicile</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Audit ergonomique et Tahara 360&deg;</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Remise du protocole personnalisé</span>
                     </li>
                   </ul>
@@ -228,15 +228,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>4 séances individuelles intensives</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Messagerie privée 5j/7 en temps réel</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Garantie de transformation inaltérable</span>
                     </li>
                   </ul>
@@ -281,15 +281,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Supervision continue &amp; ligne directe</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Refonte intégrale des 8 Piliers de vie</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Tous les traités &amp; outils inclus</span>
                     </li>
                   </ul>
@@ -361,15 +361,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Anatomie du nerf vague et du Sujûd</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Protocoles de neutralisation de l&apos;angoisse</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Accessible instantanément sur smartphone et PC</span>
                     </li>
                   </ul>
@@ -414,15 +414,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Arabe voyellé, phonétique et traduction</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Invocations ciblées aux moments clés</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Accès numérique immédiat</span>
                     </li>
                   </ul>
@@ -467,15 +467,15 @@ export default function PrixPage() {
 
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Contemplation cosmique et exégèse</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Commentaires des maîtres traditionnels</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <span className="text-[#087B53] font-bold">&check;</span>
+                      <span className="text-[#087B53] font-bold">✓</span>
                       <span>Téléchargement instantané haute résolution</span>
                     </li>
                   </ul>

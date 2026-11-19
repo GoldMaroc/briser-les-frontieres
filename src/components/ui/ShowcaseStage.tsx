@@ -55,209 +55,140 @@ const SHOWCASE_STAGES: ShowcaseStageItem[] = [
 ];
 
 export default function ShowcaseStage() {
-  const containerRef = useRef<HTMLDivElement | null>(null);
   const [activeStage, setActiveStage] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const isScrollingByClick = useRef(false);
-
-  // Synchronisation du défilement épinglé (Pinned Scrollytelling 100vw / 100vh)
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (isScrollingByClick.current) return;
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (!containerRef.current) return;
-          const rect = containerRef.current.getBoundingClientRect();
-          const scrollDistance = -rect.top;
-          const maxScroll = rect.height - window.innerHeight;
-
-          if (maxScroll > 0) {
-            const rawProgress = scrollDistance / maxScroll;
-            const progress = Math.max(0, Math.min(0.999, rawProgress));
-            const stageIndex = Math.min(
-              SHOWCASE_STAGES.length - 1,
-              Math.floor(progress * SHOWCASE_STAGES.length)
-            );
-
-            setActiveStage((prev) => {
-              if (prev !== stageIndex) {
-                setIsTransitioning(true);
-                setTimeout(() => setIsTransitioning(false), 200);
-                return stageIndex;
-              }
-              return prev;
-            });
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
   const setStage = useCallback((idx: number) => {
-    if (idx === activeStage) return;
-    setIsTransitioning(true);
     setActiveStage(idx);
-    setTimeout(() => setIsTransitioning(false), 200);
+  }, []);
 
-    // Permettre la navigation par clic sur les indicateurs dash
-    if (containerRef.current) {
-      isScrollingByClick.current = true;
-      const rect = containerRef.current.getBoundingClientRect();
-      const containerTop = window.scrollY + rect.top;
-      const maxScroll = rect.height - window.innerHeight;
-      const targetScroll = containerTop + (idx / (SHOWCASE_STAGES.length - 1)) * maxScroll;
+  const nextStage = useCallback(() => {
+    setActiveStage((prev) => (prev + 1) % SHOWCASE_STAGES.length);
+  }, []);
 
-      window.scrollTo({
-        top: targetScroll,
-        behavior: "smooth",
-      });
+  const prevStage = useCallback(() => {
+    setActiveStage((prev) => (prev - 1 + SHOWCASE_STAGES.length) % SHOWCASE_STAGES.length);
+  }, []);
 
-      setTimeout(() => {
-        isScrollingByClick.current = false;
-      }, 700);
-    }
-  }, [activeStage]);
-
-  const nextStage = () => {
-    const next = (activeStage + 1) % SHOWCASE_STAGES.length;
-    setStage(next);
-  };
-
-  const prevStage = () => {
-    const prev = (activeStage - 1 + SHOWCASE_STAGES.length) % SHOWCASE_STAGES.length;
-    setStage(prev);
-  };
+  // Défilement automatique fluide (6 secondes)
+  useEffect(() => {
+    autoPlayRef.current = setInterval(nextStage, 6000);
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [nextStage]);
 
   const current = SHOWCASE_STAGES[activeStage];
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-[320vh] bg-black text-white"
-    >
-      {/* VUE ÉPINGLÉE PLEIN ÉCRAN (100vw / 100vh / 100dvh) */}
-      <div className="sticky top-0 w-full h-screen h-[100dvh] overflow-hidden select-none bg-neutral-950">
-        
-        {/* COUCHES D'IMAGES EN SCÈNE CINÉMATIQUE AVEC BALAYAGE PARALLAXE */}
-        {SHOWCASE_STAGES.map((stage, i) => {
-          const isActive = activeStage === i;
-          return (
-            <div
-              key={stage.src}
-              style={{
-                clipPath: isActive ? "inset(0 0 0 0%)" : "inset(0 0 0 100%)",
-                transition: "clip-path 750ms cubic-bezier(0.23, 1, 0.32, 1)",
-              }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image
-                src={stage.src}
-                alt={stage.alt}
-                fill
-                priority={i === 0}
-                className={`object-cover object-center transition-transform duration-1000 ease-out ${
-                  isActive ? "scale-100" : "scale-105"
-                }`}
-                sizes="100vw"
-              />
-              {/* FILTRES CINÉMATIQUES ÉDITORIAUX PLEIN ÉCRAN */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/40 to-black/30 pointer-events-none" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/25 to-transparent pointer-events-none" />
-            </div>
-          );
-        })}
-
-        {/* EN-TÊTE DISCRET / TOP BADGE STATUTAIRE */}
-        <div className="absolute top-6 left-6 sm:top-10 sm:left-12 z-20 flex items-center gap-3">
-          <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
-          <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-white/90 drop-shadow-sm">
-            {current.tag}
-          </span>
-        </div>
-
-        {/* CONTRÔLES FLÉCHÉS DISCRETS */}
-        <div className="absolute top-6 right-6 sm:top-10 sm:right-12 z-20 flex items-center gap-2">
-          <button
-            type="button"
-            onClick={prevStage}
-            aria-label="Étape précédente"
-            className="p-3 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white transition-all cursor-pointer"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={nextStage}
-            aria-label="Étape suivante"
-            className="p-3 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white transition-all cursor-pointer"
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-        </div>
-
-        {/* HUD INFÉRIEUR : TITRE MONUMENTAL, SOUS-TITRE & DASH INDICATOR */}
-        <div className="absolute bottom-8 inset-x-6 sm:bottom-14 sm:inset-x-12 z-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          
-          {/* TEXTES ÉDITORIAUX */}
+    <section className="relative w-full h-[580px] sm:h-[680px] lg:h-[760px] overflow-hidden select-none bg-neutral-950 text-white">
+      
+      {/* COUCHES D'IMAGES EN SCÈNE CINÉMATIQUE AVEC TRANSITION FLUIDE (ZÉRO BLOCAGE DU SCROLL) */}
+      {SHOWCASE_STAGES.map((stage, i) => {
+        const isActive = activeStage === i;
+        return (
           <div
-            className={`max-w-2xl transition-all duration-300 ${
-              isTransitioning ? "opacity-30 blur-xs translate-y-1.5" : "opacity-100 blur-none translate-y-0"
+            key={stage.src}
+            className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-out ${
+              isActive ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
             }`}
           >
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.08] drop-shadow-lg">
-              {current.title}
-            </h2>
-            <p className="mt-4 text-sm sm:text-base lg:text-lg text-white/85 font-sans leading-relaxed max-w-xl drop-shadow-sm font-normal">
-              {current.sub}
-            </p>
-
-            {current.ctaHref && current.ctaText && (
-              <div className="mt-6 flex items-center gap-3">
-                <Link
-                  href={current.ctaHref}
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-[0_4px_20px_rgba(8,123,83,0.35)] hover:-translate-y-0.5"
-                >
-                  <span>{current.ctaText}</span>
-                  <ArrowIcon className="w-4 h-4" />
-                </Link>
-              </div>
-            )}
+            <Image
+              src={stage.src}
+              alt={stage.alt}
+              fill
+              priority={i === 0}
+              className={`object-cover object-center transition-transform duration-1000 ease-out ${
+                isActive ? "scale-100" : "scale-105"
+              }`}
+              sizes="100vw"
+            />
+            {/* GRADIENTS ÉDITORIAUX LÉGERS (IMAGES TOUJOURS VIVANTES ET CLAIRES) */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/15 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none" />
           </div>
+        );
+      })}
 
-          {/* DASH PAGINATION INDICATOR (IDENTIQUE À NOUVEAU DOSSIER 4) */}
-          <div className="flex items-center gap-2 self-start md:self-end bg-black/45 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/20">
-            {SHOWCASE_STAGES.map((_, i) => {
-              const isActive = activeStage === i;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setStage(i)}
-                  aria-label={`Aller à la séquence ${i + 1}`}
-                  className={`transition-all duration-300 rounded-full cursor-pointer ${
-                    isActive
-                      ? "w-9 h-2.5 bg-white"
-                      : "w-3 h-2.5 bg-white/35 hover:bg-white/60"
-                  }`}
-                />
-              );
-            })}
-          </div>
+      {/* EN-TÊTE DISCRET / TOP BADGE STATUTAIRE */}
+      <div className="absolute top-6 left-6 sm:top-10 sm:left-12 z-20 flex items-center gap-3">
+        <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
+        <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.24em] text-white/95 drop-shadow-sm">
+          {current.tag}
+        </span>
+      </div>
 
+      {/* CONTRÔLES FLÉCHÉS DE NAVIGATION */}
+      <div className="absolute top-6 right-6 sm:top-10 sm:right-12 z-20 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={prevStage}
+          aria-label="Étape précédente"
+          className="p-3 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white transition-all cursor-pointer"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          onClick={nextStage}
+          aria-label="Étape suivante"
+          className="p-3 rounded-full bg-black/40 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white transition-all cursor-pointer"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+
+      {/* HUD INFÉRIEUR : TITRE MONUMENTAL, SOUS-TITRE & DASH INDICATOR */}
+      <div className="absolute bottom-8 inset-x-6 sm:bottom-14 sm:inset-x-12 z-20 flex flex-col md:flex-row md:items-end justify-between gap-8">
+        
+        {/* TEXTES ÉDITORIAUX STABLES SANS FLOU NI ÉCHO */}
+        <div className="max-w-2xl">
+          <h2 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.08] drop-shadow-lg">
+            {current.title}
+          </h2>
+          <p className="mt-4 text-sm sm:text-base lg:text-lg text-white/90 font-sans leading-relaxed max-w-xl drop-shadow-sm font-normal">
+            {current.sub}
+          </p>
+
+          {current.ctaHref && current.ctaText && (
+            <div className="mt-6 flex items-center gap-3">
+              <Link
+                href={current.ctaHref}
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-[0_4px_20px_rgba(8,123,83,0.35)] hover:-translate-y-0.5"
+              >
+                <span>{current.ctaText}</span>
+                <ArrowIcon className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* DASH PAGINATION INDICATOR (IDENTIQUE À NOUVEAU DOSSIER 4) */}
+        <div className="flex items-center gap-2 self-start md:self-end bg-black/45 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/20">
+          {SHOWCASE_STAGES.map((_, i) => {
+            const isActive = activeStage === i;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setStage(i)}
+                aria-label={`Aller à la séquence ${i + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  isActive
+                    ? "w-9 h-2.5 bg-white"
+                    : "w-3 h-2.5 bg-white/35 hover:bg-white/60"
+                }`}
+              />
+            );
+          })}
         </div>
 
       </div>
-    </div>
+
+    </section>
   );
 }

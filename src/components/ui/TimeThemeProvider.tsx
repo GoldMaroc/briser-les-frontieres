@@ -169,13 +169,6 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
     const interval = setInterval(() => {
       const now = new Date();
       
-      // A. Verrouillage du thème sombre cybernétique (Terminal UX)
-      if (!manualOverride) {
-        if (activeTheme !== "isha") {
-          setActiveTheme("isha");
-        }
-      }
-
       // B. Calculer la prochaine prière et le compte à rebours
       const timings = prayerTimingsRef.current;
       if (!timings) return;
@@ -209,13 +202,6 @@ export function TimeThemeProvider({ children }: { children: React.ReactNode }) {
           time: closestPrayerTime,
           secondsRemaining,
         });
-
-        // Déclencher le Takeover plein écran 60 secondes avant l'heure de prière
-        if (secondsRemaining > 0 && secondsRemaining <= 60) {
-          setTriggerTakeover(true);
-        } else {
-          setTriggerTakeover(false);
-        }
       }
     }, 1000);
 

@@ -257,7 +257,7 @@ export default function OffresPage() {
                 <ul className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
                   {p.keyActions.map((action, i) => (
                     <li key={i} className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-xs text-[var(--text-secondary)] font-sans leading-relaxed flex items-start gap-2.5">
-                      <span className="text-[#087B53] font-bold text-sm">&check;</span>
+                      <span className="text-[#087B53] font-bold text-sm">✓</span>
                       <span>{action}</span>
                     </li>
                   ))}
@@ -334,7 +334,7 @@ export default function OffresPage() {
                   <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     {offer.features.map((feat, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="text-[#087B53] font-bold">&check;</span>
+                        <span className="text-[#087B53] font-bold">✓</span>
                         <span>{feat}</span>
                       </li>
                     ))}

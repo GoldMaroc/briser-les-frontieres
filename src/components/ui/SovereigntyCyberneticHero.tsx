@@ -3,7 +3,6 @@
 import Link from "next/link";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 import HeroVerseCard from "@/components/ui/HeroVerseCard";
-import HeroCanvas from "@/components/ui/HeroCanvas";
 import ShowcaseStage from "@/components/ui/ShowcaseStage";
 import TransformationSlider from "@/components/ui/TransformationSlider";
 import EditorialBentoGrid from "@/components/ui/EditorialBentoGrid";
@@ -18,9 +17,6 @@ export default function SovereigntyCyberneticHero() {
           ET LE VERSET SACRÉ DE SOURATE AL-HADÎD (57:16)
           ═══════════════════════════════════════════════════════════════ */}
       <section className="relative w-full border-b border-[var(--border)] overflow-hidden py-16 sm:py-20 lg:py-24">
-        {/* SHADER PROCEDURAL WEBGL2 DE NOUVEAU DOSSIER (4) */}
-        <HeroCanvas />
-
         <div className="max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             

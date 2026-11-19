@@ -90,7 +90,7 @@ export default function Livres() {
   }, [openPopupBook]);
 
   return (
-    <div className="relative pt-28 sm:pt-36 pb-24 sm:pb-32 bg-midnight min-h-screen overflow-x-hidden w-full max-w-full">
+    <div className="relative pt-28 sm:pt-36 pb-24 sm:pb-32 bg-[var(--bg)] text-[var(--text-primary)] min-h-screen overflow-x-hidden w-full max-w-full transition-colors duration-280">
       {/* Halo de lumière doré circadien */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,var(--color-gold-muted)_0%,transparent_60%)] pointer-events-none opacity-40 md:opacity-60" />
 
@@ -658,13 +658,13 @@ export default function Livres() {
           transition={{ duration: 0.8 }}
           className="mt-16 sm:mt-20 text-center border-t border-border/60 pt-14 sm:pt-16 space-y-5"
         >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-gold font-semibold block">
+          <span className="text-[10px] uppercase tracking-[0.3em] text-[#B88E3E] dark:text-[#D4A853] font-semibold block">
             ➔ Passer à la phase supérieure
           </span>
-          <h3 className="font-heading text-2xl sm:text-3xl font-light text-cream tracking-wide">
-            Accompagnement & Mentorat Privé
+          <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-[var(--text-primary)] tracking-tight">
+            Accompagnement &amp; Mentorat Privé
           </h3>
-          <p className="text-xs sm:text-sm text-cream-muted max-w-xl mx-auto font-body leading-relaxed">
+          <p className="text-xs sm:text-sm text-[var(--text-secondary)] max-w-xl mx-auto font-sans leading-relaxed">
             La lecture des ouvrages est votre point d&apos;entrée. Si vous
             aspirez à un accompagnement personnalisé (Audit diagnostique,
             Protocole 30 Jours, 3 Mois ou Mentorat), découvrez nos formules.
