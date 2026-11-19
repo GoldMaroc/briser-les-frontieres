@@ -6,7 +6,6 @@ import Footer from "@/components/layout/Footer";
 import { TimeThemeProvider } from "@/components/ui/TimeThemeProvider";
 import SalatTakeover from "@/components/ui/SalatTakeover";
 import CookieBanner from "@/components/layout/CookieBanner";
-import KomCursor from "@/components/ui/KomCursor";
 
 const systemia = localFont({
   src: [
@@ -48,7 +47,7 @@ export const metadata: Metadata = {
     template: "%s | Briser les Frontières",
   },
   description:
-    "Cabinet BLF par Mounir Byar. Ingénierie comportementale et neurobiologie du Sujûd pour vaincre la procrastination (At-Taswîf), maîtriser le cortisol et instaurer la Salât comme arme de souveraineté.",
+    "Cabinet BLF par Mounir Byar. Ingénierie comportementale et neurobiologie du Sujûd pour dompter le cortisol, vaincre la procrastination et instaurer la Salât comme arme de souveraineté.",
   keywords: [
     "prière islam",
     "salat",
@@ -98,7 +97,7 @@ export default function RootLayout({
       lang="fr"
       className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#070707] text-white relative font-sans selection:bg-[#FF758C]/30 selection:text-white">
+      <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#141210] relative font-sans selection:bg-[#B88E3E]/20 selection:text-[#141210]">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -124,9 +123,6 @@ export default function RootLayout({
             })
           }}
         />
-        {/* Curseur dynamique fluide inspiré de KÖM */}
-        <KomCursor />
-        
         <TimeThemeProvider>
           <Header />
           <main className="flex-1">{children}</main>
