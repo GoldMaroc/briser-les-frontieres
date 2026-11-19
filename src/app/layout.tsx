@@ -43,11 +43,11 @@ const azeretMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Briser les Frontières — L'Ingénierie de la Prière (Salât) | Mounir BYAR",
+    default: "Briser les Frontières — L'Ingénierie de la Souveraineté | Mounir BYAR",
     template: "%s | Briser les Frontières",
   },
   description:
-    "Protocole C.O.M.E.S. par Mounir Byar. Ingénierie comportementale et neurobiologie du Sujûd pour vaincre la procrastination (At-Taswîf), maîtriser le cortisol et instaurer une constance inébranlable dans la Salât.",
+    "Cabinet BLF par Mounir Byar. Ingénierie comportementale et neurobiologie du Sujûd pour vaincre la procrastination (At-Taswîf), maîtriser le cortisol et instaurer la Salât comme arme de souveraineté.",
   keywords: [
     "prière islam",
     "salat",
@@ -61,15 +61,16 @@ export const metadata: Metadata = {
     "secrets de la salat",
     "livre islam",
     "khalifa",
+    "agenda rdv doctolib",
   ],
   authors: [{ name: "Mounir BYAR" }],
   openGraph: {
     type: "website",
     locale: "fr_FR",
     siteName: "Briser les Frontières",
-    title: "Briser les Frontières — Ingénierie de la Souveraineté",
+    title: "Briser les Frontières — L'Ingénierie de la Souveraineté",
     description:
-      "Protocole C.O.M.E.S. — Restaurez votre souveraineté cognitive et assumez votre mandat de Khalifa.",
+      "Reprenez le contrôle de votre vie. La Salât comme arme de souveraineté — Traités exégétiques, protocoles neurocognitifs et prise de rendez-vous en ligne.",
   },
   icons: {
     icon: [
@@ -96,7 +97,7 @@ export default function RootLayout({
       lang="fr"
       className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0A0908] text-[#FBF9F5] relative font-sans selection:bg-[#DFB76C]/30 selection:text-white">
+      <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#141210] relative font-sans selection:bg-[#B88E3E]/20 selection:text-[#141210]">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -109,16 +110,16 @@ export default function RootLayout({
               "url": "https://www.briserlesfrontieres.fr",
               "address": {
                 "@type": "PostalAddress",
-                "addressLocality": "Grand Reims",
+                "addressLocality": "Grand Reims & Paris",
                 "postalCode": "51100",
                 "addressCountry": "FR"
               },
               "founder": {
                 "@type": "Person",
                 "name": "Mounir BYAR",
-                "jobTitle": "Ingénieur en Souveraineté Cognitive"
+                "jobTitle": "Fondateur & Stratège Comportemental"
               },
-              "description": "Protocole C.O.M.E.S. — Ingénierie comportementale pour restaurer la clarté intellectuelle, maîtriser le Nafs et assumer le mandat de Khalifa."
+              "description": "Cabinet BLF — L'Ingénierie de la Souveraineté. Recherche exégétique et neurobiologie pour dompter le cortisol et instaurer une discipline inaltérable."
             })
           }}
         />

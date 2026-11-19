@@ -121,25 +121,25 @@ export default function Home() {
   };
 
   return (
-    <div className={`relative bg-[#0A0908] text-[#FBF9F5] selection:bg-[#B88E3E]/30 ${isFocusMode ? "focus-layout-active" : ""}`}>
+    <div className={`relative bg-[#FAF8F5] text-[#141210] selection:bg-[#B88E3E]/20 ${isFocusMode ? "focus-layout-active" : ""}`}>
       
-      {/* SECTION HERO MONUMENTAL & DOCTRINE */}
+      {/* SECTION HERO MONUMENTAL, AXIOMES, AGENDA DOCTOLIB & DOCTRINE */}
       <SovereigntyCyberneticHero />
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION TÉMOIGNAGES (43 Récits Vérifiés - Style Obys / Dark Luxury)
+          SECTION TÉMOIGNAGES (43 Récits Vérifiés - Style Haute Joaillerie)
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="temoignages" className="relative py-24 sm:py-32 bg-[#0E0C0A] border-b border-white/10 overflow-hidden text-white">
+      <section id="temoignages" className="relative py-20 sm:py-28 bg-[#FAF8F5] border-b border-[#E8E0D2] overflow-hidden text-[#141210]">
         
         {/* Glow discret */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(223,183,108,0.06)_0%,transparent_80%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(184,142,62,0.04)_0%,transparent_80%)] pointer-events-none" />
 
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
           
           <SectionHeading
             label="Bilan & Élévation"
             title="43 Récits de Transformation"
-            subtitle="Découvrez les témoignages authentiques de croyants qui ont restauré leur constance, maîtrisé la charge mentale et réinstauré la prière comme pivot de leur vie."
+            subtitle="Découvrez les témoignages authentiques de croyants qui ont restauré leur clarté d'esprit, vaincu la procrastination et replacé la prière au centre de leur vie."
           />
 
           {/* Onglets interactifs */}
@@ -157,11 +157,11 @@ export default function Home() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-6 py-3 text-xs font-heading font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer rounded-full border ${
                     isActive
-                      ? "bg-white text-[#0A0908] border-white shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                      : "bg-white/[0.04] text-white/70 border-white/10 hover:border-white/30 hover:text-white"
+                      ? "bg-[#141210] text-white border-[#141210] shadow-sm"
+                      : "bg-white text-[#5C534A] border-[#E8E0D2] hover:border-[#B88E3E] hover:text-[#141210]"
                   }`}
                 >
-                  {tab.label} <span className={`ml-1.5 font-mono ${isActive ? "text-[#0A0908]" : "text-[#DFB76C]"}`}>({tab.count})</span>
+                  {tab.label} <span className={`ml-1.5 font-mono ${isActive ? "text-[#B88E3E]" : "text-[#8C6214]"}`}>({tab.count})</span>
                 </button>
               );
             })}
@@ -182,14 +182,14 @@ export default function Home() {
                     <>
                       <button 
                         onClick={() => carouselRef.current?.scrollBy({ left: -420, behavior: 'smooth' })} 
-                        className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-[#141210] border border-white/20 shadow-2xl rounded-full items-center justify-center text-white hover:border-[#DFB76C] hover:text-[#DFB76C] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFB76C]"
+                        className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white border border-[#E8E0D2] shadow-md rounded-full items-center justify-center text-[#141210] hover:border-[#B88E3E] hover:text-[#B88E3E] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E]"
                         aria-label="Témoignage précédent"
                       >
                         ←
                       </button>
                       <button 
                         onClick={() => carouselRef.current?.scrollBy({ left: 420, behavior: 'smooth' })} 
-                        className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-[#141210] border border-white/20 shadow-2xl rounded-full items-center justify-center text-white hover:border-[#DFB76C] hover:text-[#DFB76C] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DFB76C]"
+                        className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white border border-[#E8E0D2] shadow-md rounded-full items-center justify-center text-[#141210] hover:border-[#B88E3E] hover:text-[#B88E3E] transition-all cursor-pointer text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E]"
                         aria-label="Témoignage suivant"
                       >
                         →
@@ -210,22 +210,22 @@ export default function Home() {
                   {filtered.map((t) => (
                     <article
                       key={t.id}
-                      className="w-[85vw] sm:w-[420px] flex-shrink-0 snap-center p-8 sm:p-9 border border-white/10 bg-[#141210] rounded-3xl transition-all duration-300 hover:border-[#DFB76C]/70 hover:shadow-[0_10px_40px_rgba(0,0,0,0.6)] flex flex-col justify-between"
+                      className="w-[85vw] sm:w-[420px] flex-shrink-0 snap-center p-8 sm:p-9 border border-[#E8E0D2] bg-white rounded-3xl transition-all duration-300 hover:border-[#B88E3E] hover:shadow-[0_10px_35px_rgba(40,30,20,0.06)] flex flex-col justify-between"
                     >
                       <div className="space-y-5">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1 text-[#DFB76C] text-sm" aria-label="5 étoiles sur 5">
+                          <div className="flex items-center gap-1 text-[#B88E3E] text-sm" aria-label="5 étoiles sur 5">
                             <span aria-hidden="true">★★★★★</span>
                           </div>
                           
                           <div className="flex items-center gap-2">
                             {t.score !== undefined && (
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#10B981] px-2.5 py-1 border border-emerald-500/30 rounded-full bg-emerald-950/60 font-mono">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#087B53] px-2.5 py-1 border border-emerald-200 rounded-full bg-emerald-50 font-mono">
                                 Audit : {t.score}%
                               </span>
                             )}
                             {t.period && (
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#DFB76C] px-2.5 py-1 border border-[#DFB76C]/30 rounded-full bg-[#DFB76C]/10 font-mono">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C6214] px-2.5 py-1 border border-[#B88E3E]/20 rounded-full bg-[#B88E3E]/10 font-mono">
                                 {t.period}
                               </span>
                             )}
@@ -233,23 +233,23 @@ export default function Home() {
                         </div>
 
                         <div>
-                          <h3 className="font-heading text-lg sm:text-xl text-white font-bold leading-tight">
+                          <h3 className="font-heading text-lg sm:text-xl text-[#141210] font-bold leading-tight">
                             {t.name}
                           </h3>
                           {t.role && (
-                            <p className="text-xs text-white/50 mt-1">{t.role}</p>
+                            <p className="text-xs text-[#7A6F64] mt-1">{t.role}</p>
                           )}
                         </div>
 
-                        <p className="text-sm sm:text-[15px] text-white/80 leading-[1.65] font-sans">
+                        <p className="text-sm sm:text-[15px] text-[#403B35] leading-[1.65] font-sans">
                           « {t.text} »
                         </p>
                       </div>
 
                       {t.location && (
-                        <div className="mt-8 pt-5 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-                          <span className="text-white/40">Localisation</span>
-                          <span className="text-[#DFB76C] font-semibold">{t.location}</span>
+                        <div className="mt-8 pt-5 border-t border-[#E8E0D2] flex items-center justify-between text-xs font-mono">
+                          <span className="text-[#7A6F64]">Localisation</span>
+                          <span className="text-[#8C6214] font-semibold">{t.location}</span>
                         </div>
                       )}
                     </article>
@@ -258,7 +258,7 @@ export default function Home() {
                 </div>
 
                 {filtered.length > 1 && (
-                  <div className="flex items-center justify-center gap-2 pt-4 text-white/40">
+                  <div className="flex items-center justify-center gap-2 pt-4 text-[#7A6F64]">
                     <span className="text-[11px] uppercase tracking-wider font-mono">← Glissez pour parcourir les témoignages →</span>
                   </div>
                 )}
@@ -267,15 +267,15 @@ export default function Home() {
           })()}
 
           {/* Formulaire Laisser un Avis */}
-          <div className="mt-24 border-t border-white/10 pt-20 max-w-2xl mx-auto">
-            <div className="text-center mb-10">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#DFB76C] mb-2 block font-mono font-bold">
+          <div className="mt-20 border-t border-[#E8E0D2] pt-16 max-w-2xl mx-auto">
+            <div className="text-center mb-8">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.20em] text-[#8C6214] mb-2 block font-mono font-bold">
                 PARTAGEZ VOTRE PARCOURS
               </span>
-              <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-white">
+              <h3 className="font-heading text-2xl sm:text-3xl font-extrabold text-[#141210]">
                 Laisser un Témoignage
               </h3>
-              <p className="mt-3 text-sm text-white/70 leading-relaxed font-sans max-w-md mx-auto">
+              <p className="mt-2 text-sm text-[#5C534A] leading-relaxed font-sans max-w-md mx-auto">
                 Votre retour sincère aide les croyants à briser leurs propres frontières cognitives. Chaque témoignage est relu et validé avant publication.
               </p>
             </div>
@@ -284,28 +284,28 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-8 border border-emerald-500/40 bg-emerald-950/40 text-center space-y-4 rounded-3xl"
+                className="p-8 border border-emerald-200 bg-emerald-50 text-center space-y-4 rounded-3xl"
               >
-                <div className="w-12 h-12 rounded-full border border-emerald-400 flex items-center justify-center mx-auto text-[#10B981] text-lg font-bold">
+                <div className="w-12 h-12 rounded-full bg-[#087B53] text-white flex items-center justify-center mx-auto text-lg font-bold">
                   ✓
                 </div>
-                <h4 className="font-heading text-xl font-bold text-white">Témoignage transmis avec succès</h4>
-                <p className="text-sm text-white/70 font-sans leading-relaxed max-w-sm mx-auto">
+                <h4 className="font-heading text-xl font-bold text-[#141210]">Témoignage transmis avec succès</h4>
+                <p className="text-sm text-[#5C534A] font-sans leading-relaxed max-w-sm mx-auto">
                   Barakallahu feekum pour votre retour. Mounir Byar étudiera votre message avec attention avant sa publication officielle.
                 </p>
                 <button
                   onClick={() => setRevSubmitted(false)}
-                  className="mt-4 text-xs uppercase tracking-wider text-[#DFB76C] hover:underline font-bold font-mono cursor-pointer"
+                  className="mt-4 text-xs uppercase tracking-wider text-[#087B53] hover:underline font-bold font-mono cursor-pointer"
                 >
                   Déposer un autre avis
                 </button>
               </motion.div>
             ) : (
-              <form onSubmit={handleReviewSubmit} className="space-y-5 font-sans">
+              <form onSubmit={handleReviewSubmit} className="space-y-4 font-sans bg-white p-6 sm:p-8 rounded-3xl border border-[#E8E0D2] shadow-sm">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="rev-nom" className="text-[11px] uppercase tracking-wider text-white/60 font-semibold font-mono">Votre Prénom ou Identité</label>
+                    <label htmlFor="rev-nom" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Votre Prénom ou Identité</label>
                     <input
                       required
                       type="text"
@@ -314,18 +314,18 @@ export default function Home() {
                       onChange={(e) => setRevNom(e.target.value)}
                       disabled={revLoading}
                       placeholder="Ex: Yacine, Leïla, Dr. M..."
-                      className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#DFB76C] outline-none text-sm transition-colors rounded-xl"
+                      className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="rev-cat" className="text-[11px] uppercase tracking-wider text-white/60 font-semibold font-mono">Vous êtes :</label>
+                    <label htmlFor="rev-cat" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Vous êtes :</label>
                     <select
                       id="rev-cat"
                       value={revCat}
                       onChange={(e) => setRevCat(e.target.value as any)}
                       disabled={revLoading}
-                      className="px-4 py-3 bg-[#141210] text-white border border-white/10 focus:border-[#DFB76C] outline-none text-sm transition-colors rounded-xl cursor-pointer"
+                      className="px-4 py-3 bg-[#FAF8F5] text-[#141210] border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl cursor-pointer"
                     >
                       <option value="homme">Un Homme particulier</option>
                       <option value="femme">Une Femme particulière</option>
@@ -337,13 +337,13 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="rev-period" className="text-[11px] uppercase tracking-wider text-white/60 font-semibold font-mono">Accompagnement Suivi</label>
+                    <label htmlFor="rev-period" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Accompagnement Suivi</label>
                     <select
                       id="rev-period"
                       value={revPeriod}
                       onChange={(e) => setRevPeriod(e.target.value)}
                       disabled={revLoading}
-                      className="px-4 py-3 bg-[#141210] text-white border border-white/10 focus:border-[#DFB76C] outline-none text-sm transition-colors rounded-xl cursor-pointer"
+                      className="px-4 py-3 bg-[#FAF8F5] text-[#141210] border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl cursor-pointer"
                     >
                       <option value="Protocole 9 Mois">Protocole de 9 Mois — Accompagnement Complet</option>
                       <option value="Protocole 3 Mois">Protocole de 3 Mois — Structure Intense</option>
@@ -353,7 +353,7 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label htmlFor="rev-localisation" className="text-[11px] uppercase tracking-wider text-white/60 font-semibold font-mono">Votre Ville / Région</label>
+                    <label htmlFor="rev-localisation" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Votre Ville / Région</label>
                     <input
                       required
                       type="text"
@@ -362,13 +362,13 @@ export default function Home() {
                       onChange={(e) => setRevLocalisation(e.target.value)}
                       disabled={revLoading}
                       placeholder="Ex: Paris, Reims, Bruxelles, Lyon..."
-                      className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#DFB76C] outline-none text-sm transition-colors rounded-xl"
+                      className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl"
                     />
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="rev-message" className="text-[11px] uppercase tracking-wider text-white/60 font-semibold font-mono">Votre Récit & Transformation</label>
+                  <label htmlFor="rev-message" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Votre Récit & Transformation</label>
                   <textarea
                     required
                     id="rev-message"
@@ -377,18 +377,18 @@ export default function Home() {
                     onChange={(e) => setRevMsg(e.target.value)}
                     disabled={revLoading}
                     placeholder="Parlez avec sincérité de vos blocages résolus (At-Taswîf, prière saccadée, doutes, retour au Fajr...) et de votre renouveau spirituel..."
-                    className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#DFB76C] outline-none text-sm transition-colors rounded-xl leading-relaxed"
+                    className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl leading-relaxed"
                   />
                 </div>
 
                 {revError && (
-                  <p className="text-xs text-red-400 font-semibold text-center">{revError}</p>
+                  <p className="text-xs text-red-600 font-semibold text-center">{revError}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={revLoading}
-                  className="w-full py-4 bg-[#DFB76C] hover:bg-[#C9A256] text-[#0A0908] text-xs tracking-[0.15em] uppercase transition-all duration-300 font-heading font-extrabold cursor-pointer inline-flex justify-center items-center gap-2 rounded-full shadow-lg"
+                  className="w-full py-4 bg-[#087B53] hover:bg-[#066343] text-white text-xs tracking-[0.15em] uppercase transition-all duration-300 font-heading font-bold cursor-pointer inline-flex justify-center items-center gap-2 rounded-full shadow-lg"
                 >
                   {revLoading ? "Transmission confidentielle..." : "Soumettre mon témoignage pour validation"}
                 </button>
@@ -402,35 +402,35 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════════════
           SECTION CANDIDATURE / CONTACT PRIVÉ
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="contact-comes" className="relative py-24 sm:py-32 bg-[#0A0908] border-b border-white/10 text-white">
-        <div className="max-w-5xl mx-auto px-6 lg:px-12">
+      <section id="contact-comes" className="relative py-20 sm:py-28 bg-[#F5EFEB] border-b border-[#E8E0D2] text-[#141210]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#10B981] mb-3 block font-mono font-bold">
-              05 // CANDIDATURE & ACCOMPAGNEMENT
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.20em] text-[#8C6214] mb-2 block font-mono font-bold">
+              06 // CANDIDATURE & ACCOMPAGNEMENT PRIVÉ
             </span>
-            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-white">
-              Solliciter un Accompagnement Privé
+            <h2 className="font-heading text-3xl sm:text-5xl font-extrabold text-[#141210]">
+              Solliciter un Accompagnement
             </h2>
-            <p className="mt-4 text-base text-white/70 leading-relaxed font-sans max-w-xl mx-auto">
-              Pour postuler au <strong className="text-white">Protocole de 9 Mois</strong> (compagnonnage individuel direct avec Mounir Byar), déposez votre demande confidentielle.
+            <p className="mt-3 text-base text-[#5C534A] leading-relaxed font-sans">
+              Pour postuler au <strong>Protocole de 9 Mois</strong> ou poser vos questions préalables à Mounir Byar, adressez votre demande ci-dessous.
             </p>
           </div>
 
-          <div className="p-8 md:p-14 border border-white/10 bg-[#141210] shadow-2xl rounded-3xl max-w-2xl mx-auto">
+          <div className="p-8 sm:p-12 border border-[#E8E0D2] bg-white shadow-xl rounded-3xl max-w-xl mx-auto">
             {submitted ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-6 bg-emerald-950/60 border border-emerald-500/40 text-[#10B981] text-xs tracking-wider uppercase text-center rounded-2xl max-w-md mx-auto font-mono font-semibold"
+                className="p-6 bg-emerald-50 border border-emerald-200 text-[#087B53] text-xs tracking-wider uppercase text-center rounded-2xl max-w-md mx-auto font-mono font-semibold"
               >
                 Votre demande a été enregistrée en toute discrétion. Mounir BYAR reprendra contact avec vous.
               </motion.div>
             ) : (
-              <form onSubmit={handleContactSubmit} className="space-y-5 max-w-md mx-auto font-sans">
+              <form onSubmit={handleContactSubmit} className="space-y-4 max-w-md mx-auto font-sans">
                 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="nom-field" className="text-[10px] uppercase tracking-wider text-white/60 font-semibold font-mono">Identité / Prénom</label>
+                  <label htmlFor="nom-field" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Identité / Prénom</label>
                   <input
                     required
                     type="text"
@@ -439,12 +439,12 @@ export default function Home() {
                     onChange={(e) => setNom(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: Yacine, Dr. Sliman..."
-                    className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#059669] outline-none text-sm transition-colors rounded-xl"
+                    className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl shadow-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="email-field" className="text-[10px] uppercase tracking-wider text-white/60 font-semibold font-mono">Adresse Email Professionnelle</label>
+                  <label htmlFor="email-field" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Adresse Email Professionnelle</label>
                   <input
                     required
                     type="email"
@@ -453,18 +453,18 @@ export default function Home() {
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: contact@votre-domaine.com"
-                    className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#059669] outline-none text-sm transition-colors rounded-xl"
+                    className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl shadow-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="accomp-select" className="text-[10px] uppercase tracking-wider text-white/60 font-semibold font-mono">Format Souhaité</label>
+                  <label htmlFor="accomp-select" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Format Souhaité</label>
                   <select
                     id="accomp-select"
                     value={accompagnementSelect}
                     onChange={(e) => setAccompagnementSelect(e.target.value)}
                     disabled={loading}
-                    className="px-4 py-3 bg-[#141210] text-white border border-white/10 focus:border-[#059669] outline-none text-sm transition-colors rounded-xl cursor-pointer"
+                    className="px-4 py-3 bg-[#FAF8F5] text-[#141210] border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl cursor-pointer shadow-sm"
                   >
                     <option value="9mois">Protocole 9 Mois — Compagnonnage d&apos;Élite</option>
                     <option value="30jours">Protocole 30 Jours — Réinitialisation Cognitive</option>
@@ -473,7 +473,7 @@ export default function Home() {
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="msg-field" className="text-[10px] uppercase tracking-wider text-white/60 font-semibold font-mono">Votre Démarche & Objectifs</label>
+                  <label htmlFor="msg-field" className="text-[11px] uppercase tracking-wider text-[#5C534A] font-semibold font-mono">Votre Démarche & Objectifs</label>
                   <textarea
                     required
                     id="msg-field"
@@ -481,19 +481,19 @@ export default function Home() {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
-                    placeholder="Exposez brièvement votre situation, votre métier et vos attentes..."
-                    className="px-4 py-3 bg-white/[0.04] text-white placeholder-white/30 border border-white/10 focus:border-[#059669] outline-none text-sm transition-colors rounded-xl leading-relaxed"
+                    placeholder="Exposez brièvement votre situation, vos objectifs et vos attentes..."
+                    className="px-4 py-3 bg-[#FAF8F5] text-[#141210] placeholder-neutral-400 border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm transition-colors rounded-xl shadow-sm leading-relaxed"
                   />
                 </div>
 
                 {error && (
-                  <p className="text-xs text-red-400 font-semibold text-center">{error}</p>
+                  <p className="text-xs text-red-600 font-semibold text-center">{error}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-4 bg-gradient-to-r from-[#059669] to-[#047857] hover:brightness-110 text-white text-xs tracking-[0.15em] uppercase transition-all duration-300 font-heading font-extrabold cursor-pointer inline-flex justify-center items-center gap-2 rounded-full shadow-[0_0_25px_rgba(5,150,105,0.4)]"
+                  className="w-full py-4 bg-[#087B53] hover:bg-[#066343] text-white text-xs tracking-[0.15em] uppercase transition-all duration-300 font-heading font-bold cursor-pointer inline-flex justify-center items-center gap-2 rounded-full shadow-lg"
                 >
                   {loading ? "Envoi en cours..." : "Transmettre ma candidature →"}
                 </button>

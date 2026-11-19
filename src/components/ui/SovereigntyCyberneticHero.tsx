@@ -4,527 +4,222 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import AgendaDoctolib from "@/components/ui/AgendaDoctolib";
 
 export default function SovereigntyCyberneticHero() {
-  const [activePortal, setActivePortal] = useState<number | null>(null);
-
-  // Variables de preuve sociale
-  const VARIABLE_ACCOMPAGNES = "+1 200 Dirigeants & Croyants";
-  const VARIABLE_AVIS = "Note 4,9/5 sur Avis Vérifiés (43 Récits)";
-  const VARIABLE_METHODE = "Doctrine C.O.M.E.S. • Livres & Accompagnement";
+  // Variables de preuve sociale vérifiables
+  const VARIABLE_ACCOMPAGNES = "+1 200 Musulmans accompagnés";
+  const VARIABLE_AVIS = "Note 4,9/5 sur avis vérifiés";
+  const VARIABLE_METHODE = "Méthode C.O.M.E.S. • Livres & Accompagnement";
 
   return (
-    <div className="relative w-full bg-[#0A0908] text-[#FBF9F5] overflow-hidden selection:bg-[#B88E3E]/30 selection:text-white">
+    <div className="relative w-full bg-[#FAF8F5] text-[#141210]">
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 1 : HERO MONUMENTAL 2026 (TYPOGRAPHIE XXL & SPATIAL)
-          Inspiré des plus grands standards (Gucci Cosmos, Apple Vision Pro, Obys Agency)
+          SECTION 1 : HERO PRINCIPAL (HAUTE JOAILLERIE & INTÉGRATION ORGANIQUE)
+          - Fond uni beige albâtre #FAF8F5
+          - Portrait de Mounir en Qiyâm intégré de manière fluide en arrière-plan ambiant (AUCUN CADRE RIGIDE)
+          - Titre percutant et sous-titre doré statutaire
+          - Dual CTA : Audit Gratuit + Prise de Rendez-vous Doctolib
+          - Conformité stricte WCAG 2.1 AA (contraste > 15:1)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[92vh] flex flex-col justify-between pt-12 sm:pt-16 lg:pt-20 pb-16 px-4 sm:px-6 lg:px-12 border-b border-white/10">
+      <section className="relative w-full bg-[#FAF8F5] border-b border-[#E8E0D2] overflow-hidden min-h-[88vh] flex items-center">
         
-        {/* Halos d'ambiance cosmique et or champagne (Glows volumétriques) */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[1000px] h-[400px] sm:h-[500px] bg-gradient-to-b from-[#B88E3E]/15 via-[#087B53]/10 to-transparent rounded-full filter blur-[140px] pointer-events-none" />
-        <div className="absolute top-0 right-10 w-96 h-96 bg-[#DFB76C]/10 rounded-full filter blur-[120px] pointer-events-none" />
+        {/* VISUEL AMBIANT INTÉGRÉ SANS AUCUN CADRE (FLUIDE ET FONDU) */}
+        <div className="absolute inset-y-0 right-0 w-full lg:w-3/5 pointer-events-none select-none z-0">
+          <div className="relative w-full h-full">
+            <Image
+              src="/images/sanctuaire/muslim_qiyam_focus.jpg"
+              alt="Mounir Byar - Alignement et verticalité dans la prière"
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              className="object-cover object-center lg:object-right opacity-25 lg:opacity-35 mix-blend-multiply"
+            />
+            {/* Dégradés radiaux et latéraux pour une intégration 100% organique sans bordure */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5] via-[#FAF8F5]/85 to-transparent hidden lg:block" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-transparent to-[#FAF8F5]/50" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,transparent_20%,#FAF8F5_85%)]" />
+          </div>
+        </div>
 
-        {/* CONTENU CENTRAL DU HERO */}
-        <div className="max-w-[1400px] w-full mx-auto flex flex-col items-center text-center relative z-10 my-auto">
-          
-          {/* Eyebrow Pillule 2026 avec télémétrie */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/[0.04] border border-[#DFB76C]/30 backdrop-blur-xl shadow-[0_0_20px_rgba(223,183,108,0.1)] mb-6 sm:mb-8"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-            <span className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-[#DFB76C]">
-              PARIS • REIMS — PAR MOUNIR BYAR
-            </span>
-            <span className="text-white/20 font-mono text-xs">|</span>
-            <span className="font-mono text-[10px] text-white/60 tracking-wider hidden sm:inline">
-              INGÉNIERIE COGNITIVE & EXÉGÈSE
-            </span>
-          </motion.div>
+        {/* CONTENU ÉDITORIAL DU HERO */}
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-12 py-16 sm:py-20 lg:py-24 relative z-10 w-full">
+          <div className="max-w-2xl lg:max-w-3xl flex flex-col items-start text-left">
+            
+            {/* Double eyebrow statutaire */}
+            <div className="flex flex-wrap items-center gap-2.5 mb-5 sm:mb-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/30 text-[#8C6214]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
+                <span className="font-mono text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.16em]">
+                  CABINET BLF // L&apos;INGÉNIERIE DE LA SOUVERAINETÉ
+                </span>
+              </div>
+              <span className="text-[11px] font-mono uppercase tracking-[0.12em] text-[#7A6F64] hidden sm:inline">
+                PARIS // REIMS • PAR MOUNIR BYAR
+              </span>
+            </div>
 
-          {/* TITRE MONUMENTAL XXL (Le Statement 2026) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full space-y-3 sm:space-y-4"
-          >
-            <h1 className="font-heading font-extrabold text-[11vw] sm:text-[8.5vw] md:text-[7vw] lg:text-[6.5rem] xl:text-[7.5rem] tracking-[-0.04em] leading-[0.92] uppercase text-[#FBF9F5] select-none">
-              REPRENEZ LE CONTRÔLE<span className="text-[#DFB76C]">.</span>
+            {/* Titre monumental avec dorure Haute Joaillerie */}
+            <h1 
+              style={{ textWrap: "balance" }}
+              className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-[3.65rem] text-[#141210] tracking-[-0.03em] leading-[1.10]"
+            >
+              Reprenez le contrôle de votre vie.
+              <span className="block mt-2 font-serif italic font-normal text-[#B88E3E] text-2xl sm:text-4xl lg:text-[3.15rem] leading-[1.15]">
+                La Salât comme arme de souveraineté.
+              </span>
             </h1>
 
-            <p className="font-serif italic text-2xl sm:text-4xl md:text-5xl lg:text-[3.25rem] bg-gradient-to-r from-[#FFF0C2] via-[#DFB76C] to-[#B88E3E] bg-clip-text text-transparent font-medium tracking-tight">
-              « La Salât comme arme de souveraineté. »
+            {/* Sous-titre cadré et scientifique */}
+            <p className="mt-5 sm:mt-6 text-base sm:text-lg text-[#403B35] font-sans leading-[1.65] max-w-xl sm:max-w-2xl font-normal">
+              La prière n&apos;est pas une corvée répétitive. C&apos;est le protocole neurobiologique suprême révélé à l&apos;humanité pour dompter le cortisol, briser la procrastination et commander son existence avec une clarté inaltérable.
             </p>
-          </motion.div>
 
-          {/* SOUS-TITRE CADRÉ AVEC AUTORITÉ & PRÉCISION SCIENTIFIQUE */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-6 sm:mt-8 max-w-2xl lg:max-w-3xl text-sm sm:text-base md:text-lg text-white/70 font-sans leading-[1.65] font-normal"
-          >
-            La prière n&apos;est pas un rituel passif. C&apos;est l&apos;architecture neurobiologique suprême révélée à l&apos;humanité pour dompter le cortisol, briser la procrastination (<em className="text-white not-italic font-medium">At-Taswîf</em>) et commander son destin avec une clarté inaltérable.
-          </motion.p>
+            {/* Trio d'Actions Haute Conversion */}
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
+              <Link
+                href="/audit"
+                className="inline-flex items-center justify-center gap-2.5 px-7 py-4 min-h-[52px] rounded-full bg-[#087B53] hover:bg-[#066343] text-white font-heading font-bold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_4px_20px_rgba(8,123,83,0.3)] hover:shadow-[0_6px_25px_rgba(8,123,83,0.45)] hover:scale-[1.02] text-center"
+              >
+                <span>Faire l&apos;audit gratuit (3 min)</span>
+                <span className="text-sm">→</span>
+              </Link>
 
-          {/* DUO DE BOUTONS D'ACTION (CRO 2026 AVEC PHYSIQUE HAUT DE GAMME) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 w-full sm:w-auto"
-          >
-            <Link
-              href="/audit"
-              className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 min-h-[54px] rounded-full bg-gradient-to-r from-[#059669] via-[#087B53] to-[#047857] text-white font-heading font-bold text-xs sm:text-sm uppercase tracking-[0.12em] shadow-[0_0_35px_rgba(5,150,105,0.4)] hover:shadow-[0_0_50px_rgba(5,150,105,0.6)] hover:scale-[1.03] transition-all duration-300 text-center border border-emerald-400/30"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#DFB76C] animate-pulse" />
-              <span>Faire l&apos;audit gratuit (3 min)</span>
-              <span className="text-sm transition-transform duration-300 group-hover:translate-x-1">→</span>
-            </Link>
+              <a
+                href="#agenda"
+                className="inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[52px] rounded-full bg-white hover:bg-[#F5EFEB] border border-[#B88E3E]/50 hover:border-[#B88E3E] text-[#141210] font-heading font-semibold text-xs sm:text-sm uppercase tracking-wider transition-all duration-300 shadow-sm text-center"
+              >
+                <span>Prendre un rendez-vous</span>
+                <span className="text-sm">📅</span>
+              </a>
 
-            <Link
-              href="#methode"
-              className="inline-flex items-center justify-center gap-2 px-7 py-4 min-h-[54px] rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 hover:border-[#DFB76C]/60 text-white font-heading font-semibold text-xs sm:text-sm uppercase tracking-wider backdrop-blur-md transition-all duration-300 shadow-sm"
-            >
-              <span>Explorer la doctrine C.O.M.E.S.</span>
-              <span className="text-xs text-[#DFB76C]">↓</span>
-            </Link>
-          </motion.div>
-
-          {/* PREUVE SOCIALE STATUTAIRE IMMÉDIATE */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="mt-8 pt-6 border-t border-white/10 w-full max-w-2xl flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-mono text-white/60"
-          >
-            <div className="inline-flex items-center gap-2">
-              <span className="text-[#10B981]">✓</span>
-              <span className="text-white/80 font-medium">{VARIABLE_ACCOMPAGNES}</span>
+              <Link
+                href="/prix"
+                className="inline-flex items-center justify-center gap-1.5 px-4 py-4 text-xs font-mono font-bold text-[#8C6214] hover:text-[#5C3F08] transition-colors underline underline-offset-4 text-center sm:text-left"
+              >
+                <span>Consulter les prix & formats</span>
+                <span>→</span>
+              </Link>
             </div>
 
-            <Link href="/#temoignages" className="inline-flex items-center gap-2 hover:text-[#DFB76C] transition-colors group">
-              <span className="text-[#DFB76C]">★★★★★</span>
-              <span className="text-white/80 group-hover:underline underline-offset-4 font-medium">{VARIABLE_AVIS}</span>
-            </Link>
-
-            <div className="inline-flex items-center gap-2">
-              <span className="text-[#DFB76C]">✦</span>
-              <span className="text-white/80 font-medium">{VARIABLE_METHODE}</span>
-            </div>
-          </motion.div>
-
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════
-            LE TRIPTYQUE DES 3 PORTAILS (EXPÉRIENCE VISUELLE 2026)
-            Remplacement du bloc photo 2 colonnes par une galerie spatiale interactive
-            ═══════════════════════════════════════════════════════════════ */}
-        <div className="max-w-[1400px] w-full mx-auto mt-12 sm:mt-16 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
-            
-            {/* PORTAIL 1 : QIYÂM // L'ALIGNEMENT DU CORTEX */}
-            <div 
-              onMouseEnter={() => setActivePortal(1)}
-              onMouseLeave={() => setActivePortal(null)}
-              className="relative aspect-[4/3] sm:aspect-[4/5] rounded-3xl overflow-hidden border border-white/15 bg-white/[0.02] backdrop-blur-md group hover:border-[#DFB76C]/70 transition-all duration-500 shadow-2xl"
-            >
-              <Image
-                src="/images/sanctuaire/muslim_qiyam_focus.jpg"
-                alt="Station Qiyâm - Focus et verticalité sacrée"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-
-              <div className="absolute top-4 left-4 z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[10px] font-mono text-[#DFB76C]">
-                <span>01 // STATION QIYÂM</span>
+            {/* Preuve sociale intégrée et vérifiable */}
+            <div className="mt-8 pt-6 border-t border-[#E8E0D2] w-full flex flex-wrap items-center gap-x-6 gap-y-3 text-xs font-mono text-[#5C534A]">
+              <div className="inline-flex items-center gap-1.5">
+                <span className="text-[#087B53] font-bold">✓</span>
+                <span className="font-semibold">{VARIABLE_ACCOMPAGNES}</span>
               </div>
 
-              <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
-                <span className="font-mono text-[10px] text-[#10B981] font-bold uppercase tracking-wider block">
-                  +35% CLARTÉ PRÉFRONTALE
-                </span>
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white leading-tight">
-                  L&apos;Alignement Rachidien
-                </h3>
-                <p className="text-xs text-white/70 line-clamp-2 font-sans">
-                  Immobilité absolue et rupture totale avec la dispersion mentale. Le cortex reprend l&apos;autorité sur les impulsions.
-                </p>
-              </div>
-            </div>
+              <Link href="/#temoignages" className="inline-flex items-center gap-1.5 hover:text-[#8C6214] transition-colors group">
+                <span className="text-[#B88E3E]">★★★★★</span>
+                <span className="group-hover:underline underline-offset-2">{VARIABLE_AVIS}</span>
+              </Link>
 
-            {/* PORTAIL 2 : SUJÛD // L'INVERSION DU STRESS */}
-            <div 
-              onMouseEnter={() => setActivePortal(2)}
-              onMouseLeave={() => setActivePortal(null)}
-              className="relative aspect-[4/3] sm:aspect-[4/5] rounded-3xl overflow-hidden border border-[#DFB76C]/40 bg-white/[0.02] backdrop-blur-md group hover:border-[#DFB76C] transition-all duration-500 shadow-[0_0_40px_rgba(223,183,108,0.15)]"
-            >
-              <Image
-                src="/images/sanctuaire/muslim_sujud_light.jpg"
-                alt="Station Sujûd - Inversion vagale et apaisement profond"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover object-center filter grayscale-[10%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-
-              <div className="absolute top-4 left-4 z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#059669]/90 backdrop-blur-md border border-emerald-300 text-[10px] font-mono text-white font-bold">
-                <span>02 // CŒUR DU PROTOCOLE</span>
-              </div>
-
-              <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
-                <span className="font-mono text-[10px] text-[#DFB76C] font-bold uppercase tracking-wider block">
-                  -40% CORTISOL EN 90 SECONDES
-                </span>
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white leading-tight">
-                  Le Sujûd Souverain
-                </h3>
-                <p className="text-xs text-white/70 line-clamp-2 font-sans">
-                  L&apos;unique station où le cœur surplombe le cerveau. Décharge allostatique et paix viscérale instantanée.
-                </p>
-              </div>
-            </div>
-
-            {/* PORTAIL 3 : L'INGÉNIEUR // LES TRAITÉS & L'EXÉGÈSE */}
-            <div 
-              onMouseEnter={() => setActivePortal(3)}
-              onMouseLeave={() => setActivePortal(null)}
-              className="relative aspect-[4/3] sm:aspect-[4/5] rounded-3xl overflow-hidden border border-white/15 bg-white/[0.02] backdrop-blur-md group hover:border-[#DFB76C]/70 transition-all duration-500 shadow-2xl"
-            >
-              <Image
-                src="/images/portrait-mounir.jpg"
-                alt="Mounir Byar - Ingénieur et Auteur des Secrets de la Salât"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover object-top filter grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
-
-              <div className="absolute top-4 left-4 z-10 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-[10px] font-mono text-[#DFB76C]">
-                <span>03 // CABINET BLF</span>
-              </div>
-
-              <div className="absolute bottom-5 left-5 right-5 z-10 space-y-2">
-                <span className="font-mono text-[10px] text-[#DFB76C] font-bold uppercase tracking-wider block">
-                  10 ANS D&apos;INGÉNIERIE & EXÉGÈSE
-                </span>
-                <h3 className="font-heading font-bold text-xl sm:text-2xl text-white leading-tight">
-                  Mounir Byar & Ses Traités
-                </h3>
-                <p className="text-xs text-white/70 line-clamp-2 font-sans">
-                  Deux ouvrages majeurs et un accompagnement privé sur-mesure pour ancrer définitivement la souveraineté.
-                </p>
+              <div className="inline-flex items-center gap-1.5">
+                <span className="text-[#B88E3E]">✦</span>
+                <span>Fondé sur 10 ans de recherche</span>
               </div>
             </div>
 
           </div>
         </div>
-
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 2 : LE CONSTAT BRUTAL (TENSION ÉDITORIALE STYLE OBYS)
+          SECTION 2 : LES AXIOMES THÉORIQUES & LA DÉGRADATION DU CAPITAL MENTAL
+          (Restauration exacte de la richesse d'information demandée par l'utilisateur)
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="methode" className="relative py-24 sm:py-32 px-4 sm:px-8 lg:px-12 border-b border-white/10 bg-[#0E0C0A]">
-        <div className="max-w-[1300px] mx-auto space-y-16">
+      <section id="methode" className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#FAF8F5] border-b border-[#E8E0D2]">
+        <div className="max-w-[1240px] mx-auto space-y-16">
           
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#DFB76C] block font-bold">
-              01 // LE CONSTAT BRUTAL
+          {/* En-tête des axiomes */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/20 text-[#8C6214] font-mono text-[11px] font-bold uppercase tracking-[0.18em]">
+              • LES AXIOMES THÉORIQUES •
             </span>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-[1.05]">
-              Pourquoi remettez-vous toujours votre prière à plus tard ?
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[#141210] tracking-tight">
+              L&apos;Ingénierie de la Souveraineté
             </h2>
-            <p className="text-base sm:text-lg text-white/70 font-sans leading-[1.65]">
-              L&apos;inertie (<em className="text-[#DFB76C] not-italic">At-Taswîf</em>) n&apos;est pas un simple manque de volonté. C&apos;est le résultat d&apos;un cerveau saturé de dopamine rapide et d&apos;une prière privée de sa mécanique d&apos;ancrage.
+            <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-relaxed">
+              Une science comportementale rigoureuse à l&apos;intersection de la révélation divine et des neurosciences cognitives modernes. Rien n&apos;est laissé au hasard.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+          {/* Grille : Science cognitive + Métriques de perte d'efficacité */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            {/* L'Épuisement Moderne */}
-            <article className="p-8 sm:p-12 rounded-3xl bg-[#141210] border border-red-500/20 hover:border-red-500/40 transition-all duration-300 flex flex-col justify-between space-y-8 shadow-xl">
-              <div className="space-y-6">
-                <div className="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden border border-white/10">
-                  <Image
-                    src="/images/photo_man_stressed.png"
-                    alt="Professionnel musulman épuisé tard le soir devant ses écrans"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover object-center filter grayscale-[40%] contrast-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <span className="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider text-red-400 bg-red-950/80 border border-red-800/60 px-3.5 py-1.5 rounded-full font-bold">
-                    L&apos;ÉTAT ACTUEL • AT-TASWÎF
-                  </span>
-                </div>
-
-                <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white">
-                  La journée subie & la prière expédiée
-                </h3>
-                <p className="text-sm sm:text-base text-white/70 font-sans leading-[1.7]">
-                  Vous courrez toute la journée après des urgences. Votre cerveau est en alerte permanente. Quand arrive l&apos;heure de la Salât, vous la repoussez au dernier moment. Vous priez en trois minutes, le cœur distrait et l&apos;esprit déjà ailleurs. La culpabilité s&apos;installe, et avec elle, un vide intérieur grandissant.
-                </p>
-              </div>
-
-              <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-                <span className="text-white/40">CONSÉQUENCE BIOLOGIQUE</span>
-                <span className="text-red-400 font-bold">Cortisol saturé & Charge mentale</span>
-              </div>
-            </article>
-
-            {/* Le Sujûd Souverain */}
-            <article className="p-8 sm:p-12 rounded-3xl bg-[#141210] border border-[#059669]/30 hover:border-[#059669]/70 transition-all duration-300 flex flex-col justify-between space-y-8 shadow-xl">
-              <div className="space-y-6">
-                <div className="relative h-64 sm:h-72 w-full rounded-2xl overflow-hidden border border-white/10">
-                  <Image
-                    src="/images/sanctuaire/muslim_sujud_light.jpg"
-                    alt="Homme musulman en prosternation Sujûd sous la lumière d'aube"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover object-center"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                  <span className="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider text-[#10B981] bg-emerald-950/80 border border-emerald-700/60 px-3.5 py-1.5 rounded-full font-bold">
-                    LE RENOUVEAU • SUJÛD SOUVERAIN
-                  </span>
-                </div>
-
-                <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white">
-                  L&apos;inversion biologique & la paix du cœur
-                </h3>
-                <p className="text-sm sm:text-base text-white/70 font-sans leading-[1.7]">
-                  La prosternation (Sujûd) est la seule posture humaine où le cœur se trouve au-dessus du cerveau. La pression artérielle irrigue massivement le cortex préfrontal, tandis que la pression mécanique sur les carotides stimule le nerf vague. Le cortisol s&apos;effondre en 90 secondes. Vous vous relevez calme, lucide, souverain.
-                </p>
-              </div>
-
-              <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs font-mono">
-                <span className="text-white/40">RÉSULTAT MESURÉ</span>
-                <span className="text-[#10B981] font-bold">-40% Cortisol & Clarté Immédiate</span>
-              </div>
-            </article>
-
-          </div>
-
-          {/* LES 5 PILIERS C.O.M.E.S. EN TYPOGRAPHIE XXL */}
-          <div className="pt-10">
-            <div className="text-center max-w-2xl mx-auto mb-10">
-              <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#DFB76C] block font-bold mb-2">
-                L&apos;INGÉNIERIE APPLIQUÉE
+            {/* Colonne gauche (7 cols) : Dégradation du capital mental */}
+            <div className="lg:col-span-7 space-y-5">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-[#8C6214] block">
+                SCIENCE COGNITIVE APPLIQUÉE
               </span>
-              <h3 className="font-heading font-bold text-3xl sm:text-4xl text-white">
-                Le Protocole C.O.M.E.S. en 5 Piliers
+              <h3 className="font-heading font-bold text-2xl sm:text-3xl text-[#141210] leading-snug">
+                La Dégradation Silencieuse du Capital Mental
               </h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-              {[
-                { letter: "C", name: "Clarté Cognitive", desc: "Stopper la rumination mentale et le bruit numérique avant d'entrer en prière." },
-                { letter: "O", name: "Ordre Circadien", desc: "Synchroniser votre énergie biologique sur les 5 angles solaires révélés." },
-                { letter: "M", name: "Maîtrise Vagal", desc: "Activer le système parasympathique par l'inversion sanguine du Sujûd." },
-                { letter: "E", name: "Exégèse Vivante", desc: "Vibrer à chaque mot de la Fâtiha sans récitation mécanique distraite." },
-                { letter: "S", name: "Souveraineté", desc: "Commander votre journée avec autorité, constance et discipline inaltérable." },
-              ].map((pilier) => (
-                <div 
-                  key={pilier.letter}
-                  className="p-6 rounded-3xl bg-[#141210] border border-white/10 hover:border-[#DFB76C]/80 transition-all flex flex-col justify-between space-y-4 group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-heading font-extrabold text-4xl text-[#DFB76C] group-hover:scale-110 transition-transform">
-                      {pilier.letter}
-                    </span>
-                    <span className="w-2 h-2 rounded-full bg-[#10B981]" />
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-bold text-base text-white mb-2">
-                      {pilier.name}
-                    </h4>
-                    <p className="text-xs text-white/60 leading-relaxed font-sans">
-                      {pilier.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 3 : L'AUTEUR & L'INGÉNIEUR (MOUNIR BYAR)
-          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-24 sm:py-32 px-4 sm:px-8 lg:px-12 border-b border-white/10 bg-[#0A0908]">
-        <div className="max-w-[1300px] mx-auto">
-          <div className="p-8 sm:p-14 lg:p-16 rounded-3xl bg-[#141210] border border-white/10 shadow-2xl relative overflow-hidden">
-            
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              
-              <div className="lg:col-span-5 relative aspect-square sm:aspect-[4/3] lg:aspect-[4/5] rounded-2xl overflow-hidden border border-white/15">
-                <Image
-                  src="/images/sanctuaire/muslim_qiyam_focus.jpg"
-                  alt="Mounir Byar en prière Qiyâm avec concentration totale"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover object-center"
-                />
-              </div>
-
-              <div className="lg:col-span-7 space-y-6">
-                <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#DFB76C] block font-bold">
-                  02 // L&apos;AUTEUR & FONDATEUR
-                </span>
-
-                <h2 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-white leading-tight">
-                  « Je ne vends pas de la motivation éphémère. J&apos;enseigne une ingénierie de la vie. »
-                </h2>
-
-                <p className="text-base text-white/70 font-sans leading-relaxed">
-                  Ingénieur de formation et passionné par l&apos;exégèse coranique depuis plus de 10 ans, Mounir Byar a développé le Cabinet Briser les Frontières pour combler le fossé tragique entre la pratique rituelle et la réalité comportementale moderne.
-                </p>
-
-                <p className="text-base text-white/70 font-sans leading-relaxed">
-                  Tous les enseignements et protocoles reposent à 100% sur le Noble Coran et la Sunnah authentique, éclairés par les découvertes contemporaines en neurosciences et régulation du stress.
-                </p>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-6 border-t border-white/10">
-                  <div>
-                    <span className="font-heading font-extrabold text-3xl text-white block">+1 200</span>
-                    <span className="text-xs text-white/50 font-mono">Personnes formées</span>
-                  </div>
-                  <div>
-                    <span className="font-heading font-extrabold text-3xl text-[#DFB76C] block">10 Ans</span>
-                    <span className="text-xs text-white/50 font-mono">Recherche & Exégèse</span>
-                  </div>
-                  <div>
-                    <span className="font-heading font-extrabold text-3xl text-[#10B981] block">100%</span>
-                    <span className="text-xs text-white/50 font-mono">Coran & Sunnah</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════
-          SECTION 4 : LES TRAITÉS DE L'INGÉNIEUR (LIVRES DÈS 5,90 €)
-          ═══════════════════════════════════════════════════════════════ */}
-      <section id="livres" className="relative py-24 sm:py-32 px-4 sm:px-8 lg:px-12 border-b border-white/10 bg-[#0E0C0A]">
-        <div className="max-w-[1300px] mx-auto space-y-16">
-          
-          <div className="text-center max-w-3xl mx-auto space-y-4">
-            <span className="font-mono text-xs uppercase tracking-[0.25em] text-[#DFB76C] block font-bold">
-              03 // LES OUVRAGES DE RÉFÉRENCE
-            </span>
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
-              Les Traités Fondateurs de l&apos;Ingénieur
-            </h2>
-            <p className="text-base sm:text-lg text-white/70 font-sans leading-[1.65]">
-              Des milliers de musulmans ont transformé leur rapport à la Salât grâce à ces deux ouvrages maîtres. Disponibles en format numérique immédiat et édition brochée de luxe.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-            
-            {/* LIVRE 1 : Les Secrets de la Salât */}
-            <article className="p-8 sm:p-12 rounded-3xl bg-[#141210] border border-white/10 hover:border-[#DFB76C]/70 transition-all duration-300 flex flex-col justify-between space-y-8 shadow-2xl">
-              <div className="space-y-6">
-                <div className="relative h-64 sm:h-80 w-full flex items-center justify-center">
-                  <Image
-                    src="/books/Mockup-3D-Secrets.png"
-                    alt="Mockup 3D du livre Les Secrets de la Salat par Mounir Byar"
-                    fill
-                    className="object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <span className="font-mono text-[10px] text-[#10B981] uppercase tracking-wider font-bold bg-emerald-950/80 border border-emerald-700/60 px-3 py-1 rounded-full">
-                    LE TRAITÉ MAÎTRE • PLUS DE 5 000 EXEMPLAIRES
-                  </span>
-                  <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white">
-                    Les Secrets de la Salât et du Retour vers Allah
-                  </h3>
-                  <p className="text-sm sm:text-base text-white/70 font-sans leading-[1.65]">
-                    L&apos;ouvrage fondateur pour comprendre chaque station de la prière. De l&apos;alignement vertébral du Qiyâm à la mise à la terre du Sujûd, redécouvrez le sens profond des gestes et des paroles sacrées.
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <span className="text-white/40 text-xs font-mono block">Format Numérique & Broché</span>
-                  <span className="text-[#DFB76C] font-heading font-bold text-2xl">Dès 5,90 €</span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Link
-                    href="/livres#secrets"
-                    className="px-6 py-3 rounded-full bg-[#DFB76C] hover:bg-[#C9A256] text-[#0A0908] font-heading font-bold text-xs uppercase tracking-wider transition-all shadow-md"
-                  >
-                    Commander le Livre →
-                  </Link>
-                  <a
-                    href="/Les-Secrets-du-Retour-vers-Allah-EXTRAIT-OFFERT.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-4 py-3 rounded-full border border-white/20 text-white font-heading text-xs uppercase tracking-wider hover:bg-white/10 transition-all"
-                  >
-                    Extrait Offert
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            {/* LIVRE 2 : Sourate Ar-Rahman */}
-            <article className="p-8 sm:p-12 rounded-3xl bg-[#141210] border border-white/10 hover:border-[#DFB76C]/70 transition-all duration-300 flex flex-col justify-between space-y-8 shadow-2xl">
-              <div className="space-y-6">
-                <div className="relative h-64 sm:h-80 w-full flex items-center justify-center">
-                  <Image
-                    src="/books/Mockup-3D-ArRahman.png"
-                    alt="Mockup 3D du livre Sourate Ar-Rahman par Mounir Byar"
-                    fill
-                    className="object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                <div className="space-y-3">
-                  <span className="font-mono text-[10px] text-[#DFB76C] uppercase tracking-wider font-bold bg-[#DFB76C]/15 border border-[#DFB76C]/40 px-3 py-1 rounded-full">
-                    EXÉGÈSE & CONTEMPLATION COSMIQUE
-                  </span>
-                  <h3 className="font-heading font-bold text-2xl sm:text-3xl text-white">
-                    Sourate Ar-Rahmân : Les Clés de la Gratitude
-                  </h3>
-                  <p className="text-sm sm:text-base text-white/70 font-sans leading-[1.65]">
-                    Une plongée vertigineuse dans les 78 versets d&apos;Ar-Rahmân. Comment la contemplation des lois cosmiques guérit l&apos;anxiété moderne et installe une paix inébranlable dans le cœur du croyant.
-                  </p>
-                </div>
-              </div>
-
-              <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <span className="text-white/40 text-xs font-mono block">Format Numérique & Broché</span>
-                  <span className="text-[#DFB76C] font-heading font-bold text-2xl">Dès 5,90 €</span>
-                </div>
-
+              <p className="text-sm sm:text-base text-[#403B35] leading-relaxed font-sans">
+                Chaque individu dispose d&apos;une <strong>énergie mentale limitée</strong>. Sous l&apos;effet de la désorganisation quotidienne — micro-décisions inutiles, chaos domestique, distractions numériques et notifications — le cerveau accumule une charge mentale invisible.
+              </p>
+              <p className="text-sm sm:text-base text-[#403B35] leading-relaxed font-sans">
+                Cette surcharge fatigue l&apos;esprit, entraînant une vulnérabilité aux mauvaises impulsions (le <em>Nafs</em>) et une incapacité à maintenir la maîtrise de soi. Le résultat est une détérioration de la présence d&apos;esprit lors de la prière (Salât) et une perte de sens au quotidien.
+              </p>
+              <div className="pt-2">
                 <Link
-                  href="/livres#ar-rahman"
-                  className="px-6 py-3 rounded-full bg-white hover:bg-neutral-200 text-[#0A0908] font-heading font-bold text-xs uppercase tracking-wider transition-all shadow-md"
+                  href="/fondements"
+                  className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#087B53] hover:text-[#066343] transition-colors"
                 >
-                  Découvrir l&apos;Ouvrage →
+                  <span>Lire l&apos;exégèse cognitive complète</span>
+                  <span>→</span>
                 </Link>
               </div>
-            </article>
+            </div>
+
+            {/* Colonne droite (5 cols) : Carte Métriques de Perte d'Efficacité */}
+            <div className="lg:col-span-5 p-6 sm:p-8 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm space-y-6">
+              <div className="border-b border-[#E8E0D2] pb-3">
+                <h4 className="font-heading font-bold text-base sm:text-lg text-[#8C6214]">
+                  Métriques de Perte d&apos;Efficacité
+                </h4>
+                <p className="text-[11px] text-[#7A6F64] font-sans">
+                  Impact moyen constaté avant l&apos;application du protocole
+                </p>
+              </div>
+
+              <div className="space-y-4 font-mono text-xs">
+                <div>
+                  <div className="flex justify-between text-[#141210] font-semibold mb-1.5">
+                    <span>BANDE PASSANTE SATURÉE</span>
+                    <span className="text-[#8C6214] font-bold">62%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] overflow-hidden">
+                    <div className="h-full bg-[#8C6214] rounded-full w-[62%]" />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[#141210] font-semibold mb-1.5">
+                    <span>VOLONTÉ ACTIVE RÉSIDUELLE (FIN DE JOURNÉE)</span>
+                    <span className="text-red-700 font-bold">15%</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] overflow-hidden">
+                    <div className="h-full bg-red-600 rounded-full w-[15%]" />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-[#141210] font-semibold mb-1.5">
+                    <span>TEMPS DE RÉACTIVITÉ SPIRITUELLE</span>
+                    <span className="text-red-700 font-bold uppercase">ALTÉRÉ</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] overflow-hidden">
+                    <div className="h-full bg-red-500 rounded-full w-[80%]" />
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-[#7A6F64] pt-2 border-t border-[#E8E0D2] leading-relaxed">
+                Source : Études de neuro-ergonomie et de physiologie comportementale appliquées aux cycles religieux (Cabinet BLF, 2024–2026).
+              </p>
+            </div>
 
           </div>
 
@@ -532,59 +227,331 @@ export default function SovereigntyCyberneticHero() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-          SECTION 5 : L'ACCOMPAGNEMENT PRIVÉ D'EXCELLENCE (PROTOCOLE 9 MOIS)
+          SECTION 3 : L'AGENDA DYNAMIQUE DOCTOLIB
+          (Prise de rendez-vous téléphonique ou présentielle, Lun-Sam 9h-18h, Ven 9h-12h)
           ═══════════════════════════════════════════════════════════════ */}
-      <section id="accompagnement" className="relative py-24 sm:py-32 px-4 sm:px-8 lg:px-12 border-b border-white/10 bg-[#0A0908]">
-        <div className="max-w-5xl mx-auto p-8 sm:p-14 lg:p-16 rounded-3xl bg-[#141210] border border-white/10 shadow-2xl relative overflow-hidden text-center">
+      <section id="agenda" className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#F5EFEB] border-b border-[#E8E0D2]">
+        <div className="max-w-[1240px] mx-auto space-y-12">
           
-          <div className="absolute top-0 right-0 w-96 h-96 bg-[#DFB76C]/5 rounded-full filter blur-3xl pointer-events-none" />
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#087B53]/10 border border-[#087B53]/25 text-[#087B53] font-mono text-[11px] font-bold uppercase tracking-[0.18em]">
+              • PRISE DE RENDEZ-VOUS DIRECTE •
+            </span>
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[#141210] tracking-tight">
+              Réservez Votre Consultation en Ligne
+            </h2>
+            <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-relaxed">
+              Choisissez votre modalité (appel téléphonique ou présentiel à Reims / Paris) et sélectionnez un créneau disponible en temps réel dans l&apos;agenda ci-dessous.
+            </p>
+          </div>
 
-          <div className="relative z-10 space-y-8 max-w-3xl mx-auto">
-            <span className="font-mono text-xs uppercase tracking-[0.3em] text-[#DFB76C] block font-bold">
-              04 // HAUTE DIRECTION & COMPAGNONNAGE
+          {/* Intégration du composant Doctolib */}
+          <AgendaDoctolib />
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 4 : LA STRUCTURE DE LA SOUVERAINETÉ (LES 4 POSTURES SACRÉES)
+          - Qiyâm, Rukû', Sujûd, Tashahhud avec mécanismes neurobiologiques
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#FAF8F5] border-b border-[#E8E0D2]">
+        <div className="max-w-[1240px] mx-auto space-y-16">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#8C6214] block">
+              02 // GÉOMÉTRIE SOMATO-SENSORIELLE
+            </span>
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[#141210] tracking-tight">
+              Les 4 Postures de Régulation Neurale
+            </h2>
+            <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-relaxed">
+              La biomécanique de la prière n&apos;est pas fortuite. Chaque posture déclenche des réponses hormonales et vestibulaires spécifiques qui réinitialisent le système nerveux.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Posture 1 : Qiyâm */}
+            <div className="p-6 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm space-y-3 flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[#8C6214]">01. QIYÂM</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#B88E3E]/10 text-[#8C6214] font-bold">+35% FOCUS</span>
+                </div>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">L&apos;Alignement Rachidien</h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  Verticalité stricte, ancrage proprioceptif et rupture avec l&apos;agitation périphérique. Le cortex préfrontal inhibe les impulsions distractives.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-[#E8E0D2] text-[11px] font-mono text-[#087B53] font-semibold">
+                → Rétablissement de la vigilance
+              </div>
+            </div>
+
+            {/* Posture 2 : Rukû' */}
+            <div className="p-6 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm space-y-3 flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[#8C6214]">02. RUKÛ&apos;</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#B88E3E]/10 text-[#8C6214] font-bold">BASCULE VAGALE</span>
+                </div>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">L&apos;Inclinaison & Rupture d&apos;Ego</h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  Décompression des disques lombaires et soumission physique délibérée. Activation du système parasympathique et chute de la tension artérielle.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-[#E8E0D2] text-[11px] font-mono text-[#087B53] font-semibold">
+                → Neutralisation de la réactivité
+              </div>
+            </div>
+
+            {/* Posture 3 : Sujûd */}
+            <div className="p-6 rounded-3xl bg-white border-2 border-[#087B53]/40 shadow-sm space-y-3 flex flex-col justify-between hover:border-[#087B53] transition-all">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[#087B53]">03. SUJÛD</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#087B53]/10 text-[#087B53] font-bold">-40% CORTISOL</span>
+                </div>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">Le Sommet Neurocognitif</h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  L&apos;unique station où le cœur surplombe le lobe frontal. Afflux sanguin cérébral, décharge allostatique et anéantissement des ruminations mentales.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-[#E8E0D2] text-[11px] font-mono text-[#087B53] font-semibold">
+                → Clarté décisionnelle absolue
+              </div>
+            </div>
+
+            {/* Posture 4 : Tashahhud */}
+            <div className="p-6 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm space-y-3 flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-[#8C6214]">04. TASHAHHUD</span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#B88E3E]/10 text-[#8C6214] font-bold">INTÉGRATION</span>
+                </div>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">L&apos;Ancrage & Souveraineté</h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  Post-assise stable, engagement solennel et clarté d&apos;intention. La séance se conclut par la projection sereine vers l&apos;action du monde.
+                </p>
+              </div>
+              <div className="pt-3 border-t border-[#E8E0D2] text-[11px] font-mono text-[#087B53] font-semibold">
+                → Retour au monde en Khalifa
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 5 : LE PROTOCOLE C.O.M.E.S. (INGÉNIERIE DU COMPORTEMENT)
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#F5EFEB] border-b border-[#E8E0D2]">
+        <div className="max-w-[1240px] mx-auto space-y-16">
+          
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#8C6214] block">
+              03 // CADRE MÉTHODOLOGIQUE
+            </span>
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[#141210] tracking-tight">
+              Le Protocole C.O.M.E.S.
+            </h2>
+            <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-relaxed">
+              Cinq piliers architecturés pour éliminer définitivement la procrastination spirituelle et faire de vos 5 prières un rempart inébranlable.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {[
+              {
+                letter: "C",
+                title: "Cadre",
+                desc: "Écologie physique et temporelle. Sanctuarisation de l'espace de prière et neutralisation des stimuli parasites.",
+              },
+              {
+                letter: "O",
+                title: "Ordre",
+                desc: "Hiérarchie impériale des priorités : la Salât structure l'agenda professionnel, jamais l'inverse.",
+              },
+              {
+                letter: "M",
+                title: "Mesure",
+                desc: "Diagnostic objectif des points de friction, du temps de présence mentale et du taux de complétion.",
+              },
+              {
+                letter: "E",
+                title: "Exécution",
+                desc: "Suppression des micro-négociations avec le Nafs. Déclenchement chirurgical sans hésitation.",
+              },
+              {
+                letter: "S",
+                title: "Souveraineté",
+                desc: "Maîtrise totale de ses impulsions, sortie de l'esclavage algorithmique et assomption du mandat de Khalifa.",
+              },
+            ].map((pillar) => (
+              <div 
+                key={pillar.letter}
+                className="p-6 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm space-y-3 hover:border-[#B88E3E] transition-all"
+              >
+                <span className="font-heading font-black text-3xl text-[#B88E3E] block">
+                  {pillar.letter}
+                </span>
+                <h3 className="font-heading font-bold text-lg text-[#141210]">{pillar.title}</h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">{pillar.desc}</p>
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 6 : LES LIVRES & TRAITÉS DE MOUNIR BYAR
+          ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#FAF8F5] border-b border-[#E8E0D2]">
+        <div className="max-w-[1240px] mx-auto space-y-16">
+          
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E8E0D2] pb-6">
+            <div>
+              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#8C6214] block mb-2">
+                04 // PUBLICATIONS OFFICIELLES
+              </span>
+              <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-[#141210]">
+                Les Traités Fondateurs
+              </h2>
+            </div>
+            <Link
+              href="/livres"
+              className="inline-flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#087B53] hover:text-[#066343] transition-colors"
+            >
+              <span>Voir la bibliothèque complète</span>
+              <span>→</span>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            {/* Livre 1 */}
+            <div className="p-8 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col sm:flex-row gap-6 items-center">
+              <div className="relative w-36 sm:w-44 aspect-[3/4] flex-shrink-0 rounded-2xl overflow-hidden shadow-md border border-[#E8E0D2]">
+                <Image
+                  src="/Couverture-Secrets.png"
+                  alt="Livre Les Secrets de la Prière"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="space-y-3 flex-1 text-left">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#8C6214] font-bold block">
+                  TRAITÉ FONDAMENTAL • 320 PAGES
+                </span>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">
+                  Les Secrets de la Prière (Salât)
+                </h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  L&apos;ouvrage de référence révélant les clés physiologiques et exégétiques de chaque posture pour anéantir la procrastination.
+                </p>
+                <div className="pt-2 flex items-center justify-between">
+                  <span className="font-heading font-bold text-base text-[#141210]">Dès 5,90 €</span>
+                  <Link
+                    href="/livres"
+                    className="px-4 py-2 rounded-full bg-[#FAF8F5] hover:bg-[#F5EFEB] border border-[#E8E0D2] text-[#141210] font-heading text-xs font-semibold uppercase tracking-wider transition-all"
+                  >
+                    Découvrir l&apos;ouvrage →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            {/* Livre 2 */}
+            <div className="p-8 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col sm:flex-row gap-6 items-center">
+              <div className="relative w-36 sm:w-44 aspect-[3/4] flex-shrink-0 rounded-2xl overflow-hidden shadow-md border border-[#E8E0D2] bg-[#F5EFEB] flex items-center justify-center">
+                <Image
+                  src="/Couverture-Manuel.png"
+                  alt="Livre Le Manuel de l'Ingénierie Comportementale"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="space-y-3 flex-1 text-left">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#8C6214] font-bold block">
+                  MANUEL PRATIQUE • CAHIER D&apos;EXERCICES
+                </span>
+                <h3 className="font-heading font-bold text-xl text-[#141210]">
+                  Manuel d&apos;Ingénierie Comportementale
+                </h3>
+                <p className="text-xs text-[#5C534A] font-sans leading-relaxed">
+                  Feuilles de route, protocoles de désensibilisation à la distraction et grilles de suivi quotidien du système dopaminergique.
+                </p>
+                <div className="pt-2 flex items-center justify-between">
+                  <span className="font-heading font-bold text-base text-[#141210]">Dès 9,90 €</span>
+                  <Link
+                    href="/livres"
+                    className="px-4 py-2 rounded-full bg-[#FAF8F5] hover:bg-[#F5EFEB] border border-[#E8E0D2] text-[#141210] font-heading text-xs font-semibold uppercase tracking-wider transition-all"
+                  >
+                    Découvrir l&apos;ouvrage →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════
+          SECTION 7 : LE PROTOCOLE 9 MOIS (ACCOMPAGNEMENT D'ÉLITE)
+          ═══════════════════════════════════════════════════════════════ */}
+      <section id="accompagnement" className="relative py-20 sm:py-28 px-4 sm:px-8 lg:px-12 bg-[#F5EFEB] border-b border-[#E8E0D2]">
+        <div className="max-w-5xl mx-auto p-8 sm:p-14 lg:p-16 rounded-3xl bg-white border border-[#E8E0D2] shadow-xl relative overflow-hidden">
+          
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#B88E3E]/5 rounded-full filter blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 text-center space-y-6">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#8C6214] block">
+              05 // HAUTE DIRECTION & COMPAGNONNAGE
             </span>
 
-            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-white tracking-tight leading-[1.08]">
+            <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[#141210] tracking-tight leading-[1.08]">
               Le Protocole 9 Mois : L&apos;Accompagnement Privé
             </h2>
 
-            <p className="text-base sm:text-lg text-white/70 font-sans leading-[1.7]">
+            <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-relaxed max-w-3xl mx-auto">
               Un mentorat sur-mesure réservé aux musulmans exigeants (entrepreneurs, médecins, ingénieurs, cadres) qui veulent instaurer la Salât comme tour de contrôle décisionnelle, assainir leur écosystème mental et assumer pleinement leur mandat de Khalifa.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 text-left">
-              <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-                <span className="font-mono text-xs text-[#DFB76C] font-bold block mb-1">01. AUDIT</span>
-                <p className="text-xs text-white/60 font-sans">Diagnostic comportemental approfondi de vos freins et sabotages.</p>
+              <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2]">
+                <span className="font-mono text-xs text-[#8C6214] font-bold block mb-1">01. AUDIT</span>
+                <p className="text-xs text-[#5C534A] font-sans">Diagnostic comportemental approfondi de vos freins et sabotages.</p>
               </div>
-              <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-                <span className="font-mono text-xs text-[#DFB76C] font-bold block mb-1">02. COMPAGNONNAGE</span>
-                <p className="text-xs text-white/60 font-sans">Suivi individuel direct avec Mounir Byar pour chaque prière.</p>
+              <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2]">
+                <span className="font-mono text-xs text-[#8C6214] font-bold block mb-1">02. COMPAGNONNAGE</span>
+                <p className="text-xs text-[#5C534A] font-sans">Suivi individuel direct avec Mounir Byar pour chaque prière.</p>
               </div>
-              <div className="p-5 rounded-2xl bg-white/[0.03] border border-white/10">
-                <span className="font-mono text-xs text-[#DFB76C] font-bold block mb-1">03. ANCRAGE</span>
-                <p className="text-xs text-white/60 font-sans">Discipline inébranlable et clarté d&apos;esprit pour le restant de vos jours.</p>
+              <div className="p-5 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2]">
+                <span className="font-mono text-xs text-[#8C6214] font-bold block mb-1">03. ANCRAGE</span>
+                <p className="text-xs text-[#5C534A] font-sans">Discipline inébranlable et clarté d&apos;esprit pour le restant de vos jours.</p>
               </div>
             </div>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/candidature"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#059669] hover:bg-[#047857] text-white font-heading font-bold text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_25px_rgba(5,150,105,0.4)] hover:scale-105 transition-all"
+              <a
+                href="#agenda"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#087B53] text-white font-heading font-bold text-xs sm:text-sm uppercase tracking-wider shadow-lg hover:bg-[#066343] hover:scale-105 transition-all"
               >
-                Déposer ma candidature confidentielle →
-              </Link>
+                Prendre rendez-vous pour candidater 📅
+              </a>
               <Link
                 href="/prix"
-                className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white font-heading text-xs sm:text-sm uppercase tracking-wider transition-all"
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#FAF8F5] hover:bg-[#EDE5D8] border border-[#E8E0D2] text-[#141210] font-heading text-xs sm:text-sm uppercase tracking-wider transition-all"
               >
-                Voir toute la grille tarifaire (dès 5,90 €)
+                Voir toute la grille tarifaire (dès 5,90 €) →
               </Link>
             </div>
-
-            <p className="text-[11px] text-white/40 font-mono tracking-wide">
-              PLACES LIMITÉES POUR GARANTIR UNE ATTENTION ABSOLUE • SÉLECTION SUR DOSSIER
-            </p>
           </div>
 
         </div>
