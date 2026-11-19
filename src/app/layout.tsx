@@ -7,37 +7,37 @@ import { TimeThemeProvider } from "@/components/ui/TimeThemeProvider";
 import SalatTakeover from "@/components/ui/SalatTakeover";
 import CookieBanner from "@/components/layout/CookieBanner";
 
-const systemia = localFont({
+const dmSans = localFont({
   src: [
     {
-      path: "../fonts/Systemia-Regular.woff2",
+      path: "../fonts/DMSans-Regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../fonts/Systemia-Medium.woff2",
+      path: "../fonts/DMSans-Medium.ttf",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../fonts/Systemia-SemiBold.woff2",
-      weight: "600",
+      path: "../fonts/DMSans-Bold.ttf",
+      weight: "700",
       style: "normal",
     },
   ],
-  variable: "--font-systemia",
+  variable: "--font-sans",
   display: "swap",
 });
 
-const azeretMono = localFont({
+const dmMono = localFont({
   src: [
     {
-      path: "../fonts/AzeretMono-Medium.woff2",
-      weight: "500",
+      path: "../fonts/DMMono-Regular.ttf",
+      weight: "400",
       style: "normal",
     },
   ],
-  variable: "--font-mono-systemia",
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -95,9 +95,10 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
+      data-theme="light"
+      className={`${dmSans.variable} ${dmMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#141210] relative font-sans selection:bg-[#B88E3E]/20 selection:text-[#141210]">
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text-primary)] relative font-sans selection:bg-[#087B53]/20 transition-colors duration-280">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

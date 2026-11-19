@@ -1,465 +1,391 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { useDraggableScroll } from "@/hooks/useDraggableScroll";
-import SectionHeading from "@/components/ui/SectionHeading";
-import { FiCheck, FiX, FiClock, FiArrowRight, FiShield } from "react-icons/fi";
+import ArrowIcon from "@/components/ui/ArrowIcon";
 
-const featuresList = [
-  { label: "Objectif Opérationnel", values: ["L'Éveil (Vos blocages)", "Action (Maîtrise des pulsions)", "Souveraineté (Ordre restauré)", "Le Mandat de Khalifa (Gouvernance absolue)"] },
-  { label: "Durée de l'Accompagnement", values: ["Séance unique", "30 Jours", "3 Mois", "12 Mois"] },
-  { label: "Bilan & Diagnostic Profond", values: ["1h30 (Audit du stress)", "1h30", "1h30", "Continu & Évolutif"] },
-  { label: "Nombre de Séances", values: ["1 Séance d'impact", "4 Séances", "12 Séances", "Illimité (À la demande)"] },
-  { label: "Fréquence du Suivi", values: ["-", "Hebdomadaire", "Quotidien", "Immersion Totale"] },
-  { label: "Accès Messagerie Privée", values: ["-", "5j/7 (Horaires bureau)", "7j/7 (Prioritaire)", "H24 (Ligne Directe VIP)"] },
-  { label: "Méthode C.O.M.E.S.", values: ["Diagnostic uniquement", "Déploiement : Clarifier & Organiser", "Déploiement complet", "Maîtrise systémique et ancrage"] },
-  { label: "Synchronisation Spirituelle", values: ["-", "Ajustement sur les horaires de prière", "Couvre-feux digitaux & Sanctuarisation", "Alignement total sur la Barakah"] },
-  { label: "Plan d'Action Stratégique", values: ["Inclus (Roadmap d'urgence)", "Inclus (Ajusté mensuellement)", "Inclus (Itératif)", "Inclus (Refonte structurelle)"] },
-  { label: "Exercices & Outils Déblocage", values: ["-", "Inclus (Routines anti-procrastination)", "Inclus (Protection mentale)", "Inclus (Protocoles de crise)"] },
-  { label: "Environnement (Tahara physique)", values: ["-", "Inclus (Aménagement du bureau)", "Inclus (Réorganisation physique)", "Inclus (Ergonomie premium)"] },
-  { label: "Clôture Mentale (Apaisement)", values: ["Identification des boucles ouvertes", "Clôture des dossiers en attente", "Délégation et automatisation", "Tawakkul total (Zéro charge)"] },
+const COMES_PILLARS = [
+  {
+    letter: "C",
+    title: "Cognitif & Psychologique",
+    subtitle: "Rupture de la Charge Allostatique",
+    desc: "Vidange chirurgicale des boucles mentales ouvertes, désamorçage de l'amygdale et extinction de la rumination nocturne.",
+    metric: "-78% de distraction",
+    keyActions: [
+      "Cartographie des points de rupture mentale",
+      "Protocole de clôture cognitive du soir",
+      "Restitution de la mémoire de travail (Cortex Préfrontal)",
+    ],
+  },
+  {
+    letter: "O",
+    title: "Organisationnel & Temporel",
+    subtitle: "Sanctuarisation de l'Agenda",
+    desc: "Alignement inviolable des 5 prières quotidiennes comme bornes structurelles de la journée. Le travail s'adapte à la prière, et non l'inverse.",
+    metric: "100% de prières à l'heure",
+    keyActions: [
+      "Verrouillage des blocs de 45 minutes dans l'agenda",
+      "Élimination des micro-décisions superflues",
+      "Protection absolue des créneaux de Fajr et d'Asr",
+    ],
+  },
+  {
+    letter: "M",
+    title: "Métabolique & Circadien",
+    subtitle: "Régulation du Cortisol & Sommeil",
+    desc: "Synchronisation biologique sur les cycles solaires. Réinitialisation de la sécrétion de mélatonine et effondrement du cortisol sanguin.",
+    metric: "-40% de cortisol sérique",
+    keyActions: [
+      "Exposition à la lumière naturelle dès l'aube",
+      "Jeûne intermittent prophétique (Lundi / Jeudi)",
+      "Couvre-feu numérique 60 min avant le coucher",
+    ],
+  },
+  {
+    letter: "E",
+    title: "Environnemental & Spatial",
+    subtitle: "Architecture de la Tahara 360°",
+    desc: "Aménagement physique de votre habitat. Création d'un sanctuaire domestique sans aucun écran ni interférence pour un recueillement instantané.",
+    metric: "0 friction d'accès au tapis",
+    keyActions: [
+      "Audit ergonomique de l'habitat (visite à domicile possible)",
+      "Sanctuarisation de l'espace de prière pur et ordonné",
+      "Suppression des déclencheurs visuels de procrastination",
+    ],
+  },
 ];
 
-const plans = [
+const OFFERS = [
   {
-    id: "audit",
-    titre: "Audit Diagnostique",
-    sousTitre: "Évaluation Initiale",
-    prix: "85,90 €",
-    paiement: "En 1 fois",
-    mensualite: "Règlement unique",
-    stripeLink: "/paiement?offre=audit",
+    id: "rdv-tel",
+    badge: "Diagnostic Clinique",
+    title: "Entretien Téléphonique & Visio",
+    duration: "45 Minutes",
+    price: "48,95 €",
+    priceSub: "Règlement à la réservation",
+    desc: "Analyse chirurgicale de votre charge mentale et de vos blocages de prière. Établissement d'une feuille de route stratégique immédiate avec Mounir Byar.",
+    cta: "Réserver mon Entretien",
+    ctaLink: "/rendez-vous",
+    featured: false,
+    features: [
+      "Entretien privé individuel de 45 minutes avec Mounir Byar",
+      "Analyse de vos déclencheurs de procrastination (At-Taswîf)",
+      "Vérification de la charge mentale et des boucles ouvertes",
+      "Remise d'une feuille de route stratégique d'urgence",
+      "Montant déductible si vous rejoignez un protocole sous 7j",
+    ],
+  },
+  {
+    id: "rdv-presentiel",
+    badge: "À Votre Domicile",
+    title: "Consultation Présentielle à Domicile",
+    duration: "1h15 à Domicile",
+    price: "96,45 €",
+    priceSub: "Mounir Byar se déplace chez vous",
+    desc: "Mounir Byar se déplace personnellement à votre domicile. Audit physique de l'habitat, sanctuarisation du lieu de prière (Tahara 360°) et diagnostic des 8 piliers.",
+    cta: "Réserver à Domicile",
+    ctaLink: "/rendez-vous",
+    featured: false,
+    features: [
+      "Déplacement physique de Mounir Byar à votre domicile",
+      "Audit d'ergonomie et d'architecture domestique (Tahara 360°)",
+      "Sanctuarisation de votre coin de prière sans distraction",
+      "Diagnostic complet des 8 Piliers du Life-Reset",
+      "Protocole personnalisé remis en main propre",
+    ],
   },
   {
     id: "30j",
-    titre: "Protocole 30 Jours",
-    sousTitre: "Urgence & Réalignement",
-    prix: "612,70 €",
-    paiement: "En 1 ou 2 fois",
-    mensualite: "ou 2x 306,35 € sans frais",
-    stripeLink: "/paiement?offre=30j",
+    badge: "Le Plus Choisi",
+    title: "Protocole C.O.M.E.S. 30 Jours",
+    duration: "30 Jours d'Immersion",
+    price: "612,70 €",
+    priceSub: "ou 3x 204,23 € sans aucun frais",
+    desc: "Un mois d'intervention intensive pour briser définitivement l'inertie, réguler le cortisol et sanctuariser les 5 prières quotidiennes.",
+    cta: "Rejoindre le Protocole 30J",
+    ctaLink: "/paiement?product=30j",
+    featured: true,
+    features: [
+      "4 séances individuelles intensives avec Mounir Byar",
+      "Messagerie privée 5j/7 pour un déblocage en temps réel",
+      "Déploiement des 4 Piliers C.O.M.E.S. dans votre quotidien",
+      "Suivi hebdomadaire de la régularité et baisse du cortisol",
+      "Garantie de résultat et d'ancrage inaltérable",
+    ],
   },
   {
-    id: "3m",
-    titre: "Transformation 3 Mois",
-    sousTitre: "Reconstruction Profonde",
-    popular: true,
-    prix: "1 655,30 €",
-    paiement: "En 1 ou 3 fois",
-    mensualite: "ou 3x 551,77 € sans frais",
-    stripeLink: "/paiement?offre=3m",
-  },
-  {
-    id: "12m",
-    titre: "Mentorat d'Excellence",
-    sousTitre: "Alliance VIP 12 Mois",
-    prixBase: "6 112,00 €",
-    prixPromo: "4 889,60 €",
-    paiement: "En 1 ou 6 fois",
-    mensualite: "ou 6x 814,93 € sans frais",
-    stripeLink: "/paiement?offre=12m",
+    id: "9m",
+    badge: "Sélection sur Dossier",
+    title: "Mandat Khalifa 9 Mois",
+    duration: "9 Mois d'Excellence",
+    price: "Sur Mesure",
+    priceSub: "Sélection stricte sur dossier",
+    desc: "Refonte structurelle intégrale de votre existence. Alignement spirituel, professionnel et familial sous la supervision directe de Mounir Byar.",
+    cta: "Candidater à l'Immersion",
+    ctaLink: "/rendez-vous",
+    featured: false,
+    features: [
+      "Supervision continue et ligne directe privée avec Mounir Byar",
+      "Refonte de vos 8 Piliers de vie (mental, couple, finances, culte)",
+      "Tous les traités, ouvrages et outils d'ingénierie inclus",
+      "Visites et ajustements réguliers sur le terrain",
+      "Cadre d'excellence et de discrétion absolue",
+    ],
   },
 ];
 
 export default function OffresPage() {
-  const [timeLeft, setTimeLeft] = useState<string | null>(null);
-  const [activeMobilePlan, setActiveMobilePlan] = useState<string>("all");
-  const tableRef = useRef<HTMLDivElement>(null);
-  const dragHandlers = useDraggableScroll(tableRef);
-
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-      const dayOfWeek = firstDay.getDay();
-      const daysToFirstFriday = (5 - dayOfWeek + 7) % 7;
-      const firstFriday = new Date(now.getFullYear(), now.getMonth(), 1 + daysToFirstFriday);
-      firstFriday.setHours(0, 0, 0, 0);
-
-      const endOfSunday = new Date(firstFriday);
-      endOfSunday.setDate(firstFriday.getDate() + 2);
-      endOfSunday.setHours(23, 59, 59, 999);
-
-      if (now >= firstFriday && now <= endOfSunday) {
-        const diff = endOfSunday.getTime() - now.getTime();
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const m = Math.floor((diff / 1000 / 60) % 60);
-        const s = Math.floor((diff / 1000) % 60);
-        return `${d}j ${h}h ${m}m ${s}s`;
-      }
-      return null;
-    };
-
-    setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+  const [selectedPillar, setSelectedPillar] = useState(0);
 
   return (
-    <div className="relative pt-28 sm:pt-36 pb-24 sm:pb-32 bg-midnight min-h-screen overflow-x-hidden w-full max-w-full">
-      {/* Gradients contenus pour ne jamais déborder sur mobile */}
-      <div className="
-        absolute top-1/4 left-0 w-72 sm:w-[500px] h-72 sm:h-[500px]
-        bg-gold/5 blur-[100px] rounded-full pointer-events-none
-      " />
-      <div className="
-        absolute bottom-1/4 right-0 w-72 sm:w-[500px] h-72 sm:h-[500px]
-        bg-gold/5 blur-[120px] rounded-full pointer-events-none
-      " />
+    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text-primary)] pt-24 pb-28 px-4 sm:px-6 lg:px-12 selection:bg-[#087B53]/20 transition-colors duration-280">
+      <div className="max-w-[1360px] mx-auto space-y-20 relative z-10">
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <SectionHeading
-          label="Investissement"
-          title="Tableau Comparatif des Offres"
-          subtitle="Comparez en un clin d'œil les différents niveaux d'accompagnement pour choisir celui qui correspond à vos besoins."
-        />
-
-        {/* ════════════════════════════════════════════════════════════════════
-            AFFICHAGE MOBILE & TABLETTE (< lg) : CARTES VERTICALES SANS DÉCALAGE
-            ════════════════════════════════════════════════════════════════════ */}
-        <div className="mt-8 lg:hidden space-y-6">
-          {/* Filtre rapide mobile pour afficher toutes les offres ou une seule */}
-          <div className="bg-midnight-light/80 border border-border p-2 rounded-sm">
-            <p className="text-[10px] uppercase tracking-widest text-gold font-bold text-center mb-2">
-              Sélectionner une formule à consulter
-            </p>
-            <div className="grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                onClick={() => setActiveMobilePlan("all")}
-                className={`col-span-2 py-2 px-3 rounded-sm text-[11px] uppercase tracking-wider font-semibold transition-all ${
-                  activeMobilePlan === "all"
-                    ? "bg-gold text-stone-950 font-bold"
-                    : "bg-surface/60 text-cream-muted border border-border"
-                }`}
-              >
-                Voir les 4 Offres ({plans.length})
-              </button>
-              {plans.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  onClick={() => setActiveMobilePlan(p.id)}
-                  className={`py-2 px-2.5 rounded-sm text-[11px] font-medium transition-all truncate ${
-                    activeMobilePlan === p.id
-                      ? "bg-gold text-stone-950 font-bold"
-                      : "bg-surface/40 text-cream border border-border/60"
-                  }`}
-                >
-                  {p.titre}
-                </button>
-              ))}
+        {/* ═════════════════════════════════════════════════════════════════
+            EN-TÊTE ÉDITORIAL PROTOCOLE C.O.M.E.S.
+            ═════════════════════════════════════════════════════════════════ */}
+        <div className="border-b border-[var(--border)] pb-8 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#087B53] animate-pulse" />
+              <span className="font-bold uppercase tracking-[0.2em] text-[#087B53]">
+                MÉTHODE PROPRIÉTAIRE // CABINET BLF
+              </span>
             </div>
+            <span className="text-[var(--text-secondary)]">
+              INGÉNIERIE DE LA SOUVERAINETÉ • PROTOCOLE C.O.M.E.S.
+            </span>
           </div>
 
-          {/* Cartes verticales 100% adaptées à la largeur de l'écran mobile */}
-          <div className="space-y-6">
-            {plans.map((plan, planIdx) => {
-              if (activeMobilePlan !== "all" && activeMobilePlan !== plan.id) return null;
+          <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-[var(--text-primary)] tracking-tight leading-[1.08]">
+            Le Protocole C.O.M.E.S. &amp;{" "}
+            <span className="text-[#087B53] dark:text-[#4ade80]">
+              Nos Accompagnements
+            </span>
+          </h1>
 
-              const displayPrice =
-                plan.id === "12m"
-                  ? timeLeft
-                    ? plan.prixPromo
-                    : plan.prixPromo || plan.prixBase
-                  : plan.prix;
+          <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans max-w-3xl leading-relaxed">
+            Une science du déblocage comportemental conçue pour les musulmans submergés par la charge mentale. Découvrez les 4 piliers fondamentaux et choisissez l&apos;accompagnement adapté à votre situation.
+          </p>
 
+          <div className="pt-2 flex flex-wrap gap-3 text-xs font-mono">
+            <span className="px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)]">
+              🧠 4 Piliers Systémiques
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)]">
+              🛡 0% Riba • Garantie Absolue
+            </span>
+            <span className="px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[#087B53] font-bold">
+              ✓ Téléphone (48,95 €) ou Domicile (96,45 €)
+            </span>
+          </div>
+        </div>
+
+        {/* ═════════════════════════════════════════════════════════════════
+            SECTION 1 : LES 4 PILIERS C.O.M.E.S. (INTERACTIVE GRID)
+            ═════════════════════════════════════════════════════════════════ */}
+        <section className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[var(--border)] pb-4">
+            <div>
+              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] font-bold">
+                MÉCANISME CLINIQUE // 4 PILIERS C.O.M.E.S.
+              </span>
+              <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] mt-1">
+                L&apos;Ingénierie des 4 Piliers de Transformation
+              </h2>
+            </div>
+            <span className="text-xs font-mono text-[var(--text-secondary)]">
+              Cliquez sur un pilier pour explorer ses protocoles
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {COMES_PILLARS.map((p, idx) => {
+              const isSelected = selectedPillar === idx;
               return (
-                <div
-                  key={plan.id}
-                  className={`rounded-sm border p-5 sm:p-6 transition-all relative overflow-hidden ${
-                    plan.popular
-                      ? "bg-gold/5 border-gold shadow-lg"
-                      : "bg-midnight-light/60 border-border"
+                <button
+                  key={p.letter}
+                  type="button"
+                  onClick={() => setSelectedPillar(idx)}
+                  className={`p-6 rounded-[var(--radius-card)] text-left transition-all cursor-pointer border flex flex-col justify-between ${
+                    isSelected
+                      ? "bg-[#087B53] text-white border-[#087B53] shadow-md ring-2 ring-[#087B53]/20"
+                      : "bg-[var(--surface)] text-[var(--text-primary)] border-[var(--border)] hover:border-[#087B53]"
                   }`}
                 >
-                  {plan.popular && (
-                    <div className="bg-gold text-stone-950 text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-sm inline-block mb-3">
-                      ★ Offre Recommandée
-                    </div>
-                  )}
-
-                  <div className="flex items-start justify-between gap-3 border-b border-border/60 pb-4">
-                    <div className="min-w-0">
-                      <h3 className="text-xl font-heading text-cream font-semibold leading-tight">
-                        {plan.titre}
-                      </h3>
-                      <p className="text-xs text-cream-muted mt-0.5">{plan.sousTitre}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      {plan.id === "12m" && plan.prixBase && (
-                        <span className="block text-xs text-cream-muted/60 line-through">
-                          {plan.prixBase}
-                        </span>
-                      )}
-                      <span className="text-2xl font-heading font-bold text-gold block leading-none">
-                        {displayPrice}
+                  <div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className={`text-2xl font-heading font-extrabold ${isSelected ? "text-white" : "text-[#087B53]"}`}>
+                        {p.letter}
                       </span>
-                      <span className="text-[10px] text-emerald font-semibold uppercase tracking-wider block mt-1">
-                        {plan.paiement} • 0% Riba
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${isSelected ? "bg-white/20 text-white" : "bg-[#087B53]/10 text-[#087B53]"}`}>
+                        {p.metric}
                       </span>
                     </div>
+
+                    <h3 className="font-heading font-extrabold text-lg mb-1">
+                      {p.title}
+                    </h3>
+                    <p className={`text-xs font-mono mb-3 ${isSelected ? "text-white/80" : "text-[#8C6214] dark:text-[#D4A853]"}`}>
+                      {p.subtitle}
+                    </p>
+                    <p className={`text-xs leading-relaxed font-sans ${isSelected ? "text-white/90" : "text-[var(--text-secondary)]"}`}>
+                      {p.desc}
+                    </p>
                   </div>
 
-                  {/* Facilité de paiement mise en avant */}
-                  <div className="my-3.5 py-2 px-3 bg-surface/50 border border-gold/20 rounded-sm flex items-center justify-between text-xs">
-                    <span className="text-cream-muted flex items-center gap-1.5">
-                      <FiShield className="text-gold shrink-0" /> Facilité sans frais :
-                    </span>
-                    <span className="text-cream font-semibold">{plan.mensualite}</span>
+                  <div className="mt-4 pt-3 border-t border-white/20 dark:border-neutral-700 text-[11px] font-mono font-bold flex items-center justify-between">
+                    <span>Voir les actions</span>
+                    <span>&rarr;</span>
                   </div>
-
-                  {/* Liste des 12 critères pour cette offre */}
-                  <div className="divide-y divide-border/40 text-xs my-4">
-                    {featuresList.map((row, rIdx) => {
-                      const val = row.values[planIdx];
-                      const isIncluded = val !== "-";
-                      return (
-                        <div
-                          key={rIdx}
-                          className="py-2.5 flex items-start justify-between gap-3"
-                        >
-                          <span className="text-cream-muted font-medium shrink-0 max-w-[48%]">
-                            {row.label}
-                          </span>
-                          <span className="text-right min-w-0">
-                            {isIncluded ? (
-                              <span className="text-cream font-medium inline-flex items-center justify-end gap-1.5">
-                                <FiCheck className="text-emerald shrink-0 w-4 h-4" />
-                                <span>{val.replace("Inclus ", "")}</span>
-                              </span>
-                            ) : (
-                              <span className="text-cream-muted/40 inline-flex items-center gap-1">
-                                <FiX className="w-3.5 h-3.5" /> Non inclus
-                              </span>
-                            )}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  {/* Bouton d'action mobile */}
-                  <Link
-                    href={plan.stripeLink}
-                    className={`w-full py-3.5 px-4 rounded-sm font-bold tracking-widest uppercase text-xs transition-all flex items-center justify-center gap-2 ${
-                      plan.popular
-                        ? "bg-gold text-stone-950 hover:bg-gold-light shadow-md"
-                        : "bg-gold/15 border border-gold text-gold hover:bg-gold hover:text-stone-950"
-                    }`}
-                  >
-                    <span>Procéder au paiement</span>
-                    <FiArrowRight />
-                  </Link>
-                </div>
+                </button>
               );
             })}
           </div>
-        </div>
 
-        {/* ════════════════════════════════════════════════════════════════════
-            AFFICHAGE ORDINATEUR (lg:block) : TABLEAU COMPARATIF COMPLET
-            ════════════════════════════════════════════════════════════════════ */}
-        <div
-          className="hidden lg:block mt-16 max-w-7xl mx-auto overflow-x-auto pb-8 relative z-10 hide-scrollbar"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          ref={tableRef}
-          {...dragHandlers}
-        >
-          <table className="w-full text-left border-collapse min-w-[800px]">
-            <thead>
-              <tr>
-                <th className="p-6 border-b border-border w-1/4"></th>
-                {plans.map((plan) => (
-                  <th
-                    key={plan.id}
-                    className={`p-6 border-b border-border w-[18%] text-center align-bottom relative ${
-                      plan.popular ? "bg-gold/5 rounded-t-lg border-x border-t border-gold/30" : ""
-                    }`}
-                  >
-                    {plan.popular && (
-                      <div className="absolute -top-4 left-0 right-0 flex justify-center">
-                        <span className="bg-gold text-stone-950 text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-sm">
-                          Recommandé
-                        </span>
-                      </div>
-                    )}
-                    <h3 className="text-lg font-heading text-cream mb-4">{plan.titre}</h3>
+          {/* DÉTAIL DU PILIER SÉLECTIONNÉ */}
+          {(() => {
+            const p = COMES_PILLARS[selectedPillar];
+            return (
+              <div className="p-8 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] space-y-4">
+                <span className="text-xs font-mono uppercase tracking-widest text-[#087B53] font-bold">
+                  Protocole Actif &bull; Pilier {p.letter} ({p.title})
+                </span>
+                <h4 className="font-heading font-extrabold text-xl text-[var(--text-primary)]">
+                  Actions de Terrain &amp; Déploiement :
+                </h4>
+                <ul className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                  {p.keyActions.map((action, i) => (
+                    <li key={i} className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-xs text-[var(--text-secondary)] font-sans leading-relaxed flex items-start gap-2.5">
+                      <span className="text-[#087B53] font-bold text-sm">&check;</span>
+                      <span>{action}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })()}
+        </section>
 
-                    {plan.id === "12m" && timeLeft ? (
-                      <div className="mb-4 flex flex-col items-center">
-                        <div className="flex items-center gap-1 text-emerald font-bold mb-1 bg-emerald/10 px-3 py-1 rounded-sm border border-emerald/20 animate-pulse">
-                          <FiClock className="w-4 h-4" />
-                          <span className="text-xs">{timeLeft}</span>
-                        </div>
-                        <span className="text-sm text-cream-muted/60 line-through decoration-gold/50">
-                          {plan.prixBase}
-                        </span>
-                        <span className="text-2xl font-bold text-cream mt-1">{plan.prixPromo}</span>
-                      </div>
-                    ) : (
-                      <div className="mb-4">
-                        {plan.id === "12m" && plan.prixBase && (
-                          <span className="block text-xs text-cream-muted/60 line-through mb-0.5">
-                            {plan.prixBase}
-                          </span>
-                        )}
-                        <span className="text-2xl font-bold text-cream">
-                          {plan.id === "12m" ? plan.prixPromo : plan.prix}
-                        </span>
-                      </div>
-                    )}
-
-                    <p className="text-xs text-cream-muted italic">{plan.paiement}</p>
-                    <p className="text-[10px] text-emerald uppercase tracking-widest mt-1 font-semibold">
-                      Sans frais (0% Riba)
-                    </p>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {featuresList.map((row, index) => (
-                <tr key={index} className="hover:bg-surface/30 transition-colors">
-                  <td className="p-6 border-b border-border/50 text-sm font-medium text-cream">
-                    {row.label}
-                  </td>
-                  {row.values.map((val, idx) => {
-                    const isPopular = plans[idx].popular;
-                    const isIncluded = val !== "-";
-                    return (
-                      <td
-                        key={idx}
-                        className={`p-6 border-b border-border/50 text-center text-sm ${
-                          isPopular ? "bg-gold/5 border-x border-gold/30" : ""
-                        }`}
-                      >
-                        {isIncluded ? (
-                          val === "Inclus" || val === "Compris" ? (
-                            <FiCheck className="mx-auto text-emerald w-5 h-5" />
-                          ) : val.startsWith("Inclus ") ? (
-                            <div className="flex flex-col items-center justify-center gap-1">
-                              <FiCheck className="text-emerald w-5 h-5" />
-                              <span className="text-cream-muted text-[11px] leading-tight text-center">
-                                {val.replace("Inclus ", "")}
-                              </span>
-                            </div>
-                          ) : (
-                            <span className="text-cream-muted text-[13px] leading-snug">{val}</span>
-                          )
-                        ) : (
-                          <FiX className="mx-auto text-cream-muted/40 w-4 h-4" />
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-              {/* Row for Checkout Buttons */}
-              <tr>
-                <td className="p-6 border-b border-border"></td>
-                {plans.map((plan) => (
-                  <td
-                    key={plan.id}
-                    className={`p-6 border-b border-border text-center ${
-                      plan.popular ? "bg-gold/5 rounded-b-lg border-x border-b border-gold/30" : ""
-                    }`}
-                  >
-                    <Link
-                      href={plan.stripeLink}
-                      className={`inline-block w-full text-center py-3 px-4 rounded-sm font-semibold tracking-wider uppercase text-[11px] transition-all ${
-                        plan.popular
-                          ? "bg-gold text-stone-950 hover:bg-gold-light"
-                          : "border border-gold/50 text-gold hover:bg-gold hover:text-stone-950"
-                      }`}
-                    >
-                      Procéder au paiement
-                    </Link>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        {/* Éthique et Accessibilité */}
-        <div className="mt-14 lg:mt-24 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto relative z-10">
-          {/* Bloc Éthique (Riba) */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="p-6 sm:p-8 border border-gold/20 rounded-sm bg-surface/40 backdrop-blur-sm relative overflow-hidden"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-              <span className="font-arabic text-6xl">۞</span>
+        {/* ═════════════════════════════════════════════════════════════════
+            SECTION 2 : GRILLE OFFICIELLE DES OFFRES & CONSULTATIONS
+            ═════════════════════════════════════════════════════════════════ */}
+        <section className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[var(--border)] pb-4">
+            <div>
+              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] font-bold">
+                ENGAGEMENT // NOS MODALITÉS D&apos;ACCOMPAGNEMENT
+              </span>
+              <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] mt-1">
+                Grille des Consultations &amp; Protocoles Privés
+              </h2>
             </div>
-            <h4 className="text-xl font-heading text-gold mb-4">Éthique Financière (0% Riba)</h4>
-            <p className="text-sm text-cream leading-relaxed mb-6">
-              Nos facilités de paiement en plusieurs fois sont proposées{" "}
-              <strong>strictement sans aucun frais supplémentaire ni intérêt</strong>. Nous refusons
-              catégoriquement la pratique de l&apos;usure (Riba), en accord avec nos principes
-              d&apos;excellence et d&apos;éthique spirituelle.
-            </p>
-            <blockquote className="border-l-2 border-gold/50 pl-4 mb-4">
-              <p className="text-xs text-cream-muted italic mb-2">
-                &quot;Allah a rendu licite le commerce, et illicite l&apos;intérêt (Riba).&quot;
-              </p>
-              <footer className="text-[10px] text-cream-muted/70 uppercase tracking-widest">
-                — Coran 2:275
-              </footer>
-            </blockquote>
-            <blockquote className="border-l-2 border-gold/50 pl-4">
-              <p className="text-xs text-cream-muted italic mb-2">
-                &quot;Le Messager d&apos;Allah ﷺ a maudit celui qui se nourrit de l&apos;usure, celui qui
-                la fait consommer, celui qui l&apos;écrit et ses deux témoins.&quot;
-              </p>
-              <footer className="text-[10px] text-cream-muted/70 uppercase tracking-widest">
-                — Sahih Muslim
-              </footer>
-            </blockquote>
-          </motion.div>
-
-          {/* Bloc Difficultés Financières */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="p-6 sm:p-8 border border-border rounded-sm bg-surface/40 backdrop-blur-sm"
-          >
-            <h4 className="text-xl font-heading text-cream mb-4">
-              L&apos;Argent ne doit pas être un frein
-            </h4>
-            <p className="text-sm text-cream-muted leading-relaxed mb-6">
-              Sachez que la porte reste ouverte. Allah a partagé Sa miséricorde en cent parts, et Il
-              accueille le retour de Ses serviteurs avec une indulgence absolue. Si vous traversez de
-              réelles difficultés financières, n&apos;hésitez pas.{" "}
-              <strong>
-                L&apos;investissement de cet accompagnement n&apos;est rien face à la récompense
-                ultime : la félicité éternelle (Al-Falah) et la reconquête de votre mandat de Khalifa.
-              </strong>{" "}
-              Reprenez la responsabilité de votre âme.
-            </p>
-            <blockquote className="border-l-2 border-border pl-4 mb-8">
-              <p className="text-xs text-cream-muted italic mb-2">
-                &quot;Allah veut pour vous la facilité, Il ne veut pas la difficulté pour vous.&quot;
-              </p>
-              <footer className="text-[10px] text-cream-muted/70 uppercase tracking-widest">
-                — Coran 2:185
-              </footer>
-            </blockquote>
             <Link
-              href="/contact"
-              className="inline-block border-b border-gold text-gold text-sm font-semibold pb-1 hover:text-cream hover:border-cream transition-colors"
+              href="/prix"
+              className="text-xs font-mono uppercase tracking-wider text-[#B88E3E] font-bold hover:underline"
             >
-              Contactez-nous pour une solution sur-mesure
+              Consulter la grille complète des tarifs &rarr;
             </Link>
-          </motion.div>
-        </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {OFFERS.map((offer) => (
+              <div
+                key={offer.id}
+                className={`p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border flex flex-col justify-between transition-all ${
+                  offer.featured
+                    ? "border-2 border-[#087B53] shadow-md relative"
+                    : "border-[var(--border)] shadow-xs hover:border-[#087B53]"
+                }`}
+              >
+                {offer.featured && (
+                  <div className="absolute -top-3.5 right-6 bg-[#087B53] text-white text-[10px] font-heading font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-sm">
+                    Recommandé
+                  </div>
+                )}
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-mono text-[#087B53] font-bold uppercase tracking-wider">
+                      {offer.badge}
+                    </span>
+                    <span className="text-[10px] font-mono bg-[var(--bg)] px-2 py-0.5 rounded-full border border-[var(--border)] text-[var(--text-secondary)]">
+                      {offer.duration}
+                    </span>
+                  </div>
+
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
+                    {offer.title}
+                  </h3>
+
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
+                    {offer.desc}
+                  </p>
+
+                  <div className="mb-6">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
+                      {offer.price}
+                    </div>
+                    <span className="text-[11px] font-mono text-[var(--text-secondary)]">
+                      {offer.priceSub}
+                    </span>
+                  </div>
+
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
+                    {offer.features.map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <span className="text-[#087B53] font-bold">&check;</span>
+                        <span>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <Link
+                  href={offer.ctaLink}
+                  className={`w-full py-3.5 rounded-full text-center text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-xs ${
+                    offer.featured
+                      ? "bg-[#087B53] hover:bg-[#065f40] text-white shadow-md"
+                      : "bg-[var(--bg)] border border-[var(--border)] hover:border-[#087B53] text-[var(--text-primary)]"
+                  }`}
+                >
+                  {offer.cta}
+                </Link>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ═════════════════════════════════════════════════════════════════
+            SECTION 3 : APPEL À L'ACTION & AUDIT
+            ═════════════════════════════════════════════════════════════════ */}
+        <section className="p-8 sm:p-12 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] text-center space-y-4">
+          <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] font-bold">
+            COMMENCER PAR UN DIAGNOSTIC PRÉALABLE
+          </span>
+          <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--text-primary)] tracking-tight max-w-xl mx-auto">
+            Pas encore certain de la formule adaptée ?
+          </h2>
+          <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-lg mx-auto font-sans">
+            Passez notre audit clinique gratuit pour mesurer votre score de charge mentale ou réservez un entretien diagnostic de 45 minutes par téléphone.
+          </p>
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+            <Link
+              href="/audit"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md"
+            >
+              <span>Passer l&apos;audit gratuit</span>
+              <ArrowIcon className="w-3.5 h-3.5" />
+            </Link>
+            <Link
+              href="/rendez-vous"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-[var(--border)] bg-[var(--bg)] hover:border-[#087B53] text-[var(--text-primary)] text-xs font-heading font-semibold uppercase tracking-wider transition-all shadow-xs"
+            >
+              <span>Prendre RDV (Tél 48,95 € • Domicile 96,45 €)</span>
+            </Link>
+          </div>
+        </section>
+
       </div>
     </div>
   );

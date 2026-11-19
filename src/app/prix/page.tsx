@@ -8,7 +8,7 @@ export default function PrixPage() {
   const [activeTab, setActiveTab] = useState<"services" | "livres">("services");
 
   return (
-    <div className="relative min-h-screen bg-[#FAF8F5] text-[#141210] pt-28 pb-24 px-4 sm:px-6 lg:px-12 selection:bg-[#B88E3E]/20">
+    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-280 pt-28 pb-24 px-4 sm:px-6 lg:px-12 selection:bg-[#B88E3E]/20">
       
       <div className="max-w-[1240px] mx-auto space-y-12 relative z-10">
         
@@ -21,27 +21,27 @@ export default function PrixPage() {
             </span>
           </div>
 
-          <h1 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-[#141210] tracking-tight leading-[1.08]">
+          <h1 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-[var(--text-primary)] tracking-tight leading-[1.08]">
             Tarifs &amp;{" "}
             <span className="text-[#B88E3E]">
               Investissements
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-[1.65]">
+          <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-[1.65]">
             Clarté absolue et zéro charge cognitive. Choisissez entre nos <strong>prestations d&apos;accompagnement clinique</strong> et nos <strong>traités fondateurs de la librairie</strong>.
           </p>
 
           {/* SÉLECTEUR D'ONGLETS STATUTAIRE (DÉCOUPLAGE STRICT SERVICES VS LIVRES) */}
           <div className="pt-4 flex justify-center">
-            <div className="inline-flex p-1.5 rounded-full bg-white border border-[#E8E0D2] shadow-sm">
+            <div className="inline-flex p-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] shadow-sm">
               <button
                 type="button"
                 onClick={() => setActiveTab("services")}
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === "services"
                     ? "bg-[#141210] text-white shadow-sm"
-                    : "text-[#5C534A] hover:text-[#141210]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${activeTab === "services" ? "bg-[#087B53]" : "bg-neutral-300"}`} />
@@ -54,7 +54,7 @@ export default function PrixPage() {
                 className={`flex items-center gap-2 px-6 py-3 rounded-full text-xs font-heading font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   activeTab === "livres"
                     ? "bg-[#141210] text-white shadow-sm"
-                    : "text-[#5C534A] hover:text-[#141210]"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${activeTab === "livres" ? "bg-[#B88E3E]" : "bg-neutral-300"}`} />
@@ -70,10 +70,10 @@ export default function PrixPage() {
         {activeTab === "services" && (
           <div className="space-y-10 animate-fadeIn">
             
-            <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E0D2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#087B53]" />
-                <span className="text-xs font-mono uppercase tracking-wider text-[#141210] font-semibold">
+                <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-semibold">
                   Accompagnement privé avec Mounir Byar • Consultations payantes et protocoles personnalisés
                 </span>
               </div>
@@ -88,7 +88,7 @@ export default function PrixPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               
               {/* CARTE 1 : ENTRETIEN TÉLÉPHONIQUE & VISIO */}
-              <div className="p-7 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#087B53] font-bold uppercase tracking-wider">
@@ -99,16 +99,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Entretien Téléphonique &amp; Visio
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Analyse chirurgicale de votre charge mentale et de vos blocages de prière. Établissement d&apos;une feuille de route stratégique immédiate avec Mounir Byar.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       48,95 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -116,7 +116,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>45 min d&apos;analyse confidentielle</span>
@@ -134,14 +134,14 @@ export default function PrixPage() {
 
                 <Link
                   href="/rendez-vous"
-                  className="w-full py-3 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] hover:border-[#B88E3E] text-center text-xs font-heading font-bold uppercase tracking-wider text-[#141210] transition-all"
+                  className="w-full py-3 rounded-full bg-[var(--bg)] border border-[var(--border)] hover:border-[#B88E3E] text-center text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] transition-all"
                 >
                   Choisir mon Créneau (48,95 &euro;)
                 </Link>
               </div>
 
               {/* CARTE 2 : CONSULTATION PRÉSENTIELLE À DOMICILE */}
-              <div className="p-7 rounded-3xl bg-white border border-[#B88E3E]/60 shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[#087B53]/50 shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#8C6214] font-bold uppercase tracking-wider">
@@ -152,16 +152,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Consultation Présentielle à Domicile
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Mounir Byar se déplace personnellement chez vous. Audit physique de l&apos;habitat, sanctuarisation du lieu de prière (Tahara 360&deg;) et plan d&apos;action remis en main propre.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       96,45 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -169,7 +169,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>Déplacement physique à votre domicile</span>
@@ -194,7 +194,7 @@ export default function PrixPage() {
               </div>
 
               {/* CARTE 3 : PROTOCOLE 30 JOURS (LE PLUS CHOISI) */}
-              <div className="p-7 rounded-3xl bg-white border-2 border-[#087B53] shadow-md flex flex-col justify-between relative">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border-2 border-[#087B53] shadow-md flex flex-col justify-between relative">
                 <div className="absolute -top-3.5 right-6 bg-[#087B53] text-white text-[10px] font-heading font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-sm">
                   Le Plus Choisi
                 </div>
@@ -209,16 +209,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Protocole C.O.M.E.S. 30 Jours
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Un mois d&apos;intervention intensive pour briser définitivement la procrastination, effondrer le cortisol et sanctuariser les 5 prières quotidiennes.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       612,70 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#087B53] font-bold">
@@ -226,7 +226,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>4 séances individuelles intensives</span>
@@ -251,7 +251,7 @@ export default function PrixPage() {
               </div>
 
               {/* CARTE 4 : MANDAT KHALIFA 9 MOIS */}
-              <div className="p-7 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#8C6214] font-bold uppercase tracking-wider">
@@ -262,16 +262,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Mandat Khalifa 9 Mois
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Refonte intégrale de votre existence. Alignement spirituel, professionnel et familial sous la supervision directe et continue de Mounir Byar.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       Sur Mesure
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -279,7 +279,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>Supervision continue &amp; ligne directe</span>
@@ -297,7 +297,7 @@ export default function PrixPage() {
 
                 <Link
                   href="/rendez-vous"
-                  className="w-full py-3 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] hover:border-[#B88E3E] text-center text-xs font-heading font-bold uppercase tracking-wider text-[#141210] transition-all"
+                  className="w-full py-3 rounded-full bg-[var(--bg)] border border-[var(--border)] hover:border-[#B88E3E] text-center text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] transition-all"
                 >
                   Candidater à l&apos;Immersion
                 </Link>
@@ -313,10 +313,10 @@ export default function PrixPage() {
         {activeTab === "livres" && (
           <div className="space-y-10 animate-fadeIn">
             
-            <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#E8E0D2] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#B88E3E]" />
-                <span className="text-xs font-mono uppercase tracking-wider text-[#141210] font-semibold">
+                <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-primary)] font-semibold">
                   Ouvrages d&apos;étude autonome • Téléchargement immédiat haute définition (PDF + ePub)
                 </span>
               </div>
@@ -331,7 +331,7 @@ export default function PrixPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
               {/* LIVRE 1 : LES SECRETS DU RETOUR VERS ALLAH */}
-              <div className="p-7 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#087B53] font-bold uppercase tracking-wider">
@@ -342,16 +342,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Les Secrets du Retour vers Allah
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Le traité d&apos;ingénierie neurocomportementale du Sujûd. Explication scientifique de chaque station de la prière, rupture du cortisol et libération de la dopamine saine.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       9,90 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -359,7 +359,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>Anatomie du nerf vague et du Sujûd</span>
@@ -384,7 +384,7 @@ export default function PrixPage() {
               </div>
 
               {/* LIVRE 2 : RECUEIL DES INVOCATIONS CIBLÉES */}
-              <div className="p-7 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#8C6214] font-bold uppercase tracking-wider">
@@ -395,16 +395,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Recueil des Invocations Ciblées
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Formules prophétiques exactes voyellées et phonétisées, accompagnées des explications neuro-émotionnelles de leur impact sur le système nerveux autonome.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       5,90 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -412,7 +412,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>Arabe voyellé, phonétique et traduction</span>
@@ -437,7 +437,7 @@ export default function PrixPage() {
               </div>
 
               {/* LIVRE 3 : AR-RAHMAN */}
-              <div className="p-7 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
+              <div className="p-7 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col justify-between hover:border-[#B88E3E] transition-all">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[11px] font-mono text-[#8C6214] font-bold uppercase tracking-wider">
@@ -448,16 +448,16 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-extrabold text-xl text-[#141210] mb-2">
+                  <h3 className="font-heading font-extrabold text-xl text-[var(--text-primary)] mb-2">
                     Ar-Rahman — La Mer sans Rivage
                   </h3>
 
-                  <p className="text-xs text-[#5C534A] leading-relaxed mb-6 font-sans">
+                  <p className="text-xs text-[var(--text-secondary)] leading-relaxed mb-6 font-sans">
                     Une exploration exégétique profonde de la Miséricorde divine pour dissoudre l&apos;angoisse existentielle, restaurer l&apos;estime de soi et retrouver la paix du cœur.
                   </p>
 
                   <div className="mb-6">
-                    <div className="text-3xl font-heading font-extrabold text-[#141210]">
+                    <div className="text-3xl font-heading font-extrabold text-[var(--text-primary)]">
                       12,65 &euro;
                     </div>
                     <span className="text-[11px] font-mono text-[#7A6F64]">
@@ -465,7 +465,7 @@ export default function PrixPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-2.5 text-xs text-[#5C534A] mb-8 font-sans border-t border-[#E8E0D2] pt-4">
+                  <ul className="space-y-2.5 text-xs text-[var(--text-secondary)] mb-8 font-sans border-t border-[var(--border)] pt-4">
                     <li className="flex items-start gap-2">
                       <span className="text-[#087B53] font-bold">&check;</span>
                       <span>Contemplation cosmique et exégèse</span>
@@ -494,12 +494,12 @@ export default function PrixPage() {
         )}
 
         {/* SECTION RÉASSURANCE PSYCHOLOGIQUE & SÉCURITÉ */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-white border border-[#E8E0D2] shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="p-8 sm:p-10 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-left">
-            <h3 className="font-heading font-extrabold text-lg text-[#141210]">
+            <h3 className="font-heading font-extrabold text-lg text-[var(--text-primary)]">
               Paiement Sécurisé &amp; Transparence Fiscale
             </h3>
-            <p className="text-xs text-[#5C534A] max-w-xl leading-relaxed font-sans">
+            <p className="text-xs text-[var(--text-secondary)] max-w-xl leading-relaxed font-sans">
               Toutes les transactions sont chiffrées de bout en bout via Stripe. Facture officielle émise immédiatement par le Cabinet BLF. Aucun frais dissimulé, 0% de Riba.
             </p>
           </div>
@@ -515,7 +515,7 @@ export default function PrixPage() {
 
             <Link
               href="/rendez-vous"
-              className="px-6 py-3 rounded-full border border-[#B88E3E]/60 bg-white hover:border-[#B88E3E] text-[#141210] text-xs font-heading font-semibold uppercase tracking-wider transition-all"
+              className="px-6 py-3 rounded-full border border-[#B88E3E]/60 bg-white hover:border-[#B88E3E] text-[var(--text-primary)] text-xs font-heading font-semibold uppercase tracking-wider transition-all"
             >
               <span>Prendre RDV</span>
             </Link>

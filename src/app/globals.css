@@ -1,11 +1,57 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
+
+:root[data-theme='dark'] {
+  /* Alpine Basalt & Pine Sage (Nouveau dossier 4) */
+  --bg: #0c100e;
+  --surface: #141a17;
+  --surface-elevated: #1b221e;
+  --text-primary: #eff3f1;
+  --text-secondary: #98a49e;
+  --border: rgba(239, 243, 241, 0.12);
+  --border-strong: rgba(239, 243, 241, 0.24);
+  --accent: #48634b;
+  --accent-hover: #56765a;
+  --accent-text: #f4f6f5;
+  --gold: #D4A853;
+  --gold-hover: #E8C468;
+  --glass-bg: rgba(18, 24, 21, 0.85);
+  --glass-border: rgba(239, 243, 241, 0.16);
+  --shadow-tinted: 0 24px 64px rgba(5, 8, 7, 0.56);
+}
 
 /* ═══════════════════════════════════════════════════════════
    DESIGN SYSTEM DYNAMIQUE — Briser les Frontières
    Ingénierie de la Souveraineté & Cycles Circadiens
    ═══════════════════════════════════════════════════════════ */
 
+
 :root {
+  --font-sans: var(--font-sans), 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: var(--font-mono), 'DM Mono', monospace;
+
+  /* Easing Curves & Shape Standards (Nouveau dossier 4) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --radius-card: 12px;
+  --radius-pill: 999px;
+
+  /* Cold Alpine Mineral & Pine Sage (Nouveau dossier 4) */
+  --bg: #f3f6f4;
+  --surface: #e8eeea;
+  --surface-elevated: #dde5e0;
+  --text-primary: #111614;
+  --text-secondary: #48544e;
+  --border: rgba(17, 22, 20, 0.12);
+  --border-strong: rgba(17, 22, 20, 0.24);
+  --accent: #3d5740;
+  --accent-hover: #314734;
+  --accent-text: #f3f6f4;
+  --gold: #B88E3E;
+  --gold-hover: #8C6214;
+  --glass-bg: rgba(243, 246, 244, 0.85);
+  --glass-border: rgba(17, 22, 20, 0.14);
+  --shadow-tinted: 0 24px 64px rgba(17, 22, 20, 0.12);
+
   /* Default Theme: BEIGE & DORÉ (Prestige Albâtre, Lin & Or Impérial) */
   --bg-base: #FAF8F5;
   --bg-surface: #F3EDE4;

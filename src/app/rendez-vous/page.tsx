@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RendezVousPage() {
   return (
-    <div className="relative min-h-screen bg-[#FAF8F5] text-[#141210] pt-28 pb-24 px-4 sm:px-6 lg:px-12 selection:bg-[#B88E3E]/20">
+    <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text-primary)] transition-colors duration-280 pt-28 pb-24 px-4 sm:px-6 lg:px-12 selection:bg-[#B88E3E]/20">
       
       <div className="max-w-[1240px] mx-auto space-y-16 relative z-10">
         
@@ -24,25 +24,25 @@ export default function RendezVousPage() {
             </span>
           </div>
 
-          <h1 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-[#141210] tracking-tight leading-[1.08]">
+          <h1 className="font-heading font-extrabold text-3xl sm:text-5xl md:text-6xl text-[var(--text-primary)] tracking-tight leading-[1.08]">
             Prenez Rendez-vous avec{" "}
             <span className="text-[#B88E3E]">
               Mounir Byar
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#5C534A] font-sans leading-[1.65]">
+          <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans leading-[1.65]">
             Sélectionnez votre modalité ci-dessous : un entretien individuel par <strong>téléphone/visio (48,95 &euro;)</strong> ou une <strong>consultation en présentiel où Mounir Byar se déplace personnellement à votre domicile (96,45 &euro;)</strong>.
           </p>
 
-          <div className="pt-2 flex flex-wrap justify-center gap-4 text-xs font-mono text-[#5C534A]">
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[#E8E0D2]">
+          <div className="pt-2 flex flex-wrap justify-center gap-4 text-xs font-mono text-[var(--text-secondary)]">
+            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)]">
               ⏱ Durée : <strong>45 min (tél) ou 1h15 (domicile)</strong>
             </span>
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[#E8E0D2]">
+            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)]">
               📅 Lun–Sam 09h–18h (Ven matin 09h–12h)
             </span>
-            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[#E8E0D2] text-[#087B53] font-semibold">
+            <span className="inline-flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[var(--border)] text-[#087B53] font-semibold">
               ✓ Validation immédiate &amp; Paiement sécurisé
             </span>
           </div>
@@ -54,27 +54,27 @@ export default function RendezVousPage() {
         </div>
 
         {/* SECTION RÉASSURANCE ET LOCALISATION */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-[#E8E0D2]">
-          <div className="p-6 rounded-2xl bg-white border border-[#E8E0D2] space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 border-t border-[var(--border)]">
+          <div className="p-6 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] space-y-2">
             <span className="text-lg">🏠</span>
-            <h4 className="font-heading font-bold text-sm text-[#141210]">Déplacement à Domicile &amp; Visio</h4>
-            <p className="text-xs text-[#5C534A] leading-relaxed font-sans">
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)]">Déplacement à Domicile &amp; Visio</h4>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
               Pour le présentiel (96,45 &euro;), Mounir Byar se déplace directement chez vous afin d&apos;auditer votre habitat et sanctuariser l&apos;espace de prière. Les consultations téléphoniques (48,95 &euro;) s&apos;effectuent partout en France et à l&apos;étranger.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white border border-[#E8E0D2] space-y-2">
+          <div className="p-6 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] space-y-2">
             <span className="text-lg">🔒</span>
-            <h4 className="font-heading font-bold text-sm text-[#141210]">Confidentialité &amp; Secret Médical</h4>
-            <p className="text-xs text-[#5C534A] leading-relaxed font-sans">
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)]">Confidentialité &amp; Secret Médical</h4>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
               Vos échanges avec Mounir Byar sont protégés par le secret professionnel le plus rigoureux. Vos données ne sont jamais partagées ni transmises à aucun tiers.
             </p>
           </div>
 
-          <div className="p-6 rounded-2xl bg-white border border-[#E8E0D2] space-y-2">
+          <div className="p-6 rounded-[var(--radius-card)] bg-[var(--surface)] border border-[var(--border)] space-y-2">
             <span className="text-lg">⚡</span>
-            <h4 className="font-heading font-bold text-sm text-[#141210]">Préparer votre Entretien</h4>
-            <p className="text-xs text-[#5C534A] leading-relaxed font-sans">
+            <h4 className="font-heading font-bold text-sm text-[var(--text-primary)]">Préparer votre Entretien</h4>
+            <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
               Pour maximiser l&apos;impact de votre consultation, nous vous recommandons de passer notre audit clinique gratuit afin de poser au préalable votre cartographie de charge mentale.
             </p>
             <Link
