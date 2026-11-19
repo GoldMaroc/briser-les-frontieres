@@ -146,13 +146,13 @@ export default async function ArticlePage({ params }: Props) {
                 Évaluez la santé de votre Salât et votre niveau de clarté
               </h3>
               <p className="text-cream-muted text-sm md:text-base font-body mb-8 leading-relaxed">
-                Vous traversez une phase de dispersion mentale, de charge allostatique ou de rupture dans votre régularité ? Mesurez vos blocages profonds en 3 minutes grâce à notre audit clinique.
+                Vous traversez une phase de dispersion mentale, de charge allostatique ou de rupture dans votre régularité ? Mesurez vos blocages profonds grâce à notre audit clinique gratuit.
               </p>
               <Link
                 href="/audit"
                 className="inline-flex items-center justify-center gap-2 py-4 px-8 rounded-xl bg-emerald text-midnight font-heading font-semibold text-base md:text-lg tracking-wide hover:bg-emerald-light transition-all duration-300 shadow-xl shadow-emerald/20 hover:scale-[1.02] cursor-pointer"
               >
-                <span>Faire mon Diagnostic en 3 minutes</span>
+                <span>Faire mon Diagnostic Gratuit</span>
                 <span>→</span>
               </Link>
             </div>

@@ -2,18 +2,18 @@
 
 import { useState, useMemo } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 
-// Créneaux de 45 minutes stricts
-const MORNING_SLOTS_45 = [
+// Créneaux de 45 minutes précis et aérés
+const SLOTS_MORNING_45 = [
   { start: "09:00", end: "09:45" },
   { start: "09:45", end: "10:30" },
   { start: "10:30", end: "11:15" },
   { start: "11:15", end: "12:00" },
 ];
 
-const AFTERNOON_SLOTS_45 = [
+const SLOTS_AFTERNOON_45 = [
   { start: "14:00", end: "14:45" },
   { start: "14:45", end: "15:30" },
   { start: "15:30", end: "16:15" },
@@ -22,33 +22,37 @@ const AFTERNOON_SLOTS_45 = [
 ];
 
 export default function AgendaDoctolib() {
-  const [selectedFormat, setSelectedFormat] = useState<"tel" | "presentiel">("tel");
-  const [selectedMotif, setSelectedMotif] = useState("Audit Stratégique d'Entrée (45 min)");
-  const [weekOffset, setWeekOffset] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState<{ dayName: string; dateStr: string; time: string; end: string } | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
+  const router = useRouter();
 
-  // Formulaire de réservation
+  // Choix du format : Téléphone 48,95 € ou Présentiel Domicile 96,45 €
+  const [selectedFormat, setSelectedFormat] = useState<"tel" | "presentiel">("tel");
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedDayIdx, setSelectedDayIdx] = useState(0);
+  const [selectedSlot, setSelectedSlot] = useState<{ start: string; end: string } | null>(null);
+
+  // Formulaire rapide
   const [nom, setNom] = useState("");
   const [email, setEmail] = useState("");
   const [telephone, setTelephone] = useState("");
-  const [notes, setNotes] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [adresse, setAdresse] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
-  // Calcul des 6 jours de la semaine (Lundi au Samedi)
+  // Prix en fonction du format
+  const currentPrice = selectedFormat === "tel" ? "48,95 €" : "96,45 €";
+  const productId = selectedFormat === "tel" ? "rdv-tel" : "rdv-presentiel";
+
+  // Calcul des 6 jours (Lundi au Samedi)
   const weekDays = useMemo(() => {
     const days = [];
     const baseDate = new Date();
-    // Ajuster au lundi de la semaine courante
     const currentDay = baseDate.getDay();
     const diffToMonday = currentDay === 0 ? -6 : 1 - currentDay;
     baseDate.setDate(baseDate.getDate() + diffToMonday + weekOffset * 7);
 
-    const dayNames = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"];
+    const dayNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
     const monthNames = [
-      "janv.", "févr.", "mars", "avr.", "mai", "juin",
-      "juil.", "août", "sept.", "oct.", "nov.", "déc."
+      "janvier", "février", "mars", "avril", "mai", "juin",
+      "juillet", "août", "septembre", "octobre", "novembre", "décembre"
     ];
 
     for (let i = 0; i < 6; i++) {
@@ -59,7 +63,7 @@ export default function AgendaDoctolib() {
         dayName: dayNames[i],
         dayNumber: d.getDate(),
         month: monthNames[d.getMonth()],
-        fullDateStr: `${dayNames[i]}. ${d.getDate()} ${monthNames[d.getMonth()]}`,
+        fullDateStr: `${dayNames[i]} ${d.getDate()} ${monthNames[d.getMonth()]}`,
         isFriday,
         dateObj: d,
       });
@@ -67,434 +71,381 @@ export default function AgendaDoctolib() {
     return days;
   }, [weekOffset]);
 
-  const handleOpenBooking = (dayName: string, dateStr: string, time: string, end: string) => {
-    setSelectedSlot({ dayName, dateStr, time, end });
+  const activeDay = weekDays[selectedDayIdx] || weekDays[0];
+
+  const handleSelectSlot = (slot: { start: string; end: string }) => {
+    setSelectedSlot(slot);
     setModalOpen(true);
   };
 
-  const handleSubmitBooking = async (e: React.FormEvent) => {
+  const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!nom || !email || !telephone || !selectedSlot) return;
 
-    setIsSubmitting(true);
-    try {
-      const response = await fetch("/api/rendez-vous", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nom,
-          email,
-          telephone,
-          format: selectedFormat === "tel" ? "Téléphonique / Visio" : "Présentiel (Paris / Reims)",
-          motif: selectedMotif,
-          duree: "45 minutes",
-          date: selectedSlot.dateStr,
-          creneau: `${selectedSlot.time} - ${selectedSlot.end}`,
-          notes,
-        }),
-      });
+    // Envoi des paramètres vers la page de paiement sécurisé Stripe
+    const params = new URLSearchParams({
+      product: productId,
+      date: activeDay.fullDateStr,
+      creneau: `${selectedSlot.start} - ${selectedSlot.end}`,
+      nom,
+      email,
+      telephone,
+      ...(selectedFormat === "presentiel" ? { adresse } : {}),
+    });
 
-      if (response.ok) {
-        setIsConfirmed(true);
-      } else {
-        // En cas de statut hors 200, confirmation de secours côté client
-        setIsConfirmed(true);
-      }
-    } catch {
-      setIsConfirmed(true);
-    } finally {
-      setIsSubmitting(false);
-    }
+    router.push(`/paiement?${params.toString()}`);
   };
 
   return (
-    <div className="relative w-full bg-[#FAF8F5]">
-      {/* CADRE PRINCIPAL DOCTOLIB PRO HAUTE JOAILLERIE */}
-      <div className="bg-white rounded-3xl border border-[#E8E0D2] shadow-[0_12px_45px_rgba(20,18,16,0.06)] overflow-hidden">
+    <div className="relative w-full">
+      {/* CADRE ÉPURÉ SANS CHARGE COGNITIVE */}
+      <div className="bg-white rounded-3xl border border-[#E8E0D2] shadow-sm overflow-hidden">
         
-        {/* EN-TÊTE DU PRATICIEN */}
-        <div className="p-6 sm:p-8 bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5] border-b border-[#E8E0D2] flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex items-center gap-4 sm:gap-5">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#B88E3E]/40 shrink-0 shadow-md">
-              <Image
-                src="/images/sanctuaire/mounir_byar_portrait.png"
-                alt="Mounir Byar"
-                fill
-                className="object-cover"
-                sizes="(max-width: 640px) 64px, 80px"
-              />
+        {/* ÉTAPE 1 : CHOIX DU FORMAT (2 CARTES STATUTAIRES CLAIRES) */}
+        <div className="p-6 sm:p-8 border-b border-[#E8E0D2] bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-4">
+              <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-[#B88E3E]/40 shrink-0 shadow-xs">
+                <Image
+                  src="/images/sanctuaire/mounir_byar_portrait.png"
+                  alt="Mounir Byar"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8C6214] font-bold block">
+                  ÉVALUATION INDIVIDUELLE DIRECTE
+                </span>
+                <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[#141210]">
+                  Consultation avec Mounir Byar
+                </h3>
+              </div>
             </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="font-heading font-extrabold text-lg sm:text-xl text-[#141210]">
-                  Mounir BYAR
-                </span>
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#087B53]/10 text-[#087B53] text-[11px] font-mono font-bold uppercase tracking-wider">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
-                  Cabinet Conventionné BLF
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-[#5C534A] font-body leading-relaxed">
-                Stratégie Comportementale & Neurobiologie du Sujûd • Auteur & Enseignant
-              </p>
-              <div className="flex flex-wrap items-center gap-3 mt-2 text-[11.5px] text-[#8C6214] font-mono">
-                <span className="inline-flex items-center gap-1">
-                  📍 Paris • Grand Reims & Visio
-                </span>
-                <span className="inline-flex items-center gap-1 font-bold">
-                  ⏱ Créneaux stricts : 45 minutes
-                </span>
-                <span className="inline-flex items-center gap-1 text-[#087B53] font-semibold">
-                  ✓ Entretien Confidentiel
-                </span>
-              </div>
+
+            <div className="text-xs font-mono text-[#087B53] bg-[#087B53]/10 px-3 py-1.5 rounded-full font-semibold self-start sm:self-auto">
+              ✓ Rendez-vous Privé & Confidentiel
             </div>
           </div>
 
-          {/* SÉLECTEUR DE FORMAT (TÉL / PRÉSENTIEL) */}
-          <div className="flex flex-col gap-2 shrink-0">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A6F64]">
-              Mode de consultation :
-            </span>
-            <div className="inline-flex p-1 rounded-xl bg-[#FAF8F5] border border-[#E8E0D2]">
-              <button
-                type="button"
-                onClick={() => setSelectedFormat("tel")}
-                className={`px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all duration-200 ${
-                  selectedFormat === "tel"
-                    ? "bg-[#087B53] text-white shadow-sm"
-                    : "text-[#5C534A] hover:text-[#141210]"
-                }`}
-              >
-                📞 Téléphone / Visio
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedFormat("presentiel")}
-                className={`px-4 py-2 rounded-lg text-xs font-heading font-bold uppercase tracking-wider transition-all duration-200 ${
-                  selectedFormat === "presentiel"
-                    ? "bg-[#087B53] text-white shadow-sm"
-                    : "text-[#5C534A] hover:text-[#141210]"
-                }`}
-              >
-                📍 Présentiel (Cabinet)
-              </button>
-            </div>
+          {/* SÉLECTEUR 2 MODES DE CONSULTATION */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* OPTION 1 : TÉLÉPHONE 48,95 € */}
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedFormat("tel");
+                setSelectedSlot(null);
+              }}
+              className={`p-5 rounded-2xl text-left transition-all border-2 flex flex-col justify-between ${
+                selectedFormat === "tel"
+                  ? "bg-white border-[#087B53] shadow-md ring-2 ring-[#087B53]/20"
+                  : "bg-white/60 border-[#E8E0D2] hover:border-[#B88E3E] hover:bg-white"
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-heading font-bold uppercase tracking-wider text-[#141210] flex items-center gap-2">
+                    <span>📞 Par Téléphone / Visio</span>
+                  </span>
+                  <span className="text-base font-heading font-extrabold text-[#087B53]">
+                    48,95 €
+                  </span>
+                </div>
+                <p className="text-xs text-[#5C534A] leading-relaxed">
+                  Séance intensive de <strong>45 minutes</strong>. Diagnostic de votre charge allostatique, identification de vos boucles d&apos;angoisse et remise d&apos;une feuille de route immédiate.
+                </p>
+              </div>
+              <div className="mt-3 pt-3 border-t border-[#E8E0D2] flex items-center justify-between text-[11px] font-mono text-[#7A6F64]">
+                <span>Durée : 45 min</span>
+                <span className={selectedFormat === "tel" ? "text-[#087B53] font-bold" : ""}>
+                  {selectedFormat === "tel" ? "● Sélectionné" : "Sélectionner"}
+                </span>
+              </div>
+            </button>
+
+            {/* OPTION 2 : PRÉSENTIEL À DOMICILE 96,45 € */}
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedFormat("presentiel");
+                setSelectedSlot(null);
+              }}
+              className={`p-5 rounded-2xl text-left transition-all border-2 flex flex-col justify-between ${
+                selectedFormat === "presentiel"
+                  ? "bg-white border-[#B88E3E] shadow-md ring-2 ring-[#B88E3E]/20"
+                  : "bg-white/60 border-[#E8E0D2] hover:border-[#B88E3E] hover:bg-white"
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-xs font-heading font-bold uppercase tracking-wider text-[#141210] flex items-center gap-2">
+                    <span>📍 En Présentiel (Déplacement à Domicile)</span>
+                  </span>
+                  <span className="text-base font-heading font-extrabold text-[#8C6214]">
+                    96,45 €
+                  </span>
+                </div>
+                <p className="text-xs text-[#5C534A] leading-relaxed">
+                  <strong>Mounir Byar se déplace personnellement chez vous</strong> (1h15). Audit de votre environnement domestique, sanctuarisation de l&apos;espace de prière (Tahara 360°) et restructuration des 8 piliers.
+                </p>
+              </div>
+              <div className="mt-3 pt-3 border-t border-[#E8E0D2] flex items-center justify-between text-[11px] font-mono text-[#7A6F64]">
+                <span>Durée : 1h15 à domicile</span>
+                <span className={selectedFormat === "presentiel" ? "text-[#8C6214] font-bold" : ""}>
+                  {selectedFormat === "presentiel" ? "● Sélectionné" : "Sélectionner"}
+                </span>
+              </div>
+            </button>
           </div>
         </div>
 
-        {/* MOTIF DE CONSULTATION & INFOS HORAIRES */}
-        <div className="px-6 sm:px-8 py-4 bg-[#FAF8F5]/60 border-b border-[#E8E0D2] flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-wrap">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#7A6F64]">
-              Motif d&apos;entretien :
+        {/* ÉTAPE 2 : CHOIX DU JOUR (SÉLECTEUR AÉRÉ HORIZONTAL) */}
+        <div className="p-6 sm:p-8 border-b border-[#E8E0D2] space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-[#7A6F64] font-semibold">
+              1. Sélectionnez votre date :
             </span>
-            <div className="flex flex-wrap gap-2">
-              {[
-                "Audit Stratégique d'Entrée (45 min)",
-                "Diagnostic Décideur & Procrastination (45 min)",
-                "Orientation Accompagnement C.O.M.E.S. (45 min)",
-              ].map((motif) => (
-                <button
-                  key={motif}
-                  type="button"
-                  onClick={() => setSelectedMotif(motif)}
-                  className={`px-3 py-1.5 rounded-full text-[11px] font-mono transition-all duration-200 ${
-                    selectedMotif === motif
-                      ? "bg-[#B88E3E] text-white font-bold shadow-sm"
-                      : "bg-white border border-[#E8E0D2] text-[#5C534A] hover:border-[#B88E3E]"
-                  }`}
-                >
-                  {motif}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="text-[11px] font-mono text-[#5C534A] flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#087B53]" />
-            <span>Lun–Sam 09h–18h • Ven matin 09h–12h</span>
-          </div>
-        </div>
-
-        {/* CALENDRIER NAVIGATION SEMAINE */}
-        <div className="p-6 sm:p-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <h3 className="font-heading font-extrabold text-base sm:text-lg text-[#141210] uppercase tracking-wider">
-                Créneaux disponibles (Séance 45 min)
-              </h3>
-              <span className="text-xs font-mono text-[#8C6214] font-semibold bg-[#B88E3E]/10 px-2.5 py-0.5 rounded-full">
-                Gratuit
-              </span>
-            </div>
-
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => setWeekOffset((prev) => Math.max(0, prev - 1))}
+                onClick={() => setWeekOffset((p) => Math.max(0, p - 1))}
                 disabled={weekOffset === 0}
-                className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] bg-white text-xs font-heading font-bold uppercase tracking-wider text-[#141210] disabled:opacity-40 hover:border-[#B88E3E] transition-all"
+                className="px-3 py-1 rounded-lg border border-[#E8E0D2] text-xs font-mono disabled:opacity-30 hover:border-[#141210]"
               >
-                ← Précédent
+                ← Semaine préc.
               </button>
               <button
                 type="button"
-                onClick={() => setWeekOffset((prev) => prev + 1)}
-                className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] bg-white text-xs font-heading font-bold uppercase tracking-wider text-[#141210] hover:border-[#B88E3E] transition-all"
+                onClick={() => setWeekOffset((p) => p + 1)}
+                className="px-3 py-1 rounded-lg border border-[#E8E0D2] text-xs font-mono hover:border-[#141210]"
               >
-                Suivant →
+                Semaine suiv. →
               </button>
             </div>
           </div>
 
-          {/* GRILLE DES JOURS ET DES CRÉNEAUX DE 45 MINUTES */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            {weekDays.map((day) => {
+          {/* PILULES DES JOURS DE LA SEMAINE */}
+          <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 sm:gap-3">
+            {weekDays.map((day, idx) => {
+              const isSelected = selectedDayIdx === idx;
               return (
-                <div
+                <button
                   key={day.fullDateStr}
-                  className="flex flex-col rounded-2xl border border-[#E8E0D2] bg-[#FAF8F5]/40 overflow-hidden"
+                  type="button"
+                  onClick={() => {
+                    setSelectedDayIdx(idx);
+                    setSelectedSlot(null);
+                  }}
+                  className={`p-3 rounded-2xl border text-center transition-all ${
+                    isSelected
+                      ? "bg-[#141210] text-white border-[#141210] shadow-sm"
+                      : "bg-[#FAF8F5]/60 border-[#E8E0D2] hover:bg-white text-[#141210]"
+                  }`}
                 >
-                  {/* EN-TÊTE DU JOUR */}
-                  <div className="py-2.5 px-2 text-center bg-white border-b border-[#E8E0D2]">
-                    <span className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210]">
-                      {day.dayName}
+                  <span className="block text-[11px] font-heading font-bold uppercase tracking-wider">
+                    {day.dayName}
+                  </span>
+                  <span className={`block text-xs font-mono font-semibold mt-0.5 ${isSelected ? "text-[#B88E3E]" : "text-[#7A6F64]"}`}>
+                    {day.dayNumber} {day.month}
+                  </span>
+                  {day.isFriday && (
+                    <span className={`block text-[9px] font-mono mt-1 ${isSelected ? "text-white/70" : "text-[#087B53]"}`}>
+                      Matin seul
                     </span>
-                    <span className="block text-[11px] font-mono text-[#8C6214] font-semibold">
-                      {day.dayNumber} {day.month}
-                    </span>
-                  </div>
-
-                  {/* LISTE DES CRÉNEAUX DU JOUR (45 MIN) */}
-                  <div className="p-2 space-y-1.5 max-h-[380px] overflow-y-auto">
-                    {/* MATINÉE (LUN À SAM) */}
-                    <div className="text-[9px] font-mono uppercase tracking-wider text-[#7A6F64] text-center pt-1 pb-0.5">
-                      Matin (45m)
-                    </div>
-                    {MORNING_SLOTS_45.map((slot) => (
-                      <button
-                        key={`${day.dayName}-${slot.start}`}
-                        type="button"
-                        onClick={() => handleOpenBooking(day.dayName, day.fullDateStr, slot.start, slot.end)}
-                        className="w-full py-2 px-1 rounded-lg border border-[#E8E0D2] bg-white hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[#141210] text-[12px] font-mono font-semibold transition-all duration-200 shadow-xs flex items-center justify-center gap-1 group"
-                      >
-                        <span>{slot.start}</span>
-                        <span className="text-[9.5px] opacity-60 group-hover:opacity-90">({slot.end})</span>
-                      </button>
-                    ))}
-
-                    {/* APRÈS-MIDI (LUN À SAM SAUF VENDREDI) */}
-                    <div className="text-[9px] font-mono uppercase tracking-wider text-[#7A6F64] text-center pt-2 pb-0.5">
-                      Après-midi
-                    </div>
-
-                    {day.isFriday ? (
-                      <div className="py-3 px-1 text-center bg-[#B88E3E]/10 rounded-lg border border-[#B88E3E]/20">
-                        <span className="block text-[9.5px] font-mono text-[#8C6214] font-bold leading-tight">
-                          Pause Jumu&apos;ah
-                        </span>
-                        <span className="block text-[8.5px] font-mono text-[#7A6F64] mt-0.5">
-                          Fermé après 12h
-                        </span>
-                      </div>
-                    ) : (
-                      AFTERNOON_SLOTS_45.map((slot) => (
-                        <button
-                          key={`${day.dayName}-${slot.start}`}
-                          type="button"
-                          onClick={() => handleOpenBooking(day.dayName, day.fullDateStr, slot.start, slot.end)}
-                          className="w-full py-2 px-1 rounded-lg border border-[#E8E0D2] bg-white hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[#141210] text-[12px] font-mono font-semibold transition-all duration-200 shadow-xs flex items-center justify-center gap-1 group"
-                        >
-                          <span>{slot.start}</span>
-                          <span className="text-[9.5px] opacity-60 group-hover:opacity-90">({slot.end})</span>
-                        </button>
-                      ))
-                    )}
-                  </div>
-                </div>
+                  )}
+                </button>
               );
             })}
           </div>
+        </div>
 
-          {/* NOTE DE RÉASSURANCE EN BAS D'AGENDA */}
-          <div className="mt-8 pt-6 border-t border-[#E8E0D2] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#5C534A]">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#087B53]" />
-              <span>Chaque entretien dure exactement <strong>45 minutes</strong> avec Mounir Byar.</span>
+        {/* ÉTAPE 3 : CRÉNEAUX DISPONIBLES (AÉRÉS, PAS DE SURCHARGE VISUELLE) */}
+        <div className="p-6 sm:p-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-mono uppercase tracking-wider text-[#7A6F64] font-semibold">
+              2. Choisissez un créneau pour le <strong>{activeDay.fullDateStr}</strong> :
+            </span>
+            <span className="text-xs font-mono text-[#087B53] font-bold">
+              Séance 45 min • {currentPrice}
+            </span>
+          </div>
+
+          <div className="space-y-4">
+            {/* CRÉNEAUX DU MATIN */}
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A6F64] block mb-2">
+                Matinée (09h00 - 12h00)
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {SLOTS_MORNING_45.map((slot) => {
+                  return (
+                    <button
+                      key={slot.start}
+                      type="button"
+                      onClick={() => handleSelectSlot(slot)}
+                      className="py-3 px-3 rounded-xl border border-[#E8E0D2] bg-white hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[#141210] text-xs font-mono font-semibold transition-all shadow-2xs text-center group"
+                    >
+                      <span className="font-bold">{slot.start}</span>
+                      <span className="text-[10px] opacity-70 ml-1">({slot.end})</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex items-center gap-4">
-              <span>✓ Confirmation immédiate par email</span>
-              <span>✓ Rappel SMS 2h avant</span>
-              <span>✓ Zéro engagement</span>
+
+            {/* CRÉNEAUX DE L'APRÈS-MIDI (SAUF VENDREDI FERMÉ POUR JUMU'AH) */}
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A6F64] block mb-2">
+                Après-midi (14h00 - 18h00)
+              </span>
+              {activeDay.isFriday ? (
+                <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#E8E0D2] text-xs font-mono text-[#8C6214] text-center">
+                  Vendredi après-midi réservé à la prière du Jumu&apos;ah • Aucun créneau disponible après 12h00.
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                  {SLOTS_AFTERNOON_45.map((slot) => {
+                    return (
+                      <button
+                        key={slot.start}
+                        type="button"
+                        onClick={() => handleSelectSlot(slot)}
+                        className="py-3 px-3 rounded-xl border border-[#E8E0D2] bg-white hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[#141210] text-xs font-mono font-semibold transition-all shadow-2xs text-center group"
+                      >
+                        <span className="font-bold">{slot.start}</span>
+                        <span className="text-[10px] opacity-70 ml-1">({slot.end})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>
+
       </div>
 
-      {/* MODAL DE RÉSERVATION DOCTOLIB PRO */}
-      <AnimatePresence>
-        {modalOpen && selectedSlot && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl border border-[#E8E0D2] shadow-2xl overflow-hidden p-6 sm:p-8"
+      {/* MODAL DE RÉSERVATION AVEC PAIEMENT OBLIGATOIRE (48,95 € ou 96,45 €) */}
+      {modalOpen && selectedSlot && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-white rounded-3xl border border-[#E8E0D2] shadow-2xl p-6 sm:p-8">
+            <button
+              type="button"
+              onClick={() => setModalOpen(false)}
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] flex items-center justify-center text-[#5C534A] hover:text-[#141210] text-sm font-bold"
+              aria-label="Fermer"
             >
-              {/* BOUTON FERMER */}
-              <button
-                type="button"
-                onClick={() => {
-                  setModalOpen(false);
-                  setIsConfirmed(false);
-                }}
-                className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#FAF8F5] border border-[#E8E0D2] flex items-center justify-center text-[#5C534A] hover:text-[#141210] text-sm font-bold"
-                aria-label="Fermer"
-              >
-                ✕
-              </button>
+              ✕
+            </button>
 
-              {!isConfirmed ? (
-                <>
-                  <div className="mb-6">
-                    <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-[#8C6214] font-bold">
-                      Confirmation de votre consultation
-                    </span>
-                    <h3 className="font-heading font-extrabold text-2xl text-[#141210] mt-1">
-                      Finaliser votre réservation
-                    </h3>
-                  </div>
+            <div className="mb-6">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8C6214] font-bold">
+                VALIDATION & PAIEMENT SÉCURISÉ
+              </span>
+              <h3 className="font-heading font-extrabold text-2xl text-[#141210] mt-1">
+                Confirmer votre Consultation
+              </h3>
+            </div>
 
-                  {/* RÉCAPITULATIF DU CRÉNEAU */}
-                  <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2] mb-6 space-y-1.5 text-xs font-mono">
-                    <div className="flex justify-between">
-                      <span className="text-[#7A6F64]">Date & Heure :</span>
-                      <strong className="text-[#141210] font-bold">
-                        {selectedSlot.dateStr} de {selectedSlot.time} à {selectedSlot.end}
-                      </strong>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#7A6F64]">Durée :</span>
-                      <span className="text-[#087B53] font-bold">45 minutes</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#7A6F64]">Format :</span>
-                      <strong className="text-[#141210]">
-                        {selectedFormat === "tel" ? "Appel Téléphonique / Visio" : "Présentiel (Paris / Reims)"}
-                      </strong>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-[#7A6F64]">Motif :</span>
-                      <span className="text-[#8C6214] font-semibold">{selectedMotif}</span>
-                    </div>
-                  </div>
+            {/* RÉCAPITULATIF FINANCIER & CRÉNEAU */}
+            <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2] mb-6 space-y-2 text-xs font-mono">
+              <div className="flex justify-between">
+                <span className="text-[#7A6F64]">Format :</span>
+                <strong className="text-[#141210]">
+                  {selectedFormat === "tel" ? "Téléphone / Visio (45 min)" : "Présentiel à Domicile (1h15)"}
+                </strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#7A6F64]">Date & Heure :</span>
+                <strong className="text-[#141210]">
+                  {activeDay.fullDateStr} à {selectedSlot.start}
+                </strong>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-[#E8E0D2] text-sm">
+                <span className="text-[#141210] font-bold">Tarif de la consultation :</span>
+                <span className="text-[#087B53] font-heading font-extrabold text-lg">
+                  {currentPrice}
+                </span>
+              </div>
+            </div>
 
-                  {/* FORMULAIRE */}
-                  <form onSubmit={handleSubmitBooking} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1.5">
-                        Nom et Prénom *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={nom}
-                        onChange={(e) => setNom(e.target.value)}
-                        placeholder="Ex : Karim Bennani"
-                        className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] bg-[#FAF8F5]/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087B53] text-sm text-[#141210]"
-                      />
-                    </div>
+            {/* FORMULAIRE PRÉALABLE AU PAIEMENT */}
+            <form onSubmit={handleProceedToPayment} className="space-y-4">
+              <div>
+                <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1">
+                  Nom et Prénom *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                  placeholder="Ex : Karim Bennani"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] text-sm text-[#141210] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                />
+              </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1.5">
-                          Adresse Email *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="votre@email.com"
-                          className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] bg-[#FAF8F5]/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087B53] text-sm text-[#141210]"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1.5">
-                          Téléphone *
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          value={telephone}
-                          onChange={(e) => setTelephone(e.target.value)}
-                          placeholder="06 12 34 56 78"
-                          className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] bg-[#FAF8F5]/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087B53] text-sm text-[#141210]"
-                        />
-                      </div>
-                    </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1">
+                    Adresse Email *
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="votre@email.com"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] text-sm text-[#141210] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1">
+                    Numéro de Téléphone *
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={telephone}
+                    onChange={(e) => setTelephone(e.target.value)}
+                    placeholder="06 12 34 56 78"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] text-sm text-[#141210] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                  />
+                </div>
+              </div>
 
-                    <div>
-                      <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1.5">
-                        Vos attentes ou situation (optionnel)
-                      </label>
-                      <textarea
-                        rows={2}
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder="Difficulté à prier à l'heure, surcharge mentale, question sur le protocole..."
-                        className="w-full px-4 py-2 rounded-xl border border-[#E8E0D2] bg-[#FAF8F5]/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#087B53] text-xs text-[#141210]"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full mt-2 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-2"
-                    >
-                      {isSubmitting ? (
-                        <span>Enregistrement en cours...</span>
-                      ) : (
-                        <>
-                          <span>Confirmer mon rendez-vous (45 min)</span>
-                          <ArrowIcon className="w-4 h-4" />
-                        </>
-                      )}
-                    </button>
-                  </form>
-                </>
-              ) : (
-                /* ÉCRAN DE CONFIRMATION SUCCÈS */
-                <div className="py-8 text-center space-y-4">
-                  <div className="w-16 h-16 rounded-full bg-[#087B53]/15 text-[#087B53] border-2 border-[#087B53] mx-auto flex items-center justify-center text-2xl font-bold">
-                    ✓
-                  </div>
-                  <h3 className="font-heading font-extrabold text-2xl text-[#141210]">
-                    Rendez-vous Confirmé !
-                  </h3>
-                  <p className="text-sm text-[#403B35] max-w-sm mx-auto leading-relaxed">
-                    Votre créneau de <strong>45 minutes</strong> le <strong>{selectedSlot.dateStr} à {selectedSlot.time}</strong> est validé avec Mounir Byar.
-                  </p>
-                  <div className="p-4 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2] text-xs font-mono text-[#5C534A] max-w-sm mx-auto">
-                    Un email de confirmation avec le lien sécurisé et l&apos;invitation Google/Outlook Agenda vient de vous être envoyé à <strong>{email}</strong>.
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setModalOpen(false);
-                      setIsConfirmed(false);
-                    }}
-                    className="mt-4 px-8 py-3 rounded-full bg-[#141210] text-white text-xs font-heading font-bold uppercase tracking-wider hover:bg-[#B88E3E] transition-all"
-                  >
-                    Fermer la fenêtre
-                  </button>
+              {selectedFormat === "presentiel" && (
+                <div>
+                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[#141210] mb-1">
+                    Adresse complète pour le déplacement à domicile *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={adresse}
+                    onChange={(e) => setAdresse(e.target.value)}
+                    placeholder="Numéro, rue, code postal, ville"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#E8E0D2] text-sm text-[#141210] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                  />
                 </div>
               )}
-            </motion.div>
+
+              <button
+                type="submit"
+                className="w-full py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 mt-2"
+              >
+                <span>Valider et Régler ({currentPrice})</span>
+                <ArrowIcon className="w-4 h-4" />
+              </button>
+
+              <span className="block text-center text-[10px] font-mono text-[#7A6F64]">
+                Paiement 100% sécurisé via Stripe • Reçu et confirmation immédiate
+              </span>
+            </form>
           </div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 }

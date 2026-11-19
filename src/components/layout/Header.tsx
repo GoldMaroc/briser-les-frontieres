@@ -7,30 +7,29 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import ArrowIcon from "@/components/ui/ArrowIcon";
 
+// ZÉRO DOUBLON : Rendez-vous est exclusivement dans le bouton d'action à droite
 const navSteps = [
   { href: "/fondements", label: "La Méthode" },
   { href: "/recherche", label: "Science & Khalifa" },
   { href: "/offres", label: "Accompagnement" },
   { href: "/livres", label: "Les Livres" },
-  { href: "/prix", label: "Prix" },
+  { href: "/prix", label: "Tarifs" },
   { href: "/temoignages", label: "Témoignages" },
-  { href: "/rendez-vous", label: "Rendez-vous" },
 ];
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Ne pas afficher le header sur l'admin
   if (pathname?.startsWith("/admin")) {
     return null;
   }
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#FAF8F5]/92 backdrop-blur-xl border-b border-[#E8E0D2] shadow-[0_4px_20px_rgba(20,18,16,0.03)] transition-all">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 h-[76px] flex items-center justify-between gap-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 h-[76px] flex items-center justify-between gap-4">
         
-        {/* GAUCHE : Logo Médaillon Joaillerie + Slogan Officiel */}
+        {/* GAUCHE : Logo Médaillon + Slogan Officiel */}
         <Link 
           href="/" 
           className="flex items-center gap-3.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E] rounded-full py-1 shrink-0"
@@ -55,10 +54,10 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* CENTRE : Navigation Haute Joaillerie (Desktop) - Pages dédiées, aucun ancrage */}
+        {/* CENTRE : Liens Clairs (ZÉRO doublon, navigation directe) */}
         <nav 
           aria-label="Navigation principale" 
-          className="hidden lg:flex items-center gap-6 xl:gap-8 shrink-0"
+          className="hidden xl:flex items-center gap-6 2xl:gap-8 shrink-0"
         >
           {navSteps.map((step) => {
             const isActive = pathname === step.href;
@@ -66,7 +65,7 @@ export default function Header() {
               <Link
                 key={step.href}
                 href={step.href}
-                className={`relative text-[12.5px] xl:text-[13px] tracking-wider uppercase transition-colors duration-200 py-1 font-heading whitespace-nowrap ${
+                className={`relative text-[12px] 2xl:text-[12.5px] tracking-wider uppercase transition-colors duration-200 py-1 font-heading whitespace-nowrap ${
                   isActive
                     ? "text-[#B88E3E] font-bold"
                     : "text-[#5C534A] hover:text-[#141210] font-medium"
@@ -85,11 +84,11 @@ export default function Header() {
           })}
         </nav>
 
-        {/* DROITE : Action Principale (Desktop) */}
-        <div className="hidden lg:flex items-center gap-3.5 shrink-0">
+        {/* DROITE : Action Principale (RDV & Audit Gratuit sans mention 3 min) */}
+        <div className="hidden lg:flex items-center gap-3 shrink-0">
           <Link
             href="/rendez-vous"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#B88E3E]/40 bg-white/60 hover:bg-white text-[#141210] text-[11.5px] font-heading font-semibold uppercase tracking-wider transition-all duration-300 shadow-sm hover:border-[#B88E3E]"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#B88E3E]/50 bg-white/70 hover:bg-white text-[#141210] text-[11px] font-heading font-semibold uppercase tracking-wider transition-all duration-300 shadow-xs hover:border-[#B88E3E]"
           >
             <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
             <span>Prendre RDV</span>
@@ -99,18 +98,18 @@ export default function Header() {
             href="/audit"
             className="group relative inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-[11px] font-heading font-bold uppercase tracking-wider transition-all duration-300 shadow-[0_4px_15px_rgba(8,123,83,0.20)] hover:shadow-[0_6px_20px_rgba(8,123,83,0.30)] hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap"
           >
-            <span>Audit gratuit (3 min)</span>
+            <span>Audit Gratuit</span>
             <ArrowIcon className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
         </div>
 
-        {/* BOUTON BURGER (Mobile) */}
-        <div className="lg:hidden flex items-center gap-2">
+        {/* BOUTON BURGER (Mobile / Tablette) */}
+        <div className="xl:hidden flex items-center gap-2">
           <Link
             href="/audit"
             className="sm:hidden inline-flex items-center px-3 py-1.5 rounded-full bg-[#087B53] text-white text-[10px] font-heading font-bold uppercase tracking-wider shadow-sm"
           >
-            Audit (3 min)
+            Audit Gratuit
           </Link>
 
           <button
@@ -152,9 +151,9 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden border-b border-[#E8E0D2] bg-[#FAF8F5] px-6 py-6 space-y-4 shadow-lg overflow-hidden"
+            className="xl:hidden border-b border-[#E8E0D2] bg-[#FAF8F5] px-6 py-6 space-y-4 shadow-lg overflow-hidden"
           >
-            <nav className="flex flex-col space-y-3 font-heading uppercase text-xs tracking-wider">
+            <nav className="flex flex-col space-y-2.5 font-heading uppercase text-xs tracking-wider">
               {navSteps.map((step) => {
                 const isActive = pathname === step.href;
                 return (
@@ -178,16 +177,17 @@ export default function Header() {
               <Link
                 href="/rendez-vous"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full border border-[#B88E3E]/40 bg-white text-[#141210] text-center text-xs font-heading font-semibold uppercase tracking-wider shadow-sm"
+                className="w-full py-3 rounded-full border border-[#B88E3E]/50 bg-white text-[#141210] text-center text-xs font-heading font-semibold uppercase tracking-wider shadow-xs"
               >
-                Prendre Rendez-vous (45 min)
+                Prendre RDV (Tél 48,95 &euro; • Domicile 96,45 &euro;)
               </Link>
               <Link
                 href="/audit"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 rounded-full bg-[#087B53] text-white text-center text-xs font-heading font-bold uppercase tracking-wider shadow-md"
+                className="w-full py-3 rounded-full bg-[#087B53] text-white text-center text-xs font-heading font-bold uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
               >
-                Passer l&apos;audit gratuit (3 min) →
+                <span>Passer l&apos;Audit Gratuit</span>
+                <ArrowIcon className="w-3.5 h-3.5" />
               </Link>
             </div>
           </motion.div>

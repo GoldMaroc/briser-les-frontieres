@@ -573,14 +573,14 @@ export default function RechercheSciencePage() {
             Prêt à appliquer ces protocoles à votre propre existence ?
           </h2>
           <p className="text-sm text-[#5C534A] max-w-xl mx-auto leading-relaxed">
-            Évaluez votre score de charge mentale en 3 minutes ou réservez un entretien d&apos;orientation de 45 minutes pour auditer vos 8 piliers avec Mounir Byar.
+            Évaluez votre score de charge mentale avec notre audit gratuit ou réservez un entretien d&apos;orientation de 45 minutes pour auditer vos 8 piliers avec Mounir Byar.
           </p>
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
               href="/audit"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md"
             >
-              <span>Passer l&apos;audit gratuit (3 min)</span>
+              <span>Passer l&apos;audit gratuit</span>
               <ArrowIcon className="w-3.5 h-3.5" />
             </Link>
             <Link

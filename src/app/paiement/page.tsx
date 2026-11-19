@@ -159,15 +159,26 @@ function PaiementContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const initialOfferId = searchParams.get("offre") || "3m";
+  const initialOfferId =
+    searchParams.get("offre") ||
+    searchParams.get("product") ||
+    "rdv-tel";
   const initialInstallmentsParam = Number(searchParams.get("echeances") || "1");
 
+  // Données de rendez-vous depuis l'Agenda
+  const appointmentDate = searchParams.get("date") || "";
+  const appointmentSlot = searchParams.get("creneau") || "";
+  const appointmentAddress = searchParams.get("adresse") || "";
+  const paramNom = searchParams.get("nom") || "";
+  const paramEmail = searchParams.get("email") || "";
+  const paramTel = searchParams.get("telephone") || "";
+
   const [selectedOfferId, setSelectedOfferId] = useState<string>(
-    PRODUCTS_CATALOG[initialOfferId] ? initialOfferId : "3m"
+    PRODUCTS_CATALOG[initialOfferId] ? initialOfferId : "rdv-tel"
   );
 
   const product = useMemo(
-    () => PRODUCTS_CATALOG[selectedOfferId] || PRODUCTS_CATALOG["3m"],
+    () => PRODUCTS_CATALOG[selectedOfferId] || PRODUCTS_CATALOG["rdv-tel"],
     [selectedOfferId]
   );
 
@@ -185,9 +196,9 @@ function PaiementContent() {
 
   const [customer, setCustomer] = useState<CustomerForm>({
     prenom: "",
-    nom: "",
-    email: "",
-    telephone: "",
+    nom: paramNom || "",
+    email: paramEmail || "",
+    telephone: paramTel || "",
     profil: "Homme",
   });
   const [customerError, setCustomerError] = useState("");
@@ -368,8 +379,8 @@ function PaiementContent() {
     }
   };
 
-  const coachingOffers = ["audit", "30j", "3m", "12m"];
-  const bookOffers = ["secrets", "rahman"];
+  const coachingOffers = ["rdv-tel", "rdv-presentiel", "30j", "9m"];
+  const bookOffers = ["secrets", "invocations", "rahman"];
 
   return (
     <div className="relative pt-24 sm:pt-32 pb-20 sm:pb-28 bg-[#0A1128] text-[#F0EDE8] min-h-screen overflow-x-hidden w-full max-w-full">
@@ -400,6 +411,40 @@ function PaiementContent() {
           </div>
         </div>
 
+        {/* RÉCAPITULATIF STATUTAIRE DU RENDEZ-VOUS SI DATE/CRÉNEAU CHOISI */}
+        {(appointmentDate || appointmentSlot || selectedOfferId.startsWith("rdv-")) && (
+          <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-[#0D1B2A] border border-[#B88E3E]/40 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-[#087B53] bg-[#087B53]/15 px-2.5 py-0.5 rounded-full">
+                <span>✓ Créneau Réservé sur l&apos;Agenda</span>
+              </div>
+              <h3 className="font-heading font-extrabold text-base sm:text-lg text-white">
+                {product.title} • {product.priceDisplay}
+              </h3>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#A0AEC0] font-sans">
+                {appointmentDate && (
+                  <span>📅 <strong>Date :</strong> {appointmentDate}</span>
+                )}
+                {appointmentSlot && (
+                  <span>⏰ <strong>Horaire :</strong> {appointmentSlot}</span>
+                )}
+                {appointmentAddress && (
+                  <span>📍 <strong>Lieu :</strong> À domicile ({appointmentAddress})</span>
+                )}
+                {!appointmentAddress && selectedOfferId === "rdv-tel" && (
+                  <span>📞 <strong>Modalité :</strong> Téléphone / Visio sécurisée</span>
+                )}
+              </div>
+            </div>
+            <div className="text-right shrink-0">
+              <span className="text-[11px] font-mono text-[#A0AEC0] uppercase block">Montant à régler</span>
+              <span className="text-2xl font-heading font-extrabold text-[#D4A853]">
+                {product.priceDisplay}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Sélecteur rapide de prestation (Grille 2x2 sur mobile sans aucun débordement) */}
         <div className="mt-5 sm:mt-8 mb-6 sm:mb-10 w-full min-w-0">
           <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -409,7 +454,7 @@ function PaiementContent() {
             <button
               type="button"
               onClick={() => {
-                const nextId = product.category === "book" ? "3m" : "secrets";
+                const nextId = product.category === "book" ? "rdv-tel" : "secrets";
                 setSelectedOfferId(nextId);
                 router.replace(`/paiement?offre=${nextId}`, { scroll: false });
               }}

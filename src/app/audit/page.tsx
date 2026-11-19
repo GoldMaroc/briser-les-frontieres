@@ -18,7 +18,7 @@ export default function AuditPage() {
         <SectionHeading
           label="Diagnostic de Rectitude"
           title="Bilan de Souveraineté Cognitive"
-          subtitle="Prenez 3 minutes pour évaluer votre degré de vulnérabilité cognitive face à l'entropie du monde moderne et de votre Nafs."
+          subtitle="Évaluez avec précision votre degré de vulnérabilité cognitive face à l'entropie du monde moderne et de votre Nafs."
         />
 
         <div className="mt-12">

@@ -9,7 +9,7 @@ const footerNav = [
   { href: "/livres", label: "Les Livres" },
   { href: "/prix", label: "Grille Tarifaire" },
   { href: "/temoignages", label: "Témoignages" },
-  { href: "/rendez-vous", label: "Prendre RDV (45 min)" },
+  { href: "/rendez-vous", label: "Prendre RDV" },
   { href: "/contact", label: "Contact Privé" },
 ];
 
@@ -66,21 +66,21 @@ export default function Footer() {
               Prise de Contact
             </h4>
             <p className="text-xs text-white/60 leading-relaxed">
-              Cabinet basé à Reims & Paris. Entretiens sur rendez-vous en présentiel ou téléconsultation sécurisée (45 min).
+              Cabinet basé à Reims & Paris. Entretiens sur rendez-vous par téléphone/visio (48,95 €) ou en présentiel à domicile (96,45 €).
             </p>
             <div className="flex flex-col gap-3 pt-2">
               <Link
                 href="/audit"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md text-center"
               >
-                <span>Passer l&apos;audit gratuit (3 min)</span>
+                <span>Passer l&apos;audit gratuit</span>
                 <ArrowIcon className="w-3.5 h-3.5" />
               </Link>
               <Link
                 href="/rendez-vous"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-heading font-semibold uppercase tracking-wider transition-all text-center"
               >
-                <span>Agenda Doctolib (45 min)</span>
+                <span>Agenda & Réservation</span>
               </Link>
             </div>
           </div>

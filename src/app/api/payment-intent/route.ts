@@ -17,7 +17,7 @@ function getStripeClient() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { offerId = "3m", installments = 1 } = body;
+    const { offerId = "rdv-tel", installments = 1 } = body;
 
     const product = PRODUCTS_CATALOG[offerId];
     if (!product) {
