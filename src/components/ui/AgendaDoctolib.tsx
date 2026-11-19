@@ -3,11 +3,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface TimeSlot {
-  time: string;
-  available: boolean;
-}
-
 interface DaySchedule {
   date: Date;
   dayName: string;
@@ -40,7 +35,7 @@ export default function AgendaDoctolib() {
   const [confirmedBooking, setConfirmedBooking] = useState<any | null>(null);
   const [error, setError] = useState("");
 
-  // Décalage de la semaine affichée (0 = semaine en cours, 1 = semaine suivante, etc.)
+  // Décalage de la semaine affichée
   const [weekOffset, setWeekOffset] = useState(0);
 
   // Générer dynamiquement les jours de la semaine courante/prochaine
@@ -48,8 +43,7 @@ export default function AgendaDoctolib() {
     const days: DaySchedule[] = [];
     const today = new Date();
     
-    // Calculer le lundi de référence
-    const currentDay = today.getDay(); // 0 = Dimanche, 1 = Lundi, etc.
+    const currentDay = today.getDay();
     const distanceToMonday = currentDay === 0 ? -6 : 1 - currentDay;
     const baseMonday = new Date(today);
     baseMonday.setDate(today.getDate() + distanceToMonday + weekOffset * 7);
@@ -60,7 +54,6 @@ export default function AgendaDoctolib() {
       "Juil.", "Août", "Sept.", "Oct.", "Nov.", "Déc."
     ];
 
-    // Créer les 6 jours de Lundi à Samedi
     for (let i = 0; i < 6; i++) {
       const d = new Date(baseMonday);
       d.setDate(baseMonday.getDate() + i);
@@ -68,14 +61,13 @@ export default function AgendaDoctolib() {
       const isFriday = d.getDay() === 5;
       const isSunday = d.getDay() === 0;
 
-      // Horaires :
-      // Lundi au Samedi : 9h00 à 18h00
-      // Vendredi : 9h00 à 12h00 UNIQUEMENT (Salât al-Jumu'ah)
       let slots: string[] = [];
       if (!isSunday) {
         if (isFriday) {
+          // Vendredi de 9h à 12h uniquement (Salât al-Jumu'ah)
           slots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
         } else {
+          // Lundi à Samedi : 9h00 à 18h00
           slots = [
             "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
             "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"
@@ -149,36 +141,36 @@ export default function AgendaDoctolib() {
       id="agenda" 
       data-cursor="view" 
       data-cursor-text="AGENDA ✦"
-      className="w-full max-w-5xl mx-auto p-5 sm:p-8 lg:p-10 rounded-3xl bg-white border border-[#E8E0D2] shadow-[0_15px_45px_rgba(40,30,20,0.06)] text-[#141210] transition-shadow duration-300 hover:shadow-[0_20px_55px_rgba(40,30,20,0.09)]"
+      className="w-full max-w-5xl mx-auto p-6 sm:p-10 rounded-[32px] bg-white/[0.03] border border-white/10 backdrop-blur-2xl shadow-2xl text-white transition-all duration-300"
     >
       
-      {/* En-tête de l'agenda Doctolib */}
-      <div className="border-b border-[#E8E0D2] pb-6 sm:pb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* En-tête de l'agenda Doctolib KÖM Style */}
+      <div className="border-b border-white/10 pb-6 sm:pb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#087B53]/10 border border-[#087B53]/20 text-[#087B53] mb-2">
-            <span className="w-2 h-2 rounded-full bg-[#087B53] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#FF758C] mb-2">
+            <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
             <span className="font-mono text-[10px] uppercase font-bold tracking-wider">
               PRISE DE RENDEZ-VOUS EN LIGNE • AGENDA OFFICIEL
             </span>
           </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl text-[#141210]">
-            Agenda des Rendez-vous & Consultations
+          <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-white">
+            ↗ Agenda des Consultations Mounir Byar
           </h2>
-          <p className="text-xs sm:text-sm text-[#5C534A] mt-1 font-sans">
+          <p className="text-xs sm:text-sm text-white/50 mt-1 font-sans">
             Du lundi au samedi (9h00–18h00) • Vendredi matin uniquement (9h00–12h00) • Dimanche fermé.
           </p>
         </div>
 
         {/* Sélecteur de modalité : Téléphonique vs Présentiel */}
-        <div className="inline-flex p-1.5 rounded-2xl bg-[#F5EFEB] border border-[#E8E0D2] self-start md:self-auto">
+        <div className="inline-flex p-1.5 rounded-2xl bg-white/5 border border-white/10 self-start md:self-auto">
           <button
             type="button"
             data-cursor="pointer"
             onClick={() => setMeetingType("telephone")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all cursor-pointer ${
               meetingType === "telephone"
-                ? "bg-white text-[#141210] shadow-sm border border-[#E8E0D2]"
-                : "text-[#5C534A] hover:text-[#141210]"
+                ? "bg-white text-black shadow-md font-extrabold"
+                : "text-white/70 hover:text-white"
             }`}
           >
             <span>📞 Téléphonique</span>
@@ -189,8 +181,8 @@ export default function AgendaDoctolib() {
             onClick={() => setMeetingType("presentiel")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all cursor-pointer ${
               meetingType === "presentiel"
-                ? "bg-white text-[#141210] shadow-sm border border-[#E8E0D2]"
-                : "text-[#5C534A] hover:text-[#141210]"
+                ? "bg-white text-black shadow-md font-extrabold"
+                : "text-white/70 hover:text-white"
             }`}
           >
             <span>📍 Présentiel (Reims / Paris)</span>
@@ -203,48 +195,48 @@ export default function AgendaDoctolib() {
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="my-8 p-8 sm:p-12 rounded-3xl bg-[#087B53]/5 border-2 border-[#087B53]/40 text-center space-y-6"
+          className="my-8 p-8 sm:p-12 rounded-3xl bg-white/[0.04] border border-[#10B981]/50 text-center space-y-6"
         >
-          <div className="w-16 h-16 rounded-full bg-[#087B53] text-white flex items-center justify-center mx-auto text-2xl shadow-lg">
+          <div className="w-16 h-16 rounded-full bg-[#10B981] text-black flex items-center justify-center mx-auto text-2xl font-black shadow-lg">
             ✓
           </div>
           <div className="space-y-2">
-            <span className="font-mono text-xs uppercase tracking-widest text-[#087B53] font-bold block">
+            <span className="font-mono text-xs uppercase tracking-widest text-[#10B981] font-bold block">
               CONFIRMATION IMMÉDIATE • {confirmedBooking.id}
             </span>
-            <h3 className="font-heading font-bold text-2xl sm:text-3xl text-[#141210]">
+            <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-white">
               Votre rendez-vous est confirmé avec succès !
             </h3>
-            <p className="text-sm text-[#5C534A] max-w-lg mx-auto">
+            <p className="text-sm text-white/60 max-w-lg mx-auto">
               Un accusé de réception a été envoyé pour <strong>{confirmedBooking.client.prenom} {confirmedBooking.client.nom}</strong>.
             </p>
           </div>
 
-          <div className="max-w-md mx-auto p-5 rounded-2xl bg-white border border-[#E8E0D2] shadow-sm text-left space-y-3 font-sans text-xs">
-            <div className="flex justify-between border-b border-[#E8E0D2] pb-2">
-              <span className="text-[#7A6F64]">Type de consultation</span>
-              <span className="font-bold text-[#141210]">
+          <div className="max-w-md mx-auto p-5 rounded-2xl bg-white/[0.04] border border-white/10 shadow-sm text-left space-y-3 font-sans text-xs">
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-white/50">Type de consultation</span>
+              <span className="font-bold text-white">
                 {confirmedBooking.typeRdv === "telephone" ? "📞 Appel Téléphonique direct" : "📍 Cabinet Présentiel (Reims / Paris)"}
               </span>
             </div>
-            <div className="flex justify-between border-b border-[#E8E0D2] pb-2">
-              <span className="text-[#7A6F64]">Date & Heure</span>
-              <span className="font-bold text-[#087B53]">
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-white/50">Date & Heure</span>
+              <span className="font-bold text-[#FF758C]">
                 {confirmedBooking.dateRdv} à {confirmedBooking.timeSlot}
               </span>
             </div>
-            <div className="flex justify-between border-b border-[#E8E0D2] pb-2">
-              <span className="text-[#7A6F64]">Motif sélectionné</span>
-              <span className="font-medium text-[#141210]">{confirmedBooking.motif}</span>
+            <div className="flex justify-between border-b border-white/10 pb-2">
+              <span className="text-white/50">Motif sélectionné</span>
+              <span className="font-medium text-white">{confirmedBooking.motif}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-[#7A6F64]">Numéro de rappel</span>
-              <span className="font-mono font-bold text-[#141210]">{confirmedBooking.client.telephone}</span>
+              <span className="text-white/50">Numéro de rappel</span>
+              <span className="font-mono font-bold text-white">{confirmedBooking.client.telephone}</span>
             </div>
           </div>
 
-          <p className="text-xs text-[#7A6F64] max-w-md mx-auto leading-relaxed">
-            Mounir Byar ou son secrétariat prendra directement contact avec vous à l&apos;heure convenue. Vous recevrez également un rappel avant la séance.
+          <p className="text-xs text-white/40 max-w-md mx-auto leading-relaxed">
+            Mounir Byar ou son secrétariat prendra directement contact avec vous à l&apos;heure convenue.
           </p>
 
           <button
@@ -254,7 +246,7 @@ export default function AgendaDoctolib() {
               setSelectedSlot(null);
             }}
             data-cursor="pointer"
-            className="px-6 py-3 rounded-full bg-[#141210] text-white font-heading font-semibold text-xs uppercase tracking-wider hover:bg-[#2A241F] transition-all cursor-pointer shadow-md"
+            className="px-6 py-3 rounded-full bg-white text-black font-heading font-bold text-xs uppercase tracking-wider hover:bg-neutral-200 transition-all cursor-pointer shadow-md"
           >
             Prendre un autre rendez-vous
           </button>
@@ -264,7 +256,7 @@ export default function AgendaDoctolib() {
           
           {/* 1. Sélection du motif */}
           <div>
-            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-[#7A6F64] mb-3">
+            <label className="block text-xs font-mono font-bold uppercase tracking-wider text-white/50 mb-3">
               1. Choisissez le motif de votre consultation :
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -280,15 +272,15 @@ export default function AgendaDoctolib() {
                   onClick={() => setMotif(m.label)}
                   className={`p-4 rounded-2xl border text-left transition-all cursor-pointer hover:-translate-y-0.5 ${
                     motif === m.label
-                      ? "border-[#B88E3E] bg-[#B88E3E]/5 shadow-sm ring-1 ring-[#B88E3E]"
-                      : "border-[#E8E0D2] bg-white hover:border-[#B88E3E]/40"
+                      ? "border-[#FF758C] bg-white/[0.06] shadow-sm ring-1 ring-[#FF758C]"
+                      : "border-white/10 bg-white/[0.02] hover:border-white/25"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-heading font-bold text-xs sm:text-sm text-[#141210]">{m.label}</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F5EFEB] text-[#7A6F64] font-semibold">{m.time}</span>
+                    <span className="font-heading font-bold text-xs sm:text-sm text-white">{m.label}</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-white/70 font-semibold">{m.time}</span>
                   </div>
-                  <p className="text-[11px] text-[#5C534A] leading-relaxed">{m.desc}</p>
+                  <p className="text-[11px] text-white/50 leading-relaxed">{m.desc}</p>
                 </button>
               ))}
             </div>
@@ -297,7 +289,7 @@ export default function AgendaDoctolib() {
           {/* 2. Grille Calendrier et Créneaux façon Doctolib */}
           <div>
             <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-              <label className="text-xs font-mono font-bold uppercase tracking-wider text-[#7A6F64]">
+              <label className="text-xs font-mono font-bold uppercase tracking-wider text-white/50">
                 2. Choisissez votre jour et créneau horaire :
               </label>
 
@@ -308,7 +300,7 @@ export default function AgendaDoctolib() {
                   data-cursor="pointer"
                   disabled={weekOffset <= 0}
                   onClick={() => setWeekOffset(prev => Math.max(0, prev - 1))}
-                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#F5EFEB] transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono disabled:opacity-30 disabled:cursor-not-allowed hover:bg-white/10 transition-colors cursor-pointer text-white"
                 >
                   ← Semaine précédente
                 </button>
@@ -316,7 +308,7 @@ export default function AgendaDoctolib() {
                   type="button"
                   data-cursor="pointer"
                   onClick={() => setWeekOffset(prev => prev + 1)}
-                  className="px-3 py-1.5 rounded-lg border border-[#E8E0D2] text-xs font-mono hover:bg-[#F5EFEB] transition-colors cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg border border-white/10 text-xs font-mono hover:bg-white/10 transition-colors cursor-pointer text-white"
                 >
                   Semaine suivante →
                 </button>
@@ -331,20 +323,20 @@ export default function AgendaDoctolib() {
                 return (
                   <div 
                     key={dateKey} 
-                    className="flex flex-col rounded-2xl border border-[#E8E0D2] bg-[#FAF8F5] overflow-hidden"
+                    className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden"
                   >
                     {/* En-tête du jour */}
-                    <div className={`p-3 text-center border-b border-[#E8E0D2] ${
-                      day.isFriday ? "bg-[#B88E3E]/10" : "bg-white"
+                    <div className={`p-3 text-center border-b border-white/10 ${
+                      day.isFriday ? "bg-[#FF758C]/15" : "bg-white/[0.04]"
                     }`}>
-                      <span className="font-heading font-bold text-xs uppercase block text-[#141210]">
+                      <span className="font-heading font-bold text-xs uppercase block text-white/70">
                         {day.dayName}
                       </span>
-                      <span className="text-sm font-extrabold text-[#141210]">
+                      <span className="text-sm font-extrabold text-white">
                         {day.dayNumber} {day.monthName}
                       </span>
                       {day.isFriday && (
-                        <span className="text-[9px] font-mono text-[#8C6214] font-bold block mt-0.5">
+                        <span className="text-[9px] font-mono text-[#FF758C] font-bold block mt-0.5">
                           Jumu&apos;ah (9h–12h)
                         </span>
                       )}
@@ -364,8 +356,8 @@ export default function AgendaDoctolib() {
                             onClick={() => handleSelectSlot(dateKey, slot)}
                             className={`w-full py-2 px-1 text-center rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
                               isSelected
-                                ? "bg-[#087B53] text-white shadow-sm ring-2 ring-[#087B53]/50 scale-[1.03]"
-                                : "bg-white text-[#141210] border border-[#E8E0D2] hover:bg-[#087B53]/10 hover:border-[#087B53]/40 hover:text-[#087B53] hover:scale-[1.01]"
+                                ? "bg-gradient-to-r from-[#FF758C] to-[#FF7EB3] text-black shadow-lg font-bold scale-[1.03]"
+                                : "bg-white/5 text-white/80 border border-white/5 hover:bg-white/15 hover:text-white hover:scale-[1.01]"
                             }`}
                           >
                             {slot}
@@ -386,26 +378,26 @@ export default function AgendaDoctolib() {
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 15 }}
-                className="p-6 sm:p-8 rounded-3xl bg-[#FAF8F5] border border-[#B88E3E]/30 space-y-6 shadow-sm"
+                className="p-6 sm:p-8 rounded-3xl bg-white/[0.04] border border-[#FF758C]/40 space-y-6 shadow-xl"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E8E0D2] pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                   <div>
-                    <span className="font-mono text-[10px] uppercase font-bold text-[#8C6214] tracking-wider block">
+                    <span className="font-mono text-[10px] uppercase font-bold text-[#FF758C] tracking-wider block">
                       3. Créneau sélectionné
                     </span>
-                    <h3 className="font-heading font-bold text-lg text-[#141210]">
+                    <h3 className="font-heading font-bold text-lg text-white">
                       {selectedDate} à {selectedSlot} ({meetingType === "telephone" ? "📞 Téléphonique" : "📍 Présentiel"})
                     </h3>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-[#087B53]/10 text-[#087B53] font-mono text-xs font-bold self-start sm:self-auto">
-                    Créneau réservable
+                  <span className="px-3 py-1 rounded-full bg-[#10B981]/20 text-[#10B981] border border-emerald-500/30 font-mono text-xs font-bold self-start sm:self-auto">
+                    Créneau disponible
                   </span>
                 </div>
 
                 <form onSubmit={handleBookingSubmit} className="space-y-4 font-sans">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-mono font-bold uppercase text-[#5C534A]">
+                      <label className="text-[11px] font-mono font-bold uppercase text-white/60">
                         Prénom *
                       </label>
                       <input
@@ -414,12 +406,12 @@ export default function AgendaDoctolib() {
                         value={prenom}
                         onChange={(e) => setPrenom(e.target.value)}
                         placeholder="Ex: Yacine, Mehdi..."
-                        className="px-4 py-3 rounded-xl bg-white border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm text-[#141210] placeholder-neutral-400"
+                        className="px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#FF758C] outline-none text-sm text-white placeholder-white/30"
                       />
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-mono font-bold uppercase text-[#5C534A]">
+                      <label className="text-[11px] font-mono font-bold uppercase text-white/60">
                         Nom de famille *
                       </label>
                       <input
@@ -428,14 +420,14 @@ export default function AgendaDoctolib() {
                         value={nom}
                         onChange={(e) => setNom(e.target.value)}
                         placeholder="Ex: Benali, Dr...."
-                        className="px-4 py-3 rounded-xl bg-white border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm text-[#141210] placeholder-neutral-400"
+                        className="px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#FF758C] outline-none text-sm text-white placeholder-white/30"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-mono font-bold uppercase text-[#5C534A]">
+                      <label className="text-[11px] font-mono font-bold uppercase text-white/60">
                         Numéro de téléphone mobile *
                       </label>
                       <input
@@ -444,9 +436,9 @@ export default function AgendaDoctolib() {
                         value={telephone}
                         onChange={(e) => setTelephone(e.target.value)}
                         placeholder="Ex: 06 12 34 56 78"
-                        className="px-4 py-3 rounded-xl bg-white border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm text-[#141210] placeholder-neutral-400"
+                        className="px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#FF758C] outline-none text-sm text-white placeholder-white/30"
                       />
-                      <span className="text-[10px] text-[#7A6F64]">
+                      <span className="text-[10px] text-white/40">
                         {meetingType === "telephone"
                           ? "Le numéro sur lequel Mounir Byar vous appellera."
                           : "Pour l'envoi de l'adresse exacte et du code d'accès au cabinet."}
@@ -454,7 +446,7 @@ export default function AgendaDoctolib() {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-mono font-bold uppercase text-[#5C534A]">
+                      <label className="text-[11px] font-mono font-bold uppercase text-white/60">
                         Adresse Email *
                       </label>
                       <input
@@ -463,16 +455,16 @@ export default function AgendaDoctolib() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Ex: contact@votredomaine.com"
-                        className="px-4 py-3 rounded-xl bg-white border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm text-[#141210] placeholder-neutral-400"
+                        className="px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#FF758C] outline-none text-sm text-white placeholder-white/30"
                       />
-                      <span className="text-[10px] text-[#7A6F64]">
+                      <span className="text-[10px] text-white/40">
                         Envoi instantané de la confirmation et de l&apos;invitation agenda (.ics).
                       </span>
                     </div>
                   </div>
 
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-mono font-bold uppercase text-[#5C534A]">
+                    <label className="text-[11px] font-mono font-bold uppercase text-white/60">
                       Votre objectif / Situation actuelle (Facultatif)
                     </label>
                     <textarea
@@ -480,19 +472,19 @@ export default function AgendaDoctolib() {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Ex: Procrastination sur la prière du Fajr, charge mentale d'entrepreneur, manque de concentration..."
-                      className="px-4 py-3 rounded-xl bg-white border border-[#E8E0D2] focus:border-[#087B53] outline-none text-sm text-[#141210] placeholder-neutral-400 leading-relaxed"
+                      className="px-4 py-3 rounded-xl bg-white/[0.04] border border-white/10 focus:border-[#FF758C] outline-none text-sm text-white placeholder-white/30 leading-relaxed"
                     />
                   </div>
 
                   {error && (
-                    <p className="text-xs text-red-600 font-semibold">{error}</p>
+                    <p className="text-xs text-red-400 font-semibold">{error}</p>
                   )}
 
                   <button
                     type="submit"
                     disabled={loading}
                     data-cursor="book"
-                    className="w-full py-4 rounded-full bg-[#087B53] hover:bg-[#066343] text-white font-heading font-bold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 hover:-translate-y-0.5 active:translate-y-0"
+                    className="w-full py-4 rounded-full bg-gradient-to-r from-[#FF758C] via-[#FF7EB3] to-[#FEE140] text-black font-heading font-extrabold text-xs uppercase tracking-wider shadow-lg hover:shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-95"
                   >
                     {loading ? (
                       <span>Confirmation en cours...</span>
@@ -511,15 +503,15 @@ export default function AgendaDoctolib() {
         </div>
       )}
 
-      {/* Note rassurante de bas d'agenda */}
-      <div className="mt-8 pt-6 border-t border-[#E8E0D2] flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-[#7A6F64]">
+      {/* Note de réassurance */}
+      <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-mono text-white/40">
         <div className="flex items-center gap-2">
-          <span className="text-[#087B53]">🔒</span>
-          <span>Confidentialité médicale & spirituelle absolue</span>
+          <span className="text-[#10B981]">🔒</span>
+          <span>Confidentialité absolue garantie</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[#B88E3E]">⏱</span>
-          <span>Rappel SMS & Email 24h avant</span>
+          <span className="text-[#FF758C]">⏱</span>
+          <span>Rappel SMS & Email automatique</span>
         </div>
         <div className="flex items-center gap-2">
           <span>📍</span>

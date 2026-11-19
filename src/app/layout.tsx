@@ -98,7 +98,7 @@ export default function RootLayout({
       lang="fr"
       className={`${systemia.variable} ${azeretMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#FAF8F5] text-[#141210] relative font-sans selection:bg-[#B88E3E]/20 selection:text-[#141210]">
+      <body className="min-h-full flex flex-col bg-[#070707] text-white relative font-sans selection:bg-[#FF758C]/30 selection:text-white">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
