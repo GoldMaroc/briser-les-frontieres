@@ -9,6 +9,7 @@ import ArrowIcon from "@/components/ui/ArrowIcon";
 
 const navSteps = [
   { href: "/fondements", label: "La Méthode" },
+  { href: "/recherche", label: "Science & Khalifa" },
   { href: "/offres", label: "Accompagnement" },
   { href: "/livres", label: "Les Livres" },
   { href: "/prix", label: "Prix" },
