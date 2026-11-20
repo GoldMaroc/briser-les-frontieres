@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { type ReactNode } from "react";
+import ArrowIcon from "@/components/ui/ArrowIcon";
 
-/* ═══════════════════════════════════════════
-   Composant Button — Style Ayocin Floating Pill
-   Variantes : primary (Émeraude / Sombre) | ghost (Glassmorphism)
-   ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   Composant Button — Haute Joaillerie & Dossier de Maître
+   Variantes : primary (Or Royal & Encre Bleu Nuit) | dark (Obsidienne) | ghost (Glassmorphism)
+   ZÉRO VERT FLUO • ZÉRO ICÔNE BLEUE
+   ═══════════════════════════════════════════════════════════ */
 
 interface ButtonProps {
   children: ReactNode;
-  variant?: "primary" | "ghost";
+  variant?: "primary" | "dark" | "ghost";
   href?: string;
   type?: "button" | "submit";
   onClick?: () => void;
@@ -20,13 +22,15 @@ interface ButtonProps {
 }
 
 const baseStyles =
-  "group inline-flex items-center justify-between gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-heading font-semibold text-xs sm:text-sm tracking-wide uppercase transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#00E599]/50 select-none";
+  "group inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-heading font-bold text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 cursor-pointer select-none active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed";
 
 const variants = {
   primary:
-    "bg-[#00E599] text-black shadow-[0_0_30px_rgba(0,229,153,0.4)] hover:shadow-[0_0_45px_rgba(0,229,153,0.7)] hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed",
+    "bg-[#B88E3E] dark:bg-[#D4A853] hover:bg-[#8C6214] dark:hover:bg-[#E8C468] text-[#0A1128] shadow-[0_4px_20px_rgba(184,142,62,0.28)] hover:shadow-[0_6px_28px_rgba(184,142,62,0.40)] border border-[#B88E3E]/40 dark:border-[#D4A853]/50",
+  dark:
+    "bg-[#0A1128] dark:bg-[#F0EDE8] text-[#FAF8F5] dark:text-[#0A1128] hover:bg-[#142238] dark:hover:bg-[#FFFFFF] border border-[#B88E3E]/50 shadow-[0_4px_20px_rgba(10,17,40,0.3)]",
   ghost:
-    "bg-white/10 text-white backdrop-blur-xl border border-white/20 hover:bg-white/20 hover:border-white/40 active:scale-[0.98] disabled:opacity-50",
+    "bg-[var(--surface)] text-[var(--text-primary)] border border-[var(--border)] hover:border-[#B88E3E] dark:hover:border-[#D4A853] hover:bg-[var(--surface)]/80 shadow-xs",
 };
 
 export default function Button({
@@ -43,17 +47,9 @@ export default function Button({
 
   const content = (
     <>
-      <span>{children}</span>
+      <span className="tracking-widest">{children}</span>
       {withArrow && (
-        <span
-          className={`w-7 h-7 rounded-full flex items-center justify-center text-xs transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
-            variant === "primary"
-              ? "bg-black/15 text-black"
-              : "bg-white/15 text-white"
-          }`}
-        >
-          ↗
-        </span>
+        <ArrowIcon className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
       )}
     </>
   );

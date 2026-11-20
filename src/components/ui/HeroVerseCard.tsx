@@ -21,7 +21,7 @@ export default function HeroVerseCard() {
         {/* EN-TÊTE DU VERSET */}
         <div className="flex items-center justify-between border-b border-[var(--border)] pb-3 sm:pb-4">
           <div className="inline-flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#B88E3E]" />
+            <span className="w-2 h-2 rounded-full bg-[#B88E3E] dark:bg-[#D4A853]" />
             <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853] font-bold">
               SOURATE AL-HADÎD • 57:16
             </span>
@@ -55,7 +55,7 @@ export default function HeroVerseCard() {
         {/* SCEAU D'AUTORITÉ DU CABINET */}
         <div className="pt-3 sm:pt-4 border-t border-[var(--border)] flex items-center justify-between text-[11px] sm:text-xs font-mono">
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="text-[#087B53] dark:text-[#10B981] font-bold">✓</span>
+            <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">✓</span>
             <span className="text-[var(--text-primary)] font-semibold">Point Zéro de la Souveraineté</span>
           </div>
           <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">

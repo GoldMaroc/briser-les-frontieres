@@ -98,6 +98,7 @@ export default function AgendaDoctolib() {
 
   return (
     <div className="relative w-full">
+
       {/* CADRE ÉPURÉ SANS CHARGE COGNITIVE */}
       <div className="bg-[var(--surface)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-sm overflow-hidden">
         
@@ -114,7 +115,7 @@ export default function AgendaDoctolib() {
                 />
               </div>
               <div>
-                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8C6214] font-bold block">
+                <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853] font-bold block">
                   ÉVALUATION INDIVIDUELLE DIRECTE
                 </span>
                 <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[var(--text-primary)]">
@@ -123,8 +124,8 @@ export default function AgendaDoctolib() {
               </div>
             </div>
 
-            <div className="text-xs font-mono text-[#087B53] bg-[#087B53]/10 px-3 py-1.5 rounded-full font-semibold self-start sm:self-auto">
-              ✓ Rendez-vous Privé & Confidentiel
+            <div className="text-xs font-mono text-[#B88E3E] dark:text-[#D4A853] bg-[#B88E3E]/10 px-3 py-1.5 rounded-full font-semibold self-start sm:self-auto">
+              ✓ Rendez-vous Privé &amp; Confidentiel
             </div>
           </div>
 
@@ -139,7 +140,7 @@ export default function AgendaDoctolib() {
               }}
               className={`p-5 rounded-2xl text-left transition-all border-2 flex flex-col justify-between ${
                 selectedFormat === "tel"
-                  ? "bg-[var(--surface)] border-[#087B53] shadow-md ring-2 ring-[#087B53]/20"
+                  ? "bg-[var(--surface)] border-[#B88E3E] dark:border-[#D4A853] shadow-md ring-2 ring-[#B88E3E]/20"
                   : "bg-[var(--surface)]/60 border-[var(--border)] hover:border-[#B88E3E] hover:bg-[var(--surface)]"
               }`}
             >
@@ -148,7 +149,7 @@ export default function AgendaDoctolib() {
                   <span className="text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
                     <span>📞 Par Téléphone / Visio</span>
                   </span>
-                  <span className="text-base font-heading font-extrabold text-[#087B53]">
+                  <span className="text-base font-heading font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
                     48,95 €
                   </span>
                 </div>
@@ -156,9 +157,9 @@ export default function AgendaDoctolib() {
                   Séance intensive de <strong>45 minutes</strong>. Diagnostic de votre charge allostatique, identification de vos boucles d&apos;angoisse et remise d&apos;une feuille de route immédiate.
                 </p>
               </div>
-              <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono text-[#7A6F64]">
+              <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
                 <span>Durée : 45 min</span>
-                <span className={selectedFormat === "tel" ? "text-[#087B53] font-bold" : ""}>
+                <span className={selectedFormat === "tel" ? "text-[#B88E3E] dark:text-[#D4A853] font-bold" : ""}>
                   {selectedFormat === "tel" ? "● Sélectionné" : "Sélectionner"}
                 </span>
               </div>
@@ -173,7 +174,7 @@ export default function AgendaDoctolib() {
               }}
               className={`p-5 rounded-2xl text-left transition-all border-2 flex flex-col justify-between ${
                 selectedFormat === "presentiel"
-                  ? "bg-[var(--surface)] border-[#B88E3E] shadow-md ring-2 ring-[#B88E3E]/20"
+                  ? "bg-[var(--surface)] border-[#B88E3E] dark:border-[#D4A853] shadow-md ring-2 ring-[#B88E3E]/20"
                   : "bg-[var(--surface)]/60 border-[var(--border)] hover:border-[#B88E3E] hover:bg-[var(--surface)]"
               }`}
             >
@@ -182,7 +183,7 @@ export default function AgendaDoctolib() {
                   <span className="text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] flex items-center gap-2">
                     <span>📍 En Présentiel (Déplacement à Domicile)</span>
                   </span>
-                  <span className="text-base font-heading font-extrabold text-[#8C6214]">
+                  <span className="text-base font-heading font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
                     96,45 €
                   </span>
                 </div>
@@ -190,9 +191,9 @@ export default function AgendaDoctolib() {
                   <strong>Mounir Byar se déplace personnellement chez vous</strong> (1h15). Audit de votre environnement domestique, sanctuarisation de l&apos;espace de prière (Tahara 360°) et restructuration des 8 piliers.
                 </p>
               </div>
-              <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono text-[#7A6F64]">
+              <div className="mt-3 pt-3 border-t border-[var(--border)] flex items-center justify-between text-[11px] font-mono text-[var(--text-secondary)]">
                 <span>Durée : 1h15 à domicile</span>
-                <span className={selectedFormat === "presentiel" ? "text-[#8C6214] font-bold" : ""}>
+                <span className={selectedFormat === "presentiel" ? "text-[#B88E3E] dark:text-[#D4A853] font-bold" : ""}>
                   {selectedFormat === "presentiel" ? "● Sélectionné" : "Sélectionner"}
                 </span>
               </div>
@@ -203,7 +204,7 @@ export default function AgendaDoctolib() {
         {/* ÉTAPE 2 : CHOIX DU JOUR (SÉLECTEUR AÉRÉ HORIZONTAL) */}
         <div className="p-6 sm:p-8 border-b border-[var(--border)] space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#7A6F64] font-semibold">
+            <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)] font-semibold">
               1. Sélectionnez votre date :
             </span>
             <div className="flex items-center gap-2">
@@ -211,14 +212,14 @@ export default function AgendaDoctolib() {
                 type="button"
                 onClick={() => setWeekOffset((p) => Math.max(0, p - 1))}
                 disabled={weekOffset === 0}
-                className="px-3 py-1 rounded-lg border border-[var(--border)] text-xs font-mono disabled:opacity-30 hover:border-[#141210]"
+                className="px-3 py-1 rounded-lg border border-[var(--border)] text-xs font-mono disabled:opacity-30 hover:border-[#B88E3E]"
               >
                 ← Semaine préc.
               </button>
               <button
                 type="button"
                 onClick={() => setWeekOffset((p) => p + 1)}
-                className="px-3 py-1 rounded-lg border border-[var(--border)] text-xs font-mono hover:border-[#141210]"
+                className="px-3 py-1 rounded-lg border border-[var(--border)] text-xs font-mono hover:border-[#B88E3E]"
               >
                 Semaine suiv. →
               </button>
@@ -239,18 +240,18 @@ export default function AgendaDoctolib() {
                   }}
                   className={`p-3 rounded-2xl border text-center transition-all ${
                     isSelected
-                      ? "bg-[#141210] text-white border-[#141210] shadow-sm"
+                      ? "bg-[#0A1128] text-white border-[#B88E3E] shadow-sm"
                       : "bg-[var(--bg)]/60 border-[var(--border)] hover:bg-[var(--surface)] text-[var(--text-primary)]"
                   }`}
                 >
                   <span className="block text-[11px] font-heading font-bold uppercase tracking-wider">
                     {day.dayName}
                   </span>
-                  <span className={`block text-xs font-mono font-semibold mt-0.5 ${isSelected ? "text-[#B88E3E]" : "text-[#7A6F64]"}`}>
+                  <span className={`block text-xs font-mono font-semibold mt-0.5 ${isSelected ? "text-[#D4A853]" : "text-[var(--text-secondary)]"}`}>
                     {day.dayNumber} {day.month}
                   </span>
                   {day.isFriday && (
-                    <span className={`block text-[9px] font-mono mt-1 ${isSelected ? "text-white/70" : "text-[#087B53]"}`}>
+                    <span className={`block text-[9px] font-mono mt-1 ${isSelected ? "text-white/70" : "text-[#B88E3E]"}`}>
                       Matin seul
                     </span>
                   )}
@@ -263,10 +264,10 @@ export default function AgendaDoctolib() {
         {/* ÉTAPE 3 : CRÉNEAUX DISPONIBLES (AÉRÉS, PAS DE SURCHARGE VISUELLE) */}
         <div className="p-6 sm:p-8 space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono uppercase tracking-wider text-[#7A6F64] font-semibold">
+            <span className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)] font-semibold">
               2. Choisissez un créneau pour le <strong>{activeDay.fullDateStr}</strong> :
             </span>
-            <span className="text-xs font-mono text-[#087B53] font-bold">
+            <span className="text-xs font-mono text-[#B88E3E] dark:text-[#D4A853] font-bold">
               Séance 45 min • {currentPrice}
             </span>
           </div>
@@ -274,7 +275,7 @@ export default function AgendaDoctolib() {
           <div className="space-y-4">
             {/* CRÉNEAUX DU MATIN */}
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A6F64] block mb-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-secondary)] block mb-2">
                 Matinée (09h00 - 12h00)
               </span>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -284,7 +285,7 @@ export default function AgendaDoctolib() {
                       key={slot.start}
                       type="button"
                       onClick={() => handleSelectSlot(slot)}
-                      className="py-3 px-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[var(--text-primary)] text-xs font-mono font-semibold transition-all shadow-2xs text-center group"
+                      className="py-3 px-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[#B88E3E] hover:text-[#0A1128] dark:hover:bg-[#D4A853] hover:border-[#B88E3E] text-[var(--text-primary)] text-xs font-mono font-semibold transition-all shadow-2xs text-center group cursor-pointer"
                     >
                       <span className="font-bold">{slot.start}</span>
                       <span className="text-[10px] opacity-70 ml-1">({slot.end})</span>
@@ -296,11 +297,11 @@ export default function AgendaDoctolib() {
 
             {/* CRÉNEAUX DE L'APRÈS-MIDI (SAUF VENDREDI FERMÉ POUR JUMU'AH) */}
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-[#7A6F64] block mb-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-secondary)] block mb-2">
                 Après-midi (14h00 - 18h00)
               </span>
               {activeDay.isFriday ? (
-                <div className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-xs font-mono text-[#8C6214] text-center">
+                <div className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)] text-xs font-mono text-[#B88E3E] text-center">
                   Vendredi après-midi réservé à la prière du Jumu&apos;ah • Aucun créneau disponible après 12h00.
                 </div>
               ) : (
@@ -311,7 +312,7 @@ export default function AgendaDoctolib() {
                         key={slot.start}
                         type="button"
                         onClick={() => handleSelectSlot(slot)}
-                        className="py-3 px-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[#087B53] hover:text-white hover:border-[#087B53] text-[var(--text-primary)] text-xs font-mono font-semibold transition-all shadow-2xs text-center group"
+                        className="py-3 px-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[#B88E3E] hover:text-[#0A1128] dark:hover:bg-[#D4A853] hover:border-[#B88E3E] text-[var(--text-primary)] text-xs font-mono font-semibold transition-all shadow-2xs text-center group cursor-pointer"
                       >
                         <span className="font-bold">{slot.start}</span>
                         <span className="text-[10px] opacity-70 ml-1">({slot.end})</span>
@@ -333,119 +334,119 @@ export default function AgendaDoctolib() {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-bold"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[var(--bg)] border border-[var(--border)] flex items-center justify-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-sm font-bold cursor-pointer"
               aria-label="Fermer"
             >
               ✕
             </button>
 
             <div className="mb-6">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#8C6214] font-bold">
-                VALIDATION & PAIEMENT SÉCURISÉ
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853] font-bold">
+                VALIDATION &amp; PAIEMENT SÉCURISÉ
               </span>
               <h3 className="font-heading font-extrabold text-2xl text-[var(--text-primary)] mt-1">
                 Confirmer votre Consultation
               </h3>
             </div>
 
-            {/* RÉCAPITULATIF FINANCIER & CRÉNEAU */}
-            <div className="p-4 rounded-2xl bg-[var(--bg)] border border-[var(--border)] mb-6 space-y-2 text-xs font-mono">
+            {/* RÉCAPITULATIF SÉLECTION */}
+            <div className="p-4 rounded-xl bg-[var(--bg)] border border-[var(--border)] mb-6 space-y-1.5 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-[#7A6F64]">Format :</span>
-                <strong className="text-[var(--text-primary)]">
+                <span className="text-[var(--text-secondary)]">Format :</span>
+                <span className="font-bold text-[var(--text-primary)]">
                   {selectedFormat === "tel" ? "Téléphone / Visio (45 min)" : "Présentiel à Domicile (1h15)"}
-                </strong>
+                </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#7A6F64]">Date & Heure :</span>
-                <strong className="text-[var(--text-primary)]">
-                  {activeDay.fullDateStr} à {selectedSlot.start}
-                </strong>
+                <span className="text-[var(--text-secondary)]">Date &amp; Heure :</span>
+                <span className="font-bold text-[#B88E3E] dark:text-[#D4A853]">
+                  {activeDay.fullDateStr} ({selectedSlot.start} - {selectedSlot.end})
+                </span>
               </div>
-              <div className="flex justify-between pt-2 border-t border-[var(--border)] text-sm">
-                <span className="text-[var(--text-primary)] font-bold">Tarif de la consultation :</span>
-                <span className="text-[#087B53] font-heading font-extrabold text-lg">
+              <div className="flex justify-between pt-1 border-t border-[var(--border)]">
+                <span className="text-[var(--text-secondary)]">Tarif Ferme :</span>
+                <span className="text-[#B88E3E] dark:text-[#D4A853] font-heading font-extrabold text-lg">
                   {currentPrice}
                 </span>
               </div>
             </div>
 
-            {/* FORMULAIRE PRÉALABLE AU PAIEMENT */}
+            {/* FORMULAIRE DIRECT */}
             <form onSubmit={handleProceedToPayment} className="space-y-4">
               <div>
-                <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] mb-1">
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] mb-1">
                   Nom et Prénom *
                 </label>
                 <input
-                  type="text"
                   required
+                  type="text"
                   value={nom}
                   onChange={(e) => setNom(e.target.value)}
-                  placeholder="Ex : Karim Bennani"
-                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                  placeholder="Ex: Tariq Mansouri"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#B88E3E]"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] mb-1">
-                    Adresse Email *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="votre@email.com"
-                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] mb-1">
-                    Numéro de Téléphone *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    value={telephone}
-                    onChange={(e) => setTelephone(e.target.value)}
-                    placeholder="06 12 34 56 78"
-                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
-                  />
-                </div>
+              <div>
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                  Adresse E-mail *
+                </label>
+                <input
+                  required
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Ex: tariq@exemple.com"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#B88E3E]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                  Téléphone (pour vous joindre au créneau) *
+                </label>
+                <input
+                  required
+                  type="tel"
+                  value={telephone}
+                  onChange={(e) => setTelephone(e.target.value)}
+                  placeholder="Ex: 06 12 34 56 78"
+                  className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#B88E3E]"
+                />
               </div>
 
               {selectedFormat === "presentiel" && (
                 <div>
-                  <label className="block text-xs font-heading font-bold uppercase tracking-wider text-[var(--text-primary)] mb-1">
-                    Adresse complète pour le déplacement à domicile *
+                  <label className="block text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] mb-1">
+                    Adresse complète du domicile (pour le déplacement de Mounir Byar) *
                   </label>
                   <input
-                    type="text"
                     required
+                    type="text"
                     value={adresse}
                     onChange={(e) => setAdresse(e.target.value)}
                     placeholder="Numéro, rue, code postal, ville"
-                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#087B53]"
+                    className="w-full px-4 py-2.5 rounded-xl border border-[var(--border)] bg-[var(--bg)] text-sm text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[#B88E3E]"
                   />
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 mt-2"
+                className="w-full py-3.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 mt-2 cursor-pointer active:scale-95"
               >
-                <span>Valider et Régler ({currentPrice})</span>
+                <span>Régler {currentPrice} et Verrouiller le Créneau</span>
                 <ArrowIcon className="w-4 h-4" />
               </button>
 
-              <span className="block text-center text-[10px] font-mono text-[#7A6F64]">
-                Paiement 100% sécurisé via Stripe • Reçu et confirmation immédiate
-              </span>
+              <p className="text-[10px] text-center text-[var(--text-secondary)] font-mono">
+                🔒 Paiement 100% sécurisé via Stripe • Confirmation immédiate par e-mail
+              </p>
             </form>
           </div>
         </div>
       )}
+
     </div>
   );
 }

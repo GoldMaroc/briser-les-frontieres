@@ -82,7 +82,7 @@ export default function Contact() {
         const data = await response.json();
         setError(data.message || "Une erreur est survenue lors de l'envoi.");
       }
-    } catch (err) {
+    } catch {
       setError("Impossible de joindre le cabinet d'ingénierie.");
     } finally {
       setLoading(false);
@@ -90,19 +90,21 @@ export default function Contact() {
   };
 
   return (
-    <div className="relative pt-40 pb-32 bg-midnight min-h-screen">
-      <div className="absolute top-0 right-0 w-full h-[600px] bg-[radial-gradient(circle_at_50%_0%,rgba(27,40,56,0.35)_0%,rgba(10,17,40,0)_70%)] pointer-events-none" />
+    <div className="relative pt-32 sm:pt-40 pb-28 sm:pb-32 bg-[var(--bg)] text-[var(--text-primary)] min-h-screen transition-colors duration-280">
+      
+      {/* Halo doré subtil */}
+      <div className="absolute top-0 left-0 right-0 h-[450px] bg-[radial-gradient(circle_at_50%_0%,rgba(184,142,62,0.12)_0%,transparent_70%)] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* En-tête */}
         <SectionHeading
-          label="Cabinet d&apos;Audit Privé"
-          title="Entrer en Relation avec l&apos;Ingénieur"
-          subtitle="Que ce soit pour l&apos;acquisition d&apos;un ouvrage physique, une mise en pratique du protocole de 30 jours, ou pour candidater à un accompagnement personnalisé in situ."
+          label="Cabinet d'Audit Privé"
+          title="Entrer en Relation avec l'Ingénieur"
+          subtitle="Que ce soit pour l'acquisition d'un ouvrage physique, une mise en pratique du protocole de 30 jours, ou pour candidater à un accompagnement personnalisé in situ."
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start mt-16 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mt-12 sm:mt-16 max-w-5xl mx-auto">
           
           {/* Informations Cabinet à gauche */}
           <motion.div
@@ -112,30 +114,30 @@ export default function Contact() {
             transition={{ duration: 0.8 }}
             className="lg:col-span-5 space-y-8"
           >
-            <div className="border-b border-border pb-6">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold">Charte d&apos;Échange</span>
-              <h3 className="font-heading text-2xl font-light text-cream mt-2">Discrétion & Rigueur</h3>
+            <div className="border-b border-[var(--border)] pb-6">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[#B88E3E] dark:text-[#D4A853]">Charte d&apos;Échange</span>
+              <h3 className="font-heading text-2xl font-bold text-[var(--text-primary)] mt-2">Discrétion &amp; Rigueur</h3>
             </div>
 
-            <ul className="space-y-6 text-xs text-cream-muted font-body leading-relaxed">
+            <ul className="space-y-6 text-xs text-[var(--text-secondary)] font-sans leading-relaxed">
               <li className="flex gap-3">
-                <span className="text-emerald font-bold">▪</span>
+                <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">▪</span>
                 <div>
-                  <strong className="text-cream block mb-1">Secret Professionnel</strong>
+                  <strong className="text-[var(--text-primary)] block mb-1">Secret Professionnel</strong>
                   Chaque message reçu est traité personnellement et exclusivement par Mounir BYAR. Aucun intermédiaire.
                 </div>
               </li>
               <li className="flex gap-3">
-                <span className="text-emerald font-bold">▪</span>
+                <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">▪</span>
                 <div>
-                  <strong className="text-cream block mb-1">Réponse ciblée sous 48h</strong>
-                  Nous privilégions la quality des échanges sur la quantité. Les demandes reçoivent une analyse attentive avant réponse.
+                  <strong className="text-[var(--text-primary)] block mb-1">Réponse ciblée sous 48h</strong>
+                  Nous privilégions la qualité des échanges sur la quantité. Les demandes reçoivent une analyse attentive avant réponse.
                 </div>
               </li>
               <li className="flex gap-3">
-                <span className="text-emerald font-bold">▪</span>
+                <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">▪</span>
                 <div>
-                  <strong className="text-cream block mb-1">Coordonnées de secours</strong>
+                  <strong className="text-[var(--text-primary)] block mb-1">Coordonnées directes</strong>
                   En cas d&apos;urgence relative à l&apos;application du protocole de 30 jours, utilisez l&apos;adresse directe : <ProtectedEmail />
                 </div>
               </li>
@@ -148,15 +150,15 @@ export default function Contact() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-7 p-8 md:p-12 border border-emerald/20 bg-surface/20 backdrop-blur-sm rounded-sm relative"
+            className="lg:col-span-7 p-6 sm:p-10 border border-[var(--border)] bg-[var(--surface)] shadow-md rounded-2xl relative"
           >
-            <div className="absolute top-0 right-10 w-20 h-px bg-gold" />
-            <div className="absolute bottom-0 left-10 w-20 h-px bg-gold" />
+            <div className="absolute top-0 right-10 w-20 h-px bg-[#B88E3E] dark:bg-[#D4A853]" />
+            <div className="absolute bottom-0 left-10 w-20 h-px bg-[#B88E3E] dark:bg-[#D4A853]" />
 
             {submitted ? (
-              <div className="text-center py-8 font-body">
-                <span className="text-2xl text-gold font-heading mb-4 block">Message Transmis</span>
-                <p className="text-sm text-cream-muted leading-relaxed">
+              <div className="text-center py-8 font-sans">
+                <span className="text-2xl text-[#B88E3E] dark:text-[#D4A853] font-heading font-bold mb-4 block">Message Transmis</span>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
                   Votre demande a bien été enregistrée dans notre protocole d&apos;échange sécurisé. Mounir BYAR en prendra connaissance personnellement et reviendra vers vous sous 48h.
                 </p>
               </div>
@@ -166,7 +168,7 @@ export default function Contact() {
                 {/* Identité : Prénom & Nom */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="prenom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Prénom</label>
+                    <label htmlFor="prenom" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Votre Prénom</label>
                     <input
                       required
                       type="text"
@@ -175,12 +177,12 @@ export default function Contact() {
                       onChange={(e) => setPrenom(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Sliman"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors uppercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="nom" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Votre Nom</label>
+                    <label htmlFor="nom" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Votre Nom</label>
                     <input
                       required
                       type="text"
@@ -189,7 +191,7 @@ export default function Contact() {
                       onChange={(e) => setNom(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Amrani"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors uppercase"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors uppercase"
                     />
                   </div>
                 </div>
@@ -197,7 +199,7 @@ export default function Contact() {
                 {/* Coordonnées : Email & Téléphone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="email" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Email Personnel / Contact</label>
+                    <label htmlFor="email" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Email Personnel / Contact</label>
                     <input
                       required
                       type="email"
@@ -206,12 +208,12 @@ export default function Contact() {
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: sliman@exemple.com"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors lowercase"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="telephone" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Téléphone de Contact</label>
+                    <label htmlFor="telephone" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Téléphone de Contact</label>
                     <input
                       required
                       type="tel"
@@ -220,14 +222,14 @@ export default function Contact() {
                       onChange={(e) => setTelephone(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: 06 12 34 56 78"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors"
                     />
                   </div>
                 </div>
 
-                {/* Adresse Physique */}
+                {/* Localisation : Adresse, CP, Ville */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="adresse" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Adresse physique</label>
+                  <label htmlFor="adresse" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Adresse Physique</label>
                   <input
                     required
                     type="text"
@@ -236,14 +238,13 @@ export default function Contact() {
                     onChange={(e) => setAdresse(e.target.value)}
                     disabled={loading}
                     placeholder="Ex: 14 Avenue de la République"
-                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                    className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors"
                   />
                 </div>
 
-                {/* Code Postal & Ville */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="codePostal" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Code Postal</label>
+                    <label htmlFor="codePostal" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Code Postal</label>
                     <input
                       required
                       type="text"
@@ -252,12 +253,12 @@ export default function Contact() {
                       onChange={(e) => setCodePostal(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: 51100"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors"
                     />
                   </div>
 
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="ville" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Ville de Résidence</label>
+                    <label htmlFor="ville" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Ville de Résidence</label>
                     <input
                       required
                       type="text"
@@ -266,46 +267,38 @@ export default function Contact() {
                       onChange={(e) => setVille(e.target.value)}
                       disabled={loading}
                       placeholder="Ex: Reims"
-                      className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm transition-colors"
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl transition-colors uppercase"
                     />
                   </div>
                 </div>
 
-                {/* Objet de la Demande */}
-                <div className="flex flex-col gap-2">
-                  <label htmlFor="typeRelation" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-emerald">Objet de la Demande</label>
-                  <select
-                    id="typeRelation"
-                    value={typeRelation}
-                    onChange={(e) => {
-                      setTypeRelation(e.target.value);
-                      if (e.target.value !== "livre") {
-                        setLivreSelection("aucun");
-                      } else {
-                        setFormuleAccompagnement("individuel");
-                      }
-                    }}
-                    disabled={loading}
-                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
-                  >
-                    <option value="accompagnement_9_mois">Postuler au Protocole d&apos;Accompagnement de 9 Mois</option>
-                    <option value="retour_spirituel">Échange pour un Retour vers Allah (Salat / Foi)</option>
-                    <option value="livre">Acquérir un ouvrage / version numérique (Payant)</option>
-                    <option value="autre">Autre demande</option>
-                  </select>
-                </div>
+                {/* Type de Demande */}
+                <div className="space-y-4 pt-2">
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="typeRelation" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Nature de la Démarche</label>
+                    <select
+                      id="typeRelation"
+                      value={typeRelation}
+                      onChange={(e) => setTypeRelation(e.target.value)}
+                      disabled={loading}
+                      className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl"
+                    >
+                      <option value="accompagnement_9_mois">Candidater à l&apos;Accompagnement Privé (Mounir Byar)</option>
+                      <option value="retour_spirituel">Diagnostic &amp; Protocole de Restructuration</option>
+                      <option value="livre">Acquisition &amp; Consultation d&apos;un Traité Écrit</option>
+                      <option value="autre">Autre Demande Officielle</option>
+                    </select>
+                  </div>
 
-                {/* Sélections Conditionnelles selon l'objet de la demande */}
-                <div className="grid grid-cols-1 gap-4">
                   {(typeRelation === "accompagnement_9_mois" || typeRelation === "retour_spirituel") && (
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="formuleAccompagnement" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-emerald">Format de l&apos;Accompagnement</label>
+                      <label htmlFor="formuleAccompagnement" className="text-[11px] font-semibold uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853]">Format de l&apos;Accompagnement</label>
                       <select
                         id="formuleAccompagnement"
                         value={formuleAccompagnement}
                         onChange={(e) => setFormuleAccompagnement(e.target.value)}
                         disabled={loading}
-                        className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
+                        className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl"
                       >
                         <option value="individuel">Accompagnement Individuel (1 personne)</option>
                         <option value="famille">Accompagnement Familles (Foyer / Couple)</option>
@@ -316,13 +309,13 @@ export default function Contact() {
 
                   {typeRelation === "livre" && (
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="livreSelection" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted font-semibold text-gold">Sélectionner l&apos;Ouvrage</label>
+                      <label htmlFor="livreSelection" className="text-[11px] font-semibold uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853]">Sélectionner l&apos;Ouvrage</label>
                       <select
                         id="livreSelection"
                         value={livreSelection}
                         onChange={(e) => setLivreSelection(e.target.value)}
                         disabled={loading}
-                        className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs rounded-sm"
+                        className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs rounded-xl"
                       >
                         <option value="secrets">Les Secrets du Retour vers Allah — Format ePub (5,90 €)</option>
                         <option value="rahman">Ar-Rahman : La Mer sans Rivage — Format PDF (12,65 €)</option>
@@ -334,7 +327,7 @@ export default function Contact() {
 
                 {/* Message situationnel */}
                 <div className="flex flex-col gap-2">
-                  <label htmlFor="message" className="text-[11px] font-semibold uppercase tracking-wider text-cream-muted">Description de votre Situation / Message</label>
+                  <label htmlFor="message" className="text-[11px] font-semibold uppercase tracking-wider text-[var(--text-secondary)]">Description de votre Situation / Message</label>
                   <textarea
                     required
                     id="message"
@@ -343,15 +336,15 @@ export default function Contact() {
                     onChange={(e) => setMessage(e.target.value)}
                     disabled={loading}
                     placeholder="Détaillez votre demande en toute franchise. Quelle impasse traversez-vous ?"
-                    className="px-4 py-3 bg-surface text-cream border shadow-inner border-border focus:border-gold outline-none text-xs font-body rounded-sm"
+                    className="px-4 py-3 bg-[var(--bg)] text-[var(--text-primary)] border border-[var(--border)] focus:border-[#B88E3E] dark:focus:border-[#D4A853] outline-none text-xs font-sans rounded-xl"
                   />
                 </div>
 
                 {error && (
-                  <p className="text-xs text-red-400 font-body uppercase tracking-wider text-center">{error}</p>
+                  <p className="text-xs text-red-500 font-mono uppercase tracking-wider text-center">{error}</p>
                 )}
 
-                <Button type="submit" disabled={loading} className="w-full mt-4 py-4 justify-center shadow-lg shadow-emerald/5">
+                <Button type="submit" disabled={loading} className="w-full mt-4 py-4 justify-center">
                   {loading ? "Validation..." : "Transmettre au Cabinet"}
                 </Button>
 
@@ -361,7 +354,6 @@ export default function Contact() {
           </motion.div>
 
         </div>
-
       </div>
     </div>
   );

@@ -22,10 +22,10 @@ export default function SovereigntyCyberneticHero() {
             {/* COLONNE GAUCHE (ÉDITORIALE & ACTIONS DIRECTES) */}
             <div className="lg:col-span-7 flex flex-col items-start text-left">
               
-              {/* Eyebrow Statutaire */}
+              {/* Eyebrow Statutaire Joaillerie */}
               <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#087B53]/10 border border-[#087B53]/30 text-[#087B53] dark:text-[#4ade80]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] dark:bg-[#10B981] animate-pulse" />
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/35 text-[#8C6214] dark:text-[#D4A853]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] animate-pulse" />
                   <span className="font-mono text-[10.5px] sm:text-[11.5px] font-bold uppercase tracking-[0.16em]">
                     CABINET BLF // L&apos;INGÉNIERIE DE LA SOUVERAINETÉ
                   </span>
@@ -51,37 +51,37 @@ export default function SovereigntyCyberneticHero() {
                 Sortez du chaos mental, de l&apos;éparpillement et de la culpabilité. Réveillez la réflexion profonde, apaisez vos sensations et fortifiez une foi inébranlable (Yaqîn). La prière devient le pivot sacré d&apos;alignement neurobiologique et spirituel.
               </p>
 
-              {/* Deux Boutons Majeurs Mobile-First */}
-              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+              {/* Deux Boutons Majeurs Mobile-First (ZÉRO PRIX DANS LE BOUTON • ZÉRO VERT FLUO) */}
+              <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full sm:w-auto">
                 <Link
                   href="/rendez-vous"
-                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-[0_4px_16px_rgba(184,142,62,0.22)] active:scale-95 text-center"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-[0_4px_16px_rgba(184,142,62,0.25)] active:scale-95 text-center"
                 >
                   <span className="w-2 h-2 rounded-full bg-[#0A1128] animate-pulse" />
-                  <span>Prendre Rendez-vous (Dès 48,95 €)</span>
+                  <span>Prendre Rendez-vous</span>
                 </Link>
 
                 <Link
                   href="/audit"
-                  className="inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 rounded-full bg-[#087B53] hover:bg-[#065F40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-[0_4px_16px_rgba(8,123,83,0.22)] active:scale-95 text-center"
+                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 sm:py-4 rounded-full bg-[#0A1128] dark:bg-[#F0EDE8] text-[#FAF8F5] dark:text-[#0A1128] hover:bg-[#142238] dark:hover:bg-[#FFFFFF] border border-[#B88E3E]/40 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md active:scale-95 text-center"
                 >
                   <span>Passer l&apos;Audit Gratuit</span>
                   <ArrowIcon className="w-3.5 h-3.5" />
                 </Link>
               </div>
 
-              {/* Éléments de Réassurance Synthétiques */}
+              {/* Éléments de Réassurance Synthétiques (Or & Noblesse) */}
               <div className="mt-6 flex flex-wrap items-center gap-y-2 gap-x-4 text-[11px] sm:text-xs font-mono text-[var(--text-secondary)]">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#087B53] dark:text-[#10B981] font-bold">✓</span>
-                  <span>Séance Tél (48,95 €) &bull; Domicile (96,45 €)</span>
+                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">✓</span>
+                  <span>Séance Téléphone &bull; Présentiel Domicile</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#087B53] dark:text-[#10B981] font-bold">✓</span>
+                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">✓</span>
                   <span>Alliance Neurosciences &amp; Révélation</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#087B53] dark:text-[#10B981] font-bold">✓</span>
+                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">✓</span>
                   <span>Zéro Culpabilisation • Protocole Sur-Mesure</span>
                 </div>
               </div>
@@ -98,21 +98,21 @@ export default function SovereigntyCyberneticHero() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════
-          SECTION 2 : LE FIL CONDUCTEUR EN 3 ACTES (DYNAMIQUE & TACTILE)
+          SECTION 2 : PINNED SCROLLYTELLING SHOWCASE (STYLE MATERIAL GOURDE)
+          La page reste épinglée au scroll, ne descend pas et wipe 4 images monumentales
+          ═══════════════════════════════════════════════════════════ */}
+      <ShowcaseStage />
+
+      {/* ═══════════════════════════════════════════════════════════
+          SECTION 3 : LE FIL CONDUCTEUR EN 3 ACTES (DYNAMIQUE & TACTILE)
           01. Le Chaos Mental -> 02. Le Pivot Sacré -> 03. Le Mandat de Khalifa
           ═══════════════════════════════════════════════════════════ */}
       <EditorialBentoGrid />
 
       {/* ═══════════════════════════════════════════════════════════
-          SECTION 3 : SLIDER INTERACTIF AVANT / APRÈS (LA TRANSFORMATION)
+          SECTION 4 : SLIDER INTERACTIF AVANT / APRÈS (LA TRANSFORMATION)
           ═══════════════════════════════════════════════════════════ */}
       <TransformationSlider />
-
-      {/* ═══════════════════════════════════════════════════════════
-          SECTION 4 : HORIZONS DE CONTEMPLATION NATURELLE (PLEIN ÉCRAN)
-          4 panoramas grandioses sans posture de prière
-          ═══════════════════════════════════════════════════════════ */}
-      <ShowcaseStage />
 
       {/* ═══════════════════════════════════════════════════════════
           SECTION 5 : LES FORMULES & PRESTATIONS D'ACCOMPAGNEMENT
@@ -149,10 +149,10 @@ export default function SovereigntyCyberneticHero() {
           <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs flex flex-col justify-between hover:border-[#B88E3E] transition-all">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#087B53] dark:text-[#10B981] font-bold">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853] font-bold">
                   Diagnostic Préalable
                 </span>
-                <span className="text-[10px] font-mono bg-[#087B53]/10 text-[#087B53] dark:text-[#4ade80] px-2 py-0.5 rounded-full font-bold">
+                <span className="text-[10px] font-mono bg-[#B88E3E]/15 text-[#B88E3E] dark:text-[#D4A853] px-2 py-0.5 rounded-full font-bold">
                   45 Min
                 </span>
               </div>
@@ -180,7 +180,7 @@ export default function SovereigntyCyberneticHero() {
           </div>
 
           {/* CARTE 2 : CONSULTATION PRÉSENTIELLE À DOMICILE (96,45 €) */}
-          <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[#B88E3E] dark:border-[#D4A853] shadow-md flex flex-col justify-between relative">
+          <div className="p-7 rounded-2xl bg-[var(--surface)] border-2 border-[#B88E3E] dark:border-[#D4A853] shadow-md flex flex-col justify-between relative">
             <div className="absolute -top-3 right-6 bg-[#B88E3E] dark:bg-[#D4A853] text-[#0A1128] text-[10px] font-heading font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-sm">
               Déplacement à Domicile
             </div>
@@ -217,16 +217,13 @@ export default function SovereigntyCyberneticHero() {
           </div>
 
           {/* CARTE 3 : PROTOCOLE IMMERSION 30 JOURS (612,70 €) */}
-          <div className="p-7 rounded-2xl bg-[var(--surface)] border-2 border-[#087B53] shadow-md flex flex-col justify-between relative">
-            <div className="absolute -top-3 right-6 bg-[#087B53] text-white text-[10px] font-heading font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-sm">
-              Transformation Complète
-            </div>
+          <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] shadow-xs flex flex-col justify-between hover:border-[#B88E3E] transition-all">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#087B53] font-bold">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853] font-bold">
                   Accompagnement Intensif
                 </span>
-                <span className="text-[10px] font-mono bg-[#087B53]/10 text-[#087B53] px-2 py-0.5 rounded-full font-bold">
+                <span className="text-[10px] font-mono bg-[#B88E3E]/15 text-[#B88E3E] dark:text-[#D4A853] px-2 py-0.5 rounded-full font-bold">
                   30 Jours
                 </span>
               </div>
@@ -247,7 +244,7 @@ export default function SovereigntyCyberneticHero() {
             </div>
             <Link
               href="/offres"
-              className="w-full py-3 rounded-full bg-[#087B53] hover:bg-[#065F40] text-center text-xs font-heading font-bold uppercase tracking-wider text-white transition-all shadow-md"
+              className="w-full py-3 rounded-full bg-[var(--text-primary)] hover:bg-[#B88E3E] text-[var(--bg)] hover:text-[#0A1128] text-center text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md"
             >
               Rejoindre le Protocole 30J
             </Link>
@@ -307,7 +304,7 @@ export default function SovereigntyCyberneticHero() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-14 sm:py-20 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
         <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#087B53] dark:text-[#10B981] font-bold">
+          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853] font-bold">
             RÉSULTATS CLINIQUES CONCRETS
           </span>
           <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] mt-1">
@@ -319,7 +316,7 @@ export default function SovereigntyCyberneticHero() {
           <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] space-y-4 shadow-xs hover:border-[#B88E3E] transition-all">
             <div className="flex items-center justify-between">
               <strong className="text-sm font-heading font-bold text-[var(--text-primary)]">Karim B.</strong>
-              <span className="text-xs font-mono text-[#087B53] dark:text-[#10B981] font-semibold bg-[#087B53]/10 px-2.5 py-0.5 rounded-full">
+              <span className="text-xs font-mono text-[#B88E3E] dark:text-[#D4A853] font-semibold bg-[#B88E3E]/10 px-2.5 py-0.5 rounded-full">
                 Audit : 87%
               </span>
             </div>
@@ -332,10 +329,10 @@ export default function SovereigntyCyberneticHero() {
             </span>
           </div>
 
-          <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] space-y-4 shadow-xs hover:border-[#087B53] transition-all">
+          <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] space-y-4 shadow-xs hover:border-[#B88E3E] transition-all">
             <div className="flex items-center justify-between">
               <strong className="text-sm font-heading font-bold text-[var(--text-primary)]">Youssef T.</strong>
-              <span className="text-xs font-mono text-[#087B53] dark:text-[#10B981] font-semibold bg-[#087B53]/10 px-2.5 py-0.5 rounded-full">
+              <span className="text-xs font-mono text-[#B88E3E] dark:text-[#D4A853] font-semibold bg-[#B88E3E]/10 px-2.5 py-0.5 rounded-full">
                 Audit : 92%
               </span>
             </div>
@@ -351,7 +348,7 @@ export default function SovereigntyCyberneticHero() {
           <div className="p-7 rounded-2xl bg-[var(--surface)] border border-[var(--border)] space-y-4 shadow-xs hover:border-[#B88E3E] transition-all">
             <div className="flex items-center justify-between">
               <strong className="text-sm font-heading font-bold text-[var(--text-primary)]">Mehdi R.</strong>
-              <span className="text-xs font-mono text-[#087B53] dark:text-[#10B981] font-semibold bg-[#087B53]/10 px-2.5 py-0.5 rounded-full">
+              <span className="text-xs font-mono text-[#B88E3E] dark:text-[#D4A853] font-semibold bg-[#B88E3E]/10 px-2.5 py-0.5 rounded-full">
                 Audit : 95%
               </span>
             </div>
@@ -371,7 +368,7 @@ export default function SovereigntyCyberneticHero() {
           ═══════════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-12">
         <div className="p-8 sm:p-14 rounded-2xl bg-[var(--surface)] border border-[#B88E3E]/30 text-center shadow-xs">
-          <span className="inline-block text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] dark:text-[#10B981] font-bold mb-3">
+          <span className="inline-block text-[11px] font-mono uppercase tracking-[0.2em] text-[#B88E3E] dark:text-[#D4A853] font-bold mb-3">
             PASSER À L&apos;ACTION DÈS AUJOURD&apos;HUI
           </span>
           <h2 className="font-heading font-extrabold text-2xl sm:text-4xl text-[var(--text-primary)] max-w-xl mx-auto tracking-tight">
@@ -385,11 +382,11 @@ export default function SovereigntyCyberneticHero() {
               href="/rendez-vous"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
             >
-              <span>Prendre RDV (Tél 48,95 € • Domicile 96,45 €)</span>
+              <span>Prendre Rendez-vous</span>
             </Link>
             <Link
               href="/audit"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065F40] text-white text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full bg-[#0A1128] dark:bg-[#F0EDE8] text-[#FAF8F5] dark:text-[#0A1128] hover:bg-[#142238] dark:hover:bg-[#FFFFFF] border border-[#B88E3E]/40 text-xs sm:text-sm font-heading font-bold uppercase tracking-wider transition-all shadow-md active:scale-95"
             >
               <span>Passer l&apos;audit gratuit</span>
               <ArrowIcon className="w-4 h-4" />

@@ -36,7 +36,7 @@ const FIL_CONDUCTEUR = [
       "Alignement circadien sur les 5 portes célestes solaires",
       "Sanctuarisation de l'espace domestique (Tahara 360°)",
     ],
-    accent: "#087B53",
+    accent: "#B88E3E",
   },
   {
     step: "03",
@@ -135,7 +135,7 @@ export default function EditorialBentoGrid() {
                 <div className="font-heading font-extrabold text-4xl sm:text-6xl text-[var(--text-primary)] tracking-tight">
                   {currentItem.metric}
                 </div>
-                <p className="text-xs sm:text-sm font-mono text-[#087B53] dark:text-[#10B981] font-semibold">
+                <p className="text-xs sm:text-sm font-mono text-[#B88E3E] dark:text-[#D4A853] font-semibold">
                   {currentItem.metricLabel}
                 </p>
               </div>
@@ -164,8 +164,8 @@ export default function EditorialBentoGrid() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[var(--bg)]/70 border border-[#087B53]/30 space-y-1.5">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#087B53] dark:text-[#10B981] font-bold flex items-center gap-1.5">
+                <div className="p-4 rounded-xl bg-[var(--bg)]/70 border border-[#B88E3E]/30 dark:border-[#D4A853]/30 space-y-1.5">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#B88E3E] dark:text-[#D4A853] font-bold flex items-center gap-1.5">
                     <span>✓</span> ÉTAT SOUVERAIN ACQUIS
                   </span>
                   <p className="text-xs text-[var(--text-primary)] font-medium leading-relaxed">
@@ -189,19 +189,19 @@ export default function EditorialBentoGrid() {
                 </div>
               </div>
 
-              {/* Bouton d'Action Immédiat pour ce Palier */}
+              {/* Bouton d'Action Immédiat pour ce Palier (ZÉRO PRIX DANS LE BOUTON) */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href="/rendez-vous"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-xs"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-xs"
                 >
-                  <span>Activer ce palier en consultation (48,95 €)</span>
+                  <span>Prendre Rendez-vous</span>
                   <ArrowIcon className="w-3.5 h-3.5" />
                 </Link>
 
                 <Link
                   href="/audit"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--border)] hover:border-[#087B53] text-[var(--text-primary)] text-xs font-heading font-semibold uppercase tracking-wider transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-[var(--border)] hover:border-[#B88E3E] text-[var(--text-primary)] text-xs font-heading font-semibold uppercase tracking-wider transition-all"
                 >
                   <span>Évaluer mon score</span>
                 </Link>
