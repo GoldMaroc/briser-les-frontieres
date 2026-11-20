@@ -29,7 +29,7 @@ export default function SectionHeading({
     >
       {/* Label Badge Statutaire Haute Joaillerie */}
       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/25 text-[#8C6214] dark:text-[#D4A853] shadow-xs">
-        <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
+        <span className="w-1.5 h-1.5 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] animate-pulse" />
         <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em]">
           {label}
         </span>

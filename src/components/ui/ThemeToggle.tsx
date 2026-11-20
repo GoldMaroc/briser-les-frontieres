@@ -25,7 +25,7 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       aria-label="Changer de thème (clair/sombre)"
       title={theme === "light" ? "Activer le mode sombre" : "Activer le mode clair"}
-      className="relative p-2 rounded-full border border-neutral-300/60 dark:border-neutral-700/60 bg-white/70 dark:bg-neutral-900/70 hover:bg-white dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100 transition-all duration-200 cursor-pointer shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#087B53]"
+      className="relative p-2 rounded-full border border-[var(--border)] bg-[var(--surface)] hover:border-[#B88E3E] dark:hover:border-[#D4A853] text-[var(--text-primary)] transition-all duration-200 cursor-pointer shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B88E3E] dark:focus-visible:ring-[#D4A853]"
     >
       {theme === "light" ? (
         // Icône Soleil de Nouveau dossier (4)

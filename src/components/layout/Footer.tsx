@@ -71,7 +71,7 @@ export default function Footer() {
             <div className="flex flex-col gap-3 pt-2">
               <Link
                 href="/audit"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md text-center"
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md text-center"
               >
                 <span>Passer l&apos;audit gratuit</span>
                 <ArrowIcon className="w-3.5 h-3.5" />

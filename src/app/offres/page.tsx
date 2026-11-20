@@ -53,6 +53,19 @@ const COMES_PILLARS = [
       "Suppression des déclencheurs visuels de procrastination",
     ],
   },
+  {
+    letter: "S",
+    title: "Stabilité sur le Temps",
+    subtitle: "Pérennisation & Istiqama Durable",
+    desc: "Verrouillage définitif des acquis comportementaux et de la souveraineté. Ce pilier ultime d'auto-gouvernance et de constance (Istiqama) est exclusivement dispensé au sein de la Mission 9 Mois.",
+    metric: "Exclusif 9 Mois",
+    isExclusive9Months: true,
+    keyActions: [
+      "Systématisation de la Muhasaba (audit et auto-correction hebdomadaire)",
+      "Ancrage de l'Istiqama inébranlable face aux chocs et ruptures de routine",
+      "Souveraineté autonome du Khalifa : le système perdure sans dépendance",
+    ],
+  },
 ];
 
 const OFFERS = [
@@ -108,7 +121,7 @@ const OFFERS = [
     features: [
       "4 séances individuelles intensives avec Mounir Byar",
       "Messagerie privée 5j/7 pour un déblocage en temps réel",
-      "Déploiement des 4 Piliers C.O.M.E.S. dans votre quotidien",
+      "Déploiement des 4 Piliers initiaux C.O.M.E. (le 5e Pilier S étant exclusif au mentorat 9 mois)",
       "Suivi hebdomadaire de la régularité et baisse du cortisol",
       "Garantie de résultat et d'ancrage inaltérable",
     ],
@@ -125,6 +138,7 @@ const OFFERS = [
     ctaLink: "/rendez-vous",
     featured: false,
     features: [
+      "Déploiement exclusif du Pilier S (Stabilité sur le Temps & Istiqama)",
       "Supervision continue et ligne directe privée avec Mounir Byar",
       "Refonte de vos 8 Piliers de vie (mental, couple, finances, culte)",
       "Tous les traités, ouvrages et outils d'ingénierie inclus",
@@ -165,12 +179,12 @@ export default function OffresPage() {
           </h1>
 
           <p className="text-base sm:text-lg text-[var(--text-secondary)] font-sans max-w-3xl leading-relaxed">
-            Une science du déblocage comportemental conçue pour les musulmans submergés par la charge mentale. Découvrez les 4 piliers fondamentaux et choisissez l&apos;accompagnement adapté à votre situation.
+            Une science du déblocage comportemental conçue pour les musulmans submergés par la charge mentale. Découvrez les 5 piliers fondamentaux (avec le pilier <strong className="text-[#087B53] dark:text-[#4ade80]">S pour la Stabilité sur le temps</strong>, exclusif à la mission 9 mois).
           </p>
 
           <div className="pt-2 flex flex-wrap gap-3 text-xs font-mono">
             <span className="px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)]">
-              🧠 4 Piliers Systémiques
+              🧠 5 Piliers C.O.M.E.S.
             </span>
             <span className="px-3.5 py-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)]">
               🛡 0% Riba • Garantie Absolue
@@ -182,16 +196,16 @@ export default function OffresPage() {
         </div>
 
         {/* ═════════════════════════════════════════════════════════════════
-            SECTION 1 : LES 4 PILIERS C.O.M.E.S. (INTERACTIVE GRID)
+            SECTION 1 : LES 5 PILIERS C.O.M.E.S. (INTERACTIVE GRID)
             ═════════════════════════════════════════════════════════════════ */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[var(--border)] pb-4">
             <div>
               <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] font-bold">
-                MÉCANISME CLINIQUE // 4 PILIERS C.O.M.E.S.
+                MÉCANISME CLINIQUE // 5 PILIERS C.O.M.E.S.
               </span>
               <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] mt-1">
-                L&apos;Ingénierie des 4 Piliers de Transformation
+                L&apos;Ingénierie des 5 Piliers de Transformation
               </h2>
             </div>
             <span className="text-xs font-mono text-[var(--text-secondary)]">
@@ -199,34 +213,42 @@ export default function OffresPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
             {COMES_PILLARS.map((p, idx) => {
               const isSelected = selectedPillar === idx;
+              const isS = p.letter === "S";
               return (
                 <button
                   key={p.letter}
                   type="button"
                   onClick={() => setSelectedPillar(idx)}
-                  className={`p-6 rounded-[var(--radius-card)] text-left transition-all cursor-pointer border flex flex-col justify-between ${
+                  className={`p-5 rounded-[var(--radius-card)] text-left transition-all cursor-pointer border flex flex-col justify-between relative overflow-hidden ${
                     isSelected
                       ? "bg-[#087B53] text-white border-[#087B53] shadow-md ring-2 ring-[#087B53]/20"
+                      : isS
+                      ? "bg-[var(--surface)] text-[var(--text-primary)] border-[#087B53]/50 hover:border-[#087B53]"
                       : "bg-[var(--surface)] text-[var(--text-primary)] border-[var(--border)] hover:border-[#087B53]"
                   }`}
                 >
+                  {isS && !isSelected && (
+                    <div className="absolute top-0 right-0 bg-[#087B53] text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded-bl-lg uppercase tracking-wider">
+                      Mission 9M
+                    </div>
+                  )}
                   <div>
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between mb-2.5">
                       <span className={`text-2xl font-heading font-extrabold ${isSelected ? "text-white" : "text-[#087B53]"}`}>
                         {p.letter}
                       </span>
-                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${isSelected ? "bg-white/20 text-white" : "bg-[#087B53]/10 text-[#087B53]"}`}>
+                      <span className={`text-[9.5px] font-mono font-bold px-2 py-0.5 rounded-full ${isSelected ? "bg-white/20 text-white" : isS ? "bg-[#087B53]/15 text-[#087B53]" : "bg-[#087B53]/10 text-[#087B53]"}`}>
                         {p.metric}
                       </span>
                     </div>
 
-                    <h3 className="font-heading font-extrabold text-lg mb-1">
+                    <h3 className="font-heading font-extrabold text-base mb-1 leading-snug">
                       {p.title}
                     </h3>
-                    <p className={`text-xs font-mono mb-3 ${isSelected ? "text-white/80" : "text-[#8C6214] dark:text-[#D4A853]"}`}>
+                    <p className={`text-[11px] font-mono mb-2 ${isSelected ? "text-white/80" : "text-[#087B53] dark:text-[#4ade80] font-semibold"}`}>
                       {p.subtitle}
                     </p>
                     <p className={`text-xs leading-relaxed font-sans ${isSelected ? "text-white/90" : "text-[var(--text-secondary)]"}`}>
@@ -235,7 +257,7 @@ export default function OffresPage() {
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-white/20 dark:border-neutral-700 text-[11px] font-mono font-bold flex items-center justify-between">
-                    <span>Voir les actions</span>
+                    <span>{isS ? "Détails 9 Mois" : "Voir les actions"}</span>
                     <span>&rarr;</span>
                   </div>
                 </button>

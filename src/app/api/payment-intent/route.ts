@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { PRODUCTS_CATALOG, getInstallmentCents, formatEuros } from "@/lib/products";
-import { recordPurchase } from "@/lib/db";
-import { getTransporter, SMTP_FROM } from "@/lib/mail";
+import { recordPurchase, updateRendezVousStatus } from "@/lib/db";
+import { 
+  getTransporter, 
+  SMTP_FROM, 
+  sendClientPaymentReceiptEmail, 
+  sendAppointmentConfirmationEmail 
+} from "@/lib/mail";
 import { sql } from "@vercel/postgres";
 import crypto from "crypto";
 
@@ -67,6 +72,13 @@ export async function POST(request: Request) {
         installments: String(validInstallments),
         totalCents: String(product.totalCents),
         installmentCents: String(amountCents),
+        dateRdv: String(body.dateRdv || body.date || ""),
+        creneau: String(body.creneau || body.timeSlot || ""),
+        adresse: String(body.adresse || ""),
+        customerNom: String(body.nom || ""),
+        customerPrenom: String(body.prenom || ""),
+        customerEmail: String(body.email || ""),
+        customerPhone: String(body.telephone || ""),
       },
     };
 
@@ -107,6 +119,9 @@ export async function PUT(request: Request) {
       email = "",
       telephone = "",
       profil = "Homme",
+      dateRdv = "",
+      creneau = "",
+      adresse = "",
     } = body;
 
     const stripe = getStripeClient();
@@ -169,6 +184,9 @@ export async function PUT(request: Request) {
         customerEmail: email.trim().toLowerCase(),
         customerPhone: telephone.trim(),
         profil,
+        dateRdv: String(dateRdv || body.date || ""),
+        creneau: String(creneau || body.timeSlot || ""),
+        adresse: String(adresse || ""),
       },
     };
 
@@ -271,6 +289,49 @@ export async function GET(request: Request) {
             });
 
             if (customerEmail) {
+              // EMAIL 1 : Reçu officiel de paiement au client (Stripe / BLF)
+              try {
+                await sendClientPaymentReceiptEmail({
+                  email: customerEmail,
+                  nom: customerNom || customerName || "Client",
+                  prenom: customerPrenom || undefined,
+                  prestationTitre: product.title,
+                  montantFormatted: amountFormatted,
+                  transactionId: pi.id,
+                  modaliteTexte: scheduleText,
+                });
+              } catch (errReceipt) {
+                console.error("Erreur envoi Email 1 (Reçu de paiement) :", errReceipt);
+              }
+
+              // EMAIL 2 : Si Rendez-vous, confirmation personnalisée (Téléphonique ou Présentiel à Domicile)
+              const isRdv = offerId === "rdv-tel" || offerId === "rdv-presentiel" || product.id === "rdv-tel" || product.id === "rdv-presentiel";
+              if (isRdv) {
+                try {
+                  const typeRdv = (offerId === "rdv-presentiel" || pi.metadata?.typeRdv === "presentiel") ? "presentiel" : "telephone";
+                  await sendAppointmentConfirmationEmail({
+                    email: customerEmail,
+                    nom: customerNom || customerName || "Client",
+                    prenom: customerPrenom || undefined,
+                    telephone: customerPhone || pi.metadata?.customerPhone || "",
+                    typeRdv,
+                    dateRdv: pi.metadata?.dateRdv || "Date convenue",
+                    timeSlot: pi.metadata?.creneau || "Créneau réservé",
+                    adresseClient: pi.metadata?.adresse || undefined,
+                  });
+                } catch (errRdvConf) {
+                  console.error("Erreur envoi Email 2 (Confirmation personnalisée RDV) :", errRdvConf);
+                }
+
+                // Mise à jour du statut du Rendez-vous en base de données
+                try {
+                  await updateRendezVousStatus(customerEmail, "valide_paye", "", pi.id);
+                } catch (dbRdvErr) {
+                  console.error("Erreur mise à jour statut RDV payé :", dbRdvErr);
+                }
+              }
+
+              // Email récapitulatif transactionnel standard BLF
               await transporter.sendMail({
                 from: SMTP_FROM,
                 to: customerEmail,

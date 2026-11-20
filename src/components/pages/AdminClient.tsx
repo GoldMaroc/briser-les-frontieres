@@ -93,7 +93,27 @@ interface GiftRequest {
   created_at: string;
 }
 
-type TabType = "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials" | "planning" | "planning_linkedin_perso" | "planning_linkedin_page" | "planning_X" | "planning_tiktok" | "planning_instagram" | "planning_facebook";
+interface RendezVousItem {
+  id: string;
+  created_at: string;
+  typeRdv?: "telephone" | "presentiel";
+  format?: "tel" | "presentiel";
+  dateRdv: string;
+  timeSlot?: string;
+  creneau?: string;
+  nom: string;
+  prenom?: string;
+  email: string;
+  telephone: string;
+  adresse?: string;
+  montantCents: number;
+  montantFormatted: string;
+  statut: "valide_paye" | "abandon_avant_paiement" | "paiement_refuse" | "en_attente_paiement" | "session_expiree" | "erreur_technique";
+  motifAbandon?: string;
+  stripePaymentIntentId?: string;
+}
+
+type TabType = "rendezvous" | "candidatures" | "audits" | "messages" | "gifts" | "newsletter" | "testimonials" | "planning" | "planning_linkedin_perso" | "planning_linkedin_page" | "planning_X" | "planning_tiktok" | "planning_instagram" | "planning_facebook";
 
 export default function AdminClient() {
   const [password, setPassword] = useState("");
@@ -102,7 +122,8 @@ export default function AdminClient() {
   const [loginStep, setLoginStep] = useState<1 | 2>(1); // 1 = main password, 2 = OTP double factor
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes en secondes (300s)
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabType>("candidatures");
+  const [activeTab, setActiveTab] = useState<TabType>("rendezvous");
+  const [rdvFilter, setRdvFilter] = useState<"all" | "valide_paye" | "abandon_avant_paiement" | "paiement_refuse">("all");
   
   const [data, setData] = useState<{
     subscribers: Subscriber[];
@@ -111,13 +132,15 @@ export default function AdminClient() {
     testimonials: SubmittedTestimonial[];
     contacts: ContactMessage[];
     gifts: GiftRequest[];
+    rendezVous?: RendezVousItem[];
   }>({
     subscribers: [],
     candidatures: [],
     audits: [],
     testimonials: [],
     contacts: [],
-    gifts: []
+    gifts: [],
+    rendezVous: [],
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -663,7 +686,8 @@ export default function AdminClient() {
             Menu Rapide Mobile
           </span>
           <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold/15 text-gold border border-gold/30 font-semibold">
-            {activeTab === "planning_instagram" ? "📸 Instagram" : 
+            {activeTab === "rendezvous" ? "📅 Rendez-vous Doctolib" :
+             activeTab === "planning_instagram" ? "📸 Instagram" : 
              activeTab === "planning_facebook" ? "📘 Facebook" : 
              activeTab === "planning_linkedin_perso" ? "💼 LinkedIn (Mounir)" :
              activeTab === "planning_linkedin_page" ? "🏢 LinkedIn (Page)" :
@@ -691,6 +715,13 @@ export default function AdminClient() {
           }}
           className="w-full bg-midnight border border-gold/40 text-cream p-3 rounded-sm text-xs font-semibold focus:outline-none focus:border-gold"
         >
+          <optgroup label="Relationnel & Ventes">
+            <option value="rendezvous">📅 Rendez-vous Doctolib ({data.rendezVous?.length || 0})</option>
+            <option value="candidatures">📋 Candidatures ({data.candidatures.length})</option>
+            <option value="audits">🔍 Audits ({data.audits.length})</option>
+            <option value="messages">✉️ Messages ({data.contacts?.length || 0})</option>
+            <option value="gifts">🎁 Cadeaux ({data.gifts?.length || 0})</option>
+          </optgroup>
           <optgroup label="Usines à Contenu (IA)">
             <option value="planning_instagram">📸 Agent Instagram (Stratégie & Publications)</option>
             <option value="planning_facebook">📘 Agent Facebook</option>
@@ -698,12 +729,6 @@ export default function AdminClient() {
             <option value="planning_linkedin_page">🏢 Agent LinkedIn (Page BLF)</option>
             <option value="planning_X">𝕏 Agent X (Twitter)</option>
             <option value="link_tiktok">🎬 TikTok Studio (IA) ↗</option>
-          </optgroup>
-          <optgroup label="Relationnel & Ventes">
-            <option value="candidatures">📋 Candidatures ({data.candidatures.length})</option>
-            <option value="audits">🔍 Audits ({data.audits.length})</option>
-            <option value="messages">✉️ Messages ({data.contacts?.length || 0})</option>
-            <option value="gifts">🎁 Cadeaux ({data.gifts?.length || 0})</option>
           </optgroup>
           <optgroup label="Marketing & Réputation">
             <option value="newsletter">📰 Newsletter ({data.subscribers.length})</option>
@@ -714,6 +739,7 @@ export default function AdminClient() {
         {/* Défilement horizontal des boutons réseaux sociaux */}
         <div className="flex gap-2 overflow-x-auto pb-1 custom-scrollbar">
           {[
+            { key: "rendezvous", label: `📅 RDV Doctolib (${data.rendezVous?.length || 0})`, highlight: true },
             { key: "planning_instagram", label: "📸 Instagram", highlight: true },
             { key: "planning_facebook", label: "📘 Facebook", highlight: true },
             { key: "planning_linkedin_perso", label: "💼 LinkedIn Mounir" },
@@ -765,6 +791,7 @@ export default function AdminClient() {
           {
             title: "Relationnel & Ventes",
             items: [
+              { key: "rendezvous", label: `📅 RDV Doctolib`, count: data.rendezVous?.length || 0 },
               { key: "candidatures", label: `Candidatures`, count: data.candidatures.length },
               { key: "audits", label: `Audits`, count: data.audits.length },
               { key: "messages", label: `Messages`, count: data.contacts?.length || 0 },
@@ -833,6 +860,389 @@ export default function AdminClient() {
       <div className="flex-1 min-w-0 bg-midnight-light border border-border p-6 rounded-sm overflow-y-auto custom-scrollbar relative">
         <AnimatePresence mode="wait">
           
+          {/* 0. TABLEAU DES RENDEZ-VOUS DOCTOLIB & SUIVI DES TUNNELS / ABANDONS */}
+          {activeTab === "rendezvous" && (
+            <motion.div
+              key="rendezvous"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="space-y-6"
+            >
+              {(() => {
+                const rdvs = data.rendezVous || [];
+                const confirmed = rdvs.filter(r => r.statut === "valide_paye");
+                const abandoned = rdvs.filter(r => r.statut === "abandon_avant_paiement" || r.statut === "en_attente_paiement");
+                const refused = rdvs.filter(r => r.statut === "paiement_refuse" || r.statut === "session_expiree" || r.statut === "erreur_technique");
+
+                const totalRevenueCents = confirmed.reduce((acc, curr) => acc + (curr.montantCents || 0), 0);
+                const totalRevenueFormatted = (totalRevenueCents / 100).toFixed(2).replace(".", ",") + " €";
+
+                const conversionRate = rdvs.length > 0 ? Math.round((confirmed.length / rdvs.length) * 100) : 0;
+
+                const filteredRdvs = rdvs.filter(r => {
+                  if (rdvFilter === "all") return true;
+                  if (rdvFilter === "valide_paye") return r.statut === "valide_paye";
+                  if (rdvFilter === "abandon_avant_paiement") return r.statut === "abandon_avant_paiement" || r.statut === "en_attente_paiement";
+                  if (rdvFilter === "paiement_refuse") return r.statut === "paiement_refuse" || r.statut === "session_expiree" || r.statut === "erreur_technique";
+                  return true;
+                });
+
+                const handleMarkAsPaid = async (rdvId: string) => {
+                  try {
+                    await fetch("/api/rendez-vous", {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        identifier: rdvId,
+                        statut: "valide_paye",
+                        motifAbandon: "Régularisé manuellement par l'administrateur (Virement / Espèces)",
+                      }),
+                    });
+                    // Mettre à jour l'état local
+                    setData(prev => ({
+                      ...prev,
+                      rendezVous: (prev.rendezVous || []).map(item =>
+                        item.id === rdvId ? { ...item, statut: "valide_paye", motifAbandon: "Régularisé manuellement par l'administrateur" } : item
+                      ),
+                    }));
+                    setSuccessMsg("Rendez-vous marqué comme validé et payé avec succès.");
+                  } catch (err) {
+                    setErrorMsg("Erreur lors de la mise à jour du rendez-vous.");
+                  }
+                };
+
+                return (
+                  <>
+                    {/* EN-TÊTE DOCTOLIB */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border/40 pb-6">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] uppercase tracking-widest font-bold text-gold bg-gold/10 px-2 py-0.5 rounded-full border border-gold/30">
+                            DOCTOLIB PRO // GESTION DU PLANNING &amp; PANIERS
+                          </span>
+                          <span className="text-[10px] text-cream-muted font-mono">
+                            {rdvs.length} tentative(s) enregistrée(s)
+                          </span>
+                        </div>
+                        <h2 className="font-heading text-2xl text-cream font-light">
+                          Rendez-vous Validés &amp; Tunnels Inachevés
+                        </h2>
+                        <p className="text-xs text-cream-muted mt-1">
+                          Suivi chirurgical : consultez les consultations payées ainsi que les personnes ayant rempli le formulaire mais dont le paiement a été refusé ou abandonné.
+                        </p>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            fetch("/api/admin/data")
+                              .then(r => r.json())
+                              .then(res => { if (res.data) setData(res.data); setSuccessMsg("Données actualisées."); })
+                              .catch(() => {});
+                          }}
+                          className="px-3 py-1.5 border border-gold/40 text-gold text-xs rounded-sm hover:bg-gold/10 cursor-pointer font-mono"
+                        >
+                          🔄 Actualiser
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* KPI CARDS DOCTOLIB */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      {/* KPI 1 : CA ENCAISSÉ */}
+                      <div className="bg-surface border border-gold/30 p-4 rounded-sm">
+                        <span className="text-[10px] uppercase tracking-wider text-cream-muted font-bold block mb-1">
+                          CA RDV Encaissé (Comptant)
+                        </span>
+                        <div className="font-heading text-2xl text-gold font-bold">
+                          {totalRevenueFormatted}
+                        </div>
+                        <span className="text-[10px] text-emerald-400 font-mono mt-1 block">
+                          ✓ {confirmed.length} consultation(s) réglée(s)
+                        </span>
+                      </div>
+
+                      {/* KPI 2 : VALIDÉS & PAYÉS */}
+                      <div className="bg-surface border border-emerald-500/30 p-4 rounded-sm">
+                        <span className="text-[10px] uppercase tracking-wider text-emerald-400 font-bold block mb-1">
+                          ✓ Confirmés &amp; Payés
+                        </span>
+                        <div className="font-heading text-2xl text-cream font-bold">
+                          {confirmed.length}
+                        </div>
+                        <span className="text-[10px] text-cream-muted font-mono mt-1 block">
+                          Taux de concrétisation : {conversionRate}%
+                        </span>
+                      </div>
+
+                      {/* KPI 3 : ABANDONS AVANT PAIEMENT */}
+                      <div className="bg-surface border border-amber-500/30 p-4 rounded-sm">
+                        <span className="text-[10px] uppercase tracking-wider text-amber-400 font-bold block mb-1">
+                          ⚠️ Abandons avant Paiement
+                        </span>
+                        <div className="font-heading text-2xl text-amber-400 font-bold">
+                          {abandoned.length}
+                        </div>
+                        <span className="text-[10px] text-cream-muted font-mono mt-1 block">
+                          Formulaire rempli • Quitté avant Stripe
+                        </span>
+                      </div>
+
+                      {/* KPI 4 : REFUS BANCAIRES */}
+                      <div className="bg-surface border border-rose-500/30 p-4 rounded-sm">
+                        <span className="text-[10px] uppercase tracking-wider text-rose-400 font-bold block mb-1">
+                          ✕ Paiements Refusés (3DS/Solde)
+                        </span>
+                        <div className="font-heading text-2xl text-rose-400 font-bold">
+                          {refused.length}
+                        </div>
+                        <span className="text-[10px] text-cream-muted font-mono mt-1 block">
+                          Cartes rejetées • À relancer d&apos;urgence
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* BARRE DE FILTRES */}
+                    <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border/40">
+                      <span className="text-xs text-cream-muted font-mono mr-2">Filtrer par statut :</span>
+                      
+                      <button
+                        type="button"
+                        onClick={() => setRdvFilter("all")}
+                        className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all border cursor-pointer ${
+                          rdvFilter === "all"
+                            ? "bg-gold text-midnight font-bold border-gold"
+                            : "bg-surface border-border text-cream-muted hover:text-cream"
+                        }`}
+                      >
+                        Tous ({rdvs.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setRdvFilter("valide_paye")}
+                        className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all border cursor-pointer ${
+                          rdvFilter === "valide_paye"
+                            ? "bg-emerald-500 text-white font-bold border-emerald-500"
+                            : "bg-surface border-border text-emerald-400 hover:bg-emerald-500/10"
+                        }`}
+                      >
+                        ✓ Payés &amp; Confirmés ({confirmed.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setRdvFilter("abandon_avant_paiement")}
+                        className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all border cursor-pointer ${
+                          rdvFilter === "abandon_avant_paiement"
+                            ? "bg-amber-500 text-midnight font-bold border-amber-500"
+                            : "bg-surface border-border text-amber-400 hover:bg-amber-500/10"
+                        }`}
+                      >
+                        ⚠️ Abandons de Panier ({abandoned.length})
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setRdvFilter("paiement_refuse")}
+                        className={`px-3 py-1.5 rounded-full text-xs font-mono transition-all border cursor-pointer ${
+                          rdvFilter === "paiement_refuse"
+                            ? "bg-rose-600 text-white font-bold border-rose-600"
+                            : "bg-surface border-border text-rose-400 hover:bg-rose-500/10"
+                        }`}
+                      >
+                        ✕ Refus Bancaires &amp; Bugs ({refused.length})
+                      </button>
+                    </div>
+
+                    {/* LISTE DES RENDEZ-VOUS */}
+                    {filteredRdvs.length === 0 ? (
+                      <div className="text-center py-16 border border-dashed border-border rounded-sm">
+                        <p className="text-sm text-cream-muted italic">
+                          Aucun rendez-vous ne correspond à ce filtre actuellement.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {filteredRdvs.map((r) => {
+                          const isConfirmed = r.statut === "valide_paye";
+                          const isRefused = r.statut === "paiement_refuse" || r.statut === "erreur_technique";
+                          const isAbandoned = r.statut === "abandon_avant_paiement" || r.statut === "en_attente_paiement" || r.statut === "session_expiree";
+                          const isPresentiel = r.typeRdv === "presentiel" || r.format === "presentiel";
+
+                          return (
+                            <div
+                              key={r.id}
+                              className={`border p-5 sm:p-6 rounded-sm transition-all duration-300 ${
+                                isConfirmed
+                                  ? "border-emerald-500/30 bg-emerald-500/5 hover:border-emerald-500/50"
+                                  : isRefused
+                                  ? "border-rose-500/40 bg-rose-500/5 hover:border-rose-500/60"
+                                  : "border-amber-500/30 bg-amber-500/5 hover:border-amber-500/50"
+                              }`}
+                            >
+                              {/* LIGNE PRINCIPALE */}
+                              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-border/40 pb-4 mb-4">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-xs font-mono font-bold text-cream">
+                                      {isPresentiel ? "📍 Immersion In Situ Domicile" : "📞 Consultation Téléphonique / Visio"}
+                                    </span>
+                                    <span className="text-xs font-mono text-gold font-bold">
+                                      • {r.montantFormatted || (isPresentiel ? "96,45 €" : "48,95 €")}
+                                    </span>
+                                    <span className="text-[10px] text-cream-muted font-mono">
+                                      ({r.id})
+                                    </span>
+                                  </div>
+
+                                  <h3 className="font-heading text-lg sm:text-xl text-cream font-medium">
+                                    {r.nom} {r.prenom ? r.prenom : ""}
+                                  </h3>
+
+                                  <div className="flex items-center gap-2 text-xs text-cream-muted font-mono">
+                                    <span className="text-gold font-semibold">📅 {r.dateRdv}</span>
+                                    <span>•</span>
+                                    <span className="text-cream">⏰ {r.timeSlot || r.creneau || "Créneau à convenir"}</span>
+                                  </div>
+                                </div>
+
+                                {/* BADGE DE STATUT */}
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2.5">
+                                  {isConfirmed && (
+                                    <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center gap-1.5">
+                                      <span>✓ Payé &amp; Confirmé</span>
+                                      {r.stripePaymentIntentId && (
+                                        <span className="opacity-70 font-mono text-[9px] font-normal">({r.stripePaymentIntentId.slice(0, 12)}...)</span>
+                                      )}
+                                    </span>
+                                  )}
+
+                                  {isAbandoned && (
+                                    <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center gap-1.5">
+                                      <span>⚠️ Abandon avant Paiement</span>
+                                    </span>
+                                  )}
+
+                                  {isRefused && (
+                                    <span className="text-[10px] uppercase tracking-wider font-bold px-3 py-1.5 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center gap-1.5">
+                                      <span>✕ Paiement Refusé</span>
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* ENCART DIAGNOSTIC TUNNEL // RAISON D'ABANDON OU DE REFUS BANCAIRE */}
+                              {r.motifAbandon && (
+                                <div className={`p-3 rounded-sm border text-xs font-mono mb-4 flex items-start gap-2.5 ${
+                                  isConfirmed
+                                    ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+                                    : isRefused
+                                    ? "bg-rose-500/10 border-rose-500/30 text-rose-300"
+                                    : "bg-amber-500/10 border-amber-500/30 text-amber-300"
+                                }`}>
+                                  <span className="text-sm shrink-0">
+                                    {isConfirmed ? "✓" : isRefused ? "❌" : "⚠️"}
+                                  </span>
+                                  <div>
+                                    <strong className="uppercase tracking-wider text-[10px] block mb-0.5">
+                                      {isConfirmed ? "Statut de Confirmation :" : isRefused ? "Raison du Rejet Bancaire (Stripe) :" : "Point de Rupture dans le Tunnel :"}
+                                    </strong>
+                                    <span>{r.motifAbandon}</span>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* INFOS CONTACT & ADRESSE */}
+                              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono mb-4 bg-midnight/50 p-3 rounded border border-border/40">
+                                <div>
+                                  <span className="text-cream-muted text-[10px] uppercase block">Adresse E-mail :</span>
+                                  <a href={`mailto:${r.email}`} className="text-gold hover:underline font-semibold break-all">
+                                    {r.email}
+                                  </a>
+                                </div>
+
+                                <div>
+                                  <span className="text-cream-muted text-[10px] uppercase block">Téléphone direct :</span>
+                                  <a href={`tel:${r.telephone}`} className="text-cream hover:text-gold font-semibold">
+                                    {r.telephone}
+                                  </a>
+                                </div>
+
+                                <div>
+                                  <span className="text-cream-muted text-[10px] uppercase block">
+                                    {isPresentiel ? "Adresse d'intervention chez le client :" : "Date de la tentative :"}
+                                  </span>
+                                  <span className="text-cream">
+                                    {isPresentiel ? (r.adresse || "Non renseignée") : (r.created_at ? new Date(r.created_at).toLocaleString("fr-FR") : "Récent")}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* ACTIONS DE RELANCE COMMERCIALE */}
+                              <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+                                <div className="text-[11px] text-cream-muted font-mono">
+                                  {isConfirmed ? (
+                                    <span className="text-emerald-400">
+                                      ✉️ Deux e-mails ont été expédiés : 1. Reçu bancaire • 2. Instructions préparatoires
+                                    </span>
+                                  ) : (
+                                    <span className="text-amber-400">
+                                      Ce prospect a manifesté une intention ferme. Une relance bienveillante convertit à plus de 45%.
+                                    </span>
+                                  )}
+                                </div>
+
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  {/* BOUTON RELANCE EMAIL */}
+                                  <a
+                                    href={`mailto:${r.email}?subject=${encodeURIComponent(
+                                      `Votre rendez-vous avec Mounir BYAR — Cabinet BLF (${r.dateRdv})`
+                                    )}&body=${encodeURIComponent(
+                                      `Salam ${r.prenom || r.nom},\n\nNous avons bien noté votre intérêt pour une consultation le ${r.dateRdv} à ${r.timeSlot || r.creneau || ""}.\n\nCependant, votre règlement sur la passerelle bancaire n'a pas pu être finalisé (${r.motifAbandon || "Interruption"}).\n\nSouhaitez-vous que nous maintenions votre créneau ou préférez-vous convenir d'un autre horaire ?\n\nBien fraternellement,\nMounir BYAR\nCabinet Briser les Frontières\nhttps://www.briserlesfrontieres.fr`
+                                    )}`}
+                                    className="px-3 py-1.5 rounded bg-gold/10 hover:bg-gold/20 text-gold border border-gold/40 text-xs font-mono font-bold flex items-center gap-1.5 transition"
+                                  >
+                                    <span>✉️ Relancer par Email</span>
+                                  </a>
+
+                                  {/* BOUTON APPEL DIRECT */}
+                                  {r.telephone && (
+                                    <a
+                                      href={`tel:${r.telephone}`}
+                                      className="px-3 py-1.5 rounded bg-surface hover:bg-surface-alt text-cream border border-border text-xs font-mono font-semibold flex items-center gap-1.5 transition"
+                                    >
+                                      <span>📞 Appeler ({r.telephone})</span>
+                                    </a>
+                                  )}
+
+                                  {/* BOUTON VALIDER MANUELLEMENT */}
+                                  {!isConfirmed && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleMarkAsPaid(r.id)}
+                                      className="px-3 py-1.5 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-mono font-bold cursor-pointer transition"
+                                      title="Enregistrer comme payé si le client a réglé par virement bancaire"
+                                    >
+                                      ✓ Marquer comme Payé
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </motion.div>
+          )}
+
           {/* 1. TABLEAU DES CANDIDATURES MENTORAT */}
           {activeTab === "candidatures" && (
             <motion.div

@@ -44,16 +44,16 @@ export default function TransformationSlider() {
             onPointerCancel={handlePointerUp}
             className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-[24px] sm:rounded-[32px] overflow-hidden border border-[var(--border)] shadow-[0_20px_50px_rgba(0,0,0,0.12)] cursor-ew-resize select-none bg-neutral-900"
           >
-            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ, HORIZON DE PAIX & ANCRAGE SACRÉ) */}
+            {/* COUCHE 1 : ÉTAT APRÈS (SOUVERAINETÉ, CONTEMPLATION ET ALIGNEMENT) */}
             <div className="absolute inset-0">
               <Image
-                src="/images/instagram/photo_ocean_rahman.jpg"
-                alt="Après : Souveraineté, paix intérieure et sérénité de l'esprit"
+                src="/images/photo_woman_contemplation.jpg"
+                alt="Après : Souveraineté retrouvée, paix intérieure et sérénité de l'esprit"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 650px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
               
               {/* BADGE ÉTAT APRÈS */}
               <div className="absolute bottom-6 right-6 text-right text-white">
@@ -78,13 +78,13 @@ export default function TransformationSlider() {
               className="absolute inset-0"
             >
               <Image
-                src="/images/photo_man_stressed.png"
-                alt="Avant : Surcharge cognitive, anxiété et procrastination subie"
+                src="/images/instagram/hero_terminal_dawn.jpg"
+                alt="Avant : Surcharge cognitive, dispersion numérique et procrastination subie"
                 fill
-                className="object-cover filter contrast-125 brightness-90"
+                className="object-cover filter contrast-125 brightness-75 grayscale"
                 sizes="(max-width: 1024px) 100vw, 650px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
               
               {/* BADGE ÉTAT AVANT */}
               <div className="absolute bottom-6 left-6 text-left text-white">

@@ -41,35 +41,35 @@
   --radius-card: 16px;
   --radius-pill: 999px;
 
-  /* Beige Albâtre & Or Impérial (Mode Jour Haute Joaillerie) */
-  --bg: #FAF8F5;
-  --surface: #F3EDE4;
-  --surface-elevated: #EFE6D8;
+  /* Blanc Pur Minéral & Émeraude Souveraine (Mode Jour Épuré & Haute Joaillerie) */
+  --bg: #FFFFFF;
+  --surface: #F8F9FA;
+  --surface-elevated: #FFFFFF;
   --text-primary: #0A1128;
-  --text-secondary: #5C534A;
-  --border: rgba(184, 142, 62, 0.22);
-  --border-strong: rgba(184, 142, 62, 0.45);
-  --accent: #B88E3E;
-  --accent-hover: #8C6214;
+  --text-secondary: #4A5568;
+  --border: rgba(10, 17, 40, 0.09);
+  --border-strong: rgba(10, 17, 40, 0.18);
+  --accent: #087B53;
+  --accent-hover: #065F41;
   --accent-text: #FFFFFF;
-  --gold: #B88E3E;
-  --gold-hover: #8C6214;
-  --glass-bg: rgba(250, 248, 245, 0.90);
-  --glass-border: rgba(184, 142, 62, 0.25);
-  --shadow-tinted: 0 20px 50px rgba(184, 142, 62, 0.12);
+  --gold: #C59B4B;
+  --gold-hover: #A77E30;
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(10, 17, 40, 0.08);
+  --shadow-tinted: 0 16px 40px rgba(10, 17, 40, 0.06);
 
   /* Fallback legacy variables */
-  --bg-base: #FAF8F5;
-  --bg-surface: #F3EDE4;
-  --bg-surface-alt: #EDE5D8;
-  --bg-surface-hover: #E4DACB;
+  --bg-base: #FFFFFF;
+  --bg-surface: #F8F9FA;
+  --bg-surface-alt: #F1F3F5;
+  --bg-surface-hover: #E9ECEF;
   --text-main: #0A1128;
-  --text-muted: #5C534A;
-  --color-accent-gold: #B88E3E;
+  --text-muted: #4A5568;
+  --color-accent-gold: #C59B4B;
   --color-accent-gold-light: #D4A853;
-  --color-accent-gold-muted: rgba(184, 142, 62, 0.12);
-  --color-border-line: rgba(184, 142, 62, 0.22);
-  --color-border-hover-line: rgba(184, 142, 62, 0.45);
+  --color-accent-gold-muted: rgba(197, 155, 75, 0.12);
+  --color-border-line: rgba(10, 17, 40, 0.09);
+  --color-border-hover-line: rgba(10, 17, 40, 0.18);
   --transition-speed: 0.5s;
   --celestial-bg-opacity: 0.03;
 }
@@ -84,12 +84,12 @@
   --color-cream: var(--text-primary);
   --color-cream-muted: var(--text-secondary);
 
-  --color-emerald: var(--gold);
-  --color-emerald-dark: var(--gold-hover);
+  --color-emerald: #087B53;
+  --color-emerald-dark: #065F41;
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-hover);
-  --color-gold-muted: rgba(184, 142, 62, 0.15);
-  --color-emerald-muted: rgba(184, 142, 62, 0.15);
+  --color-gold-muted: rgba(197, 155, 75, 0.15);
+  --color-emerald-muted: rgba(8, 123, 83, 0.12);
 
   --color-border: var(--border);
   --color-border-hover: var(--border-strong);

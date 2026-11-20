@@ -1104,3 +1104,209 @@ export async function sendWeeklyAdviceEmail(email: string) {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAILS DE VALIDATION : REÇU DE PAIEMENT & CONFIRMATION DE RENDEZ-VOUS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * 1. Envoie le reçu officiel de paiement au client (Stripe)
+ */
+export async function sendClientPaymentReceiptEmail(params: {
+  email: string;
+  nom: string;
+  prenom?: string;
+  prestationTitre: string;
+  montantFormatted: string;
+  transactionId: string;
+  modaliteTexte?: string;
+}) {
+  const transporter = getTransporter();
+  if (!transporter || !params.email) {
+    console.warn("[SMTP] Pas de transporteur SMTP configuré pour le reçu client.");
+    return { success: false };
+  }
+
+  const clientName = `${params.prenom || ""} ${params.nom}`.trim() || "Cher Client";
+  const dateStr = new Date().toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const html = `
+    <div style="font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0A1128; color: #F0EDE8; padding: 40px 20px; max-width: 620px; margin: 0 auto; border-radius: 8px; border: 1px solid rgba(212, 168, 83, 0.25);">
+      <div style="text-align: center; border-bottom: 1px solid rgba(212, 168, 83, 0.2); padding-bottom: 24px; margin-bottom: 28px;">
+        <span style="font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #D4A853; text-transform: uppercase;">BRISER LES FRONTIÈRES</span>
+        <p style="margin: 6px 0 0 0; font-size: 11px; font-family: monospace; letter-spacing: 2px; color: #10B981; text-transform: uppercase;">✓ Reçu de Règlement Officiel</p>
+      </div>
+
+      <p style="font-size: 15px; line-height: 1.6; margin-bottom: 18px;">
+        Salam <strong>${clientName}</strong>,
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #A0AEC0; margin-bottom: 24px;">
+        Votre règlement sécurisé a été validé avec succès par notre infrastructure financière. Ce document constitue votre justificatif de paiement officiel auprès du Cabinet BLF.
+      </p>
+
+      <div style="background-color: #0D1B2A; border: 1px solid rgba(212, 168, 83, 0.25); border-radius: 6px; padding: 22px; margin-bottom: 26px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+          <tr>
+            <td style="padding: 8px 0; color: #A0AEC0;">Prestation :</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 700; color: #F0EDE8;">${params.prestationTitre}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #A0AEC0;">Montant réglé :</td>
+            <td style="padding: 8px 0; text-align: right; font-weight: 800; font-size: 16px; color: #10B981;">${params.montantFormatted}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #A0AEC0;">Modalité financière :</td>
+            <td style="padding: 8px 0; text-align: right; color: #D4A853;">${params.modaliteTexte || "Règlement intégral (0% Riba)"}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #A0AEC0;">Date & Heure :</td>
+            <td style="padding: 8px 0; text-align: right; color: #F0EDE8;">${dateStr}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #A0AEC0;">Réf. Stripe :</td>
+            <td style="padding: 8px 0; text-align: right; font-family: monospace; font-size: 11px; color: #A0AEC0;">${params.transactionId}</td>
+          </tr>
+        </table>
+      </div>
+
+      <div style="border-left: 3px solid #10B981; background-color: rgba(16, 185, 129, 0.08); padding: 14px 18px; margin-bottom: 26px; border-radius: 4px;">
+        <p style="margin: 0; font-size: 13px; color: #F0EDE8; line-height: 1.5;">
+          <strong>Étape suivante :</strong> Un second e-mail contenant la <strong>confirmation complète et personnalisée de votre rendez-vous</strong> (consignes et protocole d'interposition) vous a été expédié simultanément.
+        </p>
+      </div>
+
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.15); padding-top: 20px; text-align: center; font-size: 11px; color: #718096;">
+        <p style="margin: 0 0 4px 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 0;">Paris • Reims • Accompagnement In Situ</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: params.email,
+      subject: `🧾 Reçu de Paiement : ${params.prestationTitre} (${params.montantFormatted}) — Cabinet BLF`,
+      html,
+    });
+    return { success: true };
+  } catch (err) {
+    console.error("Erreur envoi reçu de paiement :", err);
+    return { success: false };
+  }
+}
+
+/**
+ * 2. Envoie la confirmation personnalisée de RDV (Téléphonique ou Présentiel à Domicile)
+ */
+export async function sendAppointmentConfirmationEmail(params: {
+  email: string;
+  nom: string;
+  prenom?: string;
+  telephone: string;
+  typeRdv: "telephone" | "presentiel";
+  dateRdv: string;
+  timeSlot: string;
+  adresseClient?: string;
+}) {
+  const transporter = getTransporter();
+  if (!transporter || !params.email) {
+    console.warn("[SMTP] Pas de transporteur SMTP configuré pour la confirmation de RDV.");
+    return { success: false };
+  }
+
+  const clientName = `${params.prenom || ""} ${params.nom}`.trim() || "Cher Client";
+  const isTel = params.typeRdv === "telephone";
+
+  const subject = isTel
+    ? `📅 Confirmation : Consultation Téléphonique avec Mounir BYAR (${params.dateRdv} à ${params.timeSlot})`
+    : `📍 Confirmation : Mounir BYAR se déplace à votre domicile (${params.dateRdv} à ${params.timeSlot})`;
+
+  const specificContent = isTel
+    ? `
+      <div style="background-color: #0D1B2A; border-left: 4px solid #D4A853; padding: 20px; border-radius: 4px; margin-bottom: 24px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #D4A853; text-transform: uppercase; letter-spacing: 1px;">Modalités de la Consultation Téléphonique (45 min)</h3>
+        <p style="margin: 0 0 8px 0; font-size: 13.5px; color: #F0EDE8; line-height: 1.6;">
+          • <strong>Créneau sanctuarisé :</strong> ${params.dateRdv} de ${params.timeSlot}.<br>
+          • <strong>Appel direct :</strong> Mounir BYAR vous contactera personnellement au <strong>${params.telephone}</strong> à la minute exacte.<br>
+          • <strong>Durée :</strong> 45 minutes d'analyse clinique comportementale et déblocage de charge mentale.
+        </p>
+      </div>
+
+      <div style="background-color: #142238; padding: 18px 22px; border-radius: 6px; margin-bottom: 24px; font-size: 13px; line-height: 1.6;">
+        <h4 style="margin: 0 0 10px 0; color: #10B981; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">📋 Guide de Préparation Recommandé</h4>
+        <ol style="margin: 0; padding-left: 20px; color: #A0AEC0;">
+          <li style="margin-bottom: 8px;"><strong style="color: #F0EDE8;">Isolement total :</strong> Installez-vous dans une pièce fermée, seul, avec des écouteurs pour une immersion vocale pure.</li>
+          <li style="margin-bottom: 8px;"><strong style="color: #F0EDE8;">Zéro écran récréatif :</strong> Prévoyez un carnet papier et un stylo pour noter immédiatement vos verrous d'action.</li>
+          <li><strong style="color: #F0EDE8;">Vos 3 blocages majeurs :</strong> Notez brièvement les situations précises qui déclenchent vos baisses de prière ou votre at-taswîf (procrastination).</li>
+        </ol>
+      </div>
+    `
+    : `
+      <div style="background-color: #0D1B2A; border-left: 4px solid #10B981; padding: 20px; border-radius: 4px; margin-bottom: 24px;">
+        <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #10B981; text-transform: uppercase; letter-spacing: 1px;">Déplacement de Mounir BYAR à Votre Domicile (1h15)</h3>
+        <p style="margin: 0 0 8px 0; font-size: 13.5px; color: #F0EDE8; line-height: 1.6;">
+          • <strong>Date & Heure d'arrivée :</strong> ${params.dateRdv} à ${params.timeSlot}.<br>
+          • <strong>Adresse d'intervention :</strong> <strong style="color: #F0EDE8;">${params.adresseClient || "Votre adresse communiquée lors de la réservation"}</strong>.<br>
+          • <strong>Objet :</strong> Audit de l'environnement domestique, sanctuarisation de l'espace de prière (Tahara 360°) et restructuration personnalisée.
+        </p>
+      </div>
+
+      <div style="background-color: #142238; padding: 18px 22px; border-radius: 6px; margin-bottom: 24px; font-size: 13px; line-height: 1.6;">
+        <h4 style="margin: 0 0 10px 0; color: #D4A853; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;">🏡 Consignes d'Accueil pour l'Audit In Situ</h4>
+        <ol style="margin: 0; padding-left: 20px; color: #A0AEC0;">
+          <li style="margin-bottom: 8px;"><strong style="color: #F0EDE8;">Authenticité du foyer :</strong> Ne rangez pas artificiellement votre intérieur. Mounir doit observer l'ergonomie réelle et les points de friction quotidiens.</li>
+          <li style="margin-bottom: 8px;"><strong style="color: #F0EDE8;">Sanctuarisation sonore :</strong> Veillez à éteindre les téléviseurs et stimuli sonores pendant les 1h15 d'intervention.</li>
+          <li><strong style="color: #F0EDE8;">Remise du protocole :</strong> À l'issue de la consultation, votre feuille de route des 8 Piliers vous sera remise en main propre.</li>
+        </ol>
+      </div>
+    `;
+
+  const html = `
+    <div style="font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #0A1128; color: #F0EDE8; padding: 40px 20px; max-width: 620px; margin: 0 auto; border-radius: 8px; border: 1px solid rgba(212, 168, 83, 0.25);">
+      <div style="text-align: center; border-bottom: 1px solid rgba(212, 168, 83, 0.2); padding-bottom: 24px; margin-bottom: 28px;">
+        <span style="font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #D4A853; text-transform: uppercase;">CABINET BLF</span>
+        <h2 style="margin: 6px 0 0 0; font-size: 16px; font-weight: 400; color: #F0EDE8;">Confirmation Officielle de Consultation</h2>
+      </div>
+
+      <p style="font-size: 15px; line-height: 1.6; margin-bottom: 18px;">
+        Salam <strong>${clientName}</strong>,
+      </p>
+      <p style="font-size: 14px; line-height: 1.6; color: #A0AEC0; margin-bottom: 24px;">
+        Votre consultation avec <strong>Mounir BYAR</strong> est formellement inscrite à l'agenda officiel du Cabinet.
+      </p>
+
+      ${specificContent}
+
+      <div style="background-color: #0D1B2A; border: 1px solid rgba(160, 174, 192, 0.2); padding: 16px 20px; border-radius: 6px; margin-bottom: 26px; font-size: 12.5px; color: #A0AEC0;">
+        <p style="margin: 0; line-height: 1.5;">
+          💡 <strong>Besoin d'un réajustement d'horaire ?</strong> En cas d'impératif majeur, vous pouvez contacter directement le Cabinet en répondant à cet e-mail ou au 06 42 18 90 22 (au moins 24h à l'avance).
+        </p>
+      </div>
+
+      <div style="border-top: 1px solid rgba(160, 174, 192, 0.15); padding-top: 20px; text-align: center; font-size: 11px; color: #718096;">
+        <p style="margin: 0 0 4px 0;">Cabinet d'Ingénierie de la Souveraineté — Mounir BYAR</p>
+        <p style="margin: 0;">Discrétion Absolue • Démarche Comportementale et Spirituelle</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    await transporter.sendMail({
+      from: SMTP_FROM,
+      to: params.email,
+      subject,
+      html,
+    });
+    return { success: true };
+  } catch (err) {
+    console.error("Erreur envoi confirmation RDV :", err);
+    return { success: false };
+  }
+}
+

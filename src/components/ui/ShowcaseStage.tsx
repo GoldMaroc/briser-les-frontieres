@@ -4,6 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHOWCASE PLEIN ÉCRAN PINNÉ (STYLE MATERIAL GOURDE)
+   • Au scroll : la page ne descend pas, le conteneur reste verrouillé (pin: true)
+   • 4 images monumentales lumineuses et impactantes (ZÉRO écran noir, ZÉRO prière)
+   • Wipe horizontal fluide de droite à gauche (clipPath)
+   • Titre & sous-titre en bas à gauche, 4 pilules de progression en bas à droite
+   ═══════════════════════════════════════════════════════════════════════════ */
+
 export interface ShowcaseStageItem {
   src: string;
   alt: string;
@@ -18,28 +26,28 @@ const SHOWCASE_STAGES: ShowcaseStageItem[] = [
     alt: "Aurore alpine et contemplation des horizons",
     tag: "01 // ARCHITECTURE COGNITIVE",
     title: "L'Éveil de la Lucidité",
-    sub: "Restauration du cortex préfrontal, silence intérieur et rupture avec le chaos mental quotidien.",
+    sub: "Restauration du cortex préfrontal et rupture avec le chaos mental quotidien.",
   },
   {
     src: "/images/instagram/photo_ocean_rahman.jpg",
-    alt: "Océan apaisé et immensité de la paix",
+    alt: "Océan apaisé et immensité de la sérénité",
     tag: "02 // PHYSIOLOGIE DU CALME",
-    title: "L'Apaisement des Sensations",
-    sub: "Activation du nerf vague, apaisement de l'amygdale et régulation somatique profonde du cortisol.",
+    title: "L'Apaisement Somatique",
+    sub: "Activation du nerf vague et régulation somatique profonde du cortisol toxique.",
   },
   {
-    src: "/images/cosmic_starfield.webp",
-    alt: "Cosmos et nébuleuses célestes",
-    tag: "03 // CONVICTION & ANCRAGE SACRÉ",
-    title: "La Foi Inébranlable (Yaqîn)",
-    sub: "La crainte vénérée du Créateur qui affranchit l'esprit de toutes les peurs terrestres.",
+    src: "/images/instagram/photo_sanctuary_dawn_editorial.jpg",
+    alt: "Sanctuaire architectural lumineux à l'aube",
+    tag: "03 // ANCRAGE SACRÉ & YAQÎN",
+    title: "Le Sanctuaire Intérieur",
+    sub: "La crainte vénérée du Créateur qui affranchit l'esprit de toute peur terrestre.",
   },
   {
-    src: "/images/instagram/photo_executive_still_life.jpg",
-    alt: "Étude exécutive, rigueur et gouvernance personnelle",
+    src: "/images/photo_woman_contemplation.jpg",
+    alt: "Femme en contemplation souveraine et clarté intellectuelle",
     tag: "04 // SOUVERAINETÉ EN ACTION",
     title: "Le Mandat de Khalifa",
-    sub: "Gouverner son être, son foyer et sa destinée dans la dignité et l'autorité souveraine.",
+    sub: "Gouverner son être, son foyer et sa destinée dans la dignité, la piété et l'autorité souveraine.",
   },
 ];
 
@@ -64,6 +72,7 @@ export default function ShowcaseStage() {
     const ctx = gsap.context(() => {
       if (!showcaseRef.current || frames.length !== 4) return;
 
+      // Timeline GSAP ScrollTrigger calquée sur le projet Material Flask
       const tl = gsap.timeline({
         scrollTrigger: {
           id: "showcaseTrigger",
@@ -72,6 +81,7 @@ export default function ShowcaseStage() {
           end: "+=280%",
           pin: true,
           scrub: 0.65,
+          anticipatePin: 1,
           onUpdate: (self: { progress: number }) => {
             const t = self.progress * 3.5;
             let nextIdx = 0;
@@ -89,12 +99,13 @@ export default function ShowcaseStage() {
                 stageTimerRef.current = null;
                 setActiveStage(nextIdx);
                 setCaptionBlur(false);
-              }, 120);
+              }, 110);
             }
           },
         },
       });
 
+      // Cadence des wipes : transition fluide droite -> gauche
       const wipeStarts = [0.25, 1.3, 2.35];
       frames.forEach((frame, i) => {
         if (i === 0) return;
@@ -106,6 +117,9 @@ export default function ShowcaseStage() {
         );
       });
       tl.set({}, {}, 3.5);
+
+      // Rafraîchir ScrollTrigger pour garantir le calcul exact après chargement
+      ScrollTrigger.refresh();
     }, showcaseRef);
 
     return () => {
@@ -131,7 +145,7 @@ export default function ShowcaseStage() {
   const current = SHOWCASE_STAGES[activeStage];
 
   return (
-    <div ref={showcaseRef} className="showcase-pin select-none" id="showcase-section">
+    <section ref={showcaseRef} className="showcase-pin select-none" id="showcase-section">
       <div className="showcase-viewport">
         
         {/* PILE D'IMAGES AVEC TRANSITION WIPE DROITE -> GAUCHE (STYLE MATERIAL GOURDE) */}
@@ -149,6 +163,7 @@ export default function ShowcaseStage() {
                 src={stage.src}
                 alt={stage.alt}
                 className="showcase-img"
+                loading={i === 0 ? "eager" : "lazy"}
               />
             </figure>
           ))}
@@ -172,7 +187,7 @@ export default function ShowcaseStage() {
           <div
             className="showcase-dots"
             role="tablist"
-            aria-label="Paliers de contemplation"
+            aria-label="Paliers de progression"
           >
             {SHOWCASE_STAGES.map((stage, i) => (
               <button
@@ -189,6 +204,6 @@ export default function ShowcaseStage() {
         </div>
 
       </div>
-    </div>
+    </section>
   );
 }

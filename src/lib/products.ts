@@ -69,7 +69,7 @@ export const PRODUCTS_CATALOG: Record<string, ProductCatalogItem> = {
     features: [
       "4 séances individuelles intensives avec Mounir Byar",
       "Messagerie privée 5j/7 pour un déblocage en temps réel",
-      "Déploiement des 4 Piliers C.O.M.E.S. dans votre quotidien",
+      "Déploiement des 4 Piliers d'amorce C.O.M.E. (le 5e Pilier S étant réservé au suivi 9 mois)",
       "Suivi hebdomadaire de la régularité et de la baisse du cortisol",
       "Garantie inaltérable de résultat et de transformation",
     ],
@@ -87,6 +87,7 @@ export const PRODUCTS_CATALOG: Record<string, ProductCatalogItem> = {
     allowedInstallments: [1, 9],
     durationLabel: "9 Mois",
     features: [
+      "Déploiement exclusif du 5e Pilier S (Stabilité sur le Temps & Istiqama durable)",
       "Supervision continue et ligne directe privée avec Mounir Byar",
       "Refonte de vos 8 Piliers de vie (mental, couple, finances, culte)",
       "Tous les traités, ouvrages et outils d'ingénierie inclus",

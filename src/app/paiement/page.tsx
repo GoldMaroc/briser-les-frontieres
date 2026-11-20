@@ -96,12 +96,35 @@ function StripeEmbeddedForm({
       });
 
       if (error) {
-        setErrorMessage(
-          error.message || "Le règlement n'a pas pu être validé. Veuillez vérifier vos informations bancaires."
-        );
+        const refusalReason = error.message || "Le règlement n'a pas pu être validé. Veuillez vérifier vos informations bancaires.";
+        setErrorMessage(refusalReason);
+
+        // Enregistrer la raison exacte du refus bancaire côté admin
+        if (customer.email) {
+          fetch("/api/rendez-vous", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              identifier: customer.email.trim().toLowerCase(),
+              statut: "paiement_refuse",
+              motifAbandon: refusalReason,
+            }),
+          }).catch(() => {});
+        }
       }
     } catch {
       setErrorMessage("Une erreur est survenue lors de la validation sécurisée.");
+      if (customer.email) {
+        fetch("/api/rendez-vous", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            identifier: customer.email.trim().toLowerCase(),
+            statut: "erreur_technique",
+            motifAbandon: "Erreur technique ou fermeture inattendue de connexion",
+          }),
+        }).catch(() => {});
+      }
     } finally {
       setSubmitting(false);
     }
@@ -229,6 +252,12 @@ function PaiementContent() {
       body: JSON.stringify({
         offerId: selectedOfferId,
         installments,
+        dateRdv: appointmentDate,
+        creneau: appointmentSlot,
+        adresse: appointmentAddress,
+        nom: customer.nom,
+        email: customer.email,
+        telephone: customer.telephone,
       }),
     })
       .then((res) => res.json())

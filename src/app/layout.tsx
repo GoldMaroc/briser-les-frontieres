@@ -97,7 +97,7 @@ export default function RootLayout({
       data-theme="light"
       className={`${dmSans.variable} ${dmMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text-primary)] relative font-sans selection:bg-[#087B53]/20 transition-colors duration-280">
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text-primary)] relative font-sans selection:bg-[#B88E3E]/20 transition-colors duration-280">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

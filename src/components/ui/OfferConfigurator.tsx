@@ -70,7 +70,7 @@ const OFFERS: Record<OfferKey, OfferDetails> = {
     deliverables: [
       "4 séances individuelles intensives avec Mounir Byar",
       "Messagerie privée 5j/7 pour un suivi en temps réel",
-      "Déploiement des 4 Piliers C.O.M.E.S. dans votre foyer",
+      "Déploiement des 4 Piliers initiaux C.O.M.E. (le 5e Pilier S étant réservé au suivi 9 mois)",
       "Garantie de résultat : ancrage inaltérable des 5 prières",
     ],
     ctaText: "Rejoindre le Protocole 30 Jours",
@@ -87,6 +87,7 @@ const OFFERS: Record<OfferKey, OfferDetails> = {
     priceSub: "Sélection sur dossier uniquement",
     duration: "9 mois de transformation holistique",
     deliverables: [
+      "Déploiement exclusif du 5e Pilier S (Stabilité sur le Temps & Istiqama)",
       "Supervision continue et accès direct VIP",
       "Alignement de votre capital mental, famille et entreprise",
       "Protocoles avancés de leadership prophétique",
