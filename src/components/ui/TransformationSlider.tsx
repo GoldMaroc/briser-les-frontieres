@@ -57,7 +57,7 @@ export default function TransformationSlider() {
               
               {/* BADGE ÉTAT APRÈS */}
               <div className="absolute bottom-6 right-6 text-right text-white">
-                <span className="inline-block px-3 py-1 rounded-full bg-[#087B53] text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-md mb-1.5">
+                <span className="inline-block px-3 py-1 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] text-[#0A1128] text-[11px] font-mono font-bold uppercase tracking-wider shadow-md mb-1.5">
                   ✓ APRÈS L&apos;ALIGNEMENT
                 </span>
                 <h4 className="font-heading font-extrabold text-lg sm:text-xl text-white">
@@ -179,8 +179,8 @@ export default function TransformationSlider() {
               onClick={() => updateSplit(90, true)}
               className={`px-4 py-1.5 rounded-full text-xs font-mono transition-all cursor-pointer ${
                 splitPct >= 80
-                  ? "bg-[#087B53] text-white font-bold shadow-xs"
-                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[#087B53]"
+                  ? "bg-[#B88E3E] dark:bg-[#D4A853] text-[#0A1128] font-bold shadow-xs"
+                  : "bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:border-[#B88E3E]"
               }`}
             >
               Afficher : État Après (Souveraineté)
@@ -220,7 +220,7 @@ export default function TransformationSlider() {
             </div>
 
             <div className="p-5 rounded-2xl bg-[var(--surface)] border border-[var(--border)]">
-              <span className="block text-2xl sm:text-3xl font-heading font-extrabold text-[#087B53] dark:text-[#4ade80]">
+              <span className="block text-2xl sm:text-3xl font-heading font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
                 98%
               </span>
               <span className="block text-xs font-mono text-[var(--text-secondary)] mt-1.5">

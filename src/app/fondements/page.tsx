@@ -64,7 +64,7 @@ export default function Fondements() {
           
           <div className="max-w-4xl">
             {/* Label Badge Statutaire */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#B88E3E]/10 border border-[#B88E3E]/25 text-[#8C6214] dark:text-[#D4A853] mb-6 shadow-xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#087B53]/10 border border-[#087B53]/25 text-[#087B53] dark:text-[#34D399] mb-6 shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
               <span className="font-mono text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em]">
                 LA MÉTHODOLOGIE C.O.M.E.S. // ARCHITECTURE DE SOUVERAINETÉ
@@ -74,7 +74,7 @@ export default function Fondements() {
             {/* Titre Monumental */}
             <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-[4rem] text-[var(--text-primary)] tracking-tight leading-[1.06]">
               L&apos;Ingénierie de la Souveraineté.
-              <span className="block mt-3 font-serif italic font-normal text-[#B88E3E] dark:text-[#D4A853] text-2xl sm:text-4xl lg:text-[3.5rem] leading-[1.12]">
+              <span className="block mt-3 font-serif italic font-normal text-[#087B53] dark:text-[#E2BA6E] text-2xl sm:text-4xl lg:text-[3.5rem] leading-[1.12]">
                 Réflexion, Sensation, Foi &amp; Mandat de Khalifa.
               </span>
             </h1>
@@ -110,7 +110,7 @@ export default function Fondements() {
       <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 border-b border-[var(--border)]">
         
         <div className="mb-14 sm:mb-20">
-          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#087B53] dark:text-[#E2BA6E] font-bold">
             LES 5 PILIERS D&apos;ÉLÉVATION
           </span>
           <h2 className="font-heading font-extrabold text-2xl sm:text-4xl lg:text-5xl text-[var(--text-primary)] tracking-tight mt-2">
@@ -134,7 +134,7 @@ export default function Fondements() {
             >
               {/* COLONNE GAUCHE (NUMÉRO & TAG MONO) */}
               <div className="lg:col-span-3 space-y-2">
-                <span className="font-mono text-3xl sm:text-4xl font-extrabold text-[#B88E3E] dark:text-[#D4A853]">
+                <span className="font-mono text-3xl sm:text-4xl font-extrabold text-[#087B53] dark:text-[#E2BA6E]">
                   {dim.num}
                 </span>
                 <span className="block text-[11px] font-mono uppercase tracking-[0.18em] text-[var(--text-secondary)] font-semibold">
@@ -150,7 +150,7 @@ export default function Fondements() {
                 <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)] group-hover:text-[#087B53] transition-colors leading-tight">
                   {dim.title}
                 </h3>
-                <p className="text-sm font-sans text-[#8C6214] dark:text-[#D4A853] font-medium leading-relaxed">
+                <p className="text-sm font-sans text-[var(--text-primary)] dark:text-[#E2BA6E] font-medium leading-relaxed">
                   {dim.subtitle}
                 </p>
               </div>
@@ -184,7 +184,7 @@ export default function Fondements() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           <div className="lg:col-span-7 space-y-6">
-            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-[#087B53] dark:text-[#E2BA6E] font-bold">
               L&apos;AXIOME DE LA PERCEPTION // LE CHOIX DU RÉVEIL
             </span>
             <h2 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-[var(--text-primary)] tracking-tight leading-tight">
@@ -227,10 +227,10 @@ export default function Fondements() {
               <div>
                 <div className="flex justify-between mb-1 text-[var(--text-secondary)] uppercase">
                   <span>Volonté active résiduelle en fin de journée</span>
-                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold">Stable (85%)</span>
+                  <span className="text-[#087B53] dark:text-[#34D399] font-bold">Stable (85%)</span>
                 </div>
                 <div className="h-1.5 w-full bg-[var(--bg)] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#B88E3E] w-[85%]" />
+                  <div className="h-full bg-[#087B53] w-[85%]" />
                 </div>
               </div>
 
@@ -258,7 +258,7 @@ export default function Fondements() {
           ═══════════════════════════════════════════════════════════════ */}
       <section className="py-20 sm:py-28 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-12 text-center">
         <div className="max-w-2xl mx-auto space-y-6">
-          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#8C6214] dark:text-[#D4A853] font-bold">
+          <span className="text-[11px] font-mono uppercase tracking-[0.22em] text-[#087B53] dark:text-[#E2BA6E] font-bold">
             ACCOMPAGNEMENT STRATÉGIQUE
           </span>
           <h2 className="font-heading font-extrabold text-3xl sm:text-5xl text-[var(--text-primary)] tracking-tight">

@@ -124,14 +124,14 @@ export default function HeroTiltStage() {
             {/* BADGE STATUTAIRE EN HAUT À GAUCHE */}
             <div className="absolute top-6 left-6 z-10">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-white/40 text-[#141210] text-[11px] font-mono font-bold uppercase tracking-wider shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#087B53] animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] animate-pulse" />
                 {current.station}
               </span>
             </div>
 
             {/* MÉTRIQUE FLOTTANTE EN HAUT À DROITE */}
             <div className="absolute top-6 right-6 z-10 text-right">
-              <span className="inline-block px-3 py-1 rounded-full bg-[#087B53] text-white text-[11px] font-mono font-bold shadow-md">
+              <span className="inline-block px-3 py-1 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] text-[#0A1128] text-[11px] font-mono font-bold shadow-md">
                 {current.metric}
               </span>
               <span className="block text-[9.5px] font-mono text-white/80 mt-1 uppercase tracking-wider drop-shadow">
@@ -179,7 +179,7 @@ export default function HeroTiltStage() {
             >
               <span
                 className={`w-2 h-2 rounded-full transition-all ${
-                  isActive ? "bg-[#087B53] scale-125" : "bg-[#B88E3E]"
+                  isActive ? "bg-[#B88E3E] dark:bg-[#D4A853] scale-125" : "bg-neutral-400"
                 }`}
               />
               <span>{item.name}</span>

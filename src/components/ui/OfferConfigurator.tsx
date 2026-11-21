@@ -134,12 +134,12 @@ export default function OfferConfigurator() {
             >
               <span
                 className={`w-2 h-2 rounded-full ${
-                  isSelected ? "bg-[#087B53]" : "bg-[#B88E3E]"
+                  isSelected ? "bg-[#B88E3E] dark:bg-[#D4A853]" : "bg-neutral-400"
                 }`}
               />
               <span>{item.title}</span>
               {item.isPopular && (
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#087B53] text-white font-mono ml-1">
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#B88E3E] dark:bg-[#D4A853] text-[#0A1128] font-mono font-bold ml-1">
                   Top
                 </span>
               )}
@@ -149,35 +149,35 @@ export default function OfferConfigurator() {
       </div>
 
       {/* PANNEAU DE DÉTAIL DE L'OFFRE SÉLECTIONNÉE */}
-      <div className="bg-white rounded-3xl border-2 border-[#E8E0D2] p-8 sm:p-12 shadow-sm max-w-4xl mx-auto">
+      <div className="bg-[var(--surface)] rounded-3xl border border-[var(--border)] p-8 sm:p-12 shadow-sm max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           
           {/* GAUCHE : DÉTAILS ET LIVRABLES */}
           <div className="md:col-span-7 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full bg-[#B88E3E]/10 text-[#8C6214] text-[10px] font-mono font-bold uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full bg-[#B88E3E]/10 text-[#8C6214] dark:text-[#D4A853] text-[10px] font-mono font-bold uppercase tracking-wider">
                 {activeOffer.tag}
               </span>
-              <span className="text-xs font-mono text-[#7A6F64]">
+              <span className="text-xs font-mono text-[var(--text-secondary)]">
                 {activeOffer.duration}
               </span>
             </div>
 
-            <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-[#141210]">
+            <h3 className="font-heading font-extrabold text-2xl sm:text-3xl text-[var(--text-primary)]">
               {activeOffer.title}
             </h3>
 
-            <p className="text-xs sm:text-sm text-[#403B35] font-sans leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--text-secondary)] font-sans leading-relaxed">
               {activeOffer.subtitle}
             </p>
 
-            <div className="pt-4 border-t border-[#E8E0D2] space-y-2.5">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A6F64] block font-semibold">
+            <div className="pt-4 border-t border-[var(--border)] space-y-2.5">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] block font-semibold">
                 Ce qui est inclus dans cette formule :
               </span>
               {activeOffer.deliverables.map((item) => (
-                <div key={item} className="flex items-start gap-2.5 text-xs text-[#141210]">
-                  <span className="text-[#087B53] font-bold shrink-0 mt-0.5">✓</span>
+                <div key={item} className="flex items-start gap-2.5 text-xs text-[var(--text-primary)]">
+                  <span className="text-[#B88E3E] dark:text-[#D4A853] font-bold shrink-0 mt-0.5">✓</span>
                   <span>{item}</span>
                 </div>
               ))}
@@ -185,22 +185,22 @@ export default function OfferConfigurator() {
           </div>
 
           {/* DROITE : PRIX & ACTION CTA */}
-          <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center p-6 rounded-2xl bg-[#FAF8F5] border border-[#E8E0D2] text-center md:text-right space-y-4">
+          <div className="md:col-span-5 flex flex-col items-center md:items-end justify-center p-6 rounded-2xl bg-[var(--bg)] border border-[var(--border)] text-center md:text-right space-y-4">
             <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#7A6F64] block">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] block">
                 Investissement Officiel
               </span>
-              <div className="text-3xl sm:text-4xl font-heading font-extrabold text-[#141210] mt-1">
+              <div className="text-3xl sm:text-4xl font-heading font-extrabold text-[var(--text-primary)] mt-1">
                 {activeOffer.price}
               </div>
-              <span className="text-xs font-mono text-[#8C6214] font-semibold mt-1 block">
+              <span className="text-xs font-mono text-[#8C6214] dark:text-[#D4A853] font-semibold mt-1 block">
                 {activeOffer.priceSub}
               </span>
             </div>
 
             <Link
               href={activeOffer.ctaHref}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#087B53] hover:bg-[#065f40] text-white text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md text-center"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#B88E3E] hover:bg-[#8C6214] dark:bg-[#D4A853] dark:hover:bg-[#E8C468] text-[#0A1128] text-xs font-heading font-bold uppercase tracking-wider transition-all shadow-md text-center"
             >
               <span>{activeOffer.ctaText}</span>
               <ArrowIcon className="w-3.5 h-3.5" />
